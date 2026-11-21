@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol" | "weapon" | "stroke";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol" | "weapon" | "stroke" | "threat";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -37,8 +37,8 @@ const OTHER = VN(/\b(con|bé|em bé|cháu|mẹ|má|ba|bố|cha|ông|bà|vợ|ch�
 //   "bé nhà a uống dầu hôi" bị đáp "😅 kể em nghe với". (Nuốt pin / nam châm là DỊ VẬT — SWALLOW bên dưới lo, có lời dặn riêng.)
 // 21/10 (đợt 3): danh sách chất độc dùng chung — lib/lomiChat.crisisReply cũng dùng (poisonIntent) để nhận Ý ĐỊNH tự hại bằng hoá chất.
 // (30/10: "uống axit folic", "acid uric" là vitamin / xét nghiệm, không phải nuốt phải axit)
-const POISON_SUBST = "thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit(?! (?:folic|uric|amin|amino|béo|ascorbic|hyaluronic|salicylic|lactic|citric))|acid(?! (?:folic|uric|amin|amino|béo|ascorbic|hyaluronic|salicylic|lactic|citric))|thuốc tẩy bồn cầu|dầu hôi|dầu lửa|dầu nhớt|nhớt xe|nhớt|nước giặt|viên giặt|nước xả vải|nước lau kính|thuốc tẩy quần áo|băng phiến|long não|thuốc diệt muỗi|thuốc xịt muỗi|nhang muỗi|cồn 70|cồn 90|cồn y tế|cồn sát khuẩn|nước rửa tay khô";
-const POISON = VN(new RegExp(`\\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\\s+(nhầm\\s+|phải\\s+)?(${POISON_SUBST})|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\\b`));
+const POISON_SUBST = "thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit(?! (?:folic|uric|amin|amino|béo|ascorbic|hyaluronic|salicylic|lactic|citric))|acid(?! (?:folic|uric|amin|amino|béo|ascorbic|hyaluronic|salicylic|lactic|citric))|thuốc tẩy bồn cầu|dầu hôi|dầu lửa|dầu nhớt|nhớt xe|nhớt|nước giặt|viên giặt|nước xả vải|nước lau kính|thuốc tẩy quần áo|băng phiến|long não|thuốc diệt muỗi|thuốc xịt muỗi|nhang muỗi|cồn 70|cồn 90|cồn y tế|cồn sát khuẩn|nước rửa tay khô|dung dịch tẩy rửa|dung dịch tẩy|chất tẩy rửa|chất tẩy|nước tẩy rửa|nước tẩy bồn cầu|tẩy bồn cầu|nước lau sàn|nước lau nhà|thuốc tẩy bồn cầu|dầu gội|nước giặt|bột giặt|cồn|nước rửa tay";
+const POISON = VN(new RegExp(`\\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\\s+(nhầm\\s+|phải\\s+)?((một |1 )?(ít|chút|tí|xíu|ngụm|miếng|hớp)\\s+)?(${POISON_SUBST})|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\\b`));
 // Ý ĐỊNH tự hại bằng chất độc / hoá chất CHƯA xảy ra ("a muốn uống thuốc tẩy để chết", "a định uống thuốc trừ sâu cho xong") —
 //   không được đáp như sự cố đã xảy ra; lib/lomiChat.crisisReply đáp lời hỗ trợ khủng hoảng.
 const POISON_INTENT = VN(new RegExp(`\\b(muốn|định|tính|sẽ|sắp|chuẩn bị|chỉ muốn|thèm|quyết định) (\\S+ ){0,2}?(uống|nuốt|ăn|hít|tu|nốc) (hết |cả |nguyên |một |1 )?(chai |lọ |hộp |can |gói |bình |ly )?(${POISON_SUBST})\\b|\\b(uống|nuốt|ăn|hít|tu|nốc) (\\S+ ){0,4}?(để|cho) (chết|xong đời|chết luôn|tự tử|khỏi sống)\\b`));
@@ -63,10 +63,10 @@ const BURN = VN(/\b((bị|vừa bị|mới bị|lỡ bị) (bỏng|phỏng)(?! (
 // Phản vệ: theo thẻ soc-phan-ve và trang NHS "Insect bites and stings" — môi / miệng / lưỡi / họng sưng đột ngột, họng thít, khó thở.
 //   (Chỉ sưng MẶT sau khi bị đốt thì NHS không xếp vào gọi cấp cứu → để mạch triệu chứng hỏi thêm.)
 const SWELL_AIR = VN(/\b(sưng (lưỡi|họng|cổ họng)|lưỡi sưng|họng (sưng|thít)|thít họng)\b/);
-const SWELL = VN(/\b(sưng (môi|mặt|mí|mí mắt|mắt|miệng)|phù (môi|mặt)|môi (hơi |bị |cũng )?sưng|mặt (hơi |bị )?sưng|nổi mề đay|mề đay|nổi mẩn|mẩn đỏ|phát ban|nổi ban|ngứa khắp người)\b/);
-const AIRWAY = VN(/\b(khó thở|thở khò khè|thở rít|tức ngực|khó nuốt|nghẹt thở|thở không (được|nổi)|không thở được|choáng|ngất|lơ mơ|tím tái)\b/);
+const SWELL = VN(/\b(sưng (môi|mặt|mí|mí mắt|mắt|miệng)|phù (môi|mặt)|môi( con| bé| nó| em)? (hơi |bị |cũng )?sưng|mặt (hơi |bị )?sưng|nổi mề đay|mề đay|nổi mẩn|mẩn đỏ|phát ban|nổi ban|ngứa khắp người)\b/);
+const AIRWAY = VN(/\b(ho (khan |sặc )?liên tục|ho khan|khó thở|thở khò khè|thở rít|tức ngực|khó nuốt|nghẹt thở|thở không (được|nổi)|không thở được|choáng|ngất|lơ mơ|tím tái)\b/);
 const TRIGGER = VN(/\b(ong (đốt|chích)|bị (ong|kiến|côn trùng|bò cạp|rết) (đốt|chích|cắn)|ăn (tôm|cua|hải sản|đậu phộng|lạc|trứng)( \S+){0,3} (xong|vào|rồi)|sau khi (ăn|uống thuốc|tiêm)|uống thuốc (xong|vào))\b/);
-const SUDDEN_LIP = VN(/\b(sưng (môi|miệng)|môi (hơi |bị |cũng )?sưng)\b/); // (31/10: "giờ môi hơi sưng")
+const SUDDEN_LIP = VN(/\b(sưng (môi|miệng)|môi( con| bé| nó| em| của bé| của con)? (hơi |bị |cũng )?sưng)\b/); // (21/11: "môi con sưng lên") // (31/10: "giờ môi hơi sưng")
 // Thai kỳ — chỉ những cách nói rõ là đang mang thai ("bầu cử", "bầu trời" không phải).
 const PREG = VN(/\b(mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|đang mang bầu|bầu (\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mấy) (tháng|tuần)|thai (\d+|mấy) (tuần|tháng))\b/);
 const PREG_URGENT = VN(/\b(ra máu|ra huyết|chảy máu|đau bụng (dữ dội|nhiều|quá|lắm|quặn|không chịu nổi)|quặn bụng|ra nước|vỡ ối|rỉ ối|thai (không|ít) (máy|đạp)|không thấy thai (máy|đạp)|thai máy ít|ít đạp|co giật|ngất)\b/);
@@ -84,8 +84,11 @@ const FALL = VN(/\b(bị ngã|té ngã|bị té|ngã cầu thang|té cầu thang
 const FALL_BAD = VN(/\b(không (đứng|ngồi|tự) dậy được|không dậy được|không đứng lên được|đập đầu|va đầu|đau (hông|lưng|cổ|háng) (dữ dội|nhiều|lắm|quá)|gãy|không cử động được|bất tỉnh|ngất|lơ mơ)\b/);
 const ELDER = VN(/\b(ông|bà|ông bà|ba|bố|mẹ|má|cụ|người già|người cao tuổi|cao tuổi|lớn tuổi|[6-9]\d tuổi|1[01]\d tuổi)\b/);
 const CALL = "gọi **115** ngay";
+// 21/11: bị đe doạ / có người tìm tới nhà.
+const THREAT = VN(/\b(nhắn (tin )?đe (doạ|dọa)|bị đe (doạ|dọa)|đe (doạ|dọa) (giết|đánh|đến|tới|tạt|xử)|doạ (giết|đánh|tạt axit|xử)|dọa (giết|đánh|tạt axit|xử)|nói sẽ (đến|tới|qua) (nhà|tận nhà)|(đang )?đập cửa|phá cửa|cạy cửa|đứng (trước|ngoài) (cổng|cửa|nhà)( \S+){0,3} (gọi tên|chửi|la|đập)|(chụp|gửi) (hình|ảnh)( chụp)? (trước|ngoài) (cổng|cửa|nhà)|rình (trước )?nhà)\b/);
 // 20/11: dấu hiệu đột quỵ (FAST — mặt, tay chân, lời nói).
-const STROKE = VN(/\b((tê|yếu|liệt|xệ|bị té|bị te) (nửa|một bên|1 bên) (mặt|người|thân)|(tê|yếu|liệt) (một|1) bên (tay|chân)|yếu nửa người|liệt nửa người|tê nửa người|liệt mặt|méo miệng|méo mặt|lệch miệng|miệng (bị |hơi |tự nhiên )?(lệch|méo|xệ))\b/);
+// 21/11 (bộ 50 đoạn, #41): "đột nhiên nói chuyện không rõ chữ", "một bên mặt ba bị xệ xuống, tay phải cũng yếu hẳn".
+const STROKE = VN(/\b((đột nhiên|tự nhiên|bỗng|bỗng dưng|tự dưng)( \S+){0,3} nói( chuyện)? (không rõ|khó|ngọng|lắp|líu|đớ|không ra tiếng)|(một|1) bên mặt( \S+){0,3} (xệ|méo|lệch|tê|yếu|liệt)|tay (phải|trái)( \S+){0,2} (yếu|tê|liệt) (hẳn|đi|hơn|bất thường)|(tê|yếu|liệt|xệ|bị té|bị te) (nửa|một bên|1 bên) (mặt|người|thân)|(tê|yếu|liệt) (một|1) bên (tay|chân)|yếu nửa người|liệt nửa người|tê nửa người|liệt mặt|méo miệng|méo mặt|lệch miệng|miệng (bị |hơi |tự nhiên )?(lệch|méo|xệ))\b/);
 // 18/10 (audit F, P0): đang sốt xuất huyết mà kể DẤU HIỆU CẢNH BÁO (NHS "Dengue", rà soát 13/08/2026: đau bụng dữ dội, nôn nhiều lần,
 //   thở nhanh, chảy máu chân răng / mũi, rất mệt, bồn chồn, nôn / phân có máu → đi cấp cứu). Trước đây "sốt xuất huyết ngày thứ 4 đau bụng,
 //   chảy máu chân răng" bị chọn nhầm thẻ viêm nướu ("chảy máu chân răng" là một tên của thẻ đó) rồi rơi vào nhánh hỏi thêm.
@@ -151,6 +154,9 @@ export function urgentOf(text: string): Urgent | null {
   if (KNOWLEDGE.test(n) || HEARSAY.test(n)) return null;
   // 20/11 (bộ 60 đoạn, #55 — "ba mk 68t bi tê nua mat trai, noi hoi kho nghe cung ko ro" từng bị đọc "bị té" → chuyện người già ngã;
   //   "cuoi mieng hoi lech" → hôi miệng): dấu hiệu ĐỘT QUỴ (mặt méo / tê yếu nửa mặt – nửa người / nói khó) đứng TRƯỚC té ngã. Thẻ dot-quy có nguồn.
+  // 21/11 (bộ 50 đoạn, #44 — bị đe doạ, người lạ đập cửa khi ở nhà một mình: trước bị đáp như chuyện cô đơn / cách nhắn tin).
+  if (THREAT.test(n) && !HEARSAY.test(n))
+    return { id: "threat", aspect: "emergency", head: `🚨 Bị **đe doạ, có người tìm tới nhà / đập cửa** → gọi **113** (công an) ngay, nói rõ địa chỉ và chuyện đang xảy ra.\n• **Không mở cửa, không ra đối chất**; khoá cửa, ở trong phòng kín, để điện thoại luôn bên mình\n• Nhắn / gọi người thân, hàng xóm gần nhất báo tình hình, nhờ họ tới hoặc gọi giúp\n• **Giữ lại** tin nhắn đe doạ, hình ảnh họ gửi — đó là bằng chứng cho công an\n• Nếu bị thương → gọi **115**` };
   if (STROKE.test(n))
     return { id: "stroke", card: "dot-quy", aspect: "emergency", head: `🚨 **Tê / yếu nửa mặt hoặc nửa người, méo lệch miệng, nói khó** xuất hiện đột ngột là dấu hiệu có thể **đột quỵ** → ${CALL}, kể cả khi người đó vẫn tỉnh hay dấu hiệu tự đỡ. **Đừng chờ theo dõi ở nhà**, đừng cho ăn uống gì; ghi lại **giờ bắt đầu** thấy dấu hiệu để báo bác sĩ.` };
   const other = OTHER.test(n);

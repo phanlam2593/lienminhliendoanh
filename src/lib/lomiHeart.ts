@@ -1870,6 +1870,34 @@ const RAW_LGBT = /(^|[\s,.])(là|mình là|anh là|em là|tôi là|tui là|tớ 
 function rawTheme(text: string): Theme | undefined {
   return RAW_LGBT.test(text.normalize("NFC")) ? byId("lgbt") : undefined;
 }
+/** 21/11 (bộ 50 đoạn — tâm sự kể dần 4 lượt rồi hỏi "giờ mình nên làm gì"): đọc CẢ MẠCH chuyện người dùng đã kể để chọn đúng chủ đề,
+ *  rồi trả lời theo chủ đề đó (trước: câu hỏi cuối bị đáp chung chung "Bạn đang phân vân chuyện gì nè?" hoặc lệch chủ đề). */
+export function threadAdvice(turns: string[]): HeartReply | null {
+  const all = turns.join(". ");
+  const n = normStrict(all, HEART);
+  if (!n) return null;
+  const has = (re: RegExp) => VN(re).test(` ${n} `);
+  // Người dùng là người ĐI VAY (chủ đề debtfriend viết cho người cho vay) / người thân (không phải mình) nghiện game → lời riêng.
+  if (has(/\b(mình|mk|tôi|tui|em|tớ|t) (có |đã |lỡ )?(mượn|vay|nợ)\b/) && has(/\b(bạn|bạn thân|người quen)\b/))
+    return { text: "Mượn tiền chưa trả kịp mà thấy bạn bắt đầu tránh mặt thì áy náy lắm, Lomi hiểu 😔 Việc bạn muốn chủ động nói chuyện là điều tốt nhất có thể làm lúc này.\n\nLomi gợi ý vầy nha:\n• **Nhắn trước, đừng đợi bạn đòi**: “Mình biết đã quá hẹn lâu rồi, mình xin lỗi vì để bạn phải chờ.”\n• **Nói thật hoàn cảnh**, ngắn gọn, không viện cớ dài dòng\n• **Đưa kế hoạch cụ thể**: trả trước một phần (dù ít), phần còn lại chia mỗi tháng bao nhiêu, ngày nào — và giữ đúng hẹn\n• Ghi lại bằng tin nhắn cho rõ ràng, để bạn yên tâm\n• Cảm ơn bạn đã tin và giúp mình lúc khó\n\nTình bạn thường không mất vì nợ, mà mất vì im lặng. Bạn muốn Lomi giúp soạn thử tin nhắn đầu tiên không?", theme: "debtfriend", quick: [] };
+  if (has(/\b(em trai|em gái|anh trai|chị gái|con trai|con gái)\b/) && has(/\b(chơi game|nạp (tiền|thẻ)( vào)? game|nghiện game)\b/) && !has(/\b(mình|mk|tôi|tui|anh|a) (nghiện|chơi game|chơi)\b/))
+    return { text: "Thấy người thân chìm vào game tới mức bán đồ, giấu gia đình thì lo và bực là dễ hiểu lắm 😔\n\nLomi gợi ý vầy nha:\n• **Chọn lúc bình tĩnh, nói riêng**, đừng mở đầu bằng trách móc hay chuyện cái xe — kiểu “Dạo này chị thấy em ít nói, em có ổn không?”\n• **Hỏi để hiểu**: vì sao nghỉ học, game đang giúp em quên chuyện gì (chán, áp lực, mất phương hướng)\n• **Nói rõ điều mình lo** bằng “chị lo / chị sợ” thay vì “em lúc nào cũng…”\n• **Cả nhà thống nhất** cách giữ tiền, giấy tờ xe, thẻ để em không bán / nạp tiếp\n• Gợi ý **một việc nhỏ thay thế** có lịch rõ: đi làm thêm, học nghề ngắn hạn\n• Nếu em không kiểm soát được việc chơi, bỏ ăn ngủ, cáu gắt nhiều → nên tìm **chuyên gia tâm lý** cùng em\n\nBạn muốn Lomi gợi ý câu mở đầu cụ thể không?", theme: "family", quick: [] };
+  const id =
+    has(/\b(\d{2} tuổi|con gái|con trai|tuổi dậy thì|con (mình|em|tôi|mk))\b/) && has(/\b(người lớn hơn|lớn hơn (khá )?nhiều tuổi|người lạ|đàn ông|ông chú)\b/) ? "minorrel"
+    : has(/\b(mượn tiền|vay tiền|nợ tiền|chưa trả (tiền|nợ)|hứa (\S+ ){0,3}trả)\b/) && has(/\b(bạn|bạn thân|người quen)\b/) ? "debtfriend"
+    : has(/\b(nói xấu|đồn|kể với mọi người|bịa chuyện|hỏi móc|nói sau lưng)\b/) ? "gossip"
+    : has(/\b(chăm (ba|bố|mẹ|má|ông|bà|người bệnh|chồng|vợ)|nằm một chỗ|liệt giường|tai biến)\b/) ? "caregiver"
+    : has(/\b(gửi tiền về|tiền (sinh hoạt|chung|bạc)|tiền của (vợ|chồng|vk|ck))\b/) && has(/\b(vợ|chồng|vk|ck|hai vợ chồng)\b/) ? "couplemoney"
+    : has(/\b(từ chối|nhờ (vả|trông|giữ)|vay tiền|mắc nợ (tình cảm|ân tình)|vô ơn)\b/) ? "boundary"
+    : has(/\b(đem chuyện|lôi chuyện|đùa (về|trước mặt)|chọc|trêu)\b/) && has(/\b(họ hàng|bác|chú|cô|dì|người lớn)\b/) ? "boundary"
+    : has(/\b(lấy tiền|lấy trộm|tiền tiết kiệm)\b/) && has(/\b(em gái|em trai|anh trai|chị gái|mẹ|ba)\b/) ? "family"
+    : has(/\b(con (gái|trai)|tuổi dậy thì|không nghe lời|khoá cửa phòng|khóa cửa phòng)\b/) ? "parenting"
+    : undefined; // chỉ dùng khi mạch chuyện có dấu hiệu RÕ — còn lại để luồng tâm sự sẵn có lo (đã đúng mạch trong đa số ca)
+  const t = id ? byId(id) : undefined;
+  if (!t) return null;
+  return themeReply(t, n, true);
+}
+
 export function heartThemeOf(text: string): string | undefined {
   text = maskDizzy(text);
   return (rawTheme(text) ?? themeOf(normStrict(text, HEART)))?.id;

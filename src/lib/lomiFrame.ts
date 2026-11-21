@@ -366,6 +366,9 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   if ((person || pet) && p.kind === "state" && p.cls === "need")
     return { intent: "frame:third_need", talk: true, text: `${subj} ${what} hả 😄 Vậy bạn lo cho ${pet || VR(/^(Con|Bé|Cháu|Nhóc)/).test(subj) ? "bé" : "người nhà"} trước đi nha, lát rảnh nói chuyện tiếp với Lomi!` };
   // Không khen không chê: kể một việc của người đó ("mẹ a mới lên chơi", "con a tuần sau thi").
+  // 21/11 (bộ 50 đoạn, #41/#42 — "ba mk đang nằm nghỉ thì đột nhiên nói chuyện không rõ chữ", "con mk vừa ăn hạt điều xong thì nổi mẩn"
+  //   từng được đáp "… hả 😄 Nghe vui đó!"): câu kể có chuyện bất thường / triệu chứng thì không đáp kiểu chuyện phiếm.
+  if (VR(/\b(đột nhiên|tự nhiên|bỗng|bỗng dưng|tự dưng|nổi mẩn|nổi mề đay|sưng|ngứa|đau|sốt|ói|nôn|ho|khó thở|ngất|xỉu|co giật|chảy máu|không rõ|yếu|tê|liệt|méo|xệ|lừ đừ|bất tỉnh|té|ngã)\b/iu).test(f.raw)) return null;
   if ((person || pet) && (p.kind === "activity" || p.kind === "motion" || (p.kind === "cognition" && !!p.recent)) && (p.recent || p.ongoing || p.planned || f.time?.explicit))
     return { intent: "frame:third_event", talk: true, text: !p.known ? `${cap(join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? subj.charAt(0).toLowerCase() + subj.slice(1) : subj, p.recent ? "mới" : p.ongoing ? "đang" : "", what))} hả? Rồi sao nữa bạn, kể Lomi nghe với.` : `${join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? subj.charAt(0).toLowerCase() + subj.slice(1) : subj, p.recent ? "mới" : p.ongoing ? "đang" : "", what)} hả 😄 ${pick(["Rồi sao nữa, kể Lomi nghe với!", "Nghe vui đó!"])}` };
   return null;

@@ -140,7 +140,7 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
-import { kinSupportText } from "@/lib/lomiHeart";
+import { kinSupportText, threadAdvice } from "@/lib/lomiHeart";
 import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotCardAsk, tarotHowto, tarotMeta, thanksGreet } from "@/lib/lomiRescue";
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
@@ -464,6 +464,9 @@ const FRAME_YIELD = new Set<string>([...PRIORITY_THEMES, "ex", "decline", "crush
 const FIND_BUDDY = "Có 2 chỗ hợp nè 👇\n• **Quẹt → Làm quen (/quet)**: ghi nhu cầu kiểu “tìm bạn đi trekking cuối tuần”, chọn sở thích; ai hợp ý quẹt phải là hai bên **kết nối** và nhắn tin được\n• **Cộng đồng (/cong-dong)**: chọn khu vực của bạn → chủ đề *Chat chung* hoặc *Linh tinh* rồi rủ cả nhóm, nhiều người thấy cùng lúc\n\nĐi trekking với người mới quen thì hẹn chỗ đông người trước, báo người nhà lịch trình nha 🥾";
 // 21/11 (bộ 60 đoạn, #59): góp vốn làm ăn chung — kiểm tra rủi ro thực tế (lời khuyên kinh doanh chung, không phải tư vấn tài chính cá nhân).
 const GOP_VON = "Rút bài thì chỉ để tham khảo cho vui thôi nha 🔮 — chuyện bỏ 80 triệu thì nên kiểm tra rủi ro **bằng giấy bút** trước:\n• **Tính thử**: tiền mặt bằng, máy móc, nguyên liệu, lương; mỗi tháng cần bao nhiêu khách để hoà vốn; nếu 6 tháng đầu vắng thì còn trụ được không\n• **Thử nhỏ trước**: làm tại nhà / nhận khách quen vài tuần, xem có khách thật không rồi mới thuê mặt bằng\n• **Ghi rõ bằng giấy**: mỗi người góp bao nhiêu, chia lời – lỗ thế nào, ai làm việc gì, muốn rút ra thì sao — ký hai bên\n• **Bù kinh nghiệm**: bạn chưa có kinh nghiệm thì cho bạn đi học nghề / làm thử ở tiệm khác trước\n• Chỉ góp số tiền mà **mất hết cũng không ảnh hưởng cuộc sống**\n\nLomi không phải chuyên gia tài chính, nên số tiền lớn thì hỏi thêm người có kinh nghiệm mở tiệm thật nha.";
+
+// 21/11: 3 lượt người dùng gần nhất (đã chuẩn hoá) — để câu hỏi nối hiểu đang nói về ưu đãi / doanh nghiệp.
+const prevUB = (ms: { role: string; raw?: string; content: string }[]) => " " + ms.filter((m) => m.role === "user").slice(-3).map((m) => normalizeVi(m.raw ?? m.content)).join(" ") + " ";
 
 export default function AiAssistant() {
   const goBack = useGoBack();
@@ -1320,7 +1323,7 @@ export function AiChat({
     const mt = medNow ? await loadMedTopic(medNow.id) : sxMed ? await loadMedTopic(sxMed) : null;
     const tname = mt ? medName(mt) : (hLabelVi ?? "");
     // (3a0) Đang dị ứng / mề đay / vừa ăn, uống gì mà kể sưng môi, lưỡi, họng hay khó thở → phản vệ, gọi 115.
-    if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && !VN(/\b(đau (tức )?ngực|tức ngực|thắt ngực)\b/).test(nr) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
+    if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && !VN(/\b(đau (tức )?ngực|tức ngực|thắt ngực)\b/).test(nr + " " + msgs.filter((m) => m.role === "user").slice(-3).map((m) => normalizeVi(m.raw ?? m.content)).join(" ")) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
       return { role: "assistant", content: "🚨 Đang nổi mề đay / dị ứng mà **sưng môi, lưỡi, mặt, họng hay khó thở** là dấu hiệu có thể **sốc phản vệ** — gọi **115** ngay hoặc nhờ người chở tới cấp cứu gần nhất, đừng chờ xem có tự hết không.\n• Nếu có bút tiêm adrenaline (epinephrine) được kê sẵn thì dùng ngay theo hướng dẫn\n• Ngồi thẳng cho dễ thở (khó thở) hoặc nằm, kê chân cao (choáng, muốn xỉu); có người ở cạnh\n\nBạn gọi được chưa?", local: true, health: hCtx ?? { label: tname }, ...(medNow ? { med: medNow } : {}) };
     // (3a) Đau bụng chuyển sang bên phải (kèm / không kèm sốt) → đi khám ngay.
     if (VN(/\b(bên phải|phía phải|hố chậu phải|bụng phải|dưới phải)\b/).test(nr) && VN(/\bđau bụng|đau quanh rốn|quanh rốn\b/).test(` ${normalizeVi(`${recentU} ${tname} ${raw}`)} `))
@@ -1936,16 +1939,33 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: "Ui, vậy là Lomi lo hơi quá rồi 😅 May quá! Lomi hỏi kỹ vì những chữ đó Lomi luôn để ý thật lòng.\n\nCòn nếu lúc nào đó thấy nặng nề thật, cứ nói với Lomi hoặc người bạn tin cậy nha 💚 Giờ mình nói tiếp chuyện của bạn nè!", local: true });
       }
     }
+    // 21/11 (bộ 50 đoạn, #42 — "Mk đã gọi 115 rồi, trong lúc chờ xe tới cần làm gì?" từng ra danh sách số khẩn cấp): đã gọi rồi → việc làm
+    //   trong lúc chờ, lấy từ thẻ có nguồn của đúng tình huống đang nói (phản vệ / đột quỵ / ngộ độc / đau ngực).
+    if (!forceAi && !en && VN(/\b(đã gọi|gọi rồi|vừa gọi|có gọi)( \S+){0,2}\b/).test(` ${normalizeVi(raw)} `) && VN(/\b((trong lúc|trong khi|lúc|khi|đang) (chờ|đợi)|cần làm gì|nên làm gì|làm gì (trước|tiếp)|phải làm sao)\b/).test(` ${normalizeVi(raw)} `)) {
+      const th = msgs.slice(-6).map((m) => m.content).join(" ");
+      const cid = /phản vệ/u.test(th) ? "soc-phan-ve" : /đột quỵ/u.test(th) ? "dot-quy" : /ngộ độc|tẩy|hoá chất|hóa chất|chất độc/u.test(th) ? "ngo-doc" : /đau tim|đau ngực|tức ngực/u.test(th) ? "nhoi-mau-co-tim" : null;
+      const card = cid ? await loadMedTopic(cid) : null;
+      const care = (card?.care ?? []).map((c) => c.text.replace(/^(NHS|Mayo Clinic|MedlinePlus|CDC|WHO|Bộ Y tế)[^:]{0,20}:\s*/u, "")).filter((t) => !/^(nếu bị côn trùng|nếu nghi nuốt pin|trẻ có miếng dán)/iu.test(t)).slice(0, 6);
+      if (care.length)
+        return localReply(q, { role: "assistant", content: `👍 Gọi 115 rồi là đúng nha. Trong lúc chờ xe tới:\n${care.map((t) => `• ${t.charAt(0).toUpperCase() + t.slice(1)}`).join("\n")}\n\nĐể điện thoại luôn bật, ra đón / mở sẵn cửa để đội cấp cứu vào nhanh. Lomi ở đây với bạn 💚`, local: true, health: {}, med: card ? { id: card.id } : undefined });
+    }
     // 20/11 (bộ 60 đoạn, #50/#55): lượt trước Lomi vừa báo CẤP CỨU (🚨 … 115) mà giờ người dùng hỏi có nên chờ / theo dõi / nằm nghỉ,
     //   hay kể thêm triệu chứng nặng ("mồ hôi lạnh ra nhiều, tay chân bủn rủn") → nhắc lại: đừng chờ, gọi 115 ngay (trước: "Lomi chưa biết cái này").
     {
-      const la = msgs[msgs.length - 1];
+      // 21/11: xét 3 câu trả lời gần nhất (không chỉ câu cuối) — một lượt lạc đề ở giữa không làm mất mạch cấp cứu.
+      const la = msgs.filter((m) => m.role === "assistant" && !m.note).slice(-3).reverse().find((m) => /^(🚨|⚠️)/u.test(m.content) && /11[53]/.test(m.content));
       const nr0 = ` ${normalizeVi(raw)} `;
-      if (!forceAi && !en && la?.role === "assistant" && /^(🚨|⚠️)/u.test(la.content) && /115/.test(la.content) && /cấp cứu|đột quỵ|đau tim|115 ngay/u.test(la.content) && raw.split(/\s+/).length <= 25 && !crisisReply(q, lang)
-        && (VN(/\b(theo dõi thêm|theo dõi ở nhà|nằm nghỉ|chờ thêm|đợi thêm|để mai|để sáng|tự (chở|lái))\b/).test(nr0)
-          || VN(/\b(mồ hôi lạnh|vã mồ hôi|bủn rủn|choáng|ngất|xỉu|lơ mơ|nôn|khó thở hơn|đau hơn|nặng hơn|tím|không nói được|nói không được|yếu hơn)\b/).test(nr0))
-        && !VN(/\b(đỡ rồi|hết rồi|ổn rồi|đã gọi|gọi rồi|đang ở viện|tới viện rồi|bác sĩ (khám|nói) rồi)\b/).test(nr0))
-        return localReply(q, { role: "assistant", content: "🚨 Với những dấu hiệu bạn kể, **đừng chờ theo dõi thêm ở nhà** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ địa chỉ và các dấu hiệu.\n\nTrong lúc chờ:\n• Có người ở cạnh, không để người bệnh ở một mình\n• Không tự lái xe đi viện, không cho ăn uống hay tự uống thuốc\n• Nếu người bệnh ngất, ngừng thở hoặc không phản ứng: làm theo hướng dẫn của tổng đài 115\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚", local: true, health: {} });
+      const threatTh = !!la && /đe doạ|đập cửa/u.test(la.content);
+      if (!forceAi && !en && la && (threatTh || /cấp cứu|đột quỵ|đau tim|115 ngay|chất độc|phản vệ/u.test(la.content)) && raw.split(/\s+/).length <= 25 && !crisisReply(q, lang)
+        && (VN(/\b(theo dõi thêm|theo dõi ở nhà|nằm nghỉ|chờ thêm|đợi thêm|để mai|để sáng|tự (chở|lái)|(nằm|nghỉ) (một chút|chút|tí|xíu)|sẽ khỏi|tự khỏi|(không muốn|ngại|không chịu|chưa muốn) (đi |gọi )?(viện|khám|cấp cứu|bệnh viện|115)|có nên nghe|(bảo|nói|kêu) (là )?(đỡ|hết|ổn) rồi)\b/).test(nr0)
+          || VN(/\b(mồ hôi lạnh|vã mồ hôi|bủn rủn|choáng|ngất|xỉu|lơ mơ|nôn|khó thở hơn|đau hơn|rát hơn|nặng hơn|tím|không nói được|nói không được|yếu hơn|vẫn (khó chịu|đau|rát|mệt)|(có )?cần (đi )?(cấp cứu|khám|viện|bệnh viện)|ngại gọi|nên làm gì|làm gì tiếp|giờ (sao|làm sao)|phải làm sao|khoá cửa|khóa cửa|vào phòng|biết địa chỉ|chụp (hình|ảnh)|gửi (hình|ảnh))\b/).test(nr0))
+        && !VN(/\b(đã gọi|gọi rồi|đang ở viện|tới viện rồi|bác sĩ (khám|nói) rồi)\b/).test(nr0)
+        && !(VN(/\b(đỡ rồi|hết rồi|ổn rồi)\b/).test(nr0) && !VN(/\b(bảo|nói|kêu|không muốn|có nên)\b/).test(nr0)))
+      {
+        if (threatTh)
+          return localReply(q, { role: "assistant", content: "🚨 Bạn làm đúng rồi, cứ **ở yên trong phòng, không mở cửa, không ra nói chuyện** với người đó nha.\n• **Gọi 113 ngay** nếu chưa gọi — nói rõ địa chỉ, có người đang đe doạ / đập cửa, bạn đang ở nhà một mình\n• Chặn cửa phòng bằng đồ nặng nếu được, để điện thoại luôn bên mình, giữ máy với người thân hoặc tổng đài\n• Nhắn người thân, hàng xóm gần nhất tới hoặc gọi giúp\n• Giữ lại tin nhắn, hình họ gửi làm bằng chứng\n• Nếu bị thương → gọi **115**\n\nLomi ở đây với bạn 💚 Có gì nhắn Lomi liền nha.", local: true });
+        return localReply(q, { role: "assistant", content: "🚨 Với những dấu hiệu bạn kể, **đừng chờ theo dõi thêm ở nhà** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ địa chỉ và các dấu hiệu. **Kể cả khi người bệnh nói đã đỡ** — với đột quỵ, đau tim, phản vệ hay ngộ độc, dấu hiệu có thể quay lại hoặc nặng lên, và điều trị càng sớm càng tốt.\n\nTrong lúc chờ:\n• Có người ở cạnh, không để người bệnh ở một mình\n• Không tự lái xe đi viện, không cho ăn uống hay tự uống thuốc\n• Nếu người bệnh ngất, ngừng thở hoặc không phản ứng: làm theo hướng dẫn của tổng đài 115\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚", local: true, health: {} });
+      }
     }
     // 20/11 (bộ 100 câu, #98–100): hỏi cách nấu món có chữ "sốt" / "kho" là tên món ("trứng sốt cà chua", "cá sốt cà", "bò sốt vang")
     //   → trả công thức NGAY, trước lớp sức khoẻ (trước đây "sốt" bị đọc là bị sốt, ra thẻ "kiêng trứng khi sốt").
@@ -2082,6 +2102,63 @@ export function AiChat({
       const tm = tarotMeta(raw);
       if (tm) return localReply(q, { role: "assistant", content: tm, local: true, routed: "tarot-howto" });
     }
+    // 21/11 (bộ 50 đoạn, #20–#27): chủ doanh nghiệp hỏi chi tiết cách app chạy — trả lời đúng những gì app CÓ (đã đối chiếu DB + code:
+    //   offers không có ngày bắt đầu / kết thúc, chỉ có số lượt nhận tổng; mã khách nhận hiệu lực 2 giờ, nhận bằng PIN của quán; reviews
+    //   có ô chủ quán trả lời (review_replies); có nút cờ báo cáo từng đánh giá; không có quản lý chung; DN bị trả về thì sửa xong tự chờ duyệt lại,
+    //   có thông báo business_approved / business_rejected).
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      const nB = ` ${normalizeVi(raw)} `;
+      const bizA = (t: string) => localReply(q, { role: "assistant", content: t, local: true, faqId: "bizoffer" });
+      if (VN(/\b(bao nhiêu|tổng số|số|đếm|thống kê)( \S+){0,2} (khách|người|lượt)( \S+){0,4} (dùng|nhận|xài|lấy) (mã|ưu đãi|deal)\b|\b(xem|biết) (\S+ ){0,3}(lượt|số lượt) (nhận|dùng)\b/).test(nB))
+        return bizA("Vào **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp → mục Ưu đãi**: mỗi ưu đãi hiện **số lượt đã nhận** (vd “12 lượt”) 📊\n• Đây là **tổng từ lúc đăng** — hiện app **chưa có thống kê theo tháng / theo ngày**\n• Muốn đếm riêng từng đợt thì đăng ưu đãi mới cho mỗi đợt (tạm ẩn ưu đãi cũ), số lượt sẽ tính lại từ đầu");
+      if (VN(/\b(nhân viên|thu ngân|quán)( \S+){0,3} xác nhận|xác nhận (mã|ở đâu|lượt)|ghi nhận lượt|nhập mã cho khách|khách đưa mã\b/).test(nB))
+        return bizA("Quán **không cần bấm xác nhận gì** nha 👍\n• Khách tới quán, bấm **Nhận ưu đãi** rồi nhập **mã PIN của quán** (bạn đặt trong Hồ sơ doanh nghiệp) — nhập đúng PIN là lượt được ghi nhận\n• App hiện **mã ưu đãi + đồng hồ đếm ngược 2 giờ** trên điện thoại khách; nhân viên chỉ cần **nhìn mã còn hạn** là áp dụng\n• Đừng đọc PIN cho khách ở xa / qua tin nhắn — PIN để chắc khách đang có mặt tại quán");
+      if (VN(/\b((kiểm tra|xem|biết)( \S+){0,4} (trạng thái|đã (được )?duyệt|duyệt (lại )?chưa|được duyệt chưa)|bị từ chối|trả về|gửi (lại|duyệt lại)|duyệt lại)\b/).test(nB) && VN(/\b(hồ sơ|doanh nghiệp|quán|tiệm|cửa hàng|duyệt)\b/).test(nB))
+        return bizA("Xem ở **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp** (/ho-so?view=business) nha 🏪\n• Trạng thái hiện ngay đầu trang: **đang chờ duyệt / cần bổ sung / đã duyệt**\n• Nếu admin trả về để **bổ sung**, lời nhắn của admin hiện ngay trong khung đó — sửa đúng phần đó rồi **Lưu**, hồ sơ **tự chuyển về chờ duyệt lại**, không cần gửi gì thêm\n• Khi admin duyệt xong (hoặc từ chối), bạn nhận **thông báo** ở mục Thông báo (/thong-bao)\n• Duyệt là admin làm tay, nên có khi mất một chút thời gian nha");
+      if (VN(/\b(ngày bắt đầu|ngày kết thúc|hạn sử dụng|thời hạn|hết hạn|chỉ (áp dụng )?(cuối tuần|thứ|ngày)|áp dụng (cuối tuần|thứ)|đặt (ngày|lịch|giờ)|sửa hạn|giờ vàng|khung giờ)\b/).test(nB) && VN(/\b(ưu đãi|mã|deal|khuyến mãi|chương trình)\b/).test(nB + prevUB(msgs)))
+        return bizA("Hiện ưu đãi trên iLomi **chưa có ô đặt ngày bắt đầu / kết thúc** hay khung giờ nha 🙏\n• Muốn chỉ áp dụng **cuối tuần**: ghi rõ trong **tên / mô tả** ưu đãi (vd “Chỉ T7–CN”), và dùng nút **Tạm ẩn / Hiện lại** để bật – tắt theo ngày\n• **Mã khách nhận chỉ có hiệu lực 2 giờ** kể từ lúc nhận tại quán, nên không có chuyện lưu mã hôm trước rồi hôm sau mới dùng\n• Muốn đổi nội dung thì bấm sửa ưu đãi và **Lưu**; đổi điều kiện lớn thì nên tạm ẩn ưu đãi cũ và đăng ưu đãi mới cho rõ ràng");
+      if (VN(/\b((trả lời|phản hồi|rep) (lại )?(đánh giá|review|bình luận của khách)|đánh giá( \S+){0,4} (trả lời|phản hồi) (ở|vào) đâu)\b/).test(nB))
+        return bizA("Mở **trang doanh nghiệp** của bạn → dưới đánh giá đó bấm **Trả lời** → viết phản hồi → gửi. Phản hồi hiện công khai ngay dưới đánh giá, ai xem trang cũng đọc được 💬\n• Viết bình tĩnh, lịch sự: cảm ơn khách đã góp ý, nói rõ hôm đó quán kiểm tra thấy thế nào, mời khách nhắn riêng để làm rõ\n• Đánh giá có vẻ sai sự thật / không phải khách thật: bấm **biểu tượng cờ 🚩** ở đánh giá đó để **báo cáo** cho Ban quản trị\n• Đừng nhờ người quen đánh giá bù — vừa không công bằng, vừa dễ mất uy tín");
+      if (VN(/\b(báo cáo|report)( \S+){0,3} (đánh giá|review)|đánh giá (giả|ảo|sai sự thật|bịa)|review (giả|ảo)\b/).test(nB) && !VN(/\b(viết|làm|tạo|mua|cày|thuê|nhờ|kiếm|bơm|spam|đăng|tự) (\S+ ){0,3}(đánh giá|review|sao)\b/).test(nB))
+        return bizA("Được nha 👍 Ở đánh giá đó bấm **biểu tượng cờ 🚩** để **báo cáo** cho Ban quản trị, chọn / ghi rõ lý do (vd ngày khách nói tới quán không có ca phục vụ, không có hoá đơn…). Kết quả xử lý bạn xem ở **Báo cáo của tôi** (/bao-cao-cua-toi). Lomi không tự xoá được đánh giá — việc này do admin quyết định sau khi xem.");
+      if (VN(/\b((bị|có người) (\S+ )?báo cáo (doanh nghiệp|quán|tiệm|cửa hàng|shop|mình|tài khoản)|(doanh nghiệp|quán|tiệm) (mình |của mình )?bị báo cáo)\b/).test(nB + prevUB(msgs)) && VN(/\b(xem|ở đâu|gửi|bằng chứng|giải trình|ẩn|khoá|khóa|bị gì|có sao|làm sao|cho ai)\b/).test(nB))
+        return bizA("Bị báo cáo thì đừng lo quá nha — báo cáo chỉ là để **Ban quản trị xem xét**, không tự động phạt hay ẩn doanh nghiệp 🙏\n• Nội dung và người báo cáo **được giữ kín**, nên bạn không xem được — Lomi cũng không xem được\n• Muốn giải trình / gửi bằng chứng (ảnh, tin nhắn, hoá đơn): vào **Hồ sơ → ⋯ → Trợ giúp & Liên hệ** để gửi cho Ban quản trị; phản hồi hiện ở **Báo cáo của tôi** (/bao-cao-cua-toi)\n• Doanh nghiệp chỉ bị ẩn / tạm khoá **khi admin quyết định** sau khi xem; khi đó bạn sẽ được báo");
+      if (VN(/\b(gửi|báo|cung cấp|đưa) (\S+ ){0,3}(cho )?(admin|ban quản trị|bqt|quản trị viên)\b|\b(thông tin|bằng chứng) (\S+ ){0,2}(gì|nào) (\S+ ){0,2}(cho )?(admin|ban quản trị|bqt)\b/).test(nB))
+        return bizA("Gửi cho Ban quản trị ở **Hồ sơ → ⋯ → Trợ giúp & Liên hệ** (phản hồi hiện ở **Báo cáo của tôi** /bao-cao-cua-toi) nha 📩 Nên kèm đủ:\n• **Tên doanh nghiệp** và **tên ưu đãi** liên quan\n• **Mã ưu đãi** khách đưa (nếu có), **ngày giờ** khách tới quán\n• **Tên / @username của khách** (nếu biết)\n• **Ảnh chụp màn hình** điện thoại khách (mã, đồng hồ đếm ngược) và những gì nhân viên thấy\n• Mô tả ngắn chuyện đã xảy ra: khách nói gì, nhân viên nói gì\n\nThông tin càng rõ thì admin kiểm tra càng nhanh.");
+      if (VN(/\b((thêm|cho|mời) (\S+ )?(nhân viên|người|quản lý)( \S+){0,3} (quản lý|vào quản lý|cùng quản lý|làm admin)|ai (đang )?có quyền( quản lý)?|phân quyền|quyền quản lý|đồng quản lý)\b/).test(nB))
+        return bizA("Hiện mỗi doanh nghiệp trên iLomi **chỉ do một tài khoản chủ quản lý**, app **chưa có chức năng thêm nhân viên / đồng quản lý** 🙏\n• Muốn nhân viên trả lời khách: để khách **nhắn tin** vào tài khoản chủ, hoặc ghi **số điện thoại quán** trong hồ sơ để khách gọi\n• **Đừng đưa mật khẩu** tài khoản cho nhân viên — người nghỉ việc vẫn đăng nhập được; nếu lỡ đưa thì **đổi mật khẩu** ngay\n• Cần quản lý chung thật sự thì báo Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ) để góp ý tính năng");
+      if (VN(/\b(đóng|tắt|gỡ|xoá|xóa|dừng|ẩn) (\S+ )?(tin|bài|thẻ)( \S+){0,2} (tuyển|tuyển dụng|tìm người|tìm việc)\b|\b(tuyển|tìm) (được )?người rồi\b/).test(nB))
+        return bizA("Vào **Quẹt → Công việc → nút Quản lý** (ở thẻ của bạn) → chọn tin tuyển dụng đó → **Xoá** (hoặc sửa lại nội dung) nha 👍 Xoá xong thì tin không còn hiện để người khác quẹt nữa; những người đã kết nối trước đó vẫn nhắn tin với bạn bình thường.");
+    }
+    // 21/11 (bộ 50 đoạn, #11–#33): hỏi BẢO QUẢN thứ vừa nấu / vừa làm ("nấu dư để tủ lạnh mấy ngày", "để qua đêm ăn lại được ko",
+    //   "chè để ngăn đá được không") — trước: "Lomi chưa biết" hoặc đi tìm quán chè.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      const nS = ` ${normalizeVi(raw)} `;
+      const STORE = VN(/\b(để (tủ lạnh|ngăn mát|ngăn đá|tủ đông|tủ mát|qua đêm|qua ngày|được (bao lâu|mấy ngày|lâu không))|(cất|bỏ) (tủ|hộp|chai|lọ)( \S+){0,4} (bao lâu|mấy ngày|được không|được ko|đc ko|đc k)|để (được )?(bao lâu|mấy ngày)|hâm lại|ăn lại được|dùng lại (được|ngày mai)|chia hộp|còn dư|nấu dư|ăn không hết|qua (2|hai) ngày|để (sẵn|ngoài)( \S+){0,3} (bao lâu|được không)|để (trong )?(nhà tắm|phòng tắm)( \S+){0,2} (có sao|được không|được ko|đc ko|đc k))\b/);
+      if (STORE.test(nS)) {
+        const ctx = nS + " " + msgs.filter((m) => m.role === "user").slice(-3).map((m) => normalizeVi(m.raw ?? m.content)).join(" ");
+        const nonFood = VN(/\b(gel|nha đam bôi|dầu dừa|dầu gội|nước súc miệng|súc miệng|bôi|thoa|đắp|gội|xông|kem)\b/).test(nS) || (VN(/\b(gel|súc miệng|bôi|thoa|gội đầu|da đầu|đắp mặt)\b/).test(ctx) && !VN(/\b(ăn|uống|nấu (canh|cháo|chè|món)|chè|cháo|canh|bánh|thịt|cá|gà|bò)\b/).test(nS));
+        if (nonFood)
+          return localReply(q, { role: "assistant", content: "Đồ **tự làm để bôi / súc / gội** (gel nha đam lấy từ lá, nước lá nấu, nước súc miệng pha…) **không có chất bảo quản** nên Lomi khuyên **làm mới dùng ngay, đừng để dành qua ngày** — để lâu dễ hỏng, nhiễm khuẩn mà nhìn bằng mắt khó biết 🙏 Lomi chưa có nguồn kiểm chứng ghi đúng số ngày cho từng loại, nên không dám nói con số. Thấy đổi màu, đổi mùi, đục hay nổi váng thì bỏ luôn nha.", local: true, health: {}, stuck: "unknown_care" });
+        if (VN(/\b(nấu|nồi|canh|cháo|chè|bánh|bột|thịt|cá|gà|bò|tôm|món|đồ ăn|thức ăn|nước (lá|gừng|rau má|dùng)|trà|sốt|kho|hấp|chiên|xào|luộc|bé ăn)\b/).test(ctx)) {
+          const lf = healthFactEarly("đồ ăn thừa để tủ lạnh bao lâu");
+          if (lf) return localReply(q, { role: "assistant", content: lf, local: true, health: {} });
+        }
+      }
+    }
+    // 21/11 (bộ 50 đoạn, #1–#10): đang tâm sự, đã kể ≥ 2 lượt, giờ hỏi "mình nên làm gì / nói sao / có nên…" → trả lời theo CẢ MẠCH chuyện.
+    //   Đánh dấu "bí" để thành viên được Claude trả lời sát hoàn cảnh hơn; người chưa có Membership vẫn nhận lời khuyên theo chủ đề.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      const uT = msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content);
+      const heartTh = msgs.filter((m) => m.role === "assistant").slice(-3).some((m) => m.heart || m.talk || m.stuck === "generic_listen");
+      const nAdv = ` ${normalizeVi(raw)} `;
+      const lastHeart = msgs.filter((m) => m.role === "assistant").slice(-1)[0]?.heart;
+      if (uT.length >= 3 && heartTh && VN(/\b(nên (làm gì|làm sao|nói|phản ứng|bắt đầu|xử lý|đứng ra|chủ động|đối chất)|làm sao (để|cho)|phải làm sao|có nên|nói (thế nào|sao|như nào|gì)|phản ứng (thế nào|sao)|bắt đầu (từ đâu|nói)|giờ (mình|mk|em|tôi|tui|t) (nên|phải))\b/).test(nAdv)
+        && !VN(/\b(thuốc|uống|ăn|bệnh|đau|app|ilomi|đăng|quán|tarot|bói)\b/).test(nAdv)) {
+        const ta = threadAdvice([...uT, raw]);
+        if (ta && ta.theme !== lastHeart) return localReply(q, { role: "assistant", content: ta.text, local: true, heart: (ta.theme ?? "sad") as Msg["heart"], heartDepth: 2, story: ta.story, stuck: "fallback" });
+      }
+    }
     // 21/11 (bộ 60 đoạn) — các câu nối trước đây bị hiểu lệch:
     if (!forceAi && !en && !danger0) {
       const nX = ` ${normalizeVi(raw)} `;
@@ -2107,6 +2184,15 @@ export function AiChat({
       //   #44 "Còn đường ăn kiêng có an toàn tuyệt đối ko?" (trước: lời khen "muốn chăm sóc cơ thể")
       if (VN(/\b((?<!tiểu )đường ăn kiêng|chất tạo ngọt|(?<!tiểu )đường không calo|(?<!tiểu )đường 0 calo|đường cỏ ngọt|stevia|aspartame|sucralose)\b/).test(nX))
         return localReply(q, { role: "assistant", content: "Về **đường ăn kiêng / chất tạo ngọt** (stevia, aspartame, sucralose…) thì Lomi chưa có nguồn y khoa đã kiểm chứng đủ chi tiết, nên chưa dám nói an toàn hay không 🙏 Chắc chắn là **không có gì “an toàn tuyệt đối”** khi dùng nhiều — người bị tiểu đường, bệnh thận hay đang mang thai thì hỏi bác sĩ / dược sĩ trước khi dùng thường xuyên nha.", local: true, health: {}, stuck: "unknown_care" });
+      //   #14 (bộ 50): "uống (trà gừng) rồi thấy nóng bụng thì có nên tiếp tục không" — trước: lời khuyên chia tay ("ở lại hay rời đi")
+      if (VN(/\b(nóng bụng|đau bụng|khó chịu|buồn nôn|ợ nóng|cồn cào|tiêu chảy|nổi mẩn|ngứa|chóng mặt|mệt)\b/).test(nX) && VN(/\b((có )?nên (tiếp tục|uống tiếp|dùng tiếp|ngưng|ngừng|dừng)|uống tiếp (được )?không|dùng tiếp (được )?không)\b/).test(nX) && VN(/\b(uống|trà|nước|lá|gừng|mật ong|dùng|bôi|thuốc)\b/).test(nX + prevU))
+        return localReply(q, { role: "assistant", content: "Dùng vào mà thấy **khó chịu** (nóng bụng, đau bụng, buồn nôn, nổi mẩn…) thì **nên ngưng** nha — mẹo dân gian là để hỗ trợ cho dễ chịu, không cần cố dùng tiếp 🙏\n• Thử lại thì dùng **ít hơn, loãng hơn**, uống **sau bữa ăn** thay vì lúc đói\n• Đang dùng thuốc (nhất là thuốc chống đông, tiểu đường, huyết áp) hay đang mang thai thì hỏi **dược sĩ / bác sĩ** trước khi dùng thường xuyên\n• Khó chịu nhiều, nôn nhiều, nổi mẩn lan rộng, khó thở → đi khám ngay", local: true, health: {} });
+      //   #15 (bộ 50): "pha sẵn một bình (mật ong chanh) để uống cả ngày có được không"
+      if (VN(/\b(pha sẵn|nấu sẵn|làm sẵn) (\S+ )?(bình|chai|ly|ca|lít|nồi)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Đồ uống **tự pha** (mật ong, chanh, trà, nước lá…) không có chất bảo quản, nên Lomi khuyên **pha vừa đủ uống trong buổi**, đựng bình sạch có nắp, để chỗ mát — **đừng để qua đêm** 🙏 Lomi chưa có nguồn kiểm chứng ghi đúng số giờ cho từng loại, nên không dám nói con số. Thấy đổi màu, đổi mùi, có váng hay vị chua lạ thì đổ bỏ nha. Người tiểu đường thì nhớ mật ong vẫn là đường — uống cả bình trong ngày là nhiều đường đó.", local: true, health: {}, stuck: "unknown_care" });
+      //   #37/#39 (bộ 50): "trời mưa thì chỗ đó còn tham quan được không / có khu trú không" — Lomi không có thông tin chi tiết từng chỗ
+      if (VN(/\b(trời mưa|mưa (nhẹ|lớn|to)|lúc mưa|khi mưa|gặp mưa)\b/).test(nX) && VN(/\b(chỗ đó|chỗ này|nơi đó|khu (đó|này|trú)|tham quan|đi chơi|còn (đi|chơi|tham quan)|hoạt động thay thế|trú mưa|có mái)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Lomi chưa có thông tin chi tiết từng chỗ lúc trời mưa (có mái che, khu trú hay không) nên không dám nói bừa 🙏 Bạn bấm vào thẻ địa điểm trên **Khám phá** để **gọi / nhắn hỏi** trước nha.\n• Đi đồi, thác, đường đất lúc mưa thì rất **trơn** — mang giày bám, áo mưa, cẩn thận với người lớn tuổi và trẻ nhỏ\n• Mưa lớn thì nên đổi sang chỗ **trong nhà** (quán cà phê, chợ, bảo tàng, khu vui chơi trong nhà) cho an toàn", local: true, stuck: "fallback" });
       //   #36 "Bạn ấy còn tập gym muốn tăng cơ nữa" (đang nói dị ứng sữa) — hỏi ăn uống, không phải tìm phòng gym
       if (VN(/\b(tập gym|tập tạ|tập thể hình)\b/).test(nX) && VN(/\b(tăng cơ|lên cơ|giữ cơ|ăn gì|bổ sung|đạm|protein)\b/).test(nX) && !VN(/\b(tìm|ở đâu|phòng gym|chỗ tập|gần đây|giá)\b/).test(nX))
         return localReply(q, { role: "assistant", content: "Muốn tăng cơ thì quan trọng nhất là **tập đều + ăn đủ đạm** chia ra các bữa trong ngày 💪 Chuyện chọn nguồn đạm hợp với người bị dị ứng thì Lomi chưa có kiến thức đã kiểm chứng đủ chi tiết, nên chưa dám chỉ món cụ thể — nếu bạn ấy dị ứng thức ăn thì hỏi bác sĩ hoặc chuyên gia dinh dưỡng để chọn nguồn đạm an toàn nha.", local: true, health: {}, stuck: "unknown_care" });
