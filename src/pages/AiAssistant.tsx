@@ -139,6 +139,7 @@ import {
 } from "@/lib/tarot";
 import { TarotCards } from "@/components/LomiTarot";
 import { storeReply } from "@/lib/lomiStore";
+import { emergencyKnowledge, emergencyReply } from "@/lib/lomiEmergency";
 import { emHead, emKindOf, waitList } from "@/lib/lomiWait";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
@@ -470,6 +471,68 @@ const GOP_VON = "Rút bài thì chỉ để tham khảo cho vui thôi nha 🔮 �
 // 21/11: 3 lượt người dùng gần nhất (đã chuẩn hoá) — để câu hỏi nối hiểu đang nói về ưu đãi / doanh nghiệp.
 const prevUB = (ms: { role: string; raw?: string; content: string }[]) => " " + ms.filter((m) => m.role === "user").slice(-3).map((m) => normalizeVi(m.raw ?? m.content)).join(" ") + " ";
 
+
+// 21/11 (bộ 40 đoạn ChatGPT, nhóm A): lượt 4 hỏi VỀ CHÍNH mấy chỗ vừa tìm ("trong mấy quán đó quán nào…", "chốt giúp một chỗ")
+//   hoặc ĐỔI Ý ("thôi đổi sang chỗ gần chợ") — trước: tìm lại danh sách chung từ đầu, hoặc "À, vậy hả 😮".
+//   Không bịa tiện ích: nói rõ app có gì (đánh giá, ảnh, giờ chủ quán khai, ưu đãi) và cái gì phải hỏi chỗ đó.
+const PICK_ASK: [RegExp, string, string][] = [
+  [VN(/\b(cầu thang|leo (cầu thang|bậc|dốc)|bậc thang|tầng trệt)\b/), "lối đi (cầu thang, bậc thang)", "hỏi quán có **bàn ở tầng trệt, gần cửa** không và xin giữ bàn đó cho người lớn tuổi"],
+  [VN(/\b(hoàng hôn|bình minh|mặt trời (lặn|mọc)|view)\b/), "hướng view (hoàng hôn / bình minh)", "xem **ảnh khách chụp** trong phần đánh giá của từng chỗ, rồi hỏi chủ quán chỗ ngồi nhìn hướng nào, mấy giờ đẹp nhất"],
+  [VN(/\b(lẩu chay|món chay|ăn chay|đồ chay)\b/), "thực đơn chay", "hỏi quán có **món đó trong thực đơn** không (vd lẩu chay), hay phải đặt trước"],
+  [VN(/\b(đậu (ô tô|oto|xe)|đỗ (ô tô|xe)|bãi (xe|đỗ)|chỗ (đậu|để|gửi) (ô tô|xe))\b/), "chỗ đậu ô tô", "hỏi chỗ đó có **chỗ đậu ô tô** ngay tại chỗ không, hay phải gửi bãi gần đó"],
+  [VN(/\b(nhà vệ sinh|toilet|wc)\b/), "nhà vệ sinh riêng hay chung", "hỏi rõ là **nhà vệ sinh riêng cho từng lều / phòng** hay **khu vệ sinh chung**, có nước nóng không"],
+  [VN(/\b(hợp (cho |với )?(bé|trẻ|con)|cho bé|trẻ nhỏ|ít khói|quá khói|bị khói|khói (bếp|nướng))\b/), "mức phù hợp cho trẻ nhỏ (khói, không gian)", "hỏi quán có **khu ngồi thoáng, xa bếp nướng** không, có ghế cho bé không"],
+  [VN(/\b(mở cửa|mở (lúc|tới|đến|sau)|còn mở|giờ mở|\d+ ?(giờ|h)( (sáng|tối|đêm))?)\b/), "giờ mở cửa thực tế", "trên thẻ mỗi chỗ có nhãn **Đang mở / Đã đóng** theo giờ chủ quán khai — nhưng giờ (nhất là khuya, sáng sớm) có thể đổi, nên **gọi trước** cho chắc"],
+  [VN(/\b(dốc|đường vào|ít dốc|bằng phẳng)\b/), "địa hình đường vào (dốc, bậc)", "hỏi chủ nhà **đường vào có dốc / bậc không, xe tới tận cổng được không** — người già đi lại khó thì nói trước để họ chỉ lối dễ nhất"],
+  [VN(/\b(trú (mưa|được)|mái che|khu (trú|che)|nhà bạt)\b/), "khu trú mưa / mái che", "hỏi chỗ đó có **khu mái che, nhà bạt** đủ cho cả nhóm không; mưa lớn thì có **đổi ngày / hoàn tiền** không"],
+  [VN(/\b(wifi|wi fi|làm việc|ổ cắm|laptop)\b/), "wifi và chỗ ngồi làm việc", "hỏi quán **wifi có ổn không, có ổ cắm** gần bàn không, ngồi lâu 3 tiếng có ngại không"],
+  [VN(/\b(phòng riêng|phòng vip|phòng kín)\b/), "phòng riêng", "hỏi rõ là **phòng riêng có cửa** hay chỉ là **bàn dài / khu riêng** — nhiều quán gọi bàn lớn là “phòng”"],
+  [VN(/\b(thú cưng|con chó|chó (nhỏ|con|cưng|mình|nhà)|mang (theo )?chó|mèo|pet|cún)\b/), "chính sách thú cưng và phụ thu", "hỏi chỗ đó **có nhận thú cưng** không, **có phụ thu** không, có quy định gì (rọ mõm, không lên giường…)"],
+  [VN(/\b(ô tô|oto|xe hơi)( \S+){0,4} (gần|tới|đến)|đi ô tô\b/), "đường cho ô tô tới điểm ngắm", "hỏi người địa phương / chủ chỗ đó **ô tô đi tới đâu thì phải gửi**, đoạn đi bộ còn lại bao xa; đường đèo sáng sớm có sương, đi chậm"],
+  [VN(/\b(gần (hồ|chợ|trung tâm)|gần nhất)\b/), "khoảng cách chính xác", "bấm vào thẻ xem địa chỉ / bản đồ, hoặc bật vị trí để Lomi xếp theo khoảng cách"],
+];
+const PICK_Q = VN(/\b(trong (mấy|các|những|số|danh sách|đó)|(quán|chỗ|nơi|homestay) nào trong|trong số đó|mấy (quán|chỗ|homestay) (đó|này|kia|lúc nãy))\b/);
+const PICK_BEST = VN(/\b(chốt (lại|giúp)?|chọn giúp|chọn (một|1) (chỗ|quán)|hợp nhất|phù hợp nhất|đáng đi nhất)\b/);
+const PICK_CHANGE = VN(/^\s*(thôi |vậy |à |ờ )?(đổi sang|chuyển sang|đổi qua|thôi chọn|chọn (quán|chỗ) nào gần)\b/);
+type PlacePick = { text?: string; change?: string; lead?: string };
+function placePick(msgs: Msg[], raw: string): PlacePick | null {
+  const nr = ` ${normalizeVi(raw)} `;
+  const pm = msgs.filter((m) => m.role === "assistant").slice(-6).reverse().find((m) => (m.places?.length ?? 0) > 0);
+  const places = ((pm?.places ?? []) as PlaceCard[]).slice(0, 3);
+  const users = msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content);
+  if ((PICK_CHANGE.test(nr) || VN(/^\s*thôi\b/).test(nr)) && VN(/\b(gần|trong nhà|ngoài trời|yên tĩnh|đi bộ được|ít người|chỗ ngồi)\b/).test(nr)) {
+    const first = users.find((t) => !!detectSearch(t)) ?? users[0] ?? "";
+    const want = raw.replace(/^\s*(thôi|vậy|à|ờ)\s+/iu, "").replace(/^(đổi sang|chuyển sang|đổi qua|thôi chọn|chọn)\s+/iu, "");
+    return { change: `${first} ${want}`, lead: `Ok, Lomi tìm lại theo ý mới nha 👍 (${want.replace(/[.!?]+$/u, "").replace(/\s*(nhé|nha|nhá)$/u, "")})\n` };
+  }
+  const best = PICK_BEST.test(nr);
+  if (!PICK_Q.test(nr) && !best) return null;
+  if (!places.length && best) return null;
+  const names = places.map((p) => `**${p.name}**`);
+  const lst = names.length ? ` (${names.join(", ")})` : "";
+  // so trên câu không dấu đã chuẩn hoá (bộ đọc câu có dấu đôi khi chặn chữ đã đoán dấu lại)
+  const asks = PICK_ASK.filter(([re]) => new RegExp(re.source, "u").test(nr));
+  const u = ` ${normalizeVi(users.join(" "))} `;
+  // cắm trại gần suối + mưa lớn → an toàn trước, không chọn "chỗ an toàn hơn" thay người dùng
+  if (VN(/\b(suối|sông|thác|lòng hồ)\b/).test(u + nr) && VN(/\b(mưa (lớn|to)|mùa mưa|lũ)\b/).test(u + nr) && VN(/\b(cắm trại|camping|lều|ở lại|ngủ lại)\b/).test(u + nr))
+    return { text: `⚠️ Với **mưa lớn** thì Lomi **không khuyên cắm trại sát suối** ở bất kỳ chỗ nào trong danh sách${lst} — nước suối có thể **dâng rất nhanh, lũ quét, sạt lở** ngay cả khi chỗ mình đứng chưa mưa nhiều.\n• Lomi chưa có dữ liệu địa hình từng khu nên không dám chọn “chỗ an toàn hơn” thay bạn\n• Hỏi khu cắm trại: **chỗ dựng lều có nền cao, cách xa lòng suối và vách đất** không; có khu nhà / mái che kiên cố để trú không; mưa lớn có **đổi ngày, hoàn tiền** không\n• Trước ngày đi xem **dự báo / cảnh báo mưa lớn**; có cảnh báo thì **hoãn chuyến** hoặc đổi sang homestay — nhóm có 2 bạn chưa có kinh nghiệm thì càng nên chọn phương án an toàn\n• Đang ở đó mà nước suối **đục, dâng nhanh, nghe tiếng ầm** → rời lên chỗ cao ngay, đừng đợi thu dọn đồ` };
+  if (best) {
+    const p = places[0];
+    const why: string[] = [];
+    if (p.rating) why.push(`đang được đánh giá cao nhất trong mấy chỗ Lomi gợi ý (${p.rating.toFixed(1)}⭐)`);
+    if (p.offerCount) why.push(`đang có **${p.offerCount} ưu đãi** trong app`);
+    if (p.distKm != null) why.push(`gần bạn nhất (khoảng ${p.distKm < 1 ? `${Math.round(p.distKm * 1000)}m` : `${p.distKm.toFixed(1)}km`})`);
+    const crit: string[] = [];
+    const price = u.match(/(\d+) ?k\b/);
+    if (price) crit.push(`ngân sách khoảng ${price[1]}k`);
+    if (VN(/\b(không thích vận động|ít đi bộ|không muốn đi bộ|không đi bộ nhiều)\b/).test(u)) crit.push("ít phải đi bộ");
+    if (VN(/\b(cảnh đẹp|view|ngắm)\b/).test(u)) crit.push("cảnh đẹp");
+    return { text: `${places.length > 1 ? `Nếu phải chốt một chỗ trong ${names.join(", ")}, Lomi nghiêng về **${p.name}**` : `Trong mấy chỗ Lomi tìm được thì hợp nhất hiện có **${p.name}**`}${why.length ? ` — vì ${why.join(", ")}` : ""}.\n\nNói thật là Lomi **chưa kiểm được** chỗ đó có hợp hết tiêu chí của bạn${crit.length ? ` (${crit.join(", ")})` : ""} hay không — dữ liệu trong app chưa ghi giá vé / mức phải đi bộ. Bạn bấm vào thẻ **${p.name}** xem ảnh, đánh giá, rồi nhắn hỏi chủ chỗ đó trước khi đi cho chắc nha.` };
+  }
+  const lab = asks.length ? asks.map((a) => a[1]).join(", ") : "chi tiết này";
+  const tips = asks.length ? asks.map((a) => `• ${a[2]}`) : ["• bấm vào thẻ từng chỗ xem ảnh, đánh giá, rồi nhắn / gọi hỏi chủ chỗ đó"];
+  return { text: `Trong mấy chỗ Lomi vừa gợi ý${lst}, Lomi **chưa có dữ liệu về ${lab}** của từng chỗ nên không dám chọn bừa 🙏\n${tips.join("\n")}\n\n📞 Hỏi xong chỗ nào ổn thì chốt chỗ đó nha — mỗi thẻ có nút **Gọi / Nhắn tin**.` };
+}
 
 // 22/11 (ChatGPT chấm lần 2, #34–#39): hỏi chi tiết chỗ vừa gợi ý → nhắc lại ĐÚNG mấy chỗ đó + tiêu chí người dùng đã nêu, rồi mới nói thiếu dữ liệu
 function placeCtxNote(msgs: Msg[], raw: string): { head: string; ask: string } {
@@ -1112,6 +1175,17 @@ export function AiChat({
       return { role: "assistant", content, local: true, places: withOffer.length ? withOffer : undefined, search: lastA0?.search, dish: lastA0?.dish };
     }
     const searchCtx = msgs.filter((m) => m.role === "assistant").slice(-3).some((m) => (m.places?.length ?? 0) > 0 || !!m.dish || !!m.search);
+    {
+      const pp = placePick(msgs, raw);
+      if (pp?.change) {
+        const itC = detectSearch(pp.change);
+        if (itC) {
+          const res = await runSearch(itC, []);
+          return { role: "assistant", content: (pp.lead ?? "") + res.text, local: true, places: res.places, quick: res.quick, search: itC };
+        }
+      }
+      if (pp?.text) return { role: "assistant", content: pp.text, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish };
+    }
     // 21/11 (ChatGPT chấm bộ 50, #38): "nếu có một người ăn chay thì quán có món nào phù hợp không" (câu dài > 12 chữ) — trước: tìm lại danh sách quán
     if (searchCtx && w <= 20 && VN(/\b(ăn chay|món chay|đồ chay|không (dùng |có )?hành tỏi)\b/).test(nr) && VN(/\b(quán (đó|này|có)|chỗ (đó|này)|ở đó|có món nào|món nào (phù hợp|hợp))\b/).test(nr)) {
       const srV = searchRefine(raw.split(/\s+/).slice(-12).join(" "));
@@ -1968,6 +2042,18 @@ export function AiChat({
         riskRef.current = null; // đã nói rõ là đùa — trọng tài an toàn trong localReply không thay lại lời khủng hoảng
         return localReply(q, { role: "assistant", content: "Ui, vậy là Lomi lo hơi quá rồi 😅 May quá! Lomi hỏi kỹ vì những chữ đó Lomi luôn để ý thật lòng.\n\nCòn nếu lúc nào đó thấy nặng nề thật, cứ nói với Lomi hoặc người bạn tin cậy nha 💚 Giờ mình nói tiếp chuyện của bạn nè!", local: true });
       }
+    }
+    // 21/11 (bộ 40 đoạn, nhóm B): GIỮ MẠCH CẤP CỨU — tình huống nguy hiểm đã nói ở mấy lượt gần đây thì lượt sau ("chắc không sao",
+    //   "để mai", "có nên móc họng", "nằm thế nào") trả lời theo đúng tình huống đó (lib/lomiEmergency). Câu hỏi kiến thức / kể phim → kiến thức.
+    if (!forceAi && !en) {
+      const puE = msgs.filter((m) => m.role === "user").slice(-3).map((m) => m.raw ?? m.content);
+      const kn = emergencyKnowledge(raw, puE);
+      if (kn) {
+        riskRef.current = null; // hỏi kiến thức / kể phim — không phải ca đang xảy ra
+        return localReply(q, { role: "assistant", content: kn, local: true, health: {} });
+      }
+      const er = emergencyReply(raw, puE, { hasCard: !!findMedId(raw) });
+      if (er) return localReply(q, { role: "assistant", content: er.text, local: true, ...(er.kind === "violence" ? {} : { health: {} }) });
     }
     // 21/11 (bộ 50 đoạn, #42 — "Mk đã gọi 115 rồi, trong lúc chờ xe tới cần làm gì?" từng ra danh sách số khẩn cấp): đã gọi rồi → việc làm
     //   trong lúc chờ, lấy từ thẻ có nguồn của đúng tình huống đang nói (phản vệ / đột quỵ / ngộ độc / đau ngực).
