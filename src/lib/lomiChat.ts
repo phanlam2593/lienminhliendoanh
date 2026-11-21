@@ -906,7 +906,7 @@ function birthdayWishes(n: string): string {
 // 115 khi có nguy cơ tức thời; hỏi thẳng; đường dây nóng. Câu doạ tự hại để giữ người yêu: coi trọng an toàn nhưng không bắt người kể
 // gánh một mình hay phải ở lại.
 const OTHER_WHO = "(bạn (anh|em|tôi|tui|mình|a|e|thân|ấy|của (anh|em|tôi|mình))|bạn thân|đứa bạn|thằng bạn|con bạn|người bạn|người yêu|ny|bạn gái|bạn trai|vợ|chồng|cô ấy|anh ấy|em ấy|chị ấy|con (anh|em|tôi|mình)|em gái|em trai|anh trai|chị gái|đồng nghiệp|một người|có người|ai đó|người đó|người ta)";
-const OTHER_CR = "(muốn chết|tự tử|tự sát|không (còn )?muốn sống|chẳng (còn )?muốn sống|tự làm hại|làm hại bản thân|tự làm đau|tự làm tổn thương|(sẽ|được) nhẹ nhõm (hơn )?nếu|tốt hơn nếu (không có|thiếu)|biến mất|kết thúc cuộc đời|kết liễu)";
+const OTHER_CR = "(muốn chết|chán sống|sống (làm gì|chi) nữa|tự tử|tự sát|không (còn )?muốn sống|chẳng (còn )?muốn sống|tự làm hại|làm hại bản thân|tự làm đau|tự làm tổn thương|(sẽ|được) nhẹ nhõm (hơn )?nếu|tốt hơn nếu (không có|thiếu)|biến mất|kết thúc cuộc đời|kết liễu)";
 const OTHER_RE = VN(new RegExp(`\\b${OTHER_WHO}(?<mid>(?: \\S+){0,8}?) ${OTHER_CR}\\b`));
 // 11/11 (kiểm toán Lovable, P0-2): vừa kể một NGƯỜI KHÁC nói không muốn sống, lượt sau hỏi "giờ bạn ấy bảo mình đi về, có nên đi không"
 //   — lượt này không còn chữ khủng hoảng nào nên từng bị đáp "vận động nhẹ, ra nắng…". Ngữ cảnh khủng hoảng được mang sang lượt kế.

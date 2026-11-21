@@ -723,6 +723,12 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
   // Đã làm theo mà vẫn không được, không rõ đang làm việc gì → hỏi đúng chỗ kẹt (không nhắc lại "làm theo hả 😄").
   if (FAILED.test(` ${n} `) && TRIED.test(` ${n} `) && words <= 12)
     return { intent: "clarify", text: "Làm rồi mà vẫn chưa được hả 😣 Bạn đang làm việc gì, kẹt ở bước nào hay hiện thông báo gì? Kể Lomi nghe để Lomi chỉ tiếp nha." };
+  // 22/11 (câu thật: "Dạo này thấy trong người không ổn lắm.") — "trong người" có thể là sức khoẻ hay tâm trạng → hỏi đúng hai hướng
+  if (VN(/\b(trong người|người) (không|chẳng|hông|k) (ổn|khoẻ|khỏe|được khoẻ|thoải mái)|thấy (trong người|người) (sao sao|kì kì|kỳ kỳ|lạ lạ|mệt mệt)\b/).test(` ${n} `))
+    return { intent: "clarify", text: "Không ổn kiểu nào nè bạn 🥺\n• **Mệt trong người** — đau, sốt, chóng mặt, mất ngủ, ăn không ngon…? Kể Lomi nghe triệu chứng, bị bao lâu rồi\n• Hay **trong lòng nặng nề** — buồn, áp lực, chán chán? Lomi nghe nè\n\nCó dấu hiệu nặng như **đau ngực, khó thở, ngất, yếu nửa người** thì gọi **115** ngay nha." };
+  // "híc", "hic hic" một mình → hỏi han, không bảo "chưa hiểu ý"
+  if (VN(/^\s*(híc|hic|hix|huhu|hu hu|hức)( (híc|hic|hix|hu|hức))*\s*$/).test(` ${n} `))
+    return { intent: "listen", talk: true, text: pick(["Híc, sao vậy nè 🥺 Có chuyện gì buồn hả? Kể Lomi nghe nha.", "Ơ, sao đó bạn 🥺 Lomi ở đây nè, có gì cứ kể."]) };
   if (words >= 2 && isPersonalTalk(raw)) {
     const s = low(raw);
     const sad = VR(/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu).test(raw) || TALK_NEG.test(s) || !!ctx.neg || FAILED.test(` ${n} `);

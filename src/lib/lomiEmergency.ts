@@ -288,7 +288,7 @@ const D: Record<EmK, Def> = {
     src: "NHS (Anh) — Stroke",
   },
   suicide: {
-    re: VN(/\b(không muốn sống|muốn chết|tự tử|tự sát|kết thúc (cuộc đời|tất cả)|chuẩn bị (thuốc|dây))\b/),
+    re: VN(/\b(không muốn sống|muốn chết|chán sống|tự tử|tự sát|kết thúc (cuộc đời|tất cả)|chuẩn bị (thuốc|dây))\b/),
     head: "Bạn ấy nói **không muốn sống** mà **đã chuẩn bị thuốc, đang ở một mình** — phải coi là **khẩn cấp ngay bây giờ**, bạn ấy có thể đang gặp nguy hiểm. Đừng để bạn ấy một mình.",
     delay: "**Đừng đợi tới sáng mai** 💚 Lúc này bạn ấy có thể đang gặp nguy hiểm.",
     wait: [
@@ -315,6 +315,7 @@ const CALLED = VN(/\b(đã gọi|gọi rồi|vừa gọi|xe (đang )?tới)\b/);
 // người có nguy cơ là NGƯỜI KHÁC (bạn thân, em trai…) — lượt sau "nó bảo đã chuẩn bị thuốc, đang ở một mình" không phải người dùng tự nói về mình
 const THIRD = VN(/\b(bạn (mình|thân|tôi|em|tớ|tui)|bạn thân|em (trai|gái) (mình|tôi)|anh (trai )?(mình|tôi)|chị (gái )?(mình|tôi)|con (mình|tôi|gái|trai)|người yêu (mình|tôi)|(vợ|chồng|mẹ|ba|bố) (mình|tôi)|đồng nghiệp|nó (bảo|nói|nhắn))\b/);
 const SELF = VN(/\b(mình|tôi|em|tớ|tui|t) (cũng )?(không muốn sống|muốn chết|muốn tự tử)\b/);
+const SUI_JOKE = VN(/\b(đùa|nói chơi|nói giỡn|giỡn|có nên (để ý|lo|quan tâm)|có sao không|chắc không sao|có nghiêm trọng)\b/);
 const SUI_NOW = VN(/\b(chuẩn bị|một mình|không (nghe|bắt) máy|tắt máy|uống thuốc|đã uống|cầm (dao|dây))\b/);
 function thirdParty(recent: string[]): boolean {
   const first = recent.find((t) => D.suicide.re.test(` ${normalizeVi(t)} `));
@@ -350,6 +351,9 @@ export function emergencyReply(raw: string, prevUser: string[], opt: { hasCard?:
   if (!prevK) {
     // lượt đầu nhắc tới tình huống: chỉ nhận những tình huống luồng cũ chưa xử lý đúng
     if (!d.first || (opt.hasCard && !d.overCard) || (d.firstIf && !d.firstIf.test(n))) return null; // đã có thẻ bệnh / sơ cứu có nguồn cho câu này → để luồng cũ đưa thẻ
+  } else if (kind === "suicide" && thirdParty(recent) && SUI_JOKE.test(n) && !SUI_NOW.test(n)) {
+    // 22/11 (test trộn #31): "nó hay đùa vậy lắm", "mình có nên để ý không" → trả lời thẳng: CÓ, nên để ý
+    return { kind, text: "Có, **nên để ý** nha 💚 Kể cả khi bạn ấy hay nói kiểu đùa, câu “chán sống” vẫn có thể là cách người ta thử xem có ai để ý tới mình không — nhiều người giấu chuyện thật sau câu đùa.\n• Tìm lúc riêng, **hỏi thẳng mà nhẹ nhàng**: “Hôm trước nghe bạn nói chán sống, mình hơi lo. Dạo này bạn ổn không? Bạn có từng nghĩ tới chuyện tự tử chưa?” — hỏi thẳng **không làm** người ta nảy ý định, mà giúp họ được nói ra\n• **Nghe nhiều hơn khuyên**, đừng gạt đi kiểu “nghĩ thoáng lên”\n• Để ý thêm: bạn ấy có cho đồ, nói lời từ biệt, thu mình, nhắc tới cách làm hại bản thân không\n• Gợi ý bạn ấy gọi đường dây **Ngày Mai 096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật) hoặc gặp chuyên gia tâm lý — đi cùng nếu được\n• Nếu bạn ấy nói tới cách, thời điểm, hoặc bạn lo bạn ấy sắp làm thật: gọi **115** và báo người nhà bạn ấy ngay\n\nBạn cũng đừng ôm chuyện này một mình nha." };
   } else if (kind === "suicide" && !DELAY.test(n) && !(thirdParty(recent) && SUI_NOW.test(n))) return null; // luồng khủng hoảng sẵn có lo phần còn lại
   else if (d.firstIf && ![raw, ...recent].some((t) => d.firstIf!.test(` ${normalizeVi(t)} `))) return null; // bỏng nhỏ → luồng cũ
   if (n.split(/\s+/).length > 40) return null;
@@ -370,6 +374,7 @@ export function emergencyReply(raw: string, prevUser: string[], opt: { hasCard?:
 // ── câu hỏi kiến thức (bẫy) hay gặp: trả lời kiến thức, không coi là ca đang xảy ra ──
 const ELEC = VN(/\b(điện giật|bị giật điện|giật điện)\b/);
 const STAB = VN(/\b(đâm|dao đâm|bị đâm)( \S+){0,3} (bụng|ngực)|vết đâm\b/);
+const MUSH = VN(/\b(nấm (lạ|rừng|độc|dại)|ăn nấm|ngộ độc nấm)\b/);
 const FOODP = VN(/\b(ngộ độc thực phẩm|ngộ độc thức ăn)\b/);
 const KNOW: [RegExp, RegExp, string][] = [
   // — điện giật: trả lời riêng từng câu hỏi tiếp, không lặp nguyên khối —
@@ -386,6 +391,9 @@ const KNOW: [RegExp, RegExp, string][] = [
     "Với bụng thì **không có “đâm nhẹ”** để yên tâm được đâu nha 🩸 Vết ở ngoài nhỏ nhưng lưỡi dao có thể đi sâu, làm **thủng ruột, rách gan, lách hay mạch máu** — nhìn bên ngoài không đoán được bên trong. Ngoài đời bị đâm vào bụng là **luôn đi cấp cứu / gọi 115**, kể cả khi người đó thấy bình thường; **không rút vật đâm ra**, ép quanh vết thương, cho nằm yên.\n\n_Nguồn: NHS (Anh) — First aid: bleeding._"],
   [STAB, VN(/\b(nguy hiểm|có sao|vô lý|cảnh|nhỏ)\b/),
     "Phim hay cho nhân vật đứng dậy nói chuyện, nhưng ngoài đời **vết đâm ở bụng nhìn nhỏ vẫn có thể rất nguy hiểm** 🩸\n• Lưỡi dao có thể đi sâu, làm **thủng ruột, rách gan, lách hay mạch máu** — máu **chảy vào trong bụng** nên bên ngoài trông không nhiều\n• Người bị đâm có thể vẫn tỉnh táo lúc đầu rồi **sốc vì mất máu** sau đó\n• Ngoài đời bị đâm vào bụng, ngực là **luôn gọi 115**; **không rút dao / vật đâm ra**, ép quanh vết thương, cho nằm yên\n\n_Nguồn: NHS (Anh) — First aid: bleeding._"],
+  // — nấm lạ (kể phim / hỏi kiến thức) —
+  [MUSH, VN(/\b(nguy hiểm|có sao|có chết|cảnh|thật không|ngoài đời)\b/),
+    "Ngoài đời **ăn nấm lạ, nấm hái ngoài rừng rất nguy hiểm** 🍄 — có loại nấm độc trông giống hệt nấm ăn được, và **nấu chín không làm hết độc**.\n• Có loại gây nôn, đau bụng ngay; có loại **triệu chứng tới muộn sau nhiều giờ** rồi mới làm hỏng gan, thận — lúc đầu thấy đỡ vẫn có thể nặng\n• Chỉ ăn nấm mua ở nơi rõ nguồn gốc; **không hái nấm lạ** về ăn, kể cả thấy đẹp, thấy thú ăn\n\nNếu ngoài đời ai đó ăn nấm lạ rồi nôn, đau bụng → **gọi 115 / đi cấp cứu ngay**, giữ lại phần nấm hoặc chụp ảnh mang theo.\n\n_Nguồn: NHS (Anh) — Poisoning._"],
   // — ngộ độc thực phẩm (đang học sơ cứu) —
   [FOODP, VN(/\b(đau bụng nhẹ|chỉ (bị )?(đau bụng|tiêu chảy)|nhẹ (thì sao|thôi)|tiêu chảy (nhẹ|thì sao))\b/),
     "Ngộ độc thực phẩm **nhẹ** (đau bụng nhẹ, tiêu chảy, vẫn uống được) thường **tự đỡ sau vài ngày**, chăm ở nhà là chính 🙂\n• **Uống đủ nước**, uống từng ngụm nhỏ nếu buồn nôn; người lớn tuổi, trẻ nhỏ hay người có bệnh nền thì dùng **dung dịch bù nước (ORS)**, pha đúng hướng dẫn trên gói\n• **Nghỉ ngơi**; ăn lại khi thấy muốn ăn, bắt đầu bằng món nhẹ, dễ tiêu\n• Rửa tay kỹ, không nấu ăn cho người khác khi đang bị\n• Theo dõi dấu hiệu nặng: **nôn ra máu / đi ngoài ra máu, mất nước nặng** (rất ít tiểu, chóng mặt khi đứng), **sốt cao**, đau bụng dữ dội, hay kéo dài quá vài ngày → đi khám\n\n_Nguồn: NHS (Anh) — Food poisoning._"],

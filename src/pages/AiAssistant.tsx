@@ -140,6 +140,7 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { storeReply } from "@/lib/lomiStore";
 import { emergencyKnowledge, emergencyReply } from "@/lib/lomiEmergency";
+import { mixReply, cookFollow } from "@/lib/lomiMix";
 import { emHead, emKindOf, waitList } from "@/lib/lomiWait";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
@@ -1228,7 +1229,7 @@ export function AiChat({
       const swU = !nd ? raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").match(/^(?:(?:à|ờ|thôi)\s+)?(?:đổi|chuyển)\s+(?:qua|sang)\s+(?:món\s+|quán\s+)?(.{2,25})$/u) : null;
       if (swU && !detectPlace(swU[1]))
         return { role: "assistant", content: `Dạ, đổi qua **${swU[1]}** nha 🙏 Món này Lomi chưa có trong danh sách tìm theo món, nên chưa lọc quán chính xác được — bạn gõ “${swU[1]}” ở ô tìm kiếm trong Khám phá (/kham-pha) là ra các quán có ghi món đó. Hoặc chọn món gần giống bên dưới để Lomi tìm liền nha.`, local: true, quick: ["Bánh cuốn", "Bún", "Phở"].filter((x) => normalizeVi(x) !== normalizeVi(swU[1])), search: lastA0?.search };
-      if (nd && nd.id !== lastA0?.dish && VN(/\b(đổi|thôi|không phải|cơ|à|chuyển|qua|có món|món)\b/).test(nr)) {
+      if (nd && nd.id !== lastA0?.dish && VN(/\b(đổi|thôi|không phải|cơ|à|chuyển|qua|có món|món|thì sao|thế nào|còn|vậy|thế còn)\b/).test(nr)) { // 22/11 (câu thật: "Vậy bún bò thì sao?" sau khi tìm bánh căn)
         const dm = await replyDishShopsMsg(raw, nd.id);
         if (dm) return dm;
       }
@@ -2060,6 +2061,28 @@ export function AiChat({
       }
       const er = emergencyReply(raw, puE, { hasCard: !!findMedId(raw) });
       if (er) return localReply(q, { role: "assistant", content: er.text, local: true, ...(er.kind === "violence" ? {} : { health: {} }) });
+      // 22/11 (bộ test trộn): câu nối tiếp lệch luồng — bạo lực gia đình, sắp thi run, nghén, bé sốt ăn gì, dị ứng / bỏng nhẹ, nấu ăn hỏi tiếp…
+      const laE = msgs.filter((m) => m.role === "assistant").slice(-1)[0]?.content ?? "";
+      const mx = mixReply(raw, puE, laE);
+      if (mx) {
+        if (mx.heart) riskRef.current = null;
+        return localReply(q, { role: "assistant", content: mx.text, local: true, ...(mx.health ? { health: {} } : {}) });
+      }
+      const cf = cookFollow(raw, msgs.filter((m) => m.role === "assistant").slice(-3).map((m) => m.content));
+      if (cf) return localReply(q, { role: "assistant", content: cf, local: true });
+      // 22/11 (test trộn #40): "lá ổi có tác dụng gì" → "chữa tiêu chảy đc ko" / "trẻ con dùng được không" — hỏi tiếp về CHÍNH vị vừa nói
+      //   (trước: câu có tên bệnh bị thẻ bệnh bắt mất; "trẻ con dùng" ra "chưa xác minh trẻ con dùng").
+      {
+        const lmH = msgs.filter((m) => m.role === "assistant").slice(-1)[0];
+        const hp = lmH?.herb ? FOLK.find((x) => x.id === lmH.herb) : undefined;
+        const nH = ` ${normalizeVi(raw)} `;
+        if (hp && nH.split(/\s+/).length <= 10 && !findFolk(raw) && VN(/\b((chữa|trị|giúp|đỡ)( \S+){1,3} (được không|đc ko|đc k|được ko|được k|không|ko)|(trẻ|trẻ con|bé|em bé|con nít|bà bầu|mang thai|có thai|cho con bú|người già)( \S+){0,2} (dùng|uống|xài|ăn) (được|đc)|uống (thế nào|sao|bao nhiêu)|dùng (thế nào|sao|bao lâu))\b/).test(nH)) {
+          const mId = findMedId(raw);
+          const mT = mId ? await loadMedTopic(mId) : null;
+          const fr = folkReply(`${hp.name} ${raw}`, mT ? { id: mT.id, name: medName(mT) } : null, null);
+          if (fr) return localReply(q, { role: "assistant", content: fr.text, local: true, herb: hp.id, health: {} });
+        }
+      }
     }
     // 21/11 (bộ 50 đoạn, #42 — "Mk đã gọi 115 rồi, trong lúc chờ xe tới cần làm gì?" từng ra danh sách số khẩn cấp): đã gọi rồi → việc làm
     //   trong lúc chờ, lấy từ thẻ có nguồn của đúng tình huống đang nói (phản vệ / đột quỵ / ngộ độc / đau ngực).

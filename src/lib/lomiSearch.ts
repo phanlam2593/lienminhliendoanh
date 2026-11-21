@@ -9,6 +9,9 @@ import type { BusinessType } from "@/lib/types";
 import { VR, VN } from "@/lib/viMatch";
 import { PLACES, detectPlace, noPlaceText } from "@/lib/lomiPlaces";
 
+// 22/11 (câu thật: "Đà lạt nên ở đâu") — app chưa có chỗ ở thì vẫn gợi ý cách chọn khu, không bỏ lửng
+const STAY_TIP = "\n\nChọn khu ở Đà Lạt thì Lomi gợi ý vầy nha:\n• **Quanh chợ Đà Lạt – hồ Xuân Hương**: tiện đi bộ ăn uống, chợ đêm, hợp đi lần đầu, không có xe — đổi lại hơi ồn, cuối tuần đông\n• **Xa trung tâm một chút** (vùng đồi, ven rừng thông): yên tĩnh, view đẹp, hợp nghỉ dưỡng — nhưng cần **xe máy / ô tô**, tối đi lại hơi bất tiện\n• Đi cuối tuần, lễ Tết thì **đặt trước**; hỏi rõ chỗ đậu xe, đường vào có dốc không, có máy sưởi / nước nóng không (đêm Đà Lạt lạnh)";
+
 export type PlaceCard = {
   id: string;
   name: string;
@@ -367,7 +370,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = [], noDef
   const noun = k?.noun ?? "chỗ";
   if (!cards.length)
     return {
-      text: `Lomi chưa thấy ${noun} nào ${it.area ? `ở ${it.area} ` : ""}${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.`,
+      text: `Lomi chưa thấy ${noun} nào ${it.area ? `ở ${it.area} ` : ""}${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.${k?.type === "stay" && (!it.area || /đà lạt/i.test(it.area)) ? STAY_TIP : ""}`,
       places: [],
       quick: ["Hôm nay ăn gì?", "Tìm quán cà phê có ưu đãi"],
     };

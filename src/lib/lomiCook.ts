@@ -110,7 +110,7 @@ export function isCookAsk(text: string): boolean {
   if (/\b(tim quan|quan nao|o dau|gan day|dat ban|giao tan noi)\b/.test(n)) return false;
   const ing = ingsOf(n).length > 0;
   const named = D.some((d) => [d.name, ...(d.alias ?? [])].some((x) => n.includes(` ${normalizeVi(x)} `)));
-  if (named && /\b(cach (nau|lam)|nau (sao|the nao|ra sao|nhu nao)|lam (sao|the nao|ra sao|nhu nao)|(nem|uop|kho) (sao|the nao|ra sao|nhu nao)( cho vua)?)\b/.test(n)) return true;
+  if (named && /\b(biet (nau|lam)|bit (nau|lam)|cach (nau|lam)|nau (sao|the nao|ra sao|nhu nao)|lam (sao|the nao|ra sao|nhu nao)|(nem|uop|kho) (sao|the nao|ra sao|nhu nao)( cho vua)?)\b/.test(n)) return true;
   return (COOK_VERB.test(n) && ASK_DISH.test(n)) || (ing && /\b(tu (lanh )?(con|co)|nha (con|co)|o nha co|trong tu)\b/.test(n) && (COOK_VERB.test(n) || ASK_DISH.test(n)))
     || /\bmon (chay|hap|xao|kho|canh)\b(?: \S+){0,4} (de lam|nhanh|don gian|gon)\b/.test(n)
     || /\b(do an|mon an|mon)\b(?: \S+){0,4} (mang theo|mang di|de chia phan)\b/.test(n);

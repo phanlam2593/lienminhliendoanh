@@ -5466,6 +5466,7 @@ export const FOLK: FolkEntry[] = [
 export const UNVERIFIED_HERBS = [
   
   
+  "mỡ trăn", // 22/11 (câu thật: "Mỡ trăn để làm gì") — chưa có nguồn; riêng chuyện bôi bỏng có thẻ "boi-bong"
   "thục địa", "xuyên khung", "lá đu đủ", 
   "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "an cung ngưu hoàng",
   "nước sâm", "sâm đất", 
@@ -5573,7 +5574,9 @@ export function findFolk(text: string): FolkEntry | null {
     // (04/11) "mã đề thi", "mã đề số 3" là đề kiểm tra; "sa" không dấu một mình ("bi sa sut", "sa vao") không phải cây sả.
     if (f.id === "ma-de" && /\bma de (thi|so|\d)/.test(n)) continue;
     if (f.id === "sa" && !acc0 && !/\b(la sa|cu sa|cay sa|nuoc sa|tinh dau sa|tra sa|xong sa)\b/.test(n)) continue;
-    if (f.gen && f.verdict === "trad" && !GEN_CTX.test(n)) continue;
+    // 22/11 (câu thật: "Bồ kết" gõ trần) — gõ đúng tên vị thôi cũng là đang hỏi về vị đó
+    const bareName = f.names.some((x) => new RegExp(`^ (?:(?:qua|trai|la|cay|cu|hat|re|vo) )?${normalizeVi(x)} (?:(?:a|ha|nhi|vay|ne|di|nha) )?$`).test(n));
+    if (f.gen && f.verdict === "trad" && !GEN_CTX.test(n) && !bareName) continue;
     // 14/11: món ăn thường ngày (kn) chỉ khi đang HỎI về nó — "bữa cơm", "đi ăn phở" kể chuyện thì không phải
     if (f.kn && (!(GEN_CTX.test(n) || KN_CTX.test(n)) || (KN_PLACE.test(n) && !/\b(bo nao|tot cho nao|hai nao|thong minh)\b/.test(n)))) continue;
     let m: { 0: string } | null = n.match(RE.get(f.id)!);
@@ -5849,8 +5852,16 @@ export function folkReply(
     if (f.kn && dm && !f.topics.some((t) => t.id === dm.id)) return null;
     return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   }
+  // 22/11 (câu thật: "Ăn khế chữa bệnh gì") — mục khế chỉ nói về người bệnh thận; hỏi công dụng chung → nói thật + cảnh báo có nguồn
+  {
+    const nqK = ` ${normalizeVi(q)} `;
+    const khe = FOLK.find((x) => x.id === "khe-benh-than");
+    if (khe && !f && VN(/\b(khế|trái khế|quả khế|nước khế)\b/).test(nqK) && VN(/\b(chữa|trị|tác dụng|công dụng|tốt cho|để làm gì|làm gì|lợi ích|có tốt)\b/).test(nqK))
+      return { text: `🌿 **Khế** là trái cây quen thuộc (nấu canh chua, ăn sống, ép nước) — nhưng nguồn y khoa Lomi đối chiếu **không ghi khế chữa được bệnh nào**; các mẹo dân gian như khế trị ho, giải độc Lomi chưa có nguồn kiểm chứng.\n\n⚠️ Điều **có nguồn** và quan trọng nhất:\n${khe.caution.map((c) => `• ${c.text}`).join("\n")}\n\n_Nguồn: ${khe.sources.map((x) => x.publisher).join("; ")}._`, folk: khe.id };
+  }
   const uh = findUnverifiedHerb(q);
   if (uh && asked) {
+    if (uh === "mỡ trăn") return { text: renderUnverified(uh, med?.name) + "\n\n🔥 Riêng chuyện **bôi mỡ trăn lên vết bỏng**: nguồn y khoa khuyên **không bôi mỡ, dầu, kem** lên vết bỏng — làm mát bằng **nước mát khoảng 20 phút**, bỏng rộng hay phồng rộp thì đi khám.\n\n_Nguồn: NHS (Anh) — Burns and scalds._" };
     if ((med ?? prevMed) && !folkWord && FOOD_ASK.test(` ${normalizeVi(q)} `) && !HELP_ASK.test(` ${normalizeVi(q)} `)) return null;
     return { text: renderUnverified(uh, med?.name), topic: med?.id };
   }
