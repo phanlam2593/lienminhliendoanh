@@ -29,7 +29,8 @@ export default defineConfig(({ mode }) => ({
         // Bundle chính đã ~2.1MB, vượt mặc định 2MiB của Workbox → build fail.
         // Nâng lên 4MiB để precache được; bundle tăng thêm vẫn an toàn.
         // (31/10/2026: kiến thức Lomi chạy trên máy làm bundle chính vượt 4MiB → nâng lên 6MiB, không thì build Lovable fail)
-        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+        // (22/11/2026: bộ cấp cứu + tìm chỗ + cách dùng thuốc nam làm bundle chính ~6.1MiB → build Lovable fail từ 21/11, ilomi.live kẹt bản cũ → nâng lên 10MiB)
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
         // CỐ Ý KHÔNG precache "html": nếu precache index.html thì precacheAndRoute()
         // sẽ đăng ký 1 route match "/" (directoryIndex mặc định) TRƯỚC mọi runtimeCaching,
         // khiến navigation bị phục vụ cache-first từ snapshot HTML lúc build và không bao
