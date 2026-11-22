@@ -5,7 +5,7 @@ import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugSta
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
-import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, BriefcaseBusiness, ChefHat, CircleHelp, Copy, MapPinned, MessageCircleHeart, RotateCcw, Send, Smartphone, Smile, Sparkles, Stethoscope, Volume2, VolumeX } from "lucide-react";
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
@@ -563,6 +563,16 @@ function placeCtxNote(msgs: Msg[], raw: string): { head: string; ask: string } {
     ask: c.length ? `\n📞 Khi gọi / nhắn ${names.length ? names.join(", ") : "chỗ đó"}, hỏi gộp luôn: ${c.join("; ")}.` : names.length ? `\n📞 Mấy chỗ lúc nãy: ${names.join(", ")} — bấm vào thẻ để gọi / nhắn hỏi.` : "",
   };
 }
+const TAB_ICON: Record<LomiTab, typeof Smile> = {
+  heart: MessageCircleHeart,
+  health: Stethoscope,
+  food: MapPinned,
+  cook: ChefHat,
+  tarot: Sparkles,
+  biz: BriefcaseBusiness,
+  app: Smartphone,
+};
+
 export default function AiAssistant() {
   const goBack = useGoBack();
   // 01/10 (theo ý Kir): khung chat Lomi nằm GIỮA thanh trên của app (logo, tin nhắn, thông báo) và thanh điều hướng
@@ -659,7 +669,8 @@ export function AiChat({
     el.style.height = `${el.scrollHeight}px`;
     // Chỉ hiện thanh cuộn khi vượt max-h-32 (128px) — trước đây luôn lòi ▲▼ dù mới 1 dòng.
     el.style.overflowY = el.scrollHeight > 128 ? "auto" : "hidden";
-  }, [input]);
+    // 22/11: đổi chủ đề là đổi câu gợi ý (placeholder) — phải đo lại, không thì gợi ý 2 dòng bị khuất nửa dưới.
+  }, [input, tab, lang]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -5148,26 +5159,40 @@ export function AiChat({
             <LomiStickerGrid onPick={sendSticker} className="grid grid-cols-5 gap-1 p-2 max-h-56 overflow-y-auto" />
           </div>
         )}
-        {/* 18/11 — chọn chủ đề (gợi ý mềm, chạm lại để bỏ chọn). */}
-        <div className="flex gap-1.5 overflow-x-auto px-3 pt-2 pb-0.5 border-t [scrollbar-width:none]" role="tablist" aria-label="Chủ đề">
-          {LOMI_TABS.map((tb) => {
-            const on = tab === tb.id;
-            return (
-              <button
-                key={tb.id}
-                type="button"
-                role="tab"
-                aria-selected={on}
-                onClick={() => setTab(on ? null : tb.id)}
-                className={cn(
-                  "shrink-0 rounded-full px-3 py-1 text-xs font-medium border transition whitespace-nowrap",
-                  on ? "gradient-brand text-white border-transparent shadow-sm" : "bg-background text-muted-foreground hover:bg-accent",
-                )}
-              >
-                {tb.emoji} {tb.label}
-              </button>
-            );
-          })}
+        {/* 18/11 — chọn chủ đề (gợi ý mềm, chạm lại để bỏ chọn). 22/11 (Kir): làm lại cho hiện đại — biểu tượng thay emoji,
+            nền nhạt, nút đang chọn tô gradient; mép phải mờ dần để thấy còn kéo ngang được. */}
+        <div className="relative border-t">
+          <div
+            className="flex gap-2 overflow-x-auto px-3 pt-2.5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,black_85%,transparent)]"
+            role="tablist"
+            aria-label="Chủ đề"
+          >
+            {LOMI_TABS.map((tb) => {
+              const on = tab === tb.id;
+              const Icon = TAB_ICON[tb.id];
+              return (
+                <button
+                  key={tb.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={on}
+                  onClick={() => setTab(on ? null : tb.id)}
+                  className={cn(
+                    "shrink-0 inline-flex items-center gap-1.5 rounded-full pl-1 pr-3 py-1 text-[13px] font-medium whitespace-nowrap transition-all active:scale-95",
+                    on
+                      ? "gradient-brand text-white shadow-md shadow-primary/25"
+                      : "bg-muted/60 text-foreground/80 ring-1 ring-border/60 hover:bg-muted",
+                  )}
+                >
+                  <span className={cn("grid place-items-center w-6 h-6 rounded-full", on ? "bg-white/20" : "bg-background text-primary")}>
+                    <Icon className="w-3.5 h-3.5" />
+                  </span>
+                  {tb.label}
+                </button>
+              );
+            })}
+            <span className="shrink-0 w-6" aria-hidden />
+          </div>
         </div>
         <form
           onSubmit={(e) => {
