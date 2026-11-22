@@ -532,9 +532,16 @@ function placePick(msgs: Msg[], raw: string): PlacePick | null {
     const crit: string[] = [];
     const price = u.match(/(\d+) ?k\b/);
     if (price) crit.push(`ngân sách khoảng ${price[1]}k`);
-    if (VN(/\b(không thích vận động|ít đi bộ|không muốn đi bộ|không đi bộ nhiều)\b/).test(u)) crit.push("ít phải đi bộ");
+    if (VN(/\b(không thích vận động|ít đi bộ|không muốn đi bộ|không đi bộ nhiều|không thích đi bộ|ngại đi bộ|lười đi bộ)\b/).test(u)) crit.push("ít phải đi bộ");
+    if (VN(/\b(bé|con nhỏ|trẻ nhỏ|trẻ em|em bé|con nít)\b/).test(u)) crit.push("hợp với bé");
     if (VN(/\b(cảnh đẹp|view|ngắm)\b/).test(u)) crit.push("cảnh đẹp");
-    return { text: `${places.length > 1 ? `Nếu phải chốt một chỗ trong ${names.join(", ")}, Lomi nghiêng về **${p.name}**` : `Trong mấy chỗ Lomi tìm được thì hợp nhất hiện có **${p.name}**`}${why.length ? ` — vì ${why.join(", ")}` : ""}.\n\nNói thật là Lomi **chưa kiểm được** chỗ đó có hợp hết tiêu chí của bạn${crit.length ? ` (${crit.join(", ")})` : ""} hay không — dữ liệu trong app chưa ghi giá vé / mức phải đi bộ. Bạn bấm vào thẻ **${p.name}** xem ảnh, đánh giá, rồi nhắn hỏi chủ chỗ đó trước khi đi cho chắc nha.` };
+    // 22/11 (test trên app thật): nhắc lại đúng tiêu chí đã nói khi đi ăn nhóm — trước câu chốt quán ăn lại nói "giá vé / mức phải đi bộ"
+    const grp = u.match(/\b(\d+) ?(người|nguoi)\b/u);
+    if (grp) crit.push(`nhóm ${grp[1]} người`);
+    else if (VN(/\b(nhóm|đi đông|cả nhà|gia đình)\b/).test(u)) crit.push("đi nhóm đông");
+    if (VN(/\b(người già|người lớn tuổi|ông bà|người cao tuổi|bố mẹ già|ba mẹ già)\b/).test(u)) crit.push("có người lớn tuổi");
+    if (VN(/\b(cầu thang|bậc thang|leo dốc)\b/).test(u)) crit.push("ít cầu thang");
+    return { text: `${places.length > 1 ? `Nếu phải chốt một chỗ trong ${names.join(", ")}, Lomi nghiêng về **${p.name}**` : `Trong mấy chỗ Lomi tìm được thì hợp nhất hiện có **${p.name}**`}${why.length ? ` — vì ${why.join(", ")}` : ""}.\n\nNói thật là Lomi **chưa kiểm được** chỗ đó có hợp hết tiêu chí của bạn${crit.length ? ` (${crit.join(", ")})` : ""} hay không — dữ liệu trong app chưa ghi đủ những chi tiết này của từng chỗ. Bạn bấm vào thẻ **${p.name}** xem ảnh, đánh giá, rồi nhắn hỏi chủ chỗ đó trước khi đi cho chắc nha.` };
   }
   const lab = asks.length ? asks.map((a) => a[1]).join(", ") : "chi tiết này";
   const tips = asks.length ? asks.map((a) => `• ${a[2]}`) : ["• bấm vào thẻ từng chỗ xem ảnh, đánh giá, rồi nhắn / gọi hỏi chủ chỗ đó"];
