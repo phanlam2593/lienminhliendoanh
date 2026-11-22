@@ -669,6 +669,7 @@ export function AiChat({
   //   làm React báo "rendered more hooks than during the previous render" và khung chat sập.
   const rawRef = useRef<string | null>(null); // câu người dùng gõ nguyên văn của lượt đang xử lý
   const coreRef = useRef<string | null>(null); // (12/11) phần ý chính khi câu có lời mở đầu xã giao ("cho mình hỏi về sốt" → "sốt")
+  const riskRef = useRef<RiskScan | null>(null); // 14/11: kết quả quét rủi ro của lượt đang xử lý (xem chú thích ở localReply)
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
 
   const left = quota ? Math.max(0, quota.limit - quota.used) : null;
@@ -1482,7 +1483,7 @@ export function AiChat({
   };
   // 14/11 (kiến trúc mới): kết quả quét rủi ro của LƯỢT ĐANG XỬ LÝ (lib/lomiRouter.riskScan) — send() ghi ở một chỗ duy nhất,
   //   cửa ra localReply đọc để trọng tài quyết định. null = lượt này chưa quét (vd bấm chip, gửi sticker).
-  const riskRef = useRef<RiskScan | null>(null);
+  //   (22/11) riskRef đã dời lên trên, trước lần return sớm `if (!user)` — để dưới đó thì lúc đăng nhập xong khung chat sập (React #310).
   const localReply = (asked: string, reply0: Msg) => {
     setErr(null);
     const c = carryRef.current;
