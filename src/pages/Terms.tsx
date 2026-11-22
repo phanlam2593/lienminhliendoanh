@@ -11,6 +11,34 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+// 22/11/2026 (Kir): viết lại theo luật VN hiện hành (An ninh mạng 2025, Bảo vệ dữ liệu cá nhân 2025, Trí tuệ nhân tạo 2025,
+//   Bảo vệ quyền lợi người tiêu dùng 2023, NĐ 147/2024) và tính năng hiện có (Lomi có dùng AI cho câu bí, thuốc nam Long Châu…).
+//   Nội dung ở i18n.tsx (termsPage.<mục>.<số>); thêm / bớt ý thì sửa số lượng ở đây.
+const SECTIONS: [key: string, kind: "p" | "li", count: number][] = [
+  ["intro", "p", 2],
+  ["def", "li", 6],
+  ["cond", "p", 3],
+  ["acc", "li", 6],
+  ["conduct", "li", 6],
+  ["biz", "li", 6],
+  ["quet", "li", 6],
+  ["ride", "li", 6],
+  ["chat", "li", 4],
+  ["lomi", "li", 11],
+  ["member", "li", 4],
+  ["data", "li", 5],
+  ["ip", "p", 2],
+  ["ban", "li", 8],
+  ["report", "li", 4],
+  ["end", "p", 3],
+  ["liab", "li", 4],
+  ["indem", "p", 1],
+  ["law", "p", 2],
+  ["force", "p", 1],
+  ["lang", "p", 1],
+  ["change", "p", 1],
+];
+
 export default function Terms() {
   const goBack = useGoBack();
   const { t } = useLanguage();
@@ -30,163 +58,31 @@ export default function Terms() {
       </div>
       <p className="text-xs text-muted-foreground">{t("termsPage.lastUpdated")}</p>
 
-      <Section title={t("termsPage.s1Title")}>
-        <p>{t("termsPage.s1P1", { app: appName })}</p>
-        <p>{t("termsPage.s1P2")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s2Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s2Li1", { app: appName })}</li>
-          <li>{t("termsPage.s2Li2")}</li>
-          <li>{t("termsPage.s2Li3")}</li>
-          <li>{t("termsPage.s2Li4")}</li>
-          <li>{t("termsPage.s2Li5")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.s3Title")}>
-        <p>{t("termsPage.s3P1")}</p>
-        <p>{t("termsPage.s3P2")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s4Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s4Li1")}</li>
-          <li>{t("termsPage.s4Li2")}</li>
-          <li>{t("termsPage.s4Li3")}</li>
-          <li>{t("termsPage.s4Li4")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.s5Title")}>
-        <p>{t("termsPage.s5Intro")}</p>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s5Li1")}</li>
-          <li>{t("termsPage.s5Li2")}</li>
-          <li>{t("termsPage.s5Li3")}</li>
-          <li>{t("termsPage.s5Li4")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.s6Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s6Li1")}</li>
-          <li>{t("termsPage.s6Li2")}</li>
-          <li>{t("termsPage.s6Li3")}</li>
-          <li>{t("termsPage.s6Li4")}</li>
-          <li>{t("termsPage.s6Li5")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.q1Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.q1Li1")}</li>
-          <li>{t("termsPage.q1Li2")}</li>
-          <li>{t("termsPage.q1Li3")}</li>
-          <li>{t("termsPage.q1Li4")}</li>
-          <li>{t("termsPage.q1Li5")}</li>
-          <li>{t("termsPage.q1Li6")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.r1Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.r1Li1")}</li>
-          <li>{t("termsPage.r1Li2")}</li>
-          <li>{t("termsPage.r1Li3")}</li>
-          <li>{t("termsPage.r1Li4")}</li>
-          <li>{t("termsPage.r1Li5")}</li>
-          <li>{t("termsPage.r1Li6")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.c1Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.c1Li1")}</li>
-          <li>{t("termsPage.c1Li2")}</li>
-          <li>{t("termsPage.c1Li3")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.l1Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.l1Li1")}</li>
-          <li>{t("termsPage.l1Li2")}</li>
-          <li>{t("termsPage.l1Li3")}</li>
-          <li>{t("termsPage.l1Li4")}</li>
-          <li>{t("termsPage.l1Li5")}</li>
-          <li>{t("termsPage.l1Li6")}</li>
-          <li>{t("termsPage.l1Li7")}</li>
-          <li>{t("termsPage.l1Li8")}</li>
-          <li>{t("termsPage.l1Li9")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.t1Title")}>
-        <p>{t("termsPage.t1P1")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s7Title")}>
-        <p>{t("termsPage.s7P1")}</p>
-        <p>{t("termsPage.s7P2", { app: appName })}</p>
-      </Section>
-
-      <Section title={t("termsPage.s8Title")}>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s8Li1")}</li>
-          <li>{t("termsPage.s8Li2")}</li>
-          <li>{t("termsPage.s8Li3")}</li>
-          <li>{t("termsPage.s8Li4")}</li>
-          <li>{t("termsPage.s8Li5")}</li>
-          <li>{t("termsPage.s8Li6")}</li>
-          <li>{t("termsPage.s8Li7")}</li>
-        </ul>
-      </Section>
-
-      <Section title={t("termsPage.s9Title")}>
-        <p>{t("termsPage.s9P1")}</p>
-        <p>{t("termsPage.s9P2")}</p>
-        <p>{t("termsPage.s9P3")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s10Title")}>
-        <p>{t("termsPage.s10P1")}</p>
-        <p>{t("termsPage.s10P2")}</p>
-        <p>{t("termsPage.s10P3")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s11Title")}>
-        <p>{t("termsPage.s11P1")}</p>
-        <p>{t("termsPage.s11P2")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s12Title")}>
-        <p>{t("termsPage.s12P1")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s13Title")}>
-        <p>{t("termsPage.s13P1")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s14Title")}>
-        <p>{t("termsPage.s14P1")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s15Title")}>
-        <p>{t("termsPage.s15P1")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s16Title")}>
-        <p>{t("termsPage.s16P1")}</p>
-        <p>
-          {t("termsPage.s16Pre")}{" "}
-          <a href="https://zalo.me/0339565246" className="text-primary font-semibold">
-            0339565246
-          </a>{" "}
-          {t("termsPage.s16Post", { app: appName })}
-        </p>
-      </Section>
+      {SECTIONS.map(([key, kind, n]) => {
+        const items = Array.from({ length: n }, (_, i) => t(`termsPage.${key}.${i + 1}`, { app: appName }));
+        return (
+          <Section key={key} title={t(`termsPage.${key}.t`)}>
+            {kind === "li" ? (
+              <ul className="list-disc pl-4 space-y-1">
+                {items.map((x, i) => (
+                  <li key={i}>{x}</li>
+                ))}
+              </ul>
+            ) : (
+              items.map((x, i) => <p key={i}>{x}</p>)
+            )}
+            {key === "change" && (
+              <p>
+                {t("termsPage.contactPre")}{" "}
+                <a href="https://zalo.me/0339565246" className="text-primary font-semibold">
+                  0339565246
+                </a>{" "}
+                {t("termsPage.contactPost", { app: appName })}
+              </p>
+            )}
+          </Section>
+        );
+      })}
 
       <div className="pt-4 flex justify-center">
         <button
