@@ -5180,7 +5180,7 @@ export function AiChat({
                   className={cn(
                     "shrink-0 inline-flex items-center gap-1.5 rounded-full pl-1 pr-3 py-1 text-[13px] font-medium whitespace-nowrap transition-all active:scale-95",
                     on
-                      ? "gradient-brand text-white shadow-md shadow-primary/25"
+                      ? "bg-gradient-brand text-white shadow-md shadow-primary/25"
                       : "bg-muted/60 text-foreground/80 ring-1 ring-border/60 hover:bg-muted",
                   )}
                 >

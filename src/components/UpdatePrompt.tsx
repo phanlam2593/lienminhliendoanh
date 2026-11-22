@@ -36,7 +36,7 @@ export default function UpdatePrompt() {
     <AlertDialog open={open} onOpenChange={(o) => !o && setLater(true)}>
       <AlertDialogContent className="max-w-[90vw] sm:max-w-sm rounded-2xl">
         <AlertDialogHeader className="items-center text-center">
-          <div className="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full gradient-brand text-white">
+          <div className="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-brand text-white">
             <RefreshCw className="h-6 w-6" />
           </div>
           <AlertDialogTitle className="text-center">{t("pwa.updateTitle")}</AlertDialogTitle>
@@ -44,7 +44,7 @@ export default function UpdatePrompt() {
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col-reverse gap-2 sm:flex-row">
           <AlertDialogCancel className="mt-0">{t("pwa.updateLater")}</AlertDialogCancel>
-          <AlertDialogAction className="gradient-brand text-white border-0" onClick={() => window.location.reload()}>
+          <AlertDialogAction className="bg-gradient-brand text-white border-0" onClick={() => window.location.reload()}>
             {t("pwa.updateAction")}
           </AlertDialogAction>
         </AlertDialogFooter>
