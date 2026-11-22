@@ -168,7 +168,7 @@ export function LomiLearnPanel() {
     ["unanswered", "🤔 Lomi bí", un?.length],
     ["stuck", "🧪 Hội thoại bí", stDone ? undefined : st?.length],
     ["taught", "🎓 Đã dạy", tg?.length],
-    ["claude", "✨ Claude đã trả lời", ca?.length],
+    ["claude", "✨ AI đã trả lời", ca?.length],
   ];
 
   return (
@@ -286,7 +286,7 @@ export function LomiLearnPanel() {
               <div key={x.id} className="bg-card border rounded-xl p-3 space-y-2">
                 <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
                   <span className="px-2 py-0.5 rounded-full bg-muted font-semibold">{STUCK_KIND[x.kind] ?? x.kind}</span>
-                  {x.source !== "app" && <span>🤖 Claude test</span>}
+                  {x.source !== "app" && <span>🤖 AI test</span>}
                   <span className="ml-auto">{fmt(x.created_at)}</span>
                 </div>
                 <div className="text-sm">
@@ -372,7 +372,7 @@ export function LomiLearnPanel() {
       {view === "claude" && (
         <div className="space-y-2">
           <p className="text-[11px] text-muted-foreground">
-            Câu Lomi bí đã nhờ Claude trả lời và được lưu lại — lần sau ai hỏi đúng câu đó, Lomi dùng lại câu này (không gọi Claude). Câu chưa hay thì
+            Câu Lomi bí đã nhờ AI trả lời và được lưu lại — lần sau ai hỏi đúng câu đó, Lomi dùng lại câu này (không gọi Claude). Câu chưa hay thì
             bấm Xoá; muốn sửa lời thì bấm Đưa vào Đã dạy. "Ngoài phạm vi" = câu không thuộc 4 mục của Lomi, xoá đi thì lần sau sẽ hỏi lại Claude.
           </p>
           {!ca ? (
