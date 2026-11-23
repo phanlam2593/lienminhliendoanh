@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "./Logo";
 import { setWelcomeActive } from "@/lib/pwa";
 import { useLanguage } from "@/lib/i18n";
+import { LomiMascot } from "./LomiMascot";
 
 /**
  * Welcome Onboarding — 5-page swipeable popup shown ONCE per user
@@ -299,32 +300,6 @@ function Scene3({ active }: { active: boolean }) {
   );
 }
 
-function Scene4() {
-  const { t } = useLanguage();
-  return (
-    <div className="wo-scene wo-s4">
-      <SceneClouds />
-      <div className="wo-blob wo-abs-a">
-        <Blob variant="cyan" className="wo-bob" />
-      </div>
-      <div className="wo-blob wo-abs-b">
-        <Blob variant="green" className="wo-bob wo-rev" />
-      </div>
-      <svg viewBox="0 0 30 30" className="wo-fx wo-f1">
-        <use href="#wo-heart" />
-      </svg>
-      <svg viewBox="0 0 26 26" className="wo-fx wo-f2">
-        <use href="#wo-plusfx" />
-      </svg>
-      <svg viewBox="0 0 26 26" className="wo-fx wo-f3">
-        <use href="#wo-thumb" />
-      </svg>
-      <span className="wo-tag wo-ta">{t("onboarding.tagYou")}</span>
-      <span className="wo-tag wo-tb">{t("onboarding.tagCommunity")}</span>
-    </div>
-  );
-}
-
 function SceneCommunity() {
   const { t } = useLanguage();
   return (
@@ -353,6 +328,39 @@ function SceneSwipe() {
         <Blob variant="cyan" className="wo-bob wo-rev" />
       </div>
       <div className="wo-badge">{t("onboarding.swipeBadge")}</div>
+    </div>
+  );
+}
+
+// 23/11 (Kir): thêm trang Trợ lý Lomi + Đưa đón & Giao hàng, bỏ trang "người sáng tạo nội dung".
+function SceneLomi() {
+  const { t } = useLanguage();
+  return (
+    <div className="wo-scene wo-s8">
+      <SceneClouds />
+      <div className="wo-lomi">
+        <LomiMascot size={96} mood="happy" />
+      </div>
+      <div className="wo-badge">{t("onboarding.lomiBadge")}</div>
+    </div>
+  );
+}
+
+function SceneRide() {
+  const { t } = useLanguage();
+  return (
+    <div className="wo-scene wo-s9">
+      <SceneClouds />
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="cyan" className="wo-bob" />
+      </div>
+      <div className="wo-ride" aria-hidden>
+        🛵
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="green" className="wo-bob wo-rev" />
+      </div>
+      <div className="wo-badge">{t("onboarding.rideBadge")}</div>
     </div>
   );
 }
@@ -426,6 +434,11 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
             <b>{t("onboarding.s0Line2Bold")}</b>
             {t("onboarding.s0Line2Post")}
           </div>
+          <div className="wo-line">
+            {t("onboarding.s0Line3Pre")}
+            <b>{t("onboarding.s0Line3Bold")}</b>
+            {t("onboarding.s0Line3Post")}
+          </div>
         </div>
         <p className="wo-closing">{t("onboarding.s0Closing", { app: t("app.name") })}</p>
       </div>
@@ -473,26 +486,6 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
   if (index === 3) {
     return (
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
-        <Scene4 />
-        <h2 className="wo-h2">
-          {t("onboarding.s3TitlePre")}
-          <span className="wo-hl">{t("onboarding.s3TitleHl")}</span>
-          {t("onboarding.s3TitlePost")}
-          <br />
-          <span className="text-xs font-medium text-slate-500">{t("onboarding.s3Sub")}</span>
-        </h2>
-        <div className="wo-flow">
-          <FlowChip>{t("onboarding.s3Chip1")}</FlowChip>
-          <FlowArrow two />
-          <FlowChip>{t("onboarding.s3Chip2")}</FlowChip>
-        </div>
-        <p className="wo-simple">{t("onboarding.simple")}</p>
-      </div>
-    );
-  }
-  if (index === 4) {
-    return (
-      <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <SceneCommunity />
         <h2 className="wo-h2">
           {t("onboarding.communityTitlePre")}
@@ -508,7 +501,7 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       </div>
     );
   }
-  if (index === 5) {
+  if (index === 4) {
     return (
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <SceneSwipe />
@@ -526,6 +519,42 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       </div>
     );
   }
+  if (index === 5) {
+    return (
+      <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
+        <SceneLomi />
+        <h2 className="wo-h2">
+          {t("onboarding.lomiTitlePre")}
+          <span className="wo-hl">{t("onboarding.lomiTitleHl")}</span>
+          {t("onboarding.lomiTitlePost")}
+        </h2>
+        <div className="wo-flow">
+          <FlowChip>{t("onboarding.lomiChip1")}</FlowChip>
+          <FlowArrow />
+          <FlowChip>{t("onboarding.lomiChip2")}</FlowChip>
+        </div>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
+      </div>
+    );
+  }
+  if (index === 6) {
+    return (
+      <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
+        <SceneRide />
+        <h2 className="wo-h2">
+          {t("onboarding.rideTitlePre")}
+          <span className="wo-hl">{t("onboarding.rideTitleHl")}</span>
+          {t("onboarding.rideTitlePost")}
+        </h2>
+        <div className="wo-flow">
+          <FlowChip>{t("onboarding.rideChip1")}</FlowChip>
+          <FlowArrow two />
+          <FlowChip>{t("onboarding.rideChip2")}</FlowChip>
+        </div>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
+      </div>
+    );
+  }
   return (
     <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
       <Scene5 active={active} />
@@ -537,6 +566,7 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
         </span>
       </h2>
       <p className="wo-kao">{t("onboarding.s4Footer")}</p>
+      <p className="wo-simple">{t("onboarding.s4Help")}</p>
     </div>
   );
 }
@@ -632,7 +662,8 @@ export function WelcomeOnboarding({
     setClosing(false);
   };
 
-  const go = (i: number) => setPage(Math.max(0, Math.min(6, i)));
+  const PAGES = 8;
+  const go = (i: number) => setPage(Math.max(0, Math.min(PAGES - 1, i)));
 
   const onTouchStart = (e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX;
@@ -652,7 +683,7 @@ export function WelcomeOnboarding({
   if (!visible || !profile) return null;
 
   const memberNumber = memberRank ?? 1;
-  const isLast = page === 6;
+  const isLast = page === PAGES - 1;
 
   return (
     <div className="wo-root" role="dialog" aria-modal="true" aria-label={t("onboarding.ariaLabel")}>
@@ -681,7 +712,7 @@ export function WelcomeOnboarding({
         onTouchEnd={onTouchEnd}
       >
         <div className="wo-track" style={{ transform: `translateX(-${page * 100}%)` }}>
-          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          {Array.from({ length: PAGES }, (_, i) => i).map((i) => (
             <div key={i} className="wo-page">
               <Slide index={i} active={page === i} memberNumber={memberNumber} />
             </div>
@@ -692,7 +723,7 @@ export function WelcomeOnboarding({
       {/* Footer */}
       <div className="wo-footer">
         <div className="wo-dots" role="tablist" aria-label={t("onboarding.page")}>
-          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
+          {Array.from({ length: PAGES }, (_, i) => i).map((i) => (
             <button
               key={i}
               className={`wo-dot ${page === i ? "wo-dot-active" : ""}`}
@@ -898,6 +929,9 @@ export function WelcomeOnboarding({
           margin: 4px 4px 2px;
         }
         .wo-hl { background: linear-gradient(135deg,#0891b2,#10b981); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .wo-lomi { position: absolute; left: 50%; top: 38px; transform: translateX(-50%); animation: wo-bob 2.4s ease-in-out infinite; }
+        .wo-ride { position: absolute; left: 50%; top: 78px; font-size: 44px; line-height: 1; animation: wo-ride 3.2s ease-in-out infinite alternate; }
+        @keyframes wo-ride { from { transform: translateX(-90px) } to { transform: translateX(46px) } }
         .wo-kao { font-size: 13.5px; font-weight: 700; color: #10b981; }
         .wo-duo { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 330px; }
         .wo-line {
