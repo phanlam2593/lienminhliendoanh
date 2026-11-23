@@ -548,7 +548,7 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
         </h2>
         <div className="wo-flow">
           <FlowChip>{t("onboarding.rideChip1")}</FlowChip>
-          <FlowArrow two />
+          <FlowArrow />
           <FlowChip>{t("onboarding.rideChip2")}</FlowChip>
         </div>
         <p className="wo-simple">{t("onboarding.simple")}</p>
