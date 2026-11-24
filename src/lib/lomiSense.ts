@@ -401,7 +401,7 @@ const STATES: StateDef[] = [
       const t: Record<string, string[]> = {
         "mưa": ["Mưa hả 🌧️ Ra đường nhớ mang áo mưa nha. Ngồi quán cà phê nghe mưa cũng chill lắm đó ☕", "Trời mưa dễ làm lòng người chùng xuống ghê 🌧️ Pha ly trà nóng cho ấm nha. Bạn đang ở nhà hay ở ngoài vậy?"],
         "nắng": ["Nắng vậy nhớ che chắn, uống nhiều nước nha ☀️ Ra đường nhớ thoa kem chống nắng đó!"],
-        "lạnh": ["Lạnh thì mặc ấm, uống chút gì nóng nha 🧣 Đà Lạt lạnh là hợp ăn lẩu nướng lắm đó 🍲"],
+        "lạnh": ["Lạnh thì mặc ấm, uống chút gì nóng nha 🧣 Trời lạnh là hợp ăn lẩu nướng lắm đó 🍲"],
         "rét": ["Rét vậy nhớ mặc ấm, quấn khăn nha 🧣 Muốn Lomi tìm quán ấm cúng gần bạn không?"],
         "nóng": ["Nóng vậy nhớ uống thật nhiều nước 🥤 Một ly trà đá hay sinh tố là đã nhất!"],
         "oi": ["Oi bức khó chịu thiệt ha 🥵 Uống nước nhiều, mặc đồ thoáng mát nha."],

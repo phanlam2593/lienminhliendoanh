@@ -40,7 +40,7 @@ const GREET_TIME: Record<ReturnType<typeof partOfDay>, string[]> = {
     "Sáng tốt lành nè ☀️",
     "Hello buổi sáng! Uống cà phê chưa đó ☕",
     "Ui sáng sớm đã gặp bạn, hên ghê 😆",
-    "Dậy sớm dữ ta 🌤️ Đà Lạt sáng nay se lạnh, nhớ mặc ấm nha!",
+    "Dậy sớm dữ ta 🌤️ Sáng sớm trời hay se lạnh, nhớ mặc ấm nha!",
   ],
   noon: ["Chào buổi trưa nha 🌤️ Ăn cơm chưa đó?", "Trưa rồi nè, nhớ ăn uống đầy đủ nha 🍚", "Hí lô, trưa nay ăn gì chưa nè 😋"],
   afternoon: ["Chào buổi chiều nha 🌿", "Chiều rồi, làm ly nước cho tỉnh táo nè 🧋", "Chiều chiều gặp nhau vui ghê 😄"],
@@ -246,7 +246,7 @@ const RULES: Rule[] = [
   // "Có gì vui không", "kể gì đi"
   {
     re: VN(/^(có gì vui không|có gì hay không|có gì mới không|kể gì đi|nói gì vui vui đi|kể gì nghe đi)( (lomi|bạn|nè|à|a|nha))*$/),
-    reply: () => ({ text: pick(["Vui nè: Đà Lạt hôm nay lúc nắng lúc mưa, y chang tâm trạng crush luôn 😆 Còn bạn có gì vui kể Lomi nghe với!", "Lomi mới học được câu đùa nè: vì sao điện thoại hay mệt? Vì ngày nào cũng bị người ta “sạc” 🔋😆 Bạn kể Lomi nghe chuyện vui của bạn đi!"]) }),
+    reply: () => ({ text: pick(["Vui nè: trời hôm nay lúc nắng lúc mưa, y chang tâm trạng crush luôn 😆 Còn bạn có gì vui kể Lomi nghe với!", "Lomi mới học được câu đùa nè: vì sao điện thoại hay mệt? Vì ngày nào cũng bị người ta “sạc” 🔋😆 Bạn kể Lomi nghe chuyện vui của bạn đi!"]) }),
   },
   // "Để tui coi thử", "để xem"
   {
@@ -265,7 +265,7 @@ const RULES: Rule[] = [
     re: VN(/\b(thời tiết (thế nào|ra sao|hôm nay|ngày mai)|trời có mưa không|có mưa không|mai có mưa|dự báo thời tiết|mấy độ)\b/),
     reply: () => ({
       text: pick([
-        "Lomi chưa xem được dự báo thời tiết nè 😅 Bạn mở app thời tiết trên điện thoại cho chắc nha. Đà Lạt thì trời đổi nhanh lắm, ra đường cứ mang theo áo khoác với áo mưa là yên tâm 🌦️",
+        "Lomi chưa xem được dự báo thời tiết nè 😅 Bạn mở app thời tiết trên điện thoại cho chắc nha. Ra đường cứ mang theo áo khoác mỏng với áo mưa là yên tâm 🌦️",
         "Cái này Lomi chịu thua, Lomi không có dự báo thời tiết 🥲 Xem app thời tiết giúp Lomi nha — mà mang sẵn áo mưa mỏng trong cốp xe là chắc ăn nhất đó!",
       ]),
     }),
@@ -1036,16 +1036,16 @@ export const SCOPE_CHIP_REPLY: Record<string, string> = {
  */
 // Câu Lomi chưa biết (01/10, đúng lời Kir viết). Lần đầu: câu đầy đủ; nếu vừa nói câu đầy đủ trong
 // vòng 10 phút thì dùng câu ngắn xoay vòng để không lặp nguyên đoạn dài.
-// 24/11 (Kir): cập nhật theo các mảng Lomi hiện có + hàng nút chủ đề trên ô nhập; giữ câu mở đầu và nút 💡 Dạy Lomi.
+// 24/11 (Kir): cập nhật theo các mảng Lomi hiện có + hàng nút chủ đề; quán / chỗ chơi "quanh bạn" (app chạy mọi nơi, không riêng Đà Lạt); bỏ đoạn nhắc Dạy Lomi trong lời (nút vẫn giữ).
 export const UNKNOWN_FULL =
   "Ui... Kiến thức này Lomi chưa được tiếp thu, Lomi xin lỗi ấy nhé! 🥲\n\n" +
-  "Lomi vẫn đang học thêm mỗi ngày, hiện rành nhất mấy chuyện: 💬 tâm sự – tình cảm, 🩺 sức khoẻ, 📍 tìm quán, chỗ chơi ở Đà Lạt, 🍳 nấu ăn, 🔮 bói Tarot, 💼 kinh doanh nhỏ và 📱 cách dùng iLomi — ấy chọn chủ đề ở hàng nút ngay trên ô nhập cho dễ hỏi nha.\n\n" +
-  "Muốn Lomi biết câu này thì ấy bấm 💡 Dạy Lomi ngay bên dưới để gửi ban quản trị nhé — lần sau Lomi trả lời được liền 🍀";
+  "Lomi vẫn đang học thêm mỗi ngày, hiện rành nhất mấy chuyện: 💬 tâm sự – tình cảm, 🩺 sức khoẻ, 📍 tìm quán, chỗ chơi quanh bạn, 🍳 nấu ăn, 🔮 bói Tarot, 💼 kinh doanh nhỏ và 📱 cách dùng iLomi — ấy chọn chủ đề ở hàng nút ngay trên ô nhập cho dễ hỏi nha 🍀";
+// 24/11 (Kir): bỏ đoạn nhắc "Dạy Lomi" trong lời (nút 💡 Dạy Lomi bên dưới vẫn giữ).
 const UNKNOWN_SHORT = [
-  "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
-  "Chuyện này Lomi chưa có kiến thức để trả lời rồi 😵‍💫 Nhấn 💡 Dạy Lomi bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
-  "Ui, Lomi chưa biết cái này nữa 🙈 Ấy gửi giúp Lomi bằng nút 💡 Dạy Lomi nha — lần sau Lomi trả lời được liền!",
-];
+  "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy hỏi Lomi chuyện khác nha!",
+  "Chuyện này Lomi chưa có kiến thức để trả lời rồi 😵‍💫 Ấy thử hỏi về tâm sự, sức khoẻ hay tìm quán quanh bạn nha 🍀",
+  "Ui, Lomi chưa biết cái này nữa 🙈 Ấy hỏi Lomi chuyện khác nha!",
+]
 const UNKNOWN_STICKERS = ["chongmat", "toatmohoi", "suynghi", "ngai", "canloi", "doi", "ngacnhien"];
 let lastFullAt = 0;
 let lastShort = -1;
@@ -1108,7 +1108,7 @@ export function scopedFallback(text: string, faqQ?: string): ChatReply {
   // ("híc", "ủa", "thôi") không phải hỏi tiếp về app (01/10: "Híc" bị đáp "Về chuyện Liên hệ Ban quản trị…").
   if (faqQ && !outTask && (looksLikeQuestion(text) || isAppish(text)))
     return {
-      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Ấy bấm 💡 Dạy Lomi dưới câu này để ban quản trị bổ sung cho Lomi nha, còn cần người thật hỗ trợ liền thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ.`,
+      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Cần người thật hỗ trợ liền thì ấy vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.`,
     };
   // Có chào ở đầu mà phần sau Lomi chưa hiểu → vẫn chào lại cho lịch sự.
   const g = splitGreet(squash(normalizeVi(text)));
