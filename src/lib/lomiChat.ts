@@ -1036,12 +1036,11 @@ export const SCOPE_CHIP_REPLY: Record<string, string> = {
  */
 // Câu Lomi chưa biết (01/10, đúng lời Kir viết). Lần đầu: câu đầy đủ; nếu vừa nói câu đầy đủ trong
 // vòng 10 phút thì dùng câu ngắn xoay vòng để không lặp nguyên đoạn dài.
+// 24/11 (Kir): cập nhật theo các mảng Lomi hiện có + hàng nút chủ đề trên ô nhập; giữ câu mở đầu và nút 💡 Dạy Lomi.
 export const UNKNOWN_FULL =
   "Ui... Kiến thức này Lomi chưa được tiếp thu, Lomi xin lỗi ấy nhé! 🥲\n\n" +
-  "Vì Lomi đang thử nghiệm và phát triển á, nên chỉ bít chút chút về vài lĩnh vực có ích cho cộng đồng như: tư vấn sức khoẻ, tâm lý... hoặc vui vẻ như bói Tarot hihi ☺️ (tham khảo phần ❓ ở góc trên nha).\n\n" +
-  "Ấy giúp Lomi học hỏi bằng cách nhấn nút 💡 Dạy Lomi ngay dưới câu Lomi chưa biết để gửi cho ban quản trị nhé 🙂‍↕️\n" +
-  "Hy vọng lần sau khi được hỏi về vấn đề này Lomi sẽ trò chuyện được nhiều hơn nè 🍀\n\n" +
-  "Giờ để Lomi hỗ trợ ấy về vấn đề khác nheee 🫣 — bấm ❓ ở góc trên để xem gợi ý nha!";
+  "Lomi vẫn đang học thêm mỗi ngày, hiện rành nhất mấy chuyện: 💬 tâm sự – tình cảm, 🩺 sức khoẻ, 📍 tìm quán, chỗ chơi ở Đà Lạt, 🍳 nấu ăn, 🔮 bói Tarot, 💼 kinh doanh nhỏ và 📱 cách dùng iLomi — ấy chọn chủ đề ở hàng nút ngay trên ô nhập cho dễ hỏi nha.\n\n" +
+  "Muốn Lomi biết câu này thì ấy bấm 💡 Dạy Lomi ngay bên dưới để gửi ban quản trị nhé — lần sau Lomi trả lời được liền 🍀";
 const UNKNOWN_SHORT = [
   "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
   "Chuyện này Lomi chưa có kiến thức để trả lời rồi 😵‍💫 Nhấn 💡 Dạy Lomi bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
