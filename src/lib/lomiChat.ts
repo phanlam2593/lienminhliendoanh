@@ -451,7 +451,7 @@ const RULES: Rule[] = [
     re: VN(/\b(lomi ngu|bạn ngu|(?<!buồn )ngu quá|đồ ngốc|vô dụng|tệ quá|chán lomi|lomi dốt|kém quá|lomi không hiểu gì|lomi chẳng hiểu gì)\b/),
     reply: () => ({
       text: pick([
-        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Câu nào Lomi chưa biết, bạn bấm nút 💡 Dạy Lomi dưới câu đó để gửi ban quản trị dạy Lomi nha!",
+        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Bạn thử hỏi cách khác giúp Lomi nha, Lomi sẽ cố hiểu hơn!",
         "Lomi xin lỗi vì chưa giúp được như ý bạn 🙏 Lomi còn đang học thêm mỗi ngày, bạn nhắn lại cách khác giúp Lomi nha!",
       ]),
     }),

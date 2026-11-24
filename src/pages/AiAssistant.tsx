@@ -230,6 +230,7 @@ type Msg = {
   aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
   places?: PlaceCard[]; // thẻ doanh nghiệp thật (Lomi tìm chỗ / "hôm nay ăn gì") — lib/lomiSearch
   search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
+  searchAsk?: boolean; // 25/11: Lomi vừa hỏi "bạn ở khu vực nào" cho lần tìm `search` (chưa biết nơi, chưa có vị trí)
   tarotSpread?: "five" | "celtic"; // người dùng vừa chọn trải 5 / 10 lá, đang chờ câu hỏi
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   hsub?: string; // chủ thể sức khoẻ đang nói (lib/lomiContext) — để hiểu câu hỏi nối
@@ -1207,7 +1208,7 @@ export function AiChat({
         const itC = detectSearch(pp.change);
         if (itC) {
           const res = await runSearch(itC, []);
-          return { role: "assistant", content: (pp.lead ?? "") + res.text, local: true, places: res.places, quick: res.quick, search: itC };
+          return { role: "assistant", content: (pp.lead ?? "") + res.text, local: true, places: res.places, quick: res.quick, search: itC, searchAsk: res.askArea };
         }
       }
       if (pp?.text) return { role: "assistant", content: pp.text, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish };
@@ -1238,7 +1239,7 @@ export function AiChat({
         if (it0) {
           const it: SearchIntent = { ...it0, area: np.area, place: np.label };
           const res = await runSearch(it);
-          return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: it };
+          return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: it, searchAsk: res.askArea };
         }
       }
       if (VN(/\b(tìm quán (trước|tiếp|lại)|xem quán (lại|tiếp|trước)|quay lại tìm quán)\b/).test(nr)) {
@@ -2348,7 +2349,7 @@ export function AiChat({
         const itH = detectSearch(raw.replace(/^.*?(?=(homestay|khách sạn|nhà nghỉ|chỗ ở|villa|resort|phòng))/iu, "tìm "));
         if (itH) {
           const res = await runSearch(itH, []);
-          return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: itH });
+          return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: itH, searchAsk: res.askArea });
         }
       }
       //   #30 "Có chỗ nào cho mang theo chó nhỏ ko?" — Lomi không biết chỗ nào nhận thú cưng.
@@ -3222,7 +3223,7 @@ export function AiChat({
           setBusy(false);
         }
         const sadP = VN(/\b(buồn(?! miệng| mồm| ngủ| cười)|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(đi (đâu )?chơi|đi dạo|đi đâu)( \S+){0,4} (cho )?(đỡ|bớt|khỏi|hết) (buồn|chán)\b/g), " "));
-        return localReply(q, { role: "assistant", content: sadP && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: itP, quick: sadP ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
+        return localReply(q, { role: "assistant", content: sadP && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: itP, searchAsk: res.askArea, quick: sadP ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }
     // 30/10 (Kir gửi ảnh): "bác sĩ trả về", "không chữa được nữa", "giai đoạn cuối" — trước đây bị đáp bằng thẻ ung thư chung
@@ -3337,6 +3338,22 @@ export function AiChat({
     // 08/10 — NGỮ CẢNH (lib/lomiConvo): đọc 2–5 lượt gần nhất rồi hiểu tin này như câu NỐI TIẾP nếu đúng là vậy:
     // "quán nào ổn?" (đang nói cà phê) → tìm quán cà phê; "yên tĩnh" (vừa tìm quán) → thêm điều kiện; "ừ" sau câu hỏi
     // chọn một trong nhiều thứ → hỏi lại đúng phần còn thiếu; "người đó thì sao?" → người đang nói tới…
+    // 25/11 (Kir: app chạy mọi nơi): Lomi vừa hỏi khu vực cho một lần tìm → người dùng trả lời tên nơi ("Nha Trang", "ở quận 3")
+    //   thì tìm lại đúng loại chỗ đó ở nơi đó.
+    if (!forceAi && !en && lastA0?.searchAsk && lastA0.search && !detectSearch(q) && q.trim().split(/\s+/).length <= 8) {
+      const pl = detectPlace(q);
+      if (pl) {
+        const intent: SearchIntent = { ...lastA0.search, area: pl.area, place: pl.label };
+        setBusy(true);
+        let res;
+        try {
+          res = await runSearch(intent, []);
+        } finally {
+          setBusy(false);
+        }
+        return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick, searchAsk: res.askArea });
+      }
+    }
     const convo = !forceAi && !en ? convoOf(msgs) : null;
     const rt = convo ? resolveTurn(q, raw, convo, { correcting: corr?.action === "rewrite" }) : null;
     if (rt?.kind === "reply") {
@@ -3364,7 +3381,7 @@ export function AiChat({
       } finally {
         setBusy(false);
       }
-      return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick });
+      return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick, searchAsk: res.askArea });
     }
     // Câu bác lại trống ("không", "không phải") mà ngữ cảnh ở trên không giải thích được → Lomi nhận là mình hiểu nhầm.
     if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
@@ -4468,7 +4485,7 @@ export function AiChat({
         }
         shownRef.current = shown;
         const sadS = VN(/\b(buồn(?! miệng| mồm| ngủ| cười)|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(đi (đâu )?chơi|đi dạo|đi đâu)( \S+){0,4} (cho )?(đỡ|bớt|khỏi|hết) (buồn|chán)\b/g), " "));
-        return localReply(q, { role: "assistant", content: sadS && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, quick: sadS ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
+        return localReply(q, { role: "assistant", content: sadS && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, searchAsk: res.askArea, quick: sadS ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }
     if (!forceAi) {
@@ -4765,7 +4782,7 @@ export function AiChat({
           }
         }
         const medUnk = !careUnk && (dietUnk || (medicalKindOf(q) ?? "unclear") !== "unclear") && (dietUnk || looksLikeQuestion(q) || fr1?.act === "question" || fr1?.act === "request")
-          ? "Chuyện này Lomi **chưa có kiến thức đã kiểm chứng** nên không dám trả lời bừa — chuyện sức khoẻ mà nói sai thì nguy hiểm 🙏 Bạn hỏi bác sĩ hoặc dược sĩ là chắc nhất nha.\n\nMuốn Lomi được bổ sung phần này thì bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị."
+          ? "Chuyện này Lomi **chưa có kiến thức đã kiểm chứng** nên không dám trả lời bừa — chuyện sức khoẻ mà nói sai thì nguy hiểm 🙏 Bạn hỏi bác sĩ hoặc dược sĩ là chắc nhất nha."
           : null;
         // 12/10: phân biệt CHƯA HIỂU CÂU với CHƯA CÓ KIẾN THỨC — câu KỂ / mẩu câu Lomi không đọc được ("ý a là món đó") thì nói là chưa hiểu
         // và xin nói rõ hơn; chỉ câu HỎI / lời nhờ mới là "chưa có kiến thức". (Đang ở mạch sức khoẻ thì giữ lời đáp theo mạch đó.)
@@ -4784,7 +4801,7 @@ export function AiChat({
         if (vague0) return localReply(q, { role: "assistant", content: VAGUE_TEXT[vague0], local: true, stuck: "not_understood" as StuckKind });
         if (anaphQ) return localReply(q, { role: "assistant", content: "Bạn đang nói tới chuyện nào ha 🤔 Bạn kể cụ thể hơn một chút (đang bị gì, hay chuyện gì đã xảy ra) để Lomi trả lời đúng ý nha.", local: true, stuck: "not_understood" as StuckKind });
         const notGot = !careUnk && !medUnk && !isAsk && !keepHealth.health && !askHealth
-          ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha? (Nếu là điều Lomi nên biết mà chưa biết, bạn bấm 💡 Dạy Lomi bên dưới để gửi ban quản trị.)"
+          ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha?"
           : null;
         const unkText = careUnk ?? medUnk ?? notGot;
         // 22/10: "có nên nghỉ làm không" → lời cùng cân nhắc (hỏi hoàn cảnh) là câu trả lời thật, không hiện nút 💡 Dạy Lomi như một câu bí.
@@ -5046,21 +5063,7 @@ export function AiChat({
                       )}
                     </>
                   )}
-                  {!en && !m.note && !!m.unk && (
-                    <button
-                      onClick={() => {
-                        if (m.reported) return void toast("Câu này đã được gửi cho ban quản trị rồi nha 💚");
-                        setFbReason("unknown");
-                        setFbNote("");
-                        setFbIdx(i);
-                      }}
-                      aria-label="Dạy Lomi câu này"
-                      title="Lomi chưa biết câu này? Dạy Lomi nha"
-                      className={cn("font-semibold", m.reported ? "text-muted-foreground/60" : "text-amber-600 dark:text-amber-400")}
-                    >
-                      💡 {m.reported ? "Đã gửi" : "Dạy Lomi"}
-                    </button>
-                  )}
+                  {/* 25/11 (Kir): bỏ nút 💡 Dạy Lomi — câu bí vẫn tự ghi vào lomi_unanswered để ban quản trị xem. */}
                   {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
                     <button onClick={() => void send(m.ask!, true)} className="font-semibold text-primary">
                       {t("ai.askAi")}

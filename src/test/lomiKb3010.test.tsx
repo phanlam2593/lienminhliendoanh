@@ -806,7 +806,7 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(kid[4].content).toMatch(/Sốt ở trẻ em/);
     expect(kid[4].content).not.toMatch(/Về \*\*giờ\*\*/);
     // đang nói đau dạ dày mà "tìm quán cháo" là lệnh tìm quán; hỏi "cháo ăn được không" mới là hỏi món
-    const sto = await chat(["tôi bị đau dạ dày", "tìm quán cháo", "mấy giờ mở cửa"]);
+    const sto = await chat(["tôi bị đau dạ dày", "tìm quán cháo ở Đà Lạt", "mấy giờ mở cửa"]);
     expect(sto[1].places?.length).toBeGreaterThan(0);
     expect(sto[2].content).toMatch(/giờ mở cửa/);
     expect((await chat(["tôi bị đau dạ dày", "cháo ăn được không"]))[1].places).toBeUndefined();

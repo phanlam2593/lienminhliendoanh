@@ -174,7 +174,7 @@ export function LomiLearnPanel() {
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">
-        Người dùng bấm 💡 Dạy Lomi dưới câu Lomi chưa biết → hiện ở đây. Bấm <b>Dạy Lomi</b>, viết câu trả lời đúng — Lomi sẽ dùng câu đó cho mọi người.
+        Câu người dùng hỏi mà Lomi bí (tự ghi lại) và góp ý cũ → hiện ở đây. Bấm <b>Dạy Lomi</b>, viết câu trả lời đúng — Lomi sẽ dùng câu đó cho mọi người.
       </p>
       <div className="flex gap-1.5 overflow-x-auto">
         {tabs.map(([k, label, n]) => (

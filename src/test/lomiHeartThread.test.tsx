@@ -72,7 +72,8 @@ describe("Tâm sự nhiều lượt — giữ mạch, không suy diễn theo t�
     const r = await chat(["a đang áp lực công việc", "a mệt mỏi quá", "thôi đổi chuyện, tìm quán cà phê gần đây cho a"], { seed: 1 });
     expect(r[0].heart).toBe("work");
     expect(r[2].heart).toBeUndefined();
-    expect(r[2].places?.length ?? 0).toBeGreaterThan(0);
+    // 25/11: chưa có vị trí → Lomi hỏi khu vực (searchAsk) thay vì mặc định Đà Lạt — vẫn là đã thoát tâm sự sang tìm quán
+    expect(!!(r[2].places?.length || r[2].searchAsk)).toBe(true);
   }, T);
 
   it("đối chứng: chỉ GỌI TÊN đề tài ('chuyện gia đình') vẫn mở đúng chuyện gia đình như trước", async () => {

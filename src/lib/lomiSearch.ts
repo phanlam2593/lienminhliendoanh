@@ -173,7 +173,7 @@ export function detectSearch(text: string): SearchIntent | null {
   const pl = detectPlace(text);
   const area = pl ? pl.area : detectArea(text);
   const placeF = pl ? { place: pl.label } : {};
-  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu|có gì chơi|có gì vui|chỗ nào chơi|nơi nào chơi|đi chơi ở|nên đi đâu chơi|tham quan ở đâu|check in ở đâu)\b/).test(n) ||
+  if (VN(/\b(tìm chỗ (đi )?chơi|kiếm chỗ (đi )?chơi|tìm nơi (đi )?chơi|chỗ đi chơi|nơi đi chơi|đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu|có gì chơi|có gì vui|chỗ nào chơi|nơi nào chơi|đi chơi ở|nên đi đâu chơi|tham quan ở đâu|check in ở đâu)\b/).test(n) ||
     (pl && VN(/\b(có gì|chơi gì|đi đâu|tham quan|điểm đến|nên đi|có gì hay|địa điểm|chỗ nào đẹp|chỗ nào đáng|check in|du lịch|đi chơi)\b/).test(n) && !VN(/\b(ăn gì|uống gì|ở đâu ngủ|khách sạn|homestay|chỗ ở)\b/).test(n) && (/\?/.test(text) || VN(/\b(gì|đâu|nào|không|ko|k|hông|sao|nhỉ|ha|hả|giúp|gợi ý|chỉ)\b/).test(n))))
     return { mode: "go", near, offer: true, ...(area ? { area } : {}), ...placeF };
   // Nêu nơi + hỏi ăn gì ("ở Nha Trang ăn gì") → tìm quán ăn ở đúng nơi đó (không gợi món theo giờ ở Đà Lạt).
@@ -269,7 +269,7 @@ const toCard = (r: Row, pos: { lat: number; lng: number } | null): PlaceCard => 
   distKm: pos && r.latitude != null && r.longitude != null ? haversineKm(pos, { lat: r.latitude, lng: r.longitude }) : undefined,
 });
 
-export type SearchResult = { text: string; places: PlaceCard[]; quick: string[] };
+export type SearchResult = { text: string; places: PlaceCard[]; quick: string[]; /** 25/11: Lomi đang hỏi khu vực (chưa biết nơi, chưa có vị trí) */ askArea?: boolean };
 const pick = <T,>(a: T[]) => a[Math.floor(Math.random() * a.length)];
 const km = (d?: number) => (d == null ? "" : d < 1 ? ` (cách bạn khoảng ${Math.round(d * 1000 / 50) * 50}m)` : ` (cách bạn khoảng ${d.toFixed(1)}km)`);
 /** Ghi chú vị trí cho 1 chỗ: gần (≤50km) thì nói khoảng cách; xa thì nói chỗ đó ở đâu (không khoe "cách 459km"). */
@@ -285,11 +285,19 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = [], noDef
   if (plc && !plc.area)
     return { text: noPlaceText(plc, it.mode === "find" ? "find" : "go", it.kind?.noun), places: [], quick: plc.sights?.length ? [] : ["Tìm quán cà phê có ưu đãi"] };
   const pos = await myPos(it.near);
-  // 06/11 (Kir thử thật): không nêu nơi, không có vị trí → ưu tiên ĐÀ LẠT trước (iLomi là cộng đồng Đà Lạt) thay vì bốc nhiều tỉnh;
-  //   ở Đà Lạt chưa có chỗ phù hợp thì mới lấy như cũ (nhiều nơi, có ghi rõ).
+  // 25/11 (Kir): app chạy MỌI NƠI — không nêu nơi, không có vị trí → HỎI khu vực (hoặc mời bật vị trí), KHÔNG mặc định Đà Lạt
+  //   (bỏ cách 06/11). Tin này mang askArea; người dùng gõ tên nơi ở lượt sau → AiAssistant tìm lại đúng loại chỗ ở nơi đó.
   if (!noDefault && !it.area && !pos && !plc && !it.maxKm) {
-    const dl = await runSearch({ ...it, area: "Đà Lạt" }, avoidIds, true);
-    if (dl.places?.length) return { ...dl, text: dl.text.replace(/\nBấm vào thẻ/u, "\n(Lomi lấy ở **Đà Lạt** trước nha — muốn nơi khác thì gõ thêm tên nơi, vd “quán cà phê ở Nha Trang”.)\nBấm vào thẻ") };
+    const nn = it.mode === "find" ? it.kind?.noun ?? "chỗ" : it.mode === "eat" ? "quán ăn" : it.mode === "drink" ? "quán nước" : "chỗ đi chơi";
+    const ex = `${nn} ở Nha Trang`;
+    return {
+      text: it.near
+        ? `Lomi chưa lấy được vị trí của bạn 😅 (máy chưa cho phép định vị). Bạn gõ tên khu vực giúp Lomi nha — vd “${ex}”, hoặc chỉ cần gõ “Đà Nẵng”, “quận 3”…`
+        : `Bạn đang ở khu vực nào để Lomi tìm ${nn} cho đúng nè? 📍 Gõ tên nơi (vd “${ex}”, hay chỉ “Hà Nội”) hoặc bấm nút bên dưới để Lomi lấy vị trí của bạn.`,
+      places: [],
+      quick: it.near ? [] : [`📍 Tìm ${nn} gần tôi`],
+      askArea: true,
+    };
   }
   // ── Hôm nay ăn gì / uống gì / đi đâu: chọn NGẪU NHIÊN 1 chỗ đang có ưu đãi ──
   if (it.mode !== "find") {
@@ -370,7 +378,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = [], noDef
   const noun = k?.noun ?? "chỗ";
   if (!cards.length)
     return {
-      text: `Lomi chưa thấy ${noun} nào ${it.area ? `ở ${it.area} ` : ""}${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.${k?.type === "stay" && (!it.area || /đà lạt/i.test(it.area)) ? STAY_TIP : ""}`,
+      text: `Lomi chưa thấy ${noun} nào ${it.area ? `ở ${it.area} ` : ""}${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.${k?.type === "stay" && it.area && /đà lạt/i.test(it.area) ? STAY_TIP : ""}`,
       places: [],
       quick: ["Hôm nay ăn gì?", "Tìm quán cà phê có ưu đãi"],
     };
@@ -450,7 +458,7 @@ function partNow(h = new Date().getHours()): Dish["when"][number] {
   return "night";
 }
 const PART_VI: Record<Dish["when"][number], string> = {
-  morning: "Sáng sớm Đà Lạt se lạnh",
+  morning: "Sáng sớm se lạnh",
   noon: "Trưa rồi",
   afternoon: "Chiều chiều",
   evening: "Tối rồi, trời lạnh lạnh",

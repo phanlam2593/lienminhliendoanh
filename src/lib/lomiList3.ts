@@ -310,7 +310,7 @@ export function list3Reply(q: string): L3 | null {
   if (VN(/\b(trả lời|rep|đáp|nói)( gì)? (kỳ|kì|sai|lạc đề|tào lao|không đúng|vô duyên|lung tung|linh tinh)( vậy| thế| quá| ghê| trời)*\b|\b(bạn|lomi|em|cứ) (cứ )?trả lời (về )?(\S+ ){0,3}hoài\b|\bhiểu (sai|nhầm|lộn) (rồi|ý)\b/).test(n))
     return {
       id: "complaint",
-      text: "Ui, Lomi xin lỗi nha 🙏 Chắc Lomi hiểu nhầm ý bạn rồi. Bạn nói lại giúp Lomi bằng câu khác một chút được không? Nếu Lomi vẫn sai, bạn bấm 💡 Dạy Lomi để ban quản trị dạy lại cho Lomi nha.",
+      text: "Ui, Lomi xin lỗi nha 🙏 Chắc Lomi hiểu nhầm ý bạn rồi. Bạn nói lại giúp Lomi bằng câu khác một chút được không?",
     };
   // "Tui nói 'toang' là … không phải bệnh nha"
   if (VN(/\bkhông phải (bệnh|sức khoẻ|sức khỏe|đau)( đâu| nha| nhé| mà)*\b/).test(n) && VN(/\b(nói|ý)\b/).test(n))

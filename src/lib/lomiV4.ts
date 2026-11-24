@@ -162,7 +162,7 @@ function lastFollow(q: string, c: V4Ctx): string | null {
   if (/^[?？\s]{2,}$/u.test(q.trim()) || VN(/^ (hả|hở|gì|cái gì|sao|là sao)\s*\?+ $/).test(n))
     return c.last.length > 120 ? "Chỗ nào trong câu vừa rồi chưa rõ vậy bạn? Bạn chỉ giúp Lomi ý nào, Lomi nói kỹ hơn đúng chỗ đó nha." : null;
   if (VN(/\b(câu trả lời|trả lời|em nói|lomi nói|nói)( vừa rồi| lúc nãy| đó)? (hoàn toàn |sai bét|sai hết|sai rồi|sai)( sai)?\b|\b(sai hoàn toàn|sai bét|sai hết rồi|sai be bét)\b/).test(n))
-    return "Cảm ơn bạn nói thẳng 🙏 Sai ở chỗ nào vậy — thông tin chưa đúng, hay Lomi hiểu nhầm câu hỏi? Bạn chỉ giúp, Lomi xem lại và sửa. Nếu là kiến thức Lomi nói sai, bạn bấm 💡 Dạy Lomi để ban quản trị kiểm tra lại nha.";
+    return "Cảm ơn bạn nói thẳng 🙏 Sai ở chỗ nào vậy — thông tin chưa đúng, hay Lomi hiểu nhầm câu hỏi? Bạn chỉ giúp, Lomi xem lại và sửa.";
   return null;
 }
 

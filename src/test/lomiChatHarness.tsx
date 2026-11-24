@@ -58,6 +58,7 @@ export type Turn = {
   routed?: string;
   dishAsk?: { drink: boolean; shown: string[] };
   search?: { mode: string; kind?: { noun?: string } };
+  searchAsk?: boolean; // 25/11: Lomi hỏi khu vực (chưa biết nơi, chưa có vị trí)
   tarot?: { question?: string; cards: unknown[]; spread?: string; kind?: string };
   tarotRef?: { question?: string; cards: unknown[] };
   tarotBack?: { r: { question?: string; cards: unknown[] }; n: number };
