@@ -182,7 +182,8 @@ Deno.serve(async (req) => {
       method: "POST",
       signal: ctrl.signal,
       headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model: Deno.env.get("ANTHROPIC_MODEL") || "claude-haiku-5-5", max_tokens: 600, system, messages }),
+      // 24/11 (Kir): câu ngoài phạm vi → dừng NGAY khi AI viết nhãn [NGOAI] (stop_sequences), không trả tiền cho phần chữ viết thêm.
+      body: JSON.stringify({ model: Deno.env.get("ANTHROPIC_MODEL") || "claude-haiku-5-5", max_tokens: 600, system, messages, stop_sequences: ["[NGOAI]", "[NGOÀI]"] }),
     });
     clearTimeout(timer);
     if (!res.ok) {
@@ -199,7 +200,8 @@ Deno.serve(async (req) => {
       .join("\n")
       .trim();
     const tag = raw.match(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/iu);
-    const label = tag ? tag[1].toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "RIENG";
+    const stoppedOut = data?.stop_reason === "stop_sequence" && /NGO/i.test(String(data?.stop_sequence ?? ""));
+    const label = stoppedOut ? "NGOAI" : tag ? tag[1].toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "RIENG";
     const reply = (tag ? raw.slice(tag[0].length) : raw).replace(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/giu, "").trim();
     // Ngoài 4 mục: không trả lời, nhớ lại để lần sau khỏi hỏi Claude. Không hoàn lượt (đỡ bị hỏi dồn câu ngoài phạm vi).
     if (label === "NGOAI") {

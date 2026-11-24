@@ -37,6 +37,14 @@ describe("lomiClaude — chỉ câu Lomi bí, không nguy hiểm, thành viên m
       expect(claudeEligible({ ...base, question: q })).toBe(false);
     }
   });
+  it("24/11: thêm nhóm ngoài phạm vi rõ ràng → chặn trên máy", () => {
+    for (const q of ["cách nuôi cá koi cho đẹp", "mèo nhà mình bỏ ăn, đưa đi thú y không", "cách sửa xe máy bị chết máy", "nên mua cổ phiếu nào bây giờ", "tỉ số trận MU tối qua", "dự báo thời tiết ngày mai ở Đà Lạt", "làm hộ chiếu cần giấy tờ gì", "cài win 11 cho laptop", "cách chơi liên quân cho giỏi", "thủ đô của Úc là gì", "giá bitcoin hôm nay"])
+      expect(offTopic(q), q).toBe(true);
+  });
+  it("24/11: câu trong phạm vi gần giống vẫn KHÔNG bị chặn", () => {
+    for (const q of ["mở tiệm sửa xe nhỏ cần vốn bao nhiêu", "thời tiết lạnh bị đau khớp phải làm sao", "chơi game nhiều bị mỏi mắt", "nuôi con nhỏ mệt quá", "chó cắn có cần tiêm phòng dại không", "quán cà phê có chỗ chơi cho mèo ở Đà Lạt", "bị stress vì mất tiền chứng khoán", "người yêu mê game bỏ bê mình"])
+      expect(offTopic(q), q).toBe(false);
+  });
   it("câu trong phạm vi không bị chặn nhầm", () => {
     for (const q of ["dịch bệnh sốt xuất huyết mùa này", "bị đau lưng khi ngồi lâu", "người yêu cũ nhắn lại có nên trả lời", "mở quán cà phê nhỏ cần chuẩn bị gì", "cách dùng mã ưu đãi trong app"]) expect(offTopic(q), q).toBe(false);
   });
