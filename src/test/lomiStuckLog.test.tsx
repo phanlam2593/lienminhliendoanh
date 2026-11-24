@@ -9,10 +9,10 @@ describe("nhật ký Lomi bí", () => {
   it("câu bí được ghi kèm hội thoại phía trước và loại bí", async () => {
     const got: StuckEntry[] = [];
     setStuckSink((e) => got.push(e));
-    await chat(["xin chào", "cách sửa xe máy bị nổ lốp"]);
+    await chat(["xin chào", "cách trồng lan hồ điệp ra hoa"]);
     expect(got.length).toBeGreaterThan(0);
     const e = got[got.length - 1];
-    expect(e.question).toBe("cách sửa xe máy bị nổ lốp");
+    expect(e.question).toBe("cách trồng lan hồ điệp ra hoa");
     expect(e.reply.length).toBeGreaterThan(10);
     expect(e.context.some((c) => c.r === "u" && /xin chào/i.test(c.t))).toBe(true);
     expect(["not_understood", "fallback", "suggest", "unknown_med"]).toContain(e.kind);

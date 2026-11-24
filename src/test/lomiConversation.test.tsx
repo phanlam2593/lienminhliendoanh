@@ -184,8 +184,8 @@ describe("Nghe kể chuyện — tự nhiên, không lặp câu mẫu", () => {
   }, T);
   it("câu kể đáp lại câu Lomi hỏi ('quán gần nhà') không bị hiểu là nhờ tìm quán", async () => expect((await last(["a mới ăn xong phở", "ngon lắm", "quán gần nhà"])).search).toBeUndefined(), T);
   it("đang nghe kể mà gặp câu khác hẳn chuyện đang kể → vẫn nói thật là chưa biết", async () => {
-    const m = await last(["a thấy lạ lạ", "bitcoin hôm nay lên 100k"]);
-    expect(m.unk).toBe("bitcoin hôm nay lên 100k");
+    const m = await last(["a thấy lạ lạ", "cách trồng lan hồ điệp ra hoa"]);
+    expect(m.unk).toBe("cách trồng lan hồ điệp ra hoa");
   }, T);
   it("'a đang chán' không bị hiểu thành hỏi về 'chặn' người dùng", async () => {
     const m = await last(["a đang chán"]);
@@ -643,7 +643,7 @@ describe("Cấu trúc câu — không làm hỏng các mạch sẵn có", () => 
     expect((await last(["rụng tóc"])).sx).toContain("hairloss");
   }, T);
   it("câu Lomi thật sự không biết vẫn nói thật là chưa biết (kèm nút 💡)", async () => {
-    expect((await last(["bitcoin hôm nay lên 100k"])).unk).toBeTruthy();
+    expect((await last(["cách trồng lan hồ điệp ra hoa"])).unk).toBeTruthy();
     expect((await last(["thủ đô nước pháp là gì"])).unk).toBeTruthy();
   }, T);
   it("đang chọn khẩu vị thì câu phủ định là câu trả lời khẩu vị, không bị đáp theo khung", async () => {

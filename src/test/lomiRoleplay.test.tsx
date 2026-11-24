@@ -523,7 +523,7 @@ describe("Chuẩn hoá tư vấn (tiếp): đúng lớp trả lời cho câu k�
     const s = await last(["zxcv", "ý a là món đó"]);
     expect(s.content).toMatch(/chưa hiểu ý/);
     expect(s.content).not.toMatch(/chưa có kiến thức|chưa được học/);
-    for (const q of ["thủ đô nước Pháp là gì", "cách sửa xe máy"]) {
+    for (const q of ["thủ đô nước Pháp là gì", "cách trồng lan hồ điệp"]) {
       const k = await last([q]);
       expect(k.unk, q).toBeTruthy();
       expect(k.content, q).not.toMatch(/chưa hiểu ý/);
