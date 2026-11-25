@@ -1022,7 +1022,7 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(two.content).toMatch(/Về \*\*gừng\*\*, \*\*nhộng\*\*/);
     expect(two.content.match(/Nguyên tắc chung/g)?.length).toBe(1);
     const tb = await last(["bị gout ăn tôm và thịt bò được không"]);
-    expect(tb.content).toMatch(/hải sản\*\* nên/);
+    expect(tb.content).toMatch(/hải sản( có vỏ)?\*\* nên/); // 25/11: tôm thuộc nhóm "hải sản có vỏ"
     expect(tb.content).toMatch(/thịt đỏ\*\* nên/);
     expect((await last(["tiểu đường ăn chuối với xoài được không"])).content).toMatch(/“chuối”, “xoài” thuộc nhóm/);
     // đối chứng: hỏi cả chế độ ăn vẫn ra danh sách; vị mặn vẫn khớp nhóm muối; món có trong nguồn vẫn trả lời như cũ

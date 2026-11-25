@@ -67,3 +67,18 @@ describe("25/11 — gout ăn cá", () => {
     expect(b[0].content).not.toMatch(/chưa xác minh/);
   }, T);
 });
+
+// 25/11 — bộ câu Kir lấy nguồn qua ChatGPT, Claude đối chiếu lại (Mayo Clinic, CDC "Carb Choices").
+describe("25/11 — gout ăn tôm, tiểu đường ăn chuối", () => {
+  it("tôm → hạn chế (hải sản có vỏ), không bỏ hẳn; chuối → kèm khẩu phần CDC; chuối sấy không còn 'chưa xác minh'", async () => {
+    const a = await chat(["Gout ăn tôm được không?"]);
+    expect(a[0].content).toMatch(/hải sản có vỏ/);
+    expect(a[0].content).toMatch(/hạn chế/);
+    expect(a[0].content).not.toMatch(/trout/);
+    const b = await chat(["Tiểu đường ăn chuối được không?"]);
+    expect(b[0].content).toMatch(/chuối \*\*rất nhỏ\*\*/);
+    const c = await chat(["tiểu đường ăn chuối sấy được ko"]);
+    expect(c[0].content).not.toMatch(/chưa xác minh/);
+    expect(c[0].content).toMatch(/nửa lòng bàn tay/);
+  }, T);
+});

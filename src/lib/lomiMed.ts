@@ -614,6 +614,13 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     //   Riêng ăn uống khi mang thai: thẻ lấy từ danh sách "Foods to avoid in pregnancy" của NHS — món không có trong danh sách đó thì nói rõ.
     const lim = (t.diet?.foods ?? []).filter((x) => x.verdict === "avoid" || x.verdict === "limit").map((x) => x.name.toLowerCase());
     const preg = t.id === "an-uong-khi-mang-thai";
+    // 25/11 (Kir: "lủng củng"): tiểu đường + trái cây SẤY — khối trái cây bên dưới đã có cách ăn (nửa lòng bàn tay) có nguồn,
+    //   nên không mở đầu bằng "chưa xác minh được" rồi lại hướng dẫn ngay dưới.
+    const dried0 = isSugarTopic(t.id) ? fruitIn(question ?? shown ?? food) : null;
+    if (dried0 && /(sấy|khô)(?![\p{L}])/u.test(dried0 + " " + (shown ?? ""))) {
+      const nm = (shown ?? dried0).charAt(0).toUpperCase() + (shown ?? dried0).slice(1);
+      return out(`**${nm}** ăn được nhưng **ít hơn trái cây tươi** bạn nha — trái cây sấy khô cô đặc đường, nên mỗi phần chỉ bằng khoảng **nửa lòng bàn tay** và vẫn phải tính vào khẩu phần tinh bột của bữa.\n\n${diabetesFruitBlock(dried0, now)}`, "food");
+    }
     const say = preg
       ? `**${(shown ?? food).charAt(0).toUpperCase()}${(shown ?? food).slice(1)}** **không có trong danh sách món cần tránh khi mang thai** của nguồn y khoa Lomi đối chiếu (danh sách đó gồm: ${lim.slice(0, 8).join(", ")}). Nguồn cũng không nói riêng về món này, nên Lomi chưa nói chắc được là tốt hay xấu — ăn vừa phải, rửa sạch, nấu chín là an toàn nhất.`
       : `Về **${shown ?? food}** thì Lomi **chưa xác minh được**: các nguồn y khoa Lomi đã đối chiếu cho ${N} không nêu riêng món này, nên Lomi chưa nói chắc được là tốt hay xấu.${lim.length ? `\n\nNhững món nguồn dặn **tránh / hạn chế** với ${N}: ${lim.slice(0, 8).join(", ")}.` : ""}`;

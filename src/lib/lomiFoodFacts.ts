@@ -25,6 +25,7 @@ export const FACT_SOURCES: DrugSource[] = [
   /* 6 */ { title: "Top tips for diet and Type 2 Diabetes (6420-3)", publisher: "West Suffolk NHS Foundation Trust (Anh)", url: "https://www.wsh.nhs.uk/CMS-Documents/Patient-leaflets/DiabetesUnit/6420-3-Top-tips-for-diet-and-Type-2-diabetes.pdf", updated: "2021-03-19" },
   /* 7 */ { title: "What I need to know about Carbohydrate Counting and Diabetes (12/2013)", publisher: "NIDDK (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://niddk.nih.gov/-/media/Files/Diabetes/WINTKA_CarbCounting_508.pdf" },
   /* 8 */ { title: "Bảng thành phần thực phẩm Việt Nam (NXB Y học, 2007; bản lưu tại FAO)", publisher: "Viện Dinh dưỡng – Bộ Y tế", url: "https://www.fao.org/fileadmin/templates/food_composition/documents/pdf/VTN_FCT_2007.pdf", updated: "2007-01-01" },
+  /* 9 */ { title: "Carb Choices", publisher: "CDC (Hoa Kỳ)", url: "https://www.cdc.gov/diabetes/healthy-eating/carbohydrate-lists-starchy-foods.html" },
 ];
 
 /** Một dòng bảng FDA. g = khẩu phần (gam); các số đúng như bảng (null = bảng không có cột này). */
@@ -275,6 +276,10 @@ export const DIABETES_FRUIT: Fact[] = [
   { text: "Chọn trái cây **nguyên quả**; **tránh nước ép, sinh tố** (uống vào nhanh, dễ nhiều đường). Trái cây sấy khô thì phần ăn chỉ bằng **nửa lòng bàn tay**.", src: [5, 6] },
   { text: "Một quả nhỏ (táo, cam nhỏ) có khoảng **15 g tinh bột** — dùng để ước lượng khi tính khẩu phần tinh bột mỗi bữa.", src: [7] },
 ];
+// 25/11 (Kir gửi bản ChatGPT, Claude đối chiếu lại bảng "Carb Choices" của CDC): khẩu phần 15 g tinh bột của từng loại — chỉ loại bảng có.
+const FRUIT_PORTION: Record<string, Fact> = {
+  "chuối": { text: "Riêng **chuối**: 1 quả chuối **rất nhỏ** (dài khoảng 10 cm) ≈ **15 g tinh bột** = 1 phần; quả to hơn thì tính nhiều phần hơn.", src: [9] },
+};
 /** Trái cây hay hỏi (cả loại chưa có số liệu FDA) — để nhận ra câu hỏi "tiểu đường ăn X". */
 const FRUITS = ["mít", "mít tố nữ", "xoài", "xoài chín", "xoài xanh", "sầu riêng", "nhãn", "vải", "vải thiều", "chôm chôm", "măng cụt", "thanh long", "ổi", "đu đủ", "na", "mãng cầu", "mãng cầu xiêm", "hồng xiêm", "sapoche", "vú sữa", "chuối", "nho", "dưa hấu", "dứa", "thơm", "khóm", "cam", "quýt", "bưởi", "táo", "lê", "mận", "roi", "khế", "me", "sơ ri", "chanh dây", "lựu", "hồng", "quả hồng", "trái bơ", "dừa", "nước dừa", "dưa lưới", "kiwi", "đào", "dâu tây", "cherry", "anh đào", "trái cây", "hoa quả", "trái cây sấy", "mít sấy", "chuối sấy", "xoài sấy"];
 const FRUIT_RE = new RegExp(`(?<![\\p{L}\\p{N}])(${[...FRUITS].sort((a, b) => b.length - a.length).map(esc).join("|")})(?![\\p{L}\\p{N}])`, "u");
@@ -292,9 +297,9 @@ export function diabetesFruitBlock(fruit: string, now = Date.now()): string {
   const f = FACTS.find((x) => x.names.includes(fruit)) ?? factOf(fruit);
   const generic = /^(trái cây|hoa quả)$/.test(fruit);
   return [
-    `🍎 **Ăn trái cây khi bị tiểu đường:**\n${DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n")}`,
+    `🍎 **Ăn trái cây khi bị tiểu đường:**\n${[...DIABETES_FRUIT, ...(FRUIT_PORTION[fruit] ? [FRUIT_PORTION[fruit]] : [])].map((x) => `• ${x.text}`).join("\n")}`,
     f ? `📊 **${f.name}** — ${f.src === 8 ? "trong" : "khẩu phần"} ${portion(f)}: tinh bột + đường (glucid) **${num(f.carb)} g**${has(f.sugar) ? ` · đường **${num(f.sugar)} g**` : ""}${has(f.fiber) ? ` · chất xơ ${num(f.fiber)} g` : ""}` : generic ? "" : `📊 Lomi **chưa có số liệu đường đã kiểm chứng** cho **${fruit}** (các bảng Lomi dùng chưa có món này), nên không dám nói nó nhiều hay ít đường hơn loại khác — cứ áp dụng cách ăn ở trên, và theo dõi đường huyết sau khi ăn nếu bác sĩ đã hướng dẫn bạn đo.`,
-    line([5, 6, 7, ...(f ? [f.src] : [])], now),
+    line([5, 6, 7, ...(FRUIT_PORTION[fruit]?.src ?? []), ...(f ? [f.src] : [])], now),
   ].filter(Boolean).join("\n\n");
 }
 
