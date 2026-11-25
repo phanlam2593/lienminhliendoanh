@@ -9,7 +9,7 @@ import { ArrowLeft, BriefcaseBusiness, ChefHat, CircleHelp, Copy, MapPinned, Mes
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
-import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic, tabClaudeEligible, withTabHint } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -264,6 +264,7 @@ type Msg = {
   medAge?: number; // 31/10: số lượt đã trôi qua kể từ câu đáp có thẻ y khoa thật (med được giữ thêm vài lượt qua câu kể chi tiết)
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   claude?: boolean; // 20/11: câu này do Claude trả lời (lib/lomiClaude) — Lomi bí trên máy
+  sense?: boolean; // 25/11: lời đáp trò chuyện chung (lib/lomiSense) — đang chọn chủ đề khác "Tâm sự" thì nhờ Claude đọc lại theo chủ đề
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
   tarotCard?: boolean; // (13/11) Lomi vừa giải nghĩa một lá có nêu tên (lib/lomiRescue.tarotCardAsk)
@@ -1673,6 +1674,13 @@ export function AiChat({
     //   câu đã có trong thư viện → trả lời luôn (ai cũng được); chưa có → thành viên mới được nhờ Claude, câu dùng chung được lưu lại.
     //   Claude lỗi / chưa cài key / hết lượt → vẫn gửi câu đáp trên máy như cũ. Câu "bí" vẫn được ghi vào nhật ký ở trên cho admin xem.
     const qClaude = rawRef.current ?? asked;
+    // 25/11 (Kir: "đề xuất tags để đỡ hiểu sai mà vẫn hiểu sai"): đang chọn một chủ đề (trừ Tâm sự) mà Lomi chỉ đáp được câu trò chuyện
+    //   chung ("cố lên nha, nhớ uống nước") → nhờ Claude đọc lại câu đó THEO CHỦ ĐỀ đang chọn; ghi nhật ký "tab_offtopic" để admin xem.
+    if (!en && !reply.stuck && tabClaudeEligible({ tab: lomiTab.cur, sense: !!reply.sense, question: qClaude, risk: riskRef.current })) {
+      recordStuck({ kind: "tab_offtopic", question: qClaude, reply: reply.content, context: msgs.slice(-8).map((m) => ({ r: m.role === "user" ? ("u" as const) : ("a" as const), t: m.role === "user" ? (m.raw ?? m.content) : m.content })) }, isAdmin);
+      void askClaude(userMsg, reply, qClaude, lomiTab.cur, "tab_offtopic");
+      return;
+    }
     if (claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, tarot: !!reply.tarot })) {
       void askClaude(userMsg, reply, qClaude);
       return;
@@ -1680,7 +1688,7 @@ export function AiChat({
     push([userMsg, reply]);
     lomiSound("msg");
   };
-  const askClaude = async (userMsg: Msg, local: Msg, q: string) => {
+  const askClaude = async (userMsg: Msg, local: Msg, q: string, tab?: LomiTab | null, kind?: StuckKind) => {
     setBusy(true);
     let text: string | null = null;
     try {
@@ -1688,8 +1696,12 @@ export function AiChat({
         .filter((m) => !m.note && !m.sticker)
         .slice(-6)
         .map((m) => ({ role: m.role, content: m.role === "user" ? (m.raw ?? m.content) : (m.aiContent ?? m.content) }));
-      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { messages: [...ctx, { role: "user", content: q }], kind: local.stuck } });
+      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { messages: [...ctx, { role: "user", content: tab ? withTabHint(q, tab) : q }], kind: kind ?? local.stuck } });
       if (!error && typeof data?.reply === "string" && data.reply.trim()) text = data.reply.trim();
+      // 25/11: Claude không trả lời được (hết tiền, lỗi, quá tải…) → ghi lại mã lỗi cho admin xem, trước đây thất bại im lặng
+      //   nên không biết vì sao Lomi vẫn đáp câu trên máy.
+      else if (!["MEMBER_ONLY", "OUT_OF_SCOPE"].includes(String(data?.error)))
+        recordStuck({ kind: "claude_fail", question: q, reply: `Lỗi: ${String(data?.error ?? error?.message ?? "không rõ").slice(0, 200)}`, context: [] }, isAdmin);
       if (quota && typeof data?.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
       else if (isHardOff(data?.error)) markClaudeOff();
     } catch {
@@ -3608,14 +3620,18 @@ export function AiChat({
       //    (hoặc trả lời luôn nếu đã có chủ đề đang chờ / trong câu có sẵn chủ đề).
       // (11/11: Lomi vừa hỏi loại hình mà người dùng hỏi sang CÁCH DÙNG APP — "chưa đăng ký thành viên thì mỗi ngày quẹt được mấy lần?" —
       //   thì đó không phải câu trả lời loại hình)
-      if (lastA?.bizPick && !detectTarot(q) && !(isAppish(q) && looksLikeQuestion(q) && matchFaq(q))) {
+      // 25/11 (Kir): đang chọn chủ đề "Kinh doanh" mà kể mình làm / bán gì ("a đang làm app lomi", "mình bán bánh tráng") → câu đó là
+      //   giới thiệu loại hình kinh doanh, không phải kể chuyện đang làm việc.
+      const bizTabOwn = lomiTab.cur === "biz" && !lastA?.biz && !lastA?.bizPick && !looksLikeQuestion(q) && q.split(/\s+/).length <= 12
+        && (!!detectBizKind(q).type || VN(/\b(bán|mở|kinh doanh|buôn)\b/).test(normalizeVi(q))) && !!bizAnswerNoun(q);
+      if ((lastA?.bizPick || bizTabOwn) && !detectTarot(q) && !(isAppish(q) && looksLikeQuestion(q) && matchFaq(q))) {
         const nq = normalizeVi(q);
         const key = BUSINESS_TYPES.find((k) => normalizeVi(bizLabel(k)) === nq);
         const kind = detectBizKind(q);
         // (25/11: gõ tự do "A đang làm app lomi nè" → tên là "app Lomi", không lấy nguyên câu làm tên)
         const own = key ? "" : bizAnswerNoun(q);
         const ctx: BizCtx = { type: key ?? kind.type ?? "other", noun: key ? undefined : (kind.type === "other" && own) || kind.noun || own || undefined };
-        const tp = lastA.biz?.topic ?? detectBizTopic(q);
+        const tp = lastA?.biz?.topic ?? detectBizTopic(q);
         if (tp) return bizReply(q, ctx, tp);
         const n = nounFor(ctx.type, ctx.noun);
         return localReply(q, {
@@ -3842,6 +3858,8 @@ export function AiChat({
             role: "assistant",
             content: fx.text,
             local: true,
+            // (25/11: câu kể chuyện thường ngày của chính mình — "a đang làm…" — là lời đáp trò chuyện chung, xem Msg.sense)
+            sense: !fx.about && !fx.openHealth && /^frame:(legacy|doing|echo|past|mishap|passive)$/.test(fx.intent),
             quick: fx.quick,
             about: fx.about,
             // Tin về một người / con vật đang ốm hay mới mất → mở MẠCH CHUYỆN (lib/lomiStory): câu sau là câu trả lời cho đúng điều Lomi vừa hỏi.
@@ -4533,7 +4551,7 @@ export function AiChat({
       // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
       if (!en && !gateSkip && !memLearn?.newSits.length) {
         const sl0 = senseState(raw, ["sleepy"]);
-        if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick, talk: (convo?.talk ?? 0) + 1 });
+        if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick, talk: (convo?.talk ?? 0) + 1, sense: true });
         // Đang nói chuyện sức khoẻ mà câu không có tín hiệu cảm xúc → không mở mạch tâm sự (để phần "chưa biết" bên dưới nói thật).
         //   (11/11: câu khớp hẳn một chủ đề tâm sự — "không biết mình đang cố gắng vì điều gì nữa" — vẫn mở tâm sự dù lượt trước nói chuyện thuốc)
         const calmHealth = !!hCtx && !heartOn && !healthFeeling(raw) && !(heartThemeOf(q) && !findMedId(q) && !findIndexedDrug(q) && !findDrug(q));
@@ -4589,7 +4607,7 @@ export function AiChat({
     // người nghe TRƯỚC khi dò câu hỏi thường gặp. Bỏ dấu thì "đang"/"đăng", "chán"/"chặn" trùng nhau nên phần dò FAQ dễ bắt nhầm.
     if (!forceAi && !en && !isAppish(q) && !looksLikeQuestion(q) && !lastA?.faqId && !looksLikeBizQuestion(q)) {
       const ss = senseState(raw);
-      if (ss && ss.intent !== "state:biz_state") return localReply(q, { role: "assistant", content: ss.text, local: true, quick: ss.quick, talk: (convo?.talk ?? 0) + 1 });
+      if (ss && ss.intent !== "state:biz_state") return localReply(q, { role: "assistant", content: ss.text, local: true, quick: ss.quick, talk: (convo?.talk ?? 0) + 1, sense: true });
     }
     // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
     // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.
@@ -4744,7 +4762,7 @@ export function AiChat({
           if (hL) return localReply(q, heartMsg(hL, 1));
         }
         if (sl && vague0) return localReply(q, { role: "assistant", content: VAGUE_TEXT[vague0], local: true, stuck: "not_understood" as StuckKind });
-        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...slHeart, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
+        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, sense: true, quick: sl.quick, ...slHeart, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // 12/10: đang ở mạch sức khoẻ mà người dùng nói ra một nỗi lo / cảm xúc của CHÍNH MÌNH ("mà a cũng hay lo", "lo chuyện tiền") → đó là
       // lời tâm sự, không phải "kiến thức Lomi chưa có": mở mạch tâm sự (vẫn nhớ bệnh đang nói), không đáp "chưa được học, bấm Dạy Lomi".

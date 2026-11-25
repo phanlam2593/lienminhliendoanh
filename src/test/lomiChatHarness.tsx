@@ -24,6 +24,14 @@ vi.mock("@/integrations/supabase/client", () => {
   return {
     supabase: {
       rpc: () => Promise.resolve({ data: null, error: null }),
+      // 25/11: lời gọi Claude (lomi-claude) — mặc định như người chưa có Membership (app giữ câu đáp trên máy);
+      //   test nào cần thì gán globalThis.__lomiInvoke để giả lời Claude và xem app gửi gì đi.
+      functions: {
+        invoke: (name: string, opts: unknown) => {
+          const f = (globalThis as { __lomiInvoke?: (n: string, o: unknown) => unknown }).__lomiInvoke;
+          return Promise.resolve(f ? f(name, opts) : { data: { fallback: true, error: "MEMBER_ONLY" }, error: null });
+        },
+      },
       from: (t: string) => chain(t === "businesses_explore_view" ? PLACES : []),
       auth: { getSession: () => Promise.resolve({ data: { session: null } }) },
     },

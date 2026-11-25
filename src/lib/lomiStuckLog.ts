@@ -17,6 +17,8 @@ export type StuckKind =
   | "generic_listen" // chỉ đáp "Lomi nghe nè, kể thêm đi" mà không nhận ra nội dung
   | "health_detail" // ghi nhận chi tiết sức khoẻ nhưng chưa có dữ liệu riêng
   | "kb_partial" // có chủ đề trong kho kiến thức nhưng chưa có đúng phần được hỏi
+  | "tab_offtopic" // 25/11: đang chọn một chủ đề mà Lomi chỉ đáp được câu trò chuyện chung → chuyển Claude đọc theo chủ đề
+  | "claude_fail" // 25/11: gọi Claude không được (mã lỗi ghi ở cột reply)
   | "mismatch"; // 14/10: câu đáp định gửi lạc chủ đề câu hỏi (hỏi bệnh / thuốc này mà đáp chuyện khác) — đã chặn, xem lib/lomiReplyGate
 
 export type StuckEntry = { kind: StuckKind; question: string; reply: string; context: { r: "u" | "a"; t: string }[] };

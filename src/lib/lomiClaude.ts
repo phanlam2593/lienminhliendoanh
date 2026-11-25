@@ -6,6 +6,7 @@
 import type { StuckKind } from "@/lib/lomiStuckLog";
 import type { RiskScan } from "@/lib/lomiRouter";
 import { normalizeVi } from "@/lib/lomiFaq";
+import { LOMI_TABS, type LomiTab } from "@/lib/lomiTab";
 
 /** Loại "bí" được chuyển cho Claude. "suggest" (đã gợi ý câu hỏi về app) và "generic_listen" (đang nghe kể) giữ nguyên trên máy. */
 const ASK_KINDS: ReadonlySet<StuckKind> = new Set<StuckKind>(["unknown_med", "unknown_care", "fallback", "kb_partial", "health_detail", "mismatch", "not_understood"]);
@@ -46,3 +47,20 @@ export function claudeEligible(i: { stuck?: StuckKind; question: string; reply: 
 
 /** Lỗi khiến tắt hẳn cho tới lần mở app sau. */
 export const isHardOff = (code: unknown) => code === "AI_UNAVAILABLE" || code === "AI_CREDITS";
+
+/**
+ * 25/11 (Kir): người dùng đã chọn một chủ đề (Sức khoẻ, Ăn chơi, Nấu ăn, Tarot, Kinh doanh, Hỏi về app) mà Lomi trên máy chỉ đáp được
+ * câu trò chuyện chung → nhờ Claude đọc lại câu đó theo chủ đề. "Tâm sự" thì câu trò chuyện chung là đúng chỗ, không chuyển.
+ */
+export function tabClaudeEligible(i: { tab: LomiTab | null; sense: boolean; question: string; risk: RiskScan | null }): boolean {
+  if (offUntilReload || !i.tab || i.tab === "heart" || !i.sense) return false;
+  if (i.risk?.any) return false;
+  const q = i.question.trim();
+  if (q.split(/\s+/).filter(Boolean).length < 3 || q.length > 1500) return false;
+  return !offTopic(q);
+}
+/** Ghi chú chủ đề đang chọn, gắn sau câu gửi Claude. */
+export function withTabHint(q: string, tab: LomiTab): string {
+  const t = LOMI_TABS.find((x) => x.id === tab);
+  return t ? `${q}\n\n(Ghi chú của app: người dùng đang bấm chọn chủ đề "${t.label}" — hiểu câu trên theo chủ đề này nếu hợp lý, trả lời đúng vào đó.)` : q;
+}
