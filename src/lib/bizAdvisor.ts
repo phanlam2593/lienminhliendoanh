@@ -77,7 +77,24 @@ const SUBTYPES: { re: RegExp; type: BusinessType; noun: string }[] = [
   { re: VN(/\b(tạp hoá|tạp hóa)\b/), type: "shopping", noun: "tiệm tạp hoá" },
   { re: VN(/\b(tiệm hoa|shop hoa|hoa tươi)\b/), type: "shopping", noun: "tiệm hoa" },
   { re: VN(/\b(đặc sản)\b/), type: "shopping", noun: "shop đặc sản" },
+  // 25/11 (Kir: "A đang làm app lomi nè" ở tab Kinh doanh) — sản phẩm số: app / web / phần mềm.
+  { re: VN(/\b(app|ứng dụng|website|web|phần mềm|startup|nền tảng)\b/), type: "other", noun: "app" },
 ];
+
+/**
+ * 25/11 — câu trả lời "kinh doanh gì" gõ tự do ("A đang làm app lomi nè", "mình bán bánh tráng á")
+ * → chỉ giữ phần TÊN loại hình ("app lomi", "bánh tráng"), bỏ xưng hô / động từ / từ đệm.
+ * Trả "" nếu không còn gì hoặc còn quá dài (không phải tên loại hình).
+ */
+export function bizAnswerNoun(text: string): string {
+  let t = text.normalize("NFC").toLowerCase().replace(/[.!?,…~]+/gu, " ").replace(/\p{Extended_Pictographic}/gu, " ").replace(/\s+/g, " ").trim();
+  const LEAD = /^(?:(?:a|anh|chị|c|em|e|mình|tui|tôi|t|tớ|ơ|ờ|à|dạ|ừ|thì|là|hiện|giờ|đang|mới|sắp|vừa|định|muốn|cũng|có|làm|bán|mở|kinh doanh|buôn|buôn bán|chạy|lập|xây|phát triển|dự án|chủ|một|1|cái)\s+)+/u;
+  const TAIL = /(?:\s+(?:nè|nha|nhé|á|ạ|đó|đấy|thôi|ấy|hà|à|hihi|hehe|haha|ạ|luôn|nữa|lomi ơi|em ơi|e ơi))+$/u;
+  for (let i = 0; i < 3; i++) t = t.replace(LEAD, "").replace(TAIL, "").trim();
+  if (!t || t.split(" ").length > 5 || t.length > 30) return "";
+  // (tên app của chính iLomi: "app lomi" → "app iLomi" — chữ "Lomi" trơn sẽ bị đổi xưng hô thành "em")
+  return t.replace(/(?<![\p{L}])i?lomi(?![\p{L}])/u, "iLomi");
+}
 
 export function detectBizKind(text: string): { type?: BusinessType; noun?: string } {
   const n = ` ${normStrict(text, BIZ)} `;
@@ -230,6 +247,69 @@ const TIPS: Record<Exclude<BizTopic, "offer" | "post" | "holiday">, Idea[]> = {
   ],
 };
 
+// 25/11 — SẢN PHẨM SỐ (app / web / phần mềm): mẹo riêng — mẹo của quán ("QR trước cửa", "ở quầy", "ghé chơi") không hợp.
+const DIGITAL: Record<Exclude<BizTopic, "post" | "holiday">, Idea[]> = {
+  offer: [
+    I("d-o1", "Dùng thử miễn phí", "Cho dùng thử đầy đủ 7–30 ngày — người dùng thấy được giá trị rồi mới phải quyết định trả tiền."),
+    I("d-o2", "Mời bạn cùng được thưởng", "Người mời và người được mời cùng nhận thưởng (thêm ngày dùng, tính năng mở khoá…) — kênh lan truyền rẻ nhất."),
+    I("d-o3", "Ưu đãi người dùng đầu tiên", "100–500 người đầu tiên được ưu đãi trọn đời hoặc huy hiệu riêng — vừa có người dùng sớm vừa tạo cảm giác đặc biệt."),
+    I("d-o4", "Gói năm rẻ hơn gói tháng", "Gói năm rẻ hơn khoảng 15–20% so với trả từng tháng — bạn có tiền trước, người dùng gắn bó lâu hơn."),
+    I("d-o5", "Quà khi hoàn thành bước đầu", "Tặng quà nhỏ khi người dùng làm xong hồ sơ hoặc dùng tính năng chính lần đầu — kéo họ vượt qua đoạn dễ bỏ cuộc nhất."),
+    I("d-o6", "Ưu đãi cho đối tác", "Cửa hàng / doanh nghiệp tham gia sớm được miễn phí hoặc nổi bật vài tháng — có nội dung thật thì người dùng mới ở lại."),
+  ],
+  slow: [
+    I("d-s1", "Tìm chỗ người dùng rơi rụng", "Xem họ bỏ đi ở bước nào (đăng ký, lần mở thứ hai…) rồi sửa đúng bước đó trước — thường hiệu quả hơn chạy quảng cáo."),
+    I("d-s2", "Hỏi thẳng 5–10 người", "Gọi hoặc nhắn hỏi vài người đã thôi dùng: vì sao không quay lại. Câu trả lời lặp lại chính là việc cần làm."),
+    I("d-s3", "Nhắc đúng lúc, đừng spam", "Thông báo đẩy chỉ gửi khi có điều thật sự đáng xem (tin nhắn mới, ưu đãi gần đây) — gửi nhiều quá người ta tắt luôn."),
+    I("d-s4", "Một tính năng thật mạnh", "Chọn một việc app làm tốt nhất và nói rõ điều đó ngay màn hình đầu — người dùng mới cần hiểu “app này để làm gì” trong vài giây."),
+    I("d-s5", "Hoạt động theo nhóm nhỏ", "Bắt đầu thật dày ở một khu vực / một nhóm người trước, thay vì mỏng khắp nơi — app cộng đồng cần đủ đông ở một chỗ mới vui."),
+  ],
+  newcust: [
+    I("d-n1", "Bắt đầu từ người quen", "Mời 20–50 người quen dùng thật và góp ý — người dùng đầu tiên thường đến từ quan hệ trực tiếp, không phải quảng cáo."),
+    I("d-n2", "Có mặt ở nhóm cộng đồng", "Chia sẻ trong các nhóm Facebook / Zalo địa phương bằng nội dung hữu ích, không chỉ dán link."),
+    I("d-n3", "Video ngắn quay màn hình", "Quay 15–30 giây cảnh dùng app giải quyết một việc cụ thể, đăng TikTok / Reels — dễ hiểu hơn mọi lời giới thiệu."),
+    I("d-n4", "Kéo cửa hàng trước, người dùng theo sau", "Với app kết nối người dùng – cửa hàng: thuyết phục vài chỗ nổi tiếng trong khu vực tham gia, khách của họ sẽ theo vào."),
+    I("d-n5", "Trang cửa hàng ứng dụng chỉn chu", "Tên, ảnh chụp màn hình, mô tả ngắn rõ lợi ích — nhiều người quyết định tải hay không chỉ nhìn chỗ này."),
+    I("d-n6", "Mời bạn có thưởng", "Nút mời bạn dễ thấy, kèm phần thưởng cho cả hai bên."),
+  ],
+  loyal: [
+    I("d-l1", "Lần mở đầu tiên phải “ra việc”", "Trong lần dùng đầu, giúp người dùng làm xong một việc có ích ngay — ai thấy được giá trị sớm thì quay lại nhiều hơn."),
+    I("d-l2", "Lắng nghe và cập nhật", "Ghi lại góp ý, sửa nhanh và báo cho người góp ý biết là đã sửa — họ sẽ thành người ủng hộ trung thành."),
+    I("d-l3", "Lý do để mở lại mỗi ngày", "Có thứ mới mỗi ngày: ưu đãi gần đây, tin nhắn, gợi ý mới… để người dùng có lý do quay lại."),
+    I("d-l4", "Nhóm người dùng thân thiết", "Lập nhóm Zalo / Facebook cho người dùng sớm, cho họ dùng thử tính năng mới trước."),
+    I("d-l5", "Đừng làm phiền", "Ít thông báo nhưng đúng lúc; cho người dùng tự chọn nhận gì — bị làm phiền là lý do hàng đầu khiến người ta xoá app."),
+    I("d-l6", "Ổn định trước, tính năng sau", "Lỗi, chậm, văng app làm mất người dùng nhanh hơn thiếu tính năng — ưu tiên sửa lỗi trước."),
+  ],
+  review: [
+    I("d-v1", "Xin đánh giá đúng lúc", "Hỏi đánh giá ngay sau khi người dùng vừa làm xong một việc thành công, không hỏi lúc vừa mở app."),
+    I("d-v2", "Trả lời mọi đánh giá", "Trả lời cả khen lẫn chê trên cửa hàng ứng dụng; đánh giá xấu thì cảm ơn, nói rõ sẽ sửa gì."),
+    I("d-v3", "Góp ý ngay trong app", "Có nút góp ý trong app để người không hài lòng nói với bạn trước khi họ viết đánh giá 1 sao."),
+    I("d-v4", "Đánh giá thật mới quý", "Đừng đổi quà lấy 5 sao — vừa mất uy tín vừa có thể vi phạm quy định của cửa hàng ứng dụng."),
+  ],
+  price: [
+    I("d-p1", "Miễn phí phần cốt lõi", "Phần chính miễn phí để có người dùng; thu phí ở phần nâng cao hoặc phía doanh nghiệp được lợi trực tiếp."),
+    I("d-p2", "Ít gói, dễ chọn", "2–3 gói rõ ràng là đủ; ghi lợi ích bằng lời thường thay vì liệt kê tính năng kỹ thuật."),
+    I("d-p3", "Thu tiền phía có lợi", "App kết nối hai bên thì thường bên doanh nghiệp (có thêm khách) là bên sẵn sàng trả tiền hơn người dùng thường."),
+    I("d-p4", "Tính đủ chi phí chạy", "Tính cả máy chủ, dịch vụ AI, SMS, phí cửa hàng ứng dụng theo số người dùng — giá phải còn lời khi đông người dùng."),
+    I("d-p5", "Thử giá với nhóm nhỏ", "Thử mức giá với một nhóm nhỏ trước, xem bao nhiêu người chịu trả rồi mới áp dụng cho tất cả."),
+  ],
+  opening: [
+    I("d-op1", "Chạy thử khép kín", "Cho một nhóm nhỏ dùng trước 2–4 tuần để bắt lỗi và đo xem người dùng có quay lại không."),
+    I("d-op2", "Danh sách chờ", "Mở trang đăng ký chờ trước ngày ra mắt; ngày ra mắt báo cho cả danh sách cùng lúc."),
+    I("d-op3", "Giấy tờ trước khi đông người", "Điều khoản, chính sách dữ liệu cá nhân, đăng ký kinh doanh — lo trước khi có nhiều người dùng thật."),
+    I("d-op4", "Ra mắt ở một khu vực", "Ra mắt tập trung ở một thành phố / một cộng đồng trước, đủ đông rồi mới mở rộng."),
+    I("d-op5", "Đo vài con số chính", "Theo dõi số người đăng ký, số người quay lại sau 1 tuần, số người làm xong việc chính — biết chỗ nào cần sửa."),
+  ],
+};
+const DIGITAL_POSTS: string[] = [
+  "📱 {N} đã có mặt!\nGiúp bạn [việc chính app làm] chỉ trong vài chạm.\nTải miễn phí và dùng thử nha 💚",
+  "Bạn từng mất công [vấn đề người dùng hay gặp]? 😩\n{N} sinh ra để giải quyết chuyện đó.\nThử ngay — miễn phí!",
+  "🎁 100 người đăng ký đầu tiên của {n} được ưu đãi riêng!\nMời thêm bạn bè để cùng nhận thưởng nha ✨",
+  "Cảm ơn mọi người đã dùng thử {n} 💛\nBản mới đã sửa những góp ý của các bạn — cập nhật để trải nghiệm nha!",
+];
+/** Sản phẩm số (app / web / phần mềm) — dùng bộ mẹo DIGITAL thay cho mẹo của quán. */
+export const isDigitalBiz = (ctx: BizCtx) => !!ctx.noun && VN(/\b(app|ứng dụng|website|web|phần mềm|startup|nền tảng)\b/).test(` ${normalizeVi(ctx.noun)} `);
+
 // ── Dịp lễ trong năm (tháng, ngày dương lịch; Tết/Trung thu tính gần đúng theo tháng) ──
 const HOLIDAYS: { m: number; d: number; name: string; ideas: string[] }[] = [
   { m: 1, d: 25, name: "Tết", ideas: ["Combo quà Tết đóng hộp đẹp", "Lì xì may mắn cho khách mua đủ mức", "Nhận đặt trước, giao tận nhà dịp Tết"] },
@@ -326,6 +406,15 @@ export const isMoreIdeas = (text: string) =>
   VN(/^(thêm ý|ý khác|thêm|còn gì nữa|nữa|gợi ý thêm|thêm gợi ý|thêm nữa|còn ý nào)/).test(normalizeVi(text));
 export const isThanks = (text: string) =>
   VN(/^(cảm ơn|cám ơn|thanks|thank|tks|ok|oke|okie|okay|hay quá|tuyệt|hay đó|được đó|good)\b/).test(normalizeVi(text)) && normalizeVi(text).split(" ").length <= 6;
+
+/**
+ * 25/11 — đang tư vấn kinh doanh mà gõ "gợi ý ưu đãi", "cho vài ý tưởng khuyến mãi" → xin Ý TƯỞNG ưu đãi cho chỗ của mình,
+ * không phải đi tìm ưu đãi quanh đây (trước đây Lomi hỏi "anh đang ở khu vực nào").
+ */
+export function bizIdeaAsk(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  return VN(/\b(gợi ý|ý tưởng|nghĩ giúp|nghĩ dùm|cho (vài|mấy|ít) ý|ý nào|làm|tạo|chạy|nên)\b/).test(n) && VN(/\b(ưu đãi|khuyến mãi|giảm giá|combo)\b/).test(n) && !VN(/\b(gần|quanh|ở đâu|chỗ nào|tìm|săn|nhận|lấy|đang có|quán nào|tiệm nào)\b/).test(n);
+}
 
 export function nounFor(type?: BusinessType, noun?: string) {
   return noun || (type ? TYPE_NOUN[type] : "chỗ kinh doanh");
@@ -483,6 +572,13 @@ export function bizAnswer(ctx: BizCtx, topic: BizTopic, more = false): string {
   const n = nounFor(ctx.type, ctx.noun);
   lastIntro = pickNot(more && topic !== "post" ? MORE_INTRO : INTRO[topic], lastIntro);
   const out: string[] = [fill(lastIntro, n)];
+  const dig = isDigitalBiz(ctx);
+  if (topic === "post" && dig) {
+    const two = shuffle(DIGITAL_POSTS).slice(0, 2);
+    out.push(two.map((p, k) => `📝 Mẫu ${k + 1}:\n` + p.replace(VR(/\{N\}/g), cap(n)).replace(VR(/\{n\}/g), n)).join("\n\n"));
+    out.push("💡 Mẹo: thay phần trong [ ] bằng điều app làm thật; kèm 1 ảnh chụp màn hình hoặc video ngắn quay màn hình.");
+    return out.join("\n\n");
+  }
   if (topic === "post") {
     out.push(writePosts(ctx.type, n));
     return out.join("\n\n");
@@ -492,10 +588,10 @@ export function bizAnswer(ctx: BizCtx, topic: BizTopic, more = false): string {
     for (const h of hs) out.push(`🎉 ${h.name}\n${shuffle(h.ideas).slice(0, 2).map((x) => `• ${x}`).join("\n")}`);
     out.push("💡 Mẹo: lên ý tưởng và đăng ưu đãi trước dịp lễ khoảng 1–2 tuần để khách kịp biết.");
   } else {
-    const pool = topic === "offer" ? OFFERS[ctx.type ?? "other"] : TIPS[topic];
+    const pool = dig ? DIGITAL[topic] : topic === "offer" ? OFFERS[ctx.type ?? "other"] : TIPS[topic];
     const ideas = takeFresh(pool, 3);
     out.push(ideas.map((x, i) => `${["①", "②", "③"][i]} ${x.t}\n${fill(x.d, n)}`).join("\n\n"));
-    if (topic === "offer")
+    if (topic === "offer" && !dig)
       out.push(
         pick([
           "💡 Mẹo: mỗi lần chỉ nên chạy 1–2 ưu đãi, ghi rõ thời hạn để khách thấy cần tranh thủ.",
@@ -505,7 +601,7 @@ export function bizAnswer(ctx: BizCtx, topic: BizTopic, more = false): string {
       );
   }
   lastClose = pickNot(CLOSE, lastClose);
-  out.push(fill(lastClose, n));
+  out.push(fill(dig ? lastClose.replace("đông khách", "đông người dùng").replace("khách chủ yếu là ai, lúc nào hay vắng", "người dùng chủ yếu là ai, đang kẹt ở đâu") : lastClose, n));
   return out.join("\n\n");
 }
 

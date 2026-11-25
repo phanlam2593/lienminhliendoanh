@@ -97,6 +97,9 @@ import {
   bizAnswer,
   bizPractical,
   logoColorText,
+  bizAnswerNoun,
+  bizIdeaAsk,
+  isDigitalBiz,
   detectBizKind,
   detectBizTopic,
   followUpChips,
@@ -1106,13 +1109,14 @@ export function AiChat({
       const ff = faqById("bizoffer");
       if (ff) return { role: "assistant", content: `${ff.a.vi}\n\nChưa có hồ sơ doanh nghiệp (hoặc đang chờ duyệt) thì sẽ chưa thấy mục Ưu đãi — tạo ở Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp.`, local: true, faqId: "bizoffer", biz: { type: detectBizKind(raw).type, noun: detectBizKind(raw).noun, topic: "offer" } };
     }
-    const ownerSkip = VN(/\b(đăng ký( \S+){0,2} (hồ sơ )?chủ quán|tạo hồ sơ (chủ quán|doanh nghiệp)|nhắn (tin )?(cho )?chủ quán|hỏi chủ quán|liên hệ chủ quán|gọi (cho )?chủ quán|chủ quán( \S+){0,2} (nhắn lại|trả lời|rep)|chủ quán có (thể )?tạo|với chủ quán)\b/).test(nr) || VN(/\b(duyệt|chờ duyệt|chưa duyệt|chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
+    const ownerSkip = VN(/\b(đăng ký( \S+){0,2} (hồ sơ )?chủ quán|tạo hồ sơ (chủ quán|doanh nghiệp)|nhắn (tin )?(cho )?chủ quán|hỏi chủ quán|liên hệ chủ quán|gọi (cho )?chủ quán|chủ quán( \S+){0,2} (nhắn lại|trả lời|rep)|chủ quán có (thể )?tạo|với chủ quán)\b/).test(nr) || VN(/\b(duyệt|chờ duyệt|chưa duyệt|chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr) && !(bizFaqNear && bizIdeaAsk(raw))) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
     if (ownerCtx && !ownerSkip && w <= 18 && !VN(/\b(đau|bệnh|sốt|thuốc|mất ngủ|buồn|chia tay|bầu|mang thai|có thai|cho con bú|uống được|bác sĩ)\b/).test(nr)) {
       const allTxt = [...prevU6.map((m) => m.content).reverse(), raw].join(" . ");
       const sellM = ` ${normalizeVi(allTxt)} `.match(VN(/\bbán (đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)\b/));
       const kind0 = detectBizKind(raw).type ? detectBizKind(raw) : detectBizKind(allTxt);
       const kind = kind0.type ? kind0 : sellM ? { type: "food" as const, noun: `quán ${allTxt.normalize("NFC").toLowerCase().match(/bán\s+((?:đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)(?:\s+[\p{L}]+)?)/u)?.[1]?.replace(/^đồ\s+/u, "") ?? "ăn"}` } : kind0;
-      const ctx: BizCtx = { type: kind.type ?? prevBiz?.type, noun: kind.noun ?? prevBiz?.noun };
+      // (25/11: loại hình đoán từ các câu TRƯỚC thì giữ tên riêng đã nhớ — "app iLomi" không bị rút lại thành "app")
+      const ctx: BizCtx = { type: kind.type ?? prevBiz?.type, noun: (!detectBizKind(raw).type && prevBiz?.noun && (!kind.type || kind.type === prevBiz.type) ? prevBiz.noun : undefined) ?? kind.noun ?? prevBiz?.noun };
       const noun = nounFor(ctx.type, ctx.noun);
       const tpNow = detectBizTopic(raw);
       const hire = VN(/\b(tuyển|nhân viên|ca tối|ca sáng|lương)\b/).test(` ${normalizeVi(allTxt)} `);
@@ -1160,7 +1164,8 @@ export function AiChat({
       }
       const offerTxt = ` ${normalizeVi(allTxt)} `;
       const isOffer = !hire && !review && VN(/\b(ưu đãi|khuyến mãi|giảm giá|giảm \d+)\b/).test(offerTxt);
-      if (isOffer && (write || VN(/\b(điều kiện|ghi gì|ghi những gì|cần ghi)\b/).test(nr))) {
+      // (25/11: app / web → mẫu bài đăng của sản phẩm số ở bizAnswer, không phải mẫu "ghé ăn cùng gia đình")
+      if (isOffer && !isDigitalBiz(ctx) && (write || VN(/\b(điều kiện|ghi gì|ghi những gì|cần ghi)\b/).test(nr))) {
         const pct = allTxt.match(/giảm\s*\d+\s*(%|k|nghìn|ngàn)?/iu)?.[0] ?? allTxt.match(/\b\d+\s*%/u)?.[0];
         const when = VN(/\bcuối tuần\b/).test(offerTxt) ? "Thứ 7 & Chủ nhật" : VN(/\b(buổi sáng|sáng)\b/).test(offerTxt) ? "buổi sáng" : VN(/\b(buổi tối|tối)\b/).test(offerTxt) ? "buổi tối" : "";
         const sv = VN(/\bsinh viên\b/).test(offerTxt);
@@ -3607,7 +3612,9 @@ export function AiChat({
         const nq = normalizeVi(q);
         const key = BUSINESS_TYPES.find((k) => normalizeVi(bizLabel(k)) === nq);
         const kind = detectBizKind(q);
-        const ctx: BizCtx = { type: key ?? kind.type ?? "other", noun: kind.noun ?? (key ? undefined : q.length <= 30 ? q : undefined) };
+        // (25/11: gõ tự do "A đang làm app lomi nè" → tên là "app Lomi", không lấy nguyên câu làm tên)
+        const own = key ? "" : bizAnswerNoun(q);
+        const ctx: BizCtx = { type: key ?? kind.type ?? "other", noun: key ? undefined : (kind.type === "other" && own) || kind.noun || own || undefined };
         const tp = lastA.biz?.topic ?? detectBizTopic(q);
         if (tp) return bizReply(q, ctx, tp);
         const n = nounFor(ctx.type, ctx.noun);
@@ -3622,7 +3629,7 @@ export function AiChat({
       }
       // b) Đang trong cuộc tư vấn → hiểu tin này theo ngữ cảnh (chủ đề mới, "thêm ý khác", kể thêm chi tiết…).
       // 31/10 (list 5): đang tư vấn quán mà chuyển sang hỏi thuốc / bệnh / tìm quán → không kéo về ý tưởng kinh doanh.
-      const offBiz = !!(findDrug(q) || drugAsk(q) || findMedId(q) || VN(/\b(thuốc|bầu|mang thai|có thai|đau|sốt|bệnh|bác sĩ|nhức|tiêu chảy|nôn ói)\b/).test(q) || (detectSearch(q) && !/\b(quán|tiệm|shop) (của )?(em|anh|chị|tui|tôi|mình)\b/u.test(q.toLowerCase())));
+      const offBiz = !!(findDrug(q) || drugAsk(q) || findMedId(q) || VN(/\b(thuốc|bầu|mang thai|có thai|đau|sốt|bệnh|bác sĩ|nhức|tiêu chảy|nôn ói)\b/).test(q) || (detectSearch(q) && !bizIdeaAsk(q) && !/\b(quán|tiệm|shop) (của )?(em|anh|chị|tui|tôi|mình)\b/u.test(q.toLowerCase())));
       if (lastA?.biz && !lastA.bizPick && !detectTarot(q) && !offBiz) {
         const b = lastA.biz;
         // 22/10 (QA V5): đang tư vấn mở tiệm mà kể vốn / mặt bằng / cọc / hỏi "còn lại bao nhiêu" → sổ tiền (lib/lomiV4), không lặp lại ý tưởng khai trương.
@@ -3869,6 +3876,12 @@ export function AiChat({
           const hs = healthSubjectOf(q, true);
           if (ht) return localReply(q, { role: "assistant", content: `Được chứ 😄 Lomi chia sẻ được kiến thức sức khoẻ phổ thông ở mức tham khảo — không thay bác sĩ và không kê thuốc nha.\n\n${ht.text}`, local: true, quick: ht.quick, health: ht.health });
           return localReply(q, { role: "assistant", content: ei.text, local: true, health: hs ? { subject: hs.subject, label: hs.label, diet: hs.diet, cond: hs.cond } : {} });
+        }
+        // 25/11 (Kir): "e giúp a tư vấn kinh doanh đc k?" → Lomi hỏi "đang kinh doanh gì" thì câu kế tiếp LÀ câu trả lời loại hình
+        //   (trước đây thiếu bizPick nên "A đang làm app lomi nè" bị đọc như kể đang làm việc → "uống nước, vươn vai").
+        if (ei?.intent === "capability" && ei.domain === "biz") {
+          topicHit("biz");
+          return localReply(q, { role: "assistant", content: ei.text, local: true, bizPick: true, quick: BUSINESS_TYPES.map(bizLabel) });
         }
         if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true });
         if (ei?.intent === "food_place" && !(looksLikeBizQuestion(q) && detectBizTopic(q) === "opening")) return replyDishShops(q, ei.dish);

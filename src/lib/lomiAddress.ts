@@ -127,6 +127,15 @@ function lomiAsEm(text: string): string {
 /** Đổi "bạn" / "Lomi" trong câu Lomi nói cho khớp cách xưng hô của người dùng. */
 export function speak(text: string, addr?: Addr | null): string {
   if (!addr || addr === "bạn") return text;
+  // 25/11: bài đăng MẪU ("📝 Mẫu 1:\n…" tới dòng trống) là lời chủ quán nói với KHÁCH — "bạn" trong đó giữ nguyên
+  //   (trước đây "Hôm nay bạn đã tự thưởng…" thành "Hôm nay anh đã tự thưởng…").
+  if (text.includes("📝 Mẫu")) {
+    const parts = text.split(/(📝 Mẫu \d+:\n[\s\S]*?(?=\n\n|$))/u);
+    if (parts.length > 1) return parts.map((seg, i) => (i % 2 ? seg : speakQ(seg, addr))).join("");
+  }
+  return speakQ(text, addr);
+}
+function speakQ(text: string, addr: Addr): string {
   // 11/10: chữ trong ngoặc kép “…” là lời TRÍCH (câu người dùng gõ) hoặc tin nhắn MẪU để gửi cho người khác
   // (“Dạo này thấy bạn im hơn, có chuyện gì không?”) — "bạn" trong đó không phải lời Lomi gọi người dùng → giữ nguyên.
   if (text.includes("“")) {
