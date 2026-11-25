@@ -192,7 +192,8 @@ Deno.serve(async (req) => {
       console.error("lomi-claude anthropic", res.status, t.slice(0, 300));
       await refund();
       const code = /credit balance/i.test(t) ? "AI_CREDITS" : res.status === 429 || res.status === 529 ? "AI_BUSY" : "AI_ERROR";
-      return json({ fallback: true, error: code });
+      // 25/11: kèm chi tiết lỗi (mã HTTP + đầu thông báo của Anthropic, không có key) — app ghi vào nhật ký claude_fail cho admin xem.
+      return json({ fallback: true, error: code, detail: `${res.status} ${t.slice(0, 200)}` });
     }
     const data = await res.json();
     const raw = (Array.isArray(data?.content) ? data.content : [])
@@ -215,12 +216,12 @@ Deno.serve(async (req) => {
     }
     if (!reply) {
       await refund();
-      return json({ fallback: true, error: "AI_ERROR" });
+      return json({ fallback: true, error: "AI_ERROR", detail: `empty stop=${String(data?.stop_reason)} raw=${raw.slice(0, 80)}` });
     }
     return json({ reply, remaining });
   } catch (e) {
     console.error("lomi-claude", e);
     await refund();
-    return json({ fallback: true, error: "AI_ERROR" });
+    return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
   }
 });

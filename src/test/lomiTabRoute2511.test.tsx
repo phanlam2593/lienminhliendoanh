@@ -54,3 +54,16 @@ describe("25/11 — nút chủ đề được dùng thật", () => {
     expect(withTabHint("abc", "biz")).toMatch(/"Kinh doanh"/);
   });
 });
+
+// 25/11 (Kir, ảnh chụp + bản ChatGPT): "Gout ăn cá biển đc k?" từng ra "chưa xác minh được" rồi lại liệt kê cá cơm, cá mòi — lủng củng.
+describe("25/11 — gout ăn cá", () => {
+  it("cá biển / cá thu → hạn chế, nêu loại cần hạn chế; cá lóc → được, vừa phải", async () => {
+    const a = await chat(["Gout ăn cá biển đc k?"], { tab: "health" });
+    expect(a[0].content).toMatch(/hạn chế/);
+    expect(a[0].content).toMatch(/cá cơm, cá mòi/);
+    expect(a[0].content).not.toMatch(/chưa xác minh/);
+    const b = await chat(["bị gút ăn cá lóc được ko"]);
+    expect(b[0].content).toMatch(/cá nước ngọt/);
+    expect(b[0].content).not.toMatch(/chưa xác minh/);
+  }, T);
+});

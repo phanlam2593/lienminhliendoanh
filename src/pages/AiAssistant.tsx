@@ -1701,7 +1701,7 @@ export function AiChat({
       // 25/11: Claude không trả lời được (hết tiền, lỗi, quá tải…) → ghi lại mã lỗi cho admin xem, trước đây thất bại im lặng
       //   nên không biết vì sao Lomi vẫn đáp câu trên máy.
       else if (!["MEMBER_ONLY", "OUT_OF_SCOPE"].includes(String(data?.error)))
-        recordStuck({ kind: "claude_fail", question: q, reply: `Lỗi: ${String(data?.error ?? error?.message ?? "không rõ").slice(0, 200)}`, context: [] }, isAdmin);
+        recordStuck({ kind: "claude_fail", question: q, reply: `Lỗi: ${String(data?.error ?? error?.message ?? "không rõ")} ${String(data?.detail ?? "")}`.trim().slice(0, 400), context: [] }, isAdmin);
       if (quota && typeof data?.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
       else if (isHardOff(data?.error)) markClaudeOff();
     } catch {
