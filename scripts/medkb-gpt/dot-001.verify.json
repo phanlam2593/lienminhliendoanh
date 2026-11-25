@@ -1,0 +1,29 @@
+{
+  "note": "26/11 Claude kiểm từng câu trích bằng WebFetch. Lệch chữ nhỏ (thiếu ngoặc, hoa thường, số ít/nhiều) vẫn coi là đạt vì đúng ý.",
+  "checked": [
+    "https://www.nhs.uk/conditions/sprains-and-strains/",
+    "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment",
+    "https://www.nhs.uk/conditions/detached-retina-retinal-detachment/",
+    "https://medlineplus.gov/nauseaandvomiting.html",
+    "https://medlineplus.gov/ency/patientinstructions/000122.htm",
+    "https://medlineplus.gov/ency/article/003117.htm",
+    "https://www.nhs.uk/symptoms/feeling-sick-nausea/",
+    "https://www.nhs.uk/conditions/flat-feet/",
+    "https://medlineplus.gov/ency/article/001262.htm",
+    "https://www.cdc.gov/obesity/php/about/consequences.html",
+    "https://www.cdc.gov/healthy-weight-growth/food-activity/overweight-obesity-impacts-health.html",
+    "https://www.cdc.gov/obesity/risk-factors/risk-factors.html",
+    "https://www.cdc.gov/healthy-weight-growth/about/tips-for-balancing-food-activity.html",
+    "https://www.cdc.gov/healthy-weight-growth/physical-activity/index.html",
+    "https://www.cdc.gov/healthy-weight-growth/losing-weight/index.html",
+    "https://www.cdc.gov/obesity/php/about/obesity-strategies-what-can-be-done.html"
+  ],
+  "drop": [
+    "Béo phì được đánh giá thông qua"
+  ],
+  "edit": {
+    "Giảm cân từ từ, ổn định thường giúp": "Giảm cân từ từ, khoảng 0,5–1 kg mỗi tuần, thường giữ được kết quả lâu hơn.",
+    "Nếu nghi ngờ nôn do ngộ độc": "Nghi nôn do ngộ độc thì cần được khám ngay.",
+    "Bàn chân bẹt là tình trạng lòng bàn chân": "Bàn chân bẹt là khi lòng bàn chân áp sát mặt đất lúc đứng, không thấy rõ vòm cong bên trong. Thường gặp và **thường không đáng lo**."
+  }
+}

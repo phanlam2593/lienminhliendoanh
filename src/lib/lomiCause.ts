@@ -372,6 +372,7 @@ export function doseReply(q: string): string | null {
 }
 
 /** "đau đầu có nguy hiểm không", "khóc cả tối mà đau đầu nữa, có nguy hiểm không" → khi nào đi khám / cấp cứu theo thẻ. */
+const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 export async function dangerReply(q: string): Promise<{ text: string; medId: string } | null> {
   const low = q.normalize("NFC").toLowerCase();
   if (!W(/\b(có nguy hiểm|nguy hiểm không|nguy hiểm ko)\b/u).test(low) || low.split(/\s+/).length > 22) return null;
@@ -380,9 +381,19 @@ export async function dangerReply(q: string): Promise<{ text: string; medId: str
   const mt = await loadMedTopic(id);
   if (!mt || (!mt.doctor.length && !mt.emergency.length)) return null;
   const nm = displayName(mt);
+  // 26/11: câu mở đầu theo đúng thẻ — trước đây bệnh nào cũng "hay gặp và nhiều khi tự đỡ" (kể cả bong võng mạc, ung thư).
+  //   Nặng = thẻ ung thư, hoặc phần "là gì / diễn tiến" nói cấp cứu, tử vong, mất thị lực…; nhẹ = thẻ nói tự hết / không đáng lo.
+  const said = ` ${[...mt.about, ...mt.course].map((f) => f.text).join(" ").normalize("NFC").toLowerCase()} `;
+  const serious = mt.kind === "cancer" || W(/\b(cấp cứu|tử vong|đe doạ tính mạng|đe dọa tính mạng|mù|mất thị lực|nguy hiểm đến tính mạng)\b/u).test(said) || /(?<!không |ít khi |hiếm khi )nguy hiểm(?![\p{L}])/u.test(said);
+  const mild = !serious && W(/\b(tự hết|tự khỏi|tự đỡ|thường không nghiêm trọng|không đáng lo|không nguy hiểm|thường lành tính)\b/u).test(said);
+  const opener = serious
+    ? `**${cap1(nm)}** **có thể nguy hiểm** — cần được bác sĩ khám sớm. Lomi không đánh giá được mức độ của bạn qua tin nhắn 🙏 Dựa vào mấy mốc này nha:`
+    : mild
+      ? `**${cap1(nm)}** thường không nguy hiểm và nhiều khi tự đỡ, nhưng Lomi không đánh giá được mức độ của bạn qua tin nhắn 🙏 Dựa vào mấy mốc này nha:`
+      : `Nguy hiểm hay không tuỳ mức độ của từng người — Lomi không đánh giá được qua tin nhắn 🙏 Với **${nm.toLowerCase()}**, dựa vào mấy mốc này nha:`;
   return {
     text: [
-      `Thường thì **${nm.toLowerCase()}** hay gặp và nhiều khi tự đỡ, nhưng Lomi không đánh giá được mức độ của bạn qua tin nhắn 🙏 Dựa vào mấy mốc này nha:`,
+      opener,
       mt.emergency.length ? `🚨 Gọi 115 / đi cấp cứu ngay nếu:\n${mt.emergency.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}` : "",
       mt.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${mt.doctor.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : "",
     ].filter(Boolean).join("\n\n"),

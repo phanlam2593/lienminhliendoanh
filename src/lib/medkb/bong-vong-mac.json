@@ -10,15 +10,33 @@
   ],
   "about": [
     {
-      "text": "Bong võng mạc là khi võng mạc — lớp mỏng ở đáy mắt — bị bong ra; **cần điều trị nhanh** để giữ thị lực.",
+      "text": "Bong võng mạc là tình trạng lớp mô nhạy sáng phía sau mắt bị tách khỏi vị trí bình thường. Đây là tình trạng cấp cứu về mắt vì có thể gây mất thị lực vĩnh viễn.",
       "src": [
-        0
+        1
       ]
     }
   ],
   "signs": [
     {
-      "text": "Ruồi bay (chấm, vệt) hoặc chớp sáng trong tầm nhìn; một **bóng đen như tấm màn** che một phần tầm nhìn; nhìn mờ hoặc thị lực thay đổi.",
+      "text": "Bạn có thể đột ngột thấy nhiều chấm đen hoặc sợi nhỏ trôi trước mắt.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Mắt có thể xuất hiện những tia sáng lóe bất thường.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Bạn có thể thấy bóng tối hoặc màn đen che một phần tầm nhìn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Thị lực có thể giảm hoặc nhìn mờ đột ngột.",
       "src": [
         0
       ]
@@ -26,7 +44,19 @@
   ],
   "causes": [
     {
-      "text": "Thường do dịch kính trong mắt thay đổi theo tuổi; nguy cơ cao hơn khi cận thị, từng mổ mắt (như mổ đục thuỷ tinh thể), chấn thương mắt, gia đình có người bị.",
+      "text": "Lão hóa là nguyên nhân thường gặp khiến võng mạc bị bong.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Chấn thương mắt có thể làm rách hoặc tổn thương võng mạc.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Cận thị nặng, từng phẫu thuật mắt hoặc có người thân bị bong võng mạc làm tăng nguy cơ.",
       "src": [
         0
       ]
@@ -34,23 +64,66 @@
   ],
   "course": [
     {
-      "text": "Phẫu thuật thường giúp thị lực không xấu thêm; hồi phục khoảng 2–6 tuần. Càng điều trị sớm càng giữ được thị lực.",
+      "text": "Bong võng mạc không tự khỏi theo cách chăm sóc thông thường và cần điều trị sớm.",
       "src": [
-        0
+        1
+      ]
+    },
+    {
+      "text": "Nếu chậm điều trị, vùng bong có thể lan rộng và gây mù vĩnh viễn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Bệnh có thể tái bong sau điều trị và đôi khi cần phẫu thuật lần nữa.",
+      "src": [
+        1
       ]
     }
   ],
   "care": [
     {
-      "text": "Nếu bong hoặc rách võng mạc thì thường phẫu thuật, giúp thị lực không xấu thêm; thường gây tê tại chỗ, hồi phục khoảng 2–6 tuần.",
+      "text": "Không tự điều trị tại nhà; hãy đến cơ sở chuyên khoa mắt ngay khi có dấu hiệu nghi ngờ.",
       "src": [
-        0
+        1
+      ]
+    },
+    {
+      "text": "Đeo kính bảo hộ khi chơi thể thao hoặc làm việc có nguy cơ chấn thương mắt.",
+      "src": [
+        1
       ]
     }
   ],
   "diet": null,
-  "doctor": [],
+  "doctor": [
+    {
+      "text": "Bạn cần khám chuyên khoa mắt ngay khi xuất hiện chấm đen, tia sáng hoặc bóng đen bất thường.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Người có nguy cơ cao nên khám mắt toàn diện, có kiểm tra võng mạc sau khi nhỏ thuốc giãn đồng tử.",
+      "src": [
+        1
+      ]
+    }
+  ],
   "emergency": [
+    {
+      "text": "Đi cấp cứu ngay nếu đột ngột xuất hiện màn đen, chớp sáng hoặc nhiều chấm đen trước mắt.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Không chờ đến hôm sau vì chậm điều trị có thể khiến bạn mất thị lực vĩnh viễn.",
+      "src": [
+        1
+      ]
+    },
     {
       "text": "**Ruồi bay xuất hiện / tăng đột ngột, chớp sáng, bóng đen che mắt, hay đột nhiên nhìn mờ** → đi khám mắt ngay trong ngày.",
       "src": [
@@ -64,7 +137,13 @@
       "publisher": "NHS (Anh)",
       "url": "https://www.nhs.uk/conditions/detached-retina-retinal-detachment/",
       "reviewed": "2023-08-04"
+    },
+    {
+      "title": "bong võng mạc",
+      "publisher": "National Eye Institute (NIH, Hoa Kỳ)",
+      "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/retinal-detachment",
+      "reviewed": "2026-11-26"
     }
   ],
-  "verifiedAt": "2026-10-30"
+  "verifiedAt": "2026-11-26"
 }

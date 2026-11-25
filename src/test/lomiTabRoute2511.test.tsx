@@ -82,3 +82,12 @@ describe("25/11 — gout ăn tôm, tiểu đường ăn chuối", () => {
     expect(c[0].content).toMatch(/nửa lòng bàn tay/);
   }, T);
 });
+
+// 26/11 — "X có nguy hiểm không": câu mở đầu theo thẻ (trước đây bệnh nào cũng "hay gặp và nhiều khi tự đỡ").
+describe("26/11 — có nguy hiểm không", () => {
+  it("bong võng mạc → có thể nguy hiểm; không nói 'tự đỡ'", async () => {
+    const r = await chat(["bong võng mạc có nguy hiểm không"]);
+    expect(r[0].content).toMatch(/có thể nguy hiểm/);
+    expect(r[0].content).not.toMatch(/tự đỡ/);
+  }, T);
+});

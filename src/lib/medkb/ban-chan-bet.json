@@ -11,7 +11,7 @@
   ],
   "about": [
     {
-      "text": "Bàn chân bẹt là khi cả lòng bàn chân áp sát mặt đất (không có vòm). Thường gặp và **thường không đáng lo**.",
+      "text": "Bàn chân bẹt là khi lòng bàn chân áp sát mặt đất lúc đứng, không thấy rõ vòm cong bên trong. Thường gặp và **thường không đáng lo**.",
       "src": [
         0
       ]
@@ -19,7 +19,25 @@
   ],
   "signs": [
     {
-      "text": "Đứng xem phía trong bàn chân có chạm đất không. Thường không triệu chứng; đôi khi đau cổ chân, cẳng chân, nhức phía trong bàn chân, giày mòn nhanh.",
+      "text": "Lòng bàn chân áp sát mặt đất khi bạn đứng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số người bị đau quanh mắt cá hoặc cẳng chân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Vòm bàn chân có thể đau nhức sau khi vận động.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giày dép có thể bị mòn nhanh hơn bình thường.",
       "src": [
         0
       ]
@@ -27,7 +45,25 @@
   ],
   "causes": [
     {
-      "text": "Hầu hết trẻ nhỏ đều bàn chân bẹt — vòm chân thường hình thành khoảng 3–10 tuổi. Người lớn thường do dáng chân, có thể di truyền; hiếm khi do bệnh khác.",
+      "text": "Bàn chân bẹt đôi khi chỉ là đặc điểm tự nhiên của bàn chân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tình trạng này có thể di truyền trong gia đình.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Chấn thương, tuổi tác hoặc thừa cân có thể làm các mô nâng đỡ bàn chân giãn ra.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số bất thường về xương, cơ hoặc thần kinh cũng có thể gây bàn chân bẹt.",
       "src": [
         0
       ]
@@ -35,7 +71,13 @@
   ],
   "course": [
     {
-      "text": "Thường **không đáng lo**; không gây khó chịu thì không cần điều trị, vẫn chơi thể thao bình thường. Lót giày, giày phù hợp giúp đỡ đau nhưng không làm đổi dáng bàn chân.",
+      "text": "Hầu hết trẻ nhỏ có bàn chân bẹt và vòm chân thường phát triển trong độ tuổi 3–10.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bàn chân bẹt không đau thường không cần điều trị.",
       "src": [
         0
       ]
@@ -43,14 +85,50 @@
   ],
   "care": [
     {
-      "text": "Không gây khó chịu thì không cần làm gì, vẫn chơi thể thao bình thường. Nếu đau: giày rộng, đế thấp, lót giày, bài kéo giãn theo hướng dẫn của chuyên viên.",
+      "text": "Chọn giày rộng rãi, thoải mái và có gót thấp.",
       "src": [
         0
+      ]
+    },
+    {
+      "text": "Bạn có thể sử dụng miếng lót giày hỗ trợ vòm bàn chân nếu cần.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tập các động tác kéo giãn bàn chân theo hướng dẫn phù hợp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu không đau hoặc khó đi lại, trẻ có thể chạy nhảy và chơi thể thao bình thường.",
+      "src": [
+        1
       ]
     }
   ],
   "diet": null,
   "doctor": [
+    {
+      "text": "Bạn nên đi khám nếu bàn chân đau, cứng, yếu hoặc tê.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đi khám nếu thường xuyên bị chấn thương bàn chân hoặc mắt cá.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cần kiểm tra nếu chỉ một bàn chân bị bẹt hoặc trước đây bàn chân không bị bẹt.",
+      "src": [
+        0
+      ]
+    },
     {
       "text": "Bàn chân đau, cứng, yếu hoặc tê; hay bị chấn thương bàn chân / cổ chân; khó đi lại, giữ thăng bằng; mới bị bẹt hoặc chỉ một bên → đi khám.",
       "src": [
@@ -65,7 +143,13 @@
       "publisher": "NHS (Anh)",
       "url": "https://www.nhs.uk/conditions/flat-feet/",
       "reviewed": "2025-06-24"
+    },
+    {
+      "title": "bàn chân bẹt",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/001262.htm",
+      "reviewed": "2026-11-26"
     }
   ],
-  "verifiedAt": "2026-10-30"
+  "verifiedAt": "2026-11-26"
 }
