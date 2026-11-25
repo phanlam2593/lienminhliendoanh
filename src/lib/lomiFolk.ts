@@ -5538,6 +5538,102 @@ export const FOLK: FolkEntry[] = [
   { id: "lc-xoan-tra", gen: true, name: "Xoan trà", names: ["xoan trà"], verdict: "trad", folk: [{ text: "Theo y học cổ truyền, Xoan trà vị ngọt, chua, tính bình; được dùng cho: ho, chảy máu (cầm máu), vết thương, đau bụng.", src: [0] }], science: [], caution: [{ text: "Phụ nữ có thai thận trọng — hỏi thầy thuốc trước khi dùng.", src: [0] }, { text: "Mẹ đang cho con bú hỏi bác sĩ trước khi dùng.", src: [0] }, { text: "Trẻ em chỉ dùng khi có hướng dẫn của thầy thuốc.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }], topics: [{ id: "ho", text: "y học cổ truyền có dùng vị này", src: [0], v: "trad" }, { id: "chay-mau", text: "y học cổ truyền có dùng vị này", src: [0], v: "trad" }], sources: [{ title: "Xoan trà", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/xoan-tra" }], verifiedAt: "2026-11-04" },
   { id: "lc-xuyen-tieu", gen: true, name: "Xuyên tiêu", names: ["xuyên tiêu"], verdict: "risky", folk: [{ text: "Theo y học cổ truyền, Xuyên tiêu vị cay, tính ôn; được dùng cho: ho, giun sán, đau bụng.", src: [0] }], science: [{ text: "Y học hiện đại có nghiên cứu liên quan tới: chống viêm.", src: [0] }], caution: [{ text: "Vị này **có độc** — không tự ý dùng, chỉ dùng khi thầy thuốc hướng dẫn.", src: [0] }, { text: "Theo y học cổ truyền: người âm hư, nóng trong không nên dùng.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }], topics: [], sources: [{ title: "Xuyên tiêu", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/xuyen-tieu" }], verifiedAt: "2026-11-04" },
   { id: "lc-xa-vang", gen: true, name: "Xạ vàng", names: ["xạ vàng"], verdict: "trad", folk: [{ text: "Y học cổ truyền dùng Xạ vàng cho: ho, khó tiêu, đầy bụng, dạ dày.", src: [0] }], science: [{ text: "Y học hiện đại có nghiên cứu liên quan tới: chống oxy hoá, gan.", src: [0] }], how: [{ text: "Cách dùng: Liều lượng có thể từ 10-20g, thay đổi tuỳ mục đích (tham khảo — liều cụ thể nên hỏi thầy thuốc).", src: [0] }], caution: [{ text: "Người dị ứng với vị thuốc này thì không dùng.", src: [0] }, { text: "Không dùng liều cao hoặc kéo dài.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }], topics: [{ id: "ho", text: "y học cổ truyền có dùng vị này", src: [0], v: "trad" }, { id: "kho-tieu", text: "y học cổ truyền có dùng vị này", src: [0], v: "trad" }, { id: "viem-da-day", text: "y học cổ truyền có dùng vị này", src: [0], v: "trad" }], sources: [{ title: "Xạ vàng", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/xa-vang" }], verifiedAt: "2026-11-04" },
+  // ── 25/11 (Kir: "so mấy bệnh phổ biến + kiến thức của e rồi update, Long Châu hay mấy nhà thuốc lớn ở VN cũng đc") ──
+  {
+    id: "cham-cuu",
+    name: "Châm cứu",
+    names: ["châm cứu", "chữa bằng châm cứu", "đi châm cứu", "cấy chỉ", "acupuncture"],
+    verdict: "mixed",
+    folk: [{ text: "Châm cứu là cắm kim rất nhỏ vào da để chữa bệnh; bắt nguồn từ y học cổ truyền Trung Hoa, dùng ít nhất 2.500 năm.", src: [0] }],
+    science: [
+      { text: "Đau lưng, đau cổ: châm cứu hiệu quả hơn không điều trị, nhưng hơn châm giả (sham) không nhiều.", src: [0] },
+      { text: "Đau do thoái hoá khớp (chủ yếu khớp gối): hiệu quả hơn không điều trị.", src: [0] },
+      { text: "Đau nửa đầu: có thể giảm số cơn; hơn châm giả không nhiều.", src: [0] },
+      { text: "**Không** tốt hơn thuốc cho đau do ung thư; không hơn châm giả với hội chứng ruột kích thích và bốc hoả mãn kinh; không cải thiện chức năng phổi ở người hen.", src: [0] },
+    ],
+    caution: [
+      { text: "Biến chứng ít gặp, nhưng làm **sai cách** có thể gây nhiễm trùng, đâm thủng nội tạng — chỉ châm ở nơi có người hành nghề được cấp phép.", src: [0] },
+      { text: "Kim châm phải **vô trùng, dùng một lần**.", src: [0] },
+      { text: "Đừng dùng châm cứu để **trì hoãn đi khám** khi có vấn đề sức khoẻ.", src: [0] },
+    ],
+    topics: [
+      { id: "dau-lung", text: "châm cứu giúp giảm đau lưng hơn không điều trị (hơn châm giả không nhiều)", src: [0], v: "mixed" },
+      { id: "thoai-hoa-khop", text: "châm cứu giúp giảm đau thoái hoá khớp gối hơn không điều trị — chọn nơi có giấy phép, kim dùng một lần", src: [0], v: "mixed" },
+      { id: "dau-dau", text: "châm cứu có thể giảm số cơn đau nửa đầu (lợi ích hơn châm giả nhỏ)", src: [0], v: "mixed" },
+    ],
+    sources: [nccih("acupuncture-what-you-need-to-know", "Acupuncture: What You Need To Know", "10/2022")],
+    verifiedAt: "2026-11-25",
+  },
+  {
+    id: "ruou-methanol",
+    name: "Rượu tự nấu, rượu không nhãn, rượu ngâm trôi nổi (nguy cơ ngộ độc methanol)",
+    names: ["rượu tự nấu", "rượu nấu", "rượu không nhãn", "rượu trôi nổi", "rượu lậu", "rượu giả", "rượu pha cồn", "rượu ngâm", "rượu ngâm thuốc", "rượu thuốc ngâm", "rượu ngâm trôi nổi", "ngộ độc methanol", "methanol", "cồn công nghiệp", "cồn methanol"],
+    verdict: "danger",
+    belief: "Uống rượu tự nấu, rượu không nhãn mác, rượu giá rẻ bất thường, hoặc rượu ngâm (ngâm thuốc, ngâm rễ cây) pha từ rượu không rõ nguồn gốc.",
+    folk: [],
+    science: [
+      { text: "Rượu chưng cất lậu có thể chứa **methanol** nồng độ cao hơn nhiều; uống dù **một lượng nhỏ** methanol cũng nguy hiểm — có thể gây hôn mê, co giật, **mù mắt**, tổn thương thần kinh và tử vong.", src: [0] },
+      { text: "Chỉ khoảng **một ly nhỏ (một shot) methanol** đã có thể gây chết người lớn; lượng ít hơn nữa có thể gây mù.", src: [2] },
+      { text: "Lúc đầu giống say rượu thường: nôn, lơ mơ, mất thăng bằng. Sau **12–48 giờ** mới nặng dần: đau bụng, chóng mặt, thở nhanh, khó thở, **nhìn mờ, sợ ánh sáng, mù**; nặng thì hôn mê, co giật.", src: [1, 2] },
+    ],
+    how: [{ text: "Nghi ngộ độc methanol (uống rượu không rõ nguồn rồi 'say' lâu không tỉnh, nôn nhiều, nhìn mờ, khó thở): **đi cấp cứu ngay, gọi 115** — đừng để 'ngủ cho tỉnh'. Điều trị hiệu quả nhất trong khoảng 10–30 giờ sau khi uống.", src: [2] }],
+    caution: [
+      { text: "Tránh rượu tự nấu, rượu không nhãn, chai không rõ nguồn, rượu rẻ bất thường; chọn rượu bia có nhãn mác, niêm phong, mua ở nơi có giấy phép.", src: [2] },
+      { text: "Bệnh viện có thuốc giải và lọc máu cho ngộ độc methanol — càng đến sớm càng tốt.", src: [2] },
+    ],
+    topics: [{ id: "ngo-doc-ruou", text: "rượu tự nấu / không nhãn có thể lẫn methanol — say kéo dài, nhìn mờ, khó thở thì đi cấp cứu ngay", src: [1, 2], v: "danger" }],
+    sources: [
+      { title: "Methanol: general information (cập nhật 11/10/2024)", publisher: "UKHSA – Cơ quan An ninh Y tế Anh (gov.uk)", url: "https://www.gov.uk/government/publications/methanol-properties-incident-management-and-toxicology/methanol-general-information" },
+      { title: "Methanol: toxicological overview", publisher: "UKHSA – Cơ quan An ninh Y tế Anh (gov.uk)", url: "https://www.gov.uk/government/publications/methanol-properties-incident-management-and-toxicology/methanol-toxicological-overview" },
+      { title: "Spiking and methanol poisoning", publisher: "Chính phủ Anh – chiến dịch Travel Aware (gov.uk)", url: "https://travelaware.campaign.gov.uk/spiking-and-methanol-poisoning" },
+    ],
+    verifiedAt: "2026-11-25",
+  },
+  {
+    id: "dau-dua",
+    name: "Dầu dừa (ăn uống)",
+    names: ["dầu dừa", "uống dầu dừa", "ăn dầu dừa", "nấu ăn bằng dầu dừa", "coconut oil"],
+    verdict: "unclear",
+    vlabel: "Dầu dừa **không phải dầu tốt cho tim** — nhiều chất béo bão hoà, nên dùng ít",
+    folkLabel: "Người ta hay dùng để",
+    folk: [{ text: "Nhiều người tin dầu dừa là dầu 'lành', tốt cho tim, giúp giảm cân nên thay dầu ăn hoặc uống mỗi ngày.", src: [0] }],
+    science: [
+      { text: "Dầu dừa có **nhiều chất béo bão hoà hơn cả mỡ heo**; ăn nhiều còn thêm nhiều calo.", src: [0] },
+      { text: "Dầu dừa làm **tăng cholesterol xấu (LDL)**, từ đó tăng nguy cơ bệnh tim — Hiệp hội Tim mạch Hoa Kỳ khuyên **không** dùng dầu dừa thay dầu ăn.", src: [0] },
+      { text: "Thay chất béo bão hoà bằng chất béo không bão hoà (dầu thực vật lỏng) giúp hạ LDL.", src: [0] },
+    ],
+    caution: [{ text: "Người mỡ máu cao, bệnh tim mạch: hạn chế dầu dừa, ưu tiên dầu thực vật lỏng (dầu ô liu, dầu đậu nành, dầu mè…).", src: [0] }],
+    topics: [{ id: "mo-mau-cao", text: "dầu dừa nhiều chất béo bão hoà, làm tăng LDL — mỡ máu cao nên hạn chế", src: [0], v: "risky" }],
+    sources: [{ title: "Coconut oil has more saturated fat than lard (22/06/2017)", publisher: "Mayo Clinic News Network", url: "https://newsnetwork.mayoclinic.org/discussion/coconut-oil-has-more-saturated-fat-than-lard/" }],
+    verifiedAt: "2026-11-25",
+  },
+  {
+    id: "atiso",
+    name: "Atiso",
+    names: ["atiso", "actiso", "a ti sô", "trà atiso", "trà actiso", "cao atiso", "cao actiso", "bông atiso", "hoa atiso", "lá atiso", "nước atiso", "artichoke"],
+    verdict: "trad",
+    aka: "Bộ phận hay dùng: bông, lá (trà, cao, nấu nước) — khác với \"atiso đỏ\" (bụp giấm)",
+    folk: [
+      { text: "Dân gian dùng trà, cao atiso để mát gan, giải nhiệt, hỗ trợ tiêu hoá (đầy hơi, khó tiêu, táo bón), ngủ ngon hơn.", src: [0] },
+      { text: "Người ta còn dùng để hỗ trợ giảm mỡ máu (LDL, triglyceride) và đường huyết.", src: [0] },
+    ],
+    science: [],
+    dose: [{ text: "Trà: 10–20 g atiso tươi hoặc 5–10 g khô mỗi lần pha; uống liên tục tối đa khoảng 10 ngày rồi nghỉ 5–7 ngày.", src: [0] }],
+    how: [{ text: "Hãm hoặc nấu nước bông / lá atiso uống trong ngày; thấy dị ứng, đau bụng, mệt mỏi thì ngưng và đi khám. Mua ở nơi có nguồn gốc rõ ràng.", src: [0] }],
+    caution: [
+      { text: "Không nên dùng: người tỳ vị hư hàn (tiêu hoá yếu, hay lạnh bụng, khó tiêu), người biếng ăn mệt mỏi; người viêm loét dạ dày – tá tràng phải dùng có chừng mực.", src: [0] },
+      { text: "Bà bầu, mẹ cho con bú, người đang uống thuốc huyết áp, lợi tiểu, tiểu đường: hỏi bác sĩ trước (có thể tương tác, gây hạ huyết áp).", src: [0] },
+      { text: "Dùng quá nhiều: đầy hơi, chướng bụng; dùng lâu lượng lớn có thể mất cân bằng điện giải; có người dị ứng, nổi ban, ngứa.", src: [0] },
+      { text: "Atiso hỗ trợ tiêu hoá, **không phải thuốc chữa** bệnh gan, mỡ máu hay tiểu đường — vẫn theo điều trị của bác sĩ.", src: [0] },
+    ],
+    topics: [
+      { id: "kho-tieu", text: "dân gian dùng trà atiso hỗ trợ tiêu hoá, đầy hơi — người hay lạnh bụng không nên dùng", src: [0], v: "trad" },
+      { id: "mo-mau-cao", text: "dân gian dùng atiso hỗ trợ giảm mỡ máu — vẫn theo thuốc, chế độ ăn bác sĩ dặn", src: [0], v: "trad" },
+      { id: "gan-nhiem-mo", text: "dân gian dùng atiso 'mát gan' — không thay được giảm cân, ăn uống, điều trị", src: [0], v: "trad" },
+    ],
+    sources: [{ title: "Tác dụng của atiso và những đối tượng không nên sử dụng (13/06/2025, ThS. Dược Nguyễn Thị Tú Trinh duyệt)", publisher: "Nhà thuốc Pharmacity (bài được dược sĩ duyệt)", url: "https://www.pharmacity.vn/tac-dung-cua-atiso-va-nhung-doi-tuong-khong-nen-su-dung.htm" }],
+    verifiedAt: "2026-11-25",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
@@ -5546,7 +5642,7 @@ export const UNVERIFIED_HERBS = [
   
   "mỡ trăn", // 22/11 (câu thật: "Mỡ trăn để làm gì") — chưa có nguồn; riêng chuyện bôi bỏng có thẻ "boi-bong"
   "thục địa", "xuyên khung", "lá đu đủ", 
-  "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "an cung ngưu hoàng",
+  "rượu rắn", "cao hổ cốt", "cao xương", "an cung ngưu hoàng",
   "nước sâm", "sâm đất", 
   "lá mơ", "lá mơ lông", "lá chanh",
   // 31/10 (danh sách ChatGPT lần 2) — chưa tìm được nguồn đáng tin
@@ -5590,8 +5686,10 @@ const UNVERIFIED_RE = nameRe(UNVERIFIED_HERBS);
 
 export const folkById = (id?: string | null): FolkEntry | null => FOLK.find((f) => f.id === id) ?? null;
 /** Các vị đã đối chiếu nguồn có liên quan tới một bệnh trong kho (id thẻ medkb). */
+// 25/11: thẻ triệu chứng chung dùng mẹo dân gian đã đối chiếu của bệnh gần nhất ("đau nhức xương khớp" → các vị ghi cho thoái hoá khớp)
+const FOLK_TOPIC_ALIAS: Record<string, string> = { "dau-nhuc-xuong-khop": "thoai-hoa-khop" };
 export const folkFor = (topicId: string): { f: FolkEntry; t: FolkTopic }[] =>
-  FOLK.flatMap((f) => f.topics.filter((t) => t.id === topicId).map((t) => ({ f, t })));
+  FOLK.flatMap((f) => f.topics.filter((t) => t.id === (FOLK_TOPIC_ALIAS[topicId] ?? topicId) || t.id === topicId).map((t) => ({ f, t })));
 
 /** Vị / mẹo dân gian nhắc trong câu (tên dài khớp trước). "Bôi … lên vết bỏng" chỉ nhận khi câu nói tới bỏng. */
 // (tìm quán / chỗ đi / so món để chọn — "Đà Lạt có cà phê nào view đẹp", "cao lầu vs mì Quảng nên thử món nào" — không phải hỏi sức khoẻ)

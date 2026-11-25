@@ -1039,6 +1039,11 @@ export function AiChat({
         const tn = mt ? medName(mt) : tWord;
         if (worse)
           return { role: "assistant", content: `⚠️ ${tn.replace(/^\p{L}/u, (x) => x.toUpperCase())} mà **nặng hơn** thì nên đi khám **ngay hôm nay**, đừng chờ thêm nha.\n• 🚨 Đau dữ dội, sốt cao, nôn nhiều, bụng cứng, đi ngoài ra máu, khó thở, lừ đừ → gọi **115** hoặc tới cấp cứu\n• Cần xe đi khám thì đặt ở Đưa đón (/dua-don), hoặc nhờ người nhà chở\n\nBạn đi khám được ngay không?`, local: true, health: { label: tn }, ...(mid && mt ? { med: { id: mid } } : {}) };
+        // 25/11: quay lại MÀ nói rõ phần ăn uống ("còn vụ ăn uống của mẹ thì sao") → trả lời luôn phần ăn uống của thẻ
+        if (mt && mid && VN(/\b(ăn uống|ăn gì|kiêng)\b/).test(what)) {
+          const mr = renderMed(mt, "diet");
+          return { role: "assistant", content: `Dạ, quay lại chuyện ăn uống khi bị **${tn}** nha 📝\n\n${mr.text}`, local: true, quick: mr.quick, med: { id: mid, aspect: "diet" }, health: { label: tn } };
+        }
         return { role: "assistant", content: `Dạ, quay lại chuyện **${tn}** nha 📝 Bạn muốn hỏi tiếp phần nào — ăn uống, chăm sóc, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: { label: tn }, quick: mt ? renderMed(mt, "overview").quick : undefined };
       }
       if (target) {
@@ -1050,6 +1055,10 @@ export function AiChat({
           const tn = mt ? medName(mt) : (target.health?.label ?? (target.heart === "insomnia" ? "mất ngủ" : "sức khoẻ"));
           if (worse)
             return { role: "assistant", content: `⚠️ ${tn.replace(/^\p{L}/u, (x) => x.toUpperCase())} mà **nặng hơn** thì nên đi khám **ngay hôm nay**, đừng chờ thêm nha.\n• 🚨 Đau dữ dội, sốt cao, nôn nhiều, bụng cứng, đi ngoài ra máu, khó thở, lừ đừ → gọi **115** hoặc tới cấp cứu\n• Cần xe đi khám thì đặt ở Đưa đón (/dua-don), hoặc nhờ người nhà chở\n\nBạn đi khám được ngay không?`, local: true, health: target.health ?? { label: tn }, ...(target.med ? { med: target.med } : {}) };
+          if (mt && target.med && VN(/\b(ăn uống|ăn gì|kiêng)\b/).test(what)) {
+            const mr = renderMed(mt, "diet");
+            return { role: "assistant", content: `Dạ, quay lại chuyện ăn uống khi bị **${tn}** nha 📝\n\n${mr.text}`, local: true, quick: mr.quick, med: { id: target.med.id, aspect: "diet" }, health: target.health ?? { label: tn } };
+          }
           return { role: "assistant", content: `Dạ, quay lại chuyện **${tn}** nha 📝 Bạn muốn hỏi tiếp phần nào — ăn uống, chăm sóc, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: target.health ?? { label: tn }, ...(target.med ? { med: target.med } : {}), ...(target.heart === "insomnia" ? { heart: "insomnia", heartDepth: 1 } : {}), quick: mt ? renderMed(mt, "overview").quick : undefined };
         }
         if (c === "place") {

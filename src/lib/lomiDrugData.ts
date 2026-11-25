@@ -83,6 +83,8 @@ export const TRUSTED = [
   // 04/11: Kir duyệt dùng tra cứu dược liệu / dược chất của Nhà thuốc FPT Long Châu làm nguồn THAM KHẢO cho phần y học cổ truyền
   //   (lib/lomiFolk) — chỉ diễn đạt lại có chọn lọc, luôn ghi rõ là theo y học cổ truyền / nghiên cứu chưa đủ bằng chứng trên người.
   "nhathuoclongchau.com.vn",
+  // 25/11: Kir duyệt thêm nhà thuốc lớn ở VN (Pharmacity) — bài được dược sĩ duyệt, dùng làm nguồn THAM KHẢO như Long Châu.
+  "pharmacity.vn",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

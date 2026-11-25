@@ -416,7 +416,8 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(q4[4].content).toMatch(/Tuyển người/);
     const q5 = await chat(["Mẹ em bị đau khớp", "À em quên mật khẩu", "Còn vụ ăn uống của mẹ thì sao?"]);
     expect(q5[2].faqId).toBeUndefined();
-    expect(q5[2].content).toMatch(/đau khớp/);
+    // (25/11: "đau khớp" giờ có thẻ có nguồn "Đau nhức xương khớp" — trả lời luôn phần ăn uống)
+    expect(q5[2].content).toMatch(/ăn uống[\s\S]*đau (nhức xương )?khớp/i);
   }, T);
   it("Danh sách ChatGPT lần 5 (31/10): sửa ý giữa chừng", async () => {
     const s1 = await chat(["Bé nhà em sốt", "Lộn, 3 tuổi chứ không phải 3 tháng", "Sốt 38 độ", "Ho nữa", "Ăn uống sao chị", "Bao lâu khỏi?"]);

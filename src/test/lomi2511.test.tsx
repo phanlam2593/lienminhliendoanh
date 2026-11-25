@@ -95,3 +95,21 @@ describe("25/11 (đợt 2) — bệnh / mẹo dân gian", () => {
     expect((await last(["viêm loét đại tràng nên ăn gì"])).content).toMatch(/Viêm loét đại tràng/);
   }, T);
 });
+
+describe("25/11 (đợt 3) — thẻ bệnh + mẹo dân gian mới có nguồn", () => {
+  it("thẻ mới: đau nhức xương khớp (NHS), khí hư (NHS), gai gót chân (Long Châu + NHS), thâm quầng mắt (Mayo)", async () => {
+    for (const [q, re] of [["mẹo chữa đau nhức xương khớp", /Đau nhức xương khớp/], ["ra nhiều huyết trắng có sao không", /Khí hư/], ["gai gót chân nên làm gì", /Gai gót chân/], ["thâm quầng mắt phải làm sao", /Thâm quầng mắt/]] as const) {
+      const m = await last([q]);
+      expect(m.stuck, q).toBeFalsy();
+      expect(m.content, q).toMatch(re);
+    }
+    expect((await last(["mẹo chữa đau nhức xương khớp"])).content).toMatch(/Mẹo dân gian/);
+    expect((await last(["đau khớp gối"])).content).toMatch(/Đau gối/);
+  }, T);
+  it("mẹo / vị mới: châm cứu (NCCIH), rượu tự nấu – methanol (UKHSA), dầu dừa (Mayo), atiso (Pharmacity), nhung hươu", async () => {
+    for (const [q, re] of [["châm cứu có tác dụng gì", /Châm cứu/], ["uống rượu ngâm có tốt không", /methanol/], ["dầu dừa có tốt không", /bão hoà/], ["trà atiso có tác dụng gì", /Atiso/], ["nhung hươu có tác dụng gì", /Lộc Nhung/]] as const) {
+      const m = await last([q]);
+      expect(m.content, q).toMatch(re);
+    }
+  }, T);
+});
