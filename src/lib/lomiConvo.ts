@@ -76,6 +76,8 @@ export type Convo = {
   asked?: "yesno" | "choice" | "open";
   /** Chủ đề đã nói TRƯỚC chủ đề hiện tại (để hiểu "cái lúc nãy"). */
   earlier: { topic: Topic; label: string; resume: string; /** tin Lomi cách tin cuối bao nhiêu tin (1 = ngay trước tin cuối) */ back: number }[];
+  /** 25/11: câu người dùng gõ ở lượt trước (để hiểu câu nhấn lại "Gà mà"). */
+  prevUser?: string;
 };
 
 export type Want = { text?: string; offer?: boolean; near?: boolean; /** giới hạn khoảng cách (km) người dùng nói: "5km thôi", "dưới 2 cây số" */ maxKm?: number };
@@ -148,6 +150,7 @@ export function convoOf(history: ConvoMsg[]): Convo {
   const d = (last.dish ? DISHES.find((x) => x.id === last.dish) : undefined) ?? us.slice(-2).reverse().map((m) => detectDish(userText(m))).find(Boolean);
   if (d && (!c.topic || c.topic === "food" || c.topic === "talk")) c.dish = { id: d.id, label: dishLabel(d) };
   const lastUser = us[us.length - 1];
+  c.prevUser = lastUser ? userText(lastUser) : undefined;
   const hungry = lastUser ? VR(/^state:(hungry|thirsty)$/).test(senseState(lastUser.raw ?? lastUser.content)?.intent ?? "") : false;
   c.foodTalk = (!c.topic || c.topic === "food" || c.topic === "talk") && (!!last.dishAsk || hungry || !!last.quick?.some((x) => VR(/ăn gì|uống gì|quán ăn/i).test(x)));
   if (c.foodTalk && !c.topic) c.topic = "food";
@@ -210,7 +213,11 @@ function looseAnswer(n: string): "yes" | "no" | null {
 // ("ok", "được" đứng một mình KHÔNG tính — đó là "ừ")
 const SOSO = VN(/^(cũng (được|ổn|bình thường|tạm tạm|vậy|thường thường|ổn ổn)|ổn|ổn ổn|bình thường|tạm ổn|tạm tạm|thường thường|vậy vậy|như mọi ngày|chưa biết nữa|tạm được|ổn áp)( (ạ|à|a|ah|thôi|nha|nè|lomi|e|em|lắm|mà))*$/);
 // 10/10 — XIN MẸO theo chuyện đang nói ("E biết mẹo gì k?", "còn mẹo nào khác không", "có cách nào khác không").
-const TIP = VN(/\b(mẹo|bí kíp|kinh nghiệm gì|còn cách nào|cách nào khác|cách khác|có cách gì|tips|tip)\b/);
+const TIP = VN(/\b(mẹo|bí kíp|kinh nghiệm gì|còn cách nào|cách nào khác|cách khác|có cách gì|tips|tip|cách nào nhẹ nhàng|cách nào dễ|cách nào đơn giản)\b/);
+// 25/11 (câu thật): "Có cách nào nhẹ nhàng hơn không?" sau bài cách xử trí — xin cách DỄ / NHẸ hơn
+const GENTLE = VN(/\b(nhẹ nhàng hơn|nhẹ hơn|dễ hơn|đơn giản hơn|đỡ cực hơn|ít tốn sức hơn)\b/);
+// 25/11 (câu thật): "Gà mà" ngay sau câu "Thấp khớp ăn gà đc k?" — người dùng NHẤN LẠI món vừa hỏi
+const INSIST = VN(/^(?:(?:thì|là|hỏi|mình hỏi|tôi hỏi|anh hỏi|em hỏi) )?(\S+(?: \S+)?) (?:mà|đó|á|chứ|nè|mà lomi|mà em)$/);
 // 10/10 — KHOẢNG CÁCH cho lần tìm chỗ vừa rồi ("giới hạn 5km thôi", "trong vòng 3km", "dưới 2 cây số").
 const KM = VN(/\b(\d+(?:[.,]\d+)?) ?(?:km|ki lô mét|kí lô mét|kilomet|kilô mét|kilo mét|cây số|cs)\b/);
 
@@ -455,6 +462,11 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   if (VN(/^(thiệt|thật|thiệt không|thật không|thật hả|thiệt hả|thật à|thiệt à|thật sao|thiệt hông|thật hông|thật luôn|thiệt luôn|thật không vậy|thiệt hông ta)( (không|ko|k|hông|hong|hả|ha|à|a|vậy|ta|lomi|e|em|nè))*$/).test(n) && !c.asked)
     return { kind: "reply", keep: true, why: "really", reply: { text: "Thiệt mà 😄 Lomi nói đúng những gì Lomi biết đó. Bạn còn thắc mắc chỗ nào thì hỏi tiếp nha." } };
 
+  // 3f0) 25/11 — nhấn lại đúng chữ đã hỏi ở lượt trước ("Gà mà", "tỏi đó") khi đang nói sức khoẻ → hỏi lại nguyên câu lượt trước.
+  const ins = c.topic === "health" && words <= 4 && c.prevUser ? n.match(INSIST) : null;
+  if (ins && ` ${normalizeVi(c.prevUser!)} `.includes(` ${ins[1]} `) && normalizeVi(c.prevUser!) !== n)
+    return { kind: "rewrite", why: "health:insist", q: c.prevUser! };
+
   // 3f) Xin mẹo theo chuyện đang nói.
   if (TIP.test(n) && words <= 9 && !detectTarot(q)) {
     const med = (last as { med?: { id: string; aspect?: string } }).med;
@@ -467,6 +479,8 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     const named = findMedTopicId(q);
     if (c.topic === "health" && hl && (!named || named === findMedTopicId(hl))) {
       // Vừa đưa cách xử trí rồi mà hỏi "còn mẹo nào khác" → không đọc lại; mời xem phần khác (có nguồn).
+      if (GENTLE.test(n))
+        return { kind: "reply", keep: true, why: "tip:health-gentle", reply: { text: `Mấy cách ở trên cho **${hl}** đều là cách tự làm ở nhà, không cần thuốc nè 🌿 Không cần làm hết một lúc — bạn chọn **1–2 cách thấy dễ nhất** làm đều đặn vài tuần trước, quen rồi thêm dần. Nếu đã thử mà vẫn không đỡ thì nên đi khám để bác sĩ tìm nguyên nhân nha.`, quick: [`${cap(hl)} nên làm gì?`, "Khi nào cần đi khám?", "Nguyên nhân"] } };
       if (med?.aspect === "care" || VN(/\b(còn|khác|nữa)\b/).test(n))
         return { kind: "reply", keep: true, why: "tip:health-more", reply: { text: `Những cách xử trí có nguồn cho **${hl}** Lomi đưa hết ở trên rồi nè — Lomi không tự thêm mẹo ngoài nguồn. Bạn muốn xem thêm phần nào?`, quick: [`${cap(hl)} kiêng gì?`, "Khi nào cần đi khám?", "Nguyên nhân"] } };
       return { kind: "rewrite", why: "tip:health", q: `${hl} nên làm gì` };

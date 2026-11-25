@@ -195,7 +195,9 @@ export function detectSearch(text: string): SearchIntent | null {
     (!!strictKind && !strictKind.broad && strictKind.type !== "food" && strictKind.noun !== "chuyên gia tư vấn tâm lý" &&
       (VN(/\b(cần|muốn|thuê|gọi|kêu|đặt|book|kiếm|xin)\b/).test(n) || (/xe ghép|đưa đón|taxi/u.test(strictKind.noun) && n.trim().split(/\s+/).length <= 6)) &&
       !VN(/\b(mới|vừa|đã|rồi|hôm qua|hôm trước|lúc nãy|hồi nãy|xong|mai|sắp|tuần sau|tháng sau|định|tính)\b/).test(n)) ||
-    (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
+    (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)) || // "có spa nào giảm giá không"
+    // 25/11: gõ cụm ngắn "quán phở ngon", "quán cafe đẹp", "tiệm bánh rẻ" — chính là đang tìm (trước: Lomi hỏi "quán ngon vậy hả, kể nghe với")
+    (n.trim().split(" ").length <= 7 && VN(/^ (quán|tiệm|chỗ) \S+( \S+){0,3} (ngon|rẻ|đẹp|chill|yên tĩnh|xịn|ngon rẻ|view đẹp|sống ảo)( nhất| nhỉ| ha| á| nè)? $/).test(n));
   if (!seek) return null;
   if (!kind && !offer && !place) return null;
   // Xe ghép / xe khách / đưa đón "đi Sài Gòn": nơi nêu là ĐIỂM ĐẾN, không phải nơi tìm xe → không lọc theo nơi đó.

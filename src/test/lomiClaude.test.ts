@@ -45,6 +45,10 @@ describe("lomiClaude — chỉ câu Lomi bí, không nguy hiểm, thành viên m
     for (const q of ["mở tiệm sửa xe nhỏ cần vốn bao nhiêu", "thời tiết lạnh bị đau khớp phải làm sao", "chơi game nhiều bị mỏi mắt", "nuôi con nhỏ mệt quá", "chó cắn có cần tiêm phòng dại không", "quán cà phê có chỗ chơi cho mèo ở Đà Lạt", "bị stress vì mất tiền chứng khoán", "người yêu mê game bỏ bê mình"])
       expect(offTopic(q), q).toBe(false);
   });
+  it("25/11: câu giải thích thuyết khoa học → chặn trên máy (không tốn lượt gọi AI)", () => {
+    for (const q of ["giải thích thuyết tiến hóa", "thuyết tương đối hẹp của Einstein là gì", "hố đen là gì", "vũ trụ hình thành thế nào"]) expect(offTopic(q), q).toBe(true);
+    for (const q of ["tiểu đường có di truyền không", "giải thích giúp mình chỉ số mỡ máu"]) expect(offTopic(q), q).toBe(false);
+  });
   it("câu trong phạm vi không bị chặn nhầm", () => {
     for (const q of ["dịch bệnh sốt xuất huyết mùa này", "bị đau lưng khi ngồi lâu", "người yêu cũ nhắn lại có nên trả lời", "mở quán cà phê nhỏ cần chuẩn bị gì", "cách dùng mã ưu đãi trong app"]) expect(offTopic(q), q).toBe(false);
   });

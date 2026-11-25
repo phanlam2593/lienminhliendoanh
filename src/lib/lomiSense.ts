@@ -14,6 +14,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { detectDish } from "@/lib/lomiSearch";
+import { namedDish } from "@/lib/lomiCook";
 import { expandTeen, type ChatReply } from "@/lib/lomiChat";
 import { VR, VN } from "@/lib/viMatch";
 
@@ -755,6 +756,9 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
   // Mẩu câu rất ngắn mà không nhận ra được gì ("quay lại", "tháng này") → hỏi lại một câu, vì chưa đủ ý để mà "bí".
   // (30/10: tiếng lóng ngắn — "toang rồi", "chill thôi" — có lời đáp riêng, không hỏi lại "ý bạn là sao")
   for (const [intent, re, texts] of META) if (intent.startsWith("slang_") && re.test(n)) return { intent, text: pick(texts) };
+  // 25/11: gõ mỗi tên món ("phở", "bún bò") → hỏi muốn tìm quán hay xem cách nấu (trước: "Lomi chưa chắc hiểu ý bạn")
+  const bd = !ctx.lastText ? bareDishReply(raw) : null;
+  if (bd) return bd;
   if (words <= 3) return { intent: "clarify", text: pick(["Lomi chưa chắc hiểu ý bạn 😅 Bạn nói rõ thêm giúp Lomi nha?", "Ý bạn là sao ta 🤔 Bạn nói thêm chút xíu để Lomi hiểu nha."]) };
   return null;
 }
@@ -768,4 +772,21 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
 export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number; mirror?: string | null; neg?: boolean } = {}): SenseReply | null {
   // senseState đọc câu NGUYÊN VĂN (giữ :( và chữ kéo dài); senseLate đọc câu đã đổi teen code ("đc k" → "được không").
   return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk, mirror: ctx.mirror, neg: ctx.neg }));
+}
+
+/** 25/11: câu chỉ có tên món ("phở", "bún bò", "trà sữa") → hỏi tìm quán hay xem cách nấu. null nếu không phải. */
+export function bareDishReply(raw: string): SenseReply | null {
+  const n = normalizeVi(raw);
+  // (chỉ khi câu CHỈ có tên món: có chữ tìm / quán / ăn / đổi… là người dùng đã nói rõ muốn gì rồi)
+  if (!n || n.split(" ").length > 3 || /\b(nau|lam|cach|cong thuc|che bien|tim|kiem|quan|tiem|an|uong|muon|them|doi|qua|cho|gan|di|o|mua|ban|order|ship|giao)\b/.test(n)) return null;
+  const dd = detectDish(raw);
+  if (!dd) return null;
+  const nm = dd.name.split(/[,(]/)[0].trim();
+  const lc = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
+  const ck = dd.drink ? null : namedDish(raw);
+  return {
+    intent: "dish_bare",
+    text: `**${nm.charAt(0).toUpperCase() + nm.slice(1)}** hả 😋 Bạn muốn Lomi tìm quán ${lc(nm)} quanh bạn${ck ? `, hay chỉ cách nấu ${lc(ck)} ở nhà` : ""} nè?`,
+    quick: [`🔎 Tìm quán ${lc(nm)}`, ...(ck ? [`🍳 Cách nấu ${lc(ck)}`] : [])],
+  };
 }

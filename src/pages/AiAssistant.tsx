@@ -83,7 +83,7 @@ import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { asksSource, dropRepeats, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
 import { boundaryAdvice, fearInHarm, harmOf, harmReply, helperAdvice, safetyFollow, type Harm } from "@/lib/lomiSafety";
-import { isAskLike, isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
+import { bareDishReply, isAskLike, isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
 import { convoOf, isOffer, otherPlace, resolveTurn } from "@/lib/lomiConvo";
 import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
@@ -155,7 +155,7 @@ import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
 import { drugPairReply, excessAsk, excessVerb, focusExcess, focusTiming, pairAsk, sleepPillExcess, timingAsk } from "@/lib/lomiExcess";
-import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk, isUnknownDishAsk } from "@/lib/lomiCook";
+import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk, isUnknownDishAsk, namedDish } from "@/lib/lomiCook";
 // (câu có bệnh / thai / kiêng / trẻ nhỏ → để lớp sức khoẻ lo, không gợi ý món)
 const NOT_FOOD_TALK_VI = /(?<![\p{L}])(bệnh|đau|sốt|tiểu đường|huyết áp|bầu|mang thai|kiêng|dị ứng|giảm cân|ăn kiêng)(?![\p{L}])/u;
 const NOT_COOK_CTX = /\b(benh|bi (dau|sot|tieu chay|di ung)|sot|tieu duong|huyet ap|bau|mang thai|kieng|di ung|an kieng|giam can)\b/;
@@ -2212,7 +2212,12 @@ export function AiChat({
         const cookCtx = !!prevUkT && !lastAs?.heart && !NOT_COOK_CTX.test(` ${normalizeVi(prevUkT)} `) && (
           (cookIngredientsOnly(raw) && (isCookAsk(prevUkT) || /\b(nau|bua toi|bua trua|bua com|lam mon|do an)\b/.test(` ${normalizeVi(prevUkT)} `)))
           || (isCookAsk(raw) && !hasCookIngredients(raw) && hasCookIngredients(prevUkT)));
-        const ck = cookCtx ? cookReply(raw, prevUkT) : isCookAsk(raw) ? cookReply(raw) : null;
+        // 25/11: gõ mỗi tên món ("bún bò") ngay đầu hoặc sau câu không phải sức khoẻ → hỏi tìm quán hay cách nấu (trước: thẻ dinh dưỡng "bún")
+        const bareD = !lastAs ? bareDishReply(raw) : null;
+        if (bareD) return localReply(q, { role: "assistant", content: bareD.text, local: true, quick: bareD.quick });
+        // 25/11 (câu thật): vừa gợi ý món nấu mà hỏi "Vậy bún bò thì sao?", "còn phở?" → cách nấu đúng món đó
+        const ndFollow = lastAs?.routed === "cook" && raw.split(/\s+/).length <= 8 && !isCookAsk(raw) ? namedDish(raw) : null;
+        const ck = ndFollow ? cookReply(`cách nấu ${ndFollow}`) : cookCtx ? cookReply(raw, prevUkT) : isCookAsk(raw) ? cookReply(raw) : null;
         if (ck) return localReply(q, { role: "assistant", content: ck, local: true, routed: "cook" });
         // 20/11: hỏi cách nấu một món thư viện chưa có → nói thật + đánh dấu bí (máy chủ nhờ Claude), không để rơi sang lớp khác.
         if (!cookCtx && (isCookAsk(raw) || isUnknownDishAsk(raw)))

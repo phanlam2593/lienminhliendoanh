@@ -251,7 +251,7 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["signs", VN(/\b(triệu chứng|dấu hiệu|biểu hiện|nhận biết|nhận ra|có những dấu hiệu|có hiện tượng gì|bị sao|bị như thế nào|làm sao biết|sao biết|làm sao để biết|biết mình bị|biết có bị)\b/)],
   // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính;
   //   "ai dễ bị gout", "người nào dễ bị loãng xương" — hỏi ĐỐI TƯỢNG NGUY CƠ → phần nguyên nhân / yếu tố nguy cơ)
-  ["causes", VN(/\b((ai|người nào|những ai|đối tượng nào|ai thì) (dễ|hay|thường|có nguy cơ|dễ bị|hay bị)|(?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
+  ["causes", VN(/\b((ai|người nào|những ai|đối tượng nào|ai thì) (dễ|hay|thường|có nguy cơ|dễ bị|hay bị)|(?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền(?! (dịch|nước|máu)))\b/)], // 25/11: "đi truyền dịch" bỏ dấu cũng là "di truyen"
   ["doctor", VN(/\b(đi khám|khám ở đâu|khám khoa nào|khoa nào|cần khám|nên khám|khi nào.*(khám|gặp bác sĩ|đi viện)|gặp bác sĩ|bác sĩ nào|đi viện)\b/)],
   ["course", VN(/\b(có khỏi|khỏi được|khỏi hẳn|chưa khỏi|chữa khỏi|bao lâu khỏi|có lây|lây không|lây qua|có nguy hiểm|có hết|hết không|hết ko|hết được|có sao không|có sao ko|nguy hiểm không|tiến triển|kéo dài bao lâu|kéo dài không|có kéo dài|bị bao lâu|tái phát|biến chứng|có chết|có nặng không|nặng không|có tự khỏi|tự khỏi|khó chữa|có chữa được|chữa được không|vĩnh viễn)\b/)],
   ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì|mẹo|bí quyết|lưu ý|chú ý|để ý gì|cần biết gì|nên biết gì)\b/)],
@@ -689,7 +689,7 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   if (aspect === "course") return sect(`📈 Diễn tiến của ${N}:`, t.course, "course");
   if (aspect === "spread") {
     // "có lây không": gom các ý nói về lây truyền (thẻ ghi ở nguyên nhân / diễn tiến / phòng ngừa); không có thì nói thẳng.
-    const fs = [...t.causes, ...t.course, ...t.care].filter((f) => VR(/lây|truyền|nhiễm từ|qua đường|tiếp xúc/i).test(f.text));
+    const fs = [...t.causes, ...t.course, ...t.care].filter((f) => VR(/lây|truyền(?! (dịch|nước|máu))|nhiễm từ|qua đường|tiếp xúc/i).test(f.text));
     return sect(`🦠 Về chuyện lây của ${N}:`, fs, "spread", 6, `Các nguồn Lomi đã đối chiếu cho ${N} **không nói về chuyện lây**, nên Lomi chưa xác minh được. Bạn hỏi bác sĩ để chắc nha.`);
   }
   if (aspect === "care") {

@@ -28,7 +28,7 @@ describe("thư viện món (lomiCook)", () => {
   it("hỏi cách nấu một món: có trong thư viện → cách làm; ngoài thư viện → không lấy món khác thế vào", () => {
     expect(cookReply("canh chua cá nấu sao")).toMatch(/^🍳 \*\*Canh chua cá\*\*/);
     expect(cookReply("cách làm trứng chưng")).toMatch(/Trứng hấp/);
-    expect(cookReply("nấu bún bò Huế thế nào")).toBeNull();
+    expect(cookReply("nấu cà ri gà thế nào")).toBeNull(); // 25/11: bún bò Huế đã có công thức → đổi ví dụ món ngoài thư viện
   });
   it("không nhận nhầm câu thường là hỏi nấu ăn", () => {
     for (const q of ["sao khó quá vậy", "làm sao để hết buồn", "tìm quán cơm gần chợ", "app lỗi làm sao"]) expect(isCookAsk(q), q).toBe(false);

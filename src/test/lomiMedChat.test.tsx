@@ -35,8 +35,9 @@ describe("kho y khoa — câu hỏi thật", () => {
     expect((await last(["thuốc lá điện tử có giúp bỏ được không"])).content).toMatch(/thuốc lá điện tử/);
     const got: StuckEntry[] = [];
     setStuckSink((e) => got.push(e));
-    const m = await last(["sốt xuất huyết có cần truyền nước không"]);
-    expect(m.content).toMatch(/“truyền nước”.*chưa nói rõ/);
+    // (25/11: thẻ sốt xuất huyết đã có ý truyền dịch của CDC → đổi ví dụ ý chưa có)
+    const m = await last(["sốt xuất huyết có cần đi châm cứu không"]);
+    expect(m.content).toMatch(/“châm cứu”.*chưa nói rõ/);
     expect(got.map((g) => g.kind)).toContain("kb_partial");
   }, T);
   it("câu nối chung chung theo chủ đề mà thẻ không có ý đó → không đọc lại bài của chủ đề cũ", async () => {

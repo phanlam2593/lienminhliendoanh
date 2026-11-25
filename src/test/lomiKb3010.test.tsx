@@ -996,19 +996,19 @@ describe("30/10 — trả lời qua khung chat", () => {
   }, T);
   it("01/11 — hiểu câu vòng 23: 'bị X ăn/uống Y được không' trả lời đúng món Y với bệnh X (tỏi ≠ tôi, chua ≠ chứa, nhiều món, câu nối)", async () => {
     const g = await last(["Bị gout ăn tỏi đc k?"]);
-    expect(g.content).toMatch(/Về \*\*tỏi\*\*/);
+    expect(g.content).toMatch(/“tỏi” thuộc nhóm “rau/); // 25/11: tỏi khớp nhóm rau của Gout (Mayo Clinic)
     expect(g.content).not.toMatch(/Gout\*\* là gì/);
     for (const q of ["bị gout ăn tỏi được không", "bị gout có ăn được tỏi không", "bị gout thì ăn tỏi có sao không", "bị gout có nên ăn tỏi", "gout ăn tỏi tốt không"])
-      expect((await last([q])).content, q).toMatch(/Về \*\*tỏi\*\*.*Gout/);
+      expect((await last([q])).content, q).toMatch(/Gout\*\*: \*\*rau[\s\S]*“tỏi”/);
     const me = await last(["mẹ tôi bị gout ăn tỏi được không"]);
-    expect(me.content).toMatch(/Về \*\*tỏi\*\*/);
+    expect(me.content).toMatch(/“tỏi” thuộc nhóm “rau/);
     expect(me.content).not.toMatch(/Về \*\*tôi\*\*/);
     // gõ không dấu "an toi" (tỏi / bữa tối) → hỏi lại, kèm 2 câu bấm sẵn
     const nd = await last(["bi gout an toi dc ko"]);
     expect(nd.content).toMatch(/tỏi\*\* hay ăn \*\*bữa tối/);
     expect(nd.quick).toEqual(["bi gout an toi dc ko".replace("an toi", "ăn tỏi"), "bi gout an toi dc ko".replace("an toi", "ăn tối")]);
     // câu nối sau khi kể bệnh
-    expect((await chat(["tôi bị gout", "ăn tỏi được không"]))[1].content).toMatch(/Về \*\*tỏi\*\*.*Gout/);
+    expect((await chat(["tôi bị gout", "ăn tỏi được không"]))[1].content).toMatch(/Gout\*\*: \*\*rau[\s\S]*“tỏi”/);
     // tên bệnh gan nêu rõ → thẻ bệnh trả lời món đó
     expect((await last(["bị gan nhiễm mỡ uống bia được không"])).content).toMatch(/Gan nhiễm mỡ\*\*: \*\*rượu bia/);
     expect((await last(["gout nên tránh bia không"])).content).toMatch(/Gout\*\*: \*\*bia\*\* nên/);
@@ -1016,8 +1016,9 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(ch.content).not.toMatch(/caffeine\*\* nên|cà chua\*\* nên/);
     expect((await last(["bị sốt xuất huyết ăn đồ đỏ được không"])).content).toMatch(/Về \*\*đồ đỏ\*\*/);
     // nhiều món một lúc → từng món, phần nguyên tắc chung chỉ một lần
-    const two = await last(["gout ăn tỏi, gừng được không"]);
-    expect(two.content).toMatch(/Về \*\*tỏi\*\*, \*\*gừng\*\*/);
+    // (25/11: tỏi đã khớp nhóm rau có nguồn → ví dụ hai món đều chưa có nguồn)
+    const two = await last(["gout ăn gừng, nhộng được không"]);
+    expect(two.content).toMatch(/Về \*\*gừng\*\*, \*\*nhộng\*\*/);
     expect(two.content.match(/Nguyên tắc chung/g)?.length).toBe(1);
     const tb = await last(["bị gout ăn tôm và thịt bò được không"]);
     expect(tb.content).toMatch(/hải sản\*\* nên/);

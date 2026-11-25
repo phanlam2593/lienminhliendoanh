@@ -15,6 +15,8 @@ type Dish = {
   carry?: boolean; // mang đi được
   /** tên gọi khác để nhận câu "X nấu sao" */
   alias?: string[];
+  /** 25/11: món hợp bữa sáng ("gợi ý món ăn sáng") */
+  sang?: boolean;
   steps: string[];
 };
 
@@ -28,12 +30,12 @@ const D: Dish[] = [
   { name: "Đậu phụ xào nấm", ings: ["dau phu", "nam"], method: "xao", veg: true, min: 15, steps: ["Đậu cắt miếng, áp chảo cho vàng mặt", "Phi tỏi, xào nấm lửa lớn cho ráo nước", "Cho đậu vào, nêm nước tương / muối, đảo nhẹ, thêm hành lá"] },
   { name: "Canh nấm đậu phụ", ings: ["dau phu", "nam"], method: "canh", veg: true, min: 15, steps: ["Đun sôi nước (có thể nấu cùng ít cà rốt cho ngọt nước)", "Cho nấm, đậu cắt miếng vào, nấu 5 phút", "Nêm muối / hạt nêm, thêm rau ngò, hành lá"] },
   { name: "Đậu phụ non hấp nấm", ings: ["dau phu", "nam"], method: "hap", veg: true, min: 15, steps: ["Xếp đậu non ra đĩa, xếp nấm thái mỏng lên trên", "Rưới chút nước tương pha dầu mè (hoặc dầu ăn) và hành", "Hấp 8–10 phút, rắc hành lá, tiêu"] },
-  { name: "Trứng hấp (trứng chưng)", ings: ["trung"], method: "hap", veg: true, min: 15, alias: ["trung chung", "trung hap"], steps: ["Đánh trứng với chút nước (hoặc sữa), muối, hành lá — thích thì thêm thịt băm, nấm băm", "Đổ vào bát, hấp lửa vừa 12–15 phút tới khi mặt trứng đông", "Rưới chút nước mắm hoặc dầu hành lên trên"] },
+  { name: "Trứng hấp (trứng chưng)", sang: true, ings: ["trung"], method: "hap", veg: true, min: 15, alias: ["trung chung", "trung hap"], steps: ["Đánh trứng với chút nước (hoặc sữa), muối, hành lá — thích thì thêm thịt băm, nấm băm", "Đổ vào bát, hấp lửa vừa 12–15 phút tới khi mặt trứng đông", "Rưới chút nước mắm hoặc dầu hành lên trên"] },
   { name: "Cá hấp gừng hành", ings: ["ca"], method: "hap", min: 20, alias: ["ca hap"], steps: ["Cá làm sạch, khứa vài đường, ướp chút muối, tiêu", "Xếp gừng thái sợi, hành lên cá, hấp 12–15 phút tuỳ độ dày", "Rưới nước tương + dầu nóng phi hành lên trên"] },
   { name: "Rau củ hấp chấm", ings: ["ca rot", "bong cai", "su su", "bi", "khoai", "dau que", "rau"], method: "hap", veg: true, min: 15, steps: ["Cắt rau củ miếng vừa ăn, củ cứng (cà rốt, khoai) cắt mỏng hơn", "Hấp 7–10 phút tới khi vừa chín, còn giòn", "Chấm nước tương, muối mè hoặc kho quẹt"] },
   { name: "Mì xào rau củ", ings: ["mi", "nam", "ca rot", "rau", "bap cai", "trung"], method: "xao", veg: true, min: 15, alias: ["mi xao"], steps: ["Trụng mì cho mềm (đừng nhừ), xả nước lạnh, để ráo", "Xào nấm, cà rốt thái sợi, rau với tỏi phi", "Cho mì vào, nêm nước tương / dầu hào, đảo đều lửa lớn cho săn sợi"] },
-  { name: "Mì trộn trứng", ings: ["mi", "trung"], method: "tron", veg: true, min: 10, steps: ["Luộc mì, để ráo; chiên một quả trứng ốp la", "Trộn mì với chút dầu hành, nước tương, tương ớt, ít đường", "Xếp trứng, rau thơm, dưa leo lên trên"] },
-  { name: "Cơm chiên trứng", ings: ["com", "trung"], method: "chien", veg: true, min: 15, alias: ["com chien"], steps: ["Cơm nguội đánh tơi; trứng đánh tan", "Phi tỏi / hành, cho cơm vào đảo lửa lớn cho săn hạt", "Đổ trứng vào đảo đều, nêm muối / nước tương, thêm hành lá"] },
+  { name: "Mì trộn trứng", sang: true, ings: ["mi", "trung"], method: "tron", veg: true, min: 10, steps: ["Luộc mì, để ráo; chiên một quả trứng ốp la", "Trộn mì với chút dầu hành, nước tương, tương ớt, ít đường", "Xếp trứng, rau thơm, dưa leo lên trên"] },
+  { name: "Cơm chiên trứng", sang: true, ings: ["com", "trung"], method: "chien", veg: true, min: 15, alias: ["com chien"], steps: ["Cơm nguội đánh tơi; trứng đánh tan", "Phi tỏi / hành, cho cơm vào đảo lửa lớn cho săn hạt", "Đổ trứng vào đảo đều, nêm muối / nước tương, thêm hành lá"] },
   { name: "Cơm chiên đậu Hà Lan", ings: ["com", "dau ha lan", "ca rot", "bap"], method: "chien", veg: true, min: 15, steps: ["Đậu Hà Lan, cà rốt hạt lựu trụng sơ cho chín", "Phi hành, cho cơm nguội đánh tơi vào đảo lửa lớn", "Thêm rau củ (và trứng nếu có), nêm nước tương, đảo đều là xong — dọn ra đãi khách nhanh mà đẹp mắt"] },
   { name: "Rau cải xào tỏi", ings: ["rau cai", "cai", "rau muong", "rau"], method: "xao", veg: true, min: 7, alias: ["rau xao toi"], steps: ["Rau nhặt rửa, để thật ráo", "Phi tỏi thơm, cho rau vào xào lửa lớn, đảo nhanh", "Nêm muối / dầu hào, tắt bếp khi rau vừa chín tới"] },
   { name: "Canh rau cải đậu phụ", ings: ["rau cai", "cai", "dau phu"], method: "canh", veg: true, min: 10, steps: ["Đun sôi nước (có thể phi chút hành)", "Cho đậu cắt miếng vào trước, sau đó cho rau cải", "Nêm muối, sôi lại là tắt bếp để rau còn xanh"] },
@@ -47,10 +49,23 @@ const D: Dish[] = [
   { name: "Khoai tây xào", ings: ["khoai tay"], method: "xao", veg: true, min: 15, steps: ["Khoai tây thái sợi, ngâm nước cho bớt bột, để ráo", "Xào lửa lớn với tỏi tới khi khoai vừa chín còn giòn", "Nêm muối, thêm hành lá hoặc ớt chuông"] },
   { name: "Canh bí đỏ", ings: ["bi do", "bi"], method: "canh", veg: true, min: 20, steps: ["Bí cắt miếng vừa ăn", "Nấu với nước (thêm tôm khô / thịt băm nếu không ăn chay) tới khi bí mềm", "Nêm muối, thêm rau mùi"] },
   { name: "Gỏi rau củ trộn", ings: ["dua leo", "ca chua", "ca rot", "bap cai", "rau"], method: "tron", veg: true, min: 10, steps: ["Thái sợi / thái lát các loại rau củ", "Pha nước trộn: chanh, đường, nước mắm (chay thì nước tương), tỏi ớt", "Trộn đều ngay trước khi ăn, rắc đậu phộng rang"] },
-  { name: "Bánh mì kẹp trứng", ings: ["banh mi", "trung"], method: "chien", veg: true, min: 10, carry: true, steps: ["Chiên trứng ốp la hoặc trứng cuộn", "Kẹp vào bánh mì cùng dưa leo, cà chua, rau thơm", "Gói giấy bạc, mang đi vẫn ngon"] },
+  { name: "Bánh mì kẹp trứng", sang: true, ings: ["banh mi", "trung"], method: "chien", veg: true, min: 10, carry: true, steps: ["Chiên trứng ốp la hoặc trứng cuộn", "Kẹp vào bánh mì cùng dưa leo, cà chua, rau thơm", "Gói giấy bạc, mang đi vẫn ngon"] },
   { name: "Cơm nắm muối mè", ings: ["com", "me"], method: "com", veg: true, min: 15, carry: true, steps: ["Cơm nóng nắm chặt tay thành viên / tam giác", "Chấm muối mè (hoặc ruốc)", "Gói màng bọc từng viên — trẻ con dễ cầm ăn"] },
-  { name: "Cháo trứng hành", ings: ["gao", "com", "trung"], method: "canh", veg: true, min: 25, alias: ["chao trung"], steps: ["Nấu cháo từ gạo (hoặc cơm nguội nấu với nhiều nước cho nhanh)", "Khi cháo nhừ, đập trứng khuấy đều", "Nêm muối, thêm hành lá, tiêu"] },
+  { name: "Cháo trứng hành", sang: true, ings: ["gao", "com", "trung"], method: "canh", veg: true, min: 25, alias: ["chao trung"], steps: ["Nấu cháo từ gạo (hoặc cơm nguội nấu với nhiều nước cho nhanh)", "Khi cháo nhừ, đập trứng khuấy đều", "Nêm muối, thêm hành lá, tiêu"] },  // 25/11 (câu thật: "Vậy bún bò thì sao?", "nấu bún bò") — thêm món phổ biến hay được hỏi cách nấu
+  { name: "Bún bò Huế", ings: ["bo", "suon", "sa"], method: "canh", min: 120, alias: ["bun bo", "bun bo hue"], steps: ["Xương ống / giò heo chần sơ, rửa sạch; bắp bò để nguyên miếng", "Hầm xương với sả đập dập, hành tây 1,5–2 giờ lửa nhỏ, vớt bọt thường xuyên; cho bắp bò vào hầm cùng 40–50 phút tới khi mềm thì vớt ra thái mỏng", "Phi sả băm, ớt bột với dầu làm dầu điều; hoà mắm ruốc với nước, lọc lấy nước trong cho vào nồi", "Nêm nước mắm, chút đường, muối cho đậm vị, thêm dầu điều", "Trụng bún sợi to, xếp thịt bò, giò, chả; chan nước dùng, ăn với rau sống, bắp chuối, chanh ớt"] },
+  { name: "Phở bò", ings: ["bo", "thit bo"], method: "canh", min: 150, alias: ["pho", "pho bo", "nuoc pho"], steps: ["Xương bò chần sơ, rửa sạch; hành tây, gừng nướng cháy vỏ rồi cạo sạch", "Rang thơm quế, hồi, thảo quả, đinh hương, hạt mùi, cho vào túi vải", "Hầm xương với hành, gừng 2–3 giờ lửa nhỏ, vớt bọt; 30 phút cuối thả túi gia vị vào", "Nêm nước mắm, muối, chút đường phèn cho vừa", "Trụng bánh phở, xếp thịt bò thái mỏng (tái hoặc chín), hành lá, ngò; chan nước dùng thật sôi"] },
+  { name: "Bún riêu cua", ings: ["cua", "ca chua", "dau phu"], method: "canh", min: 60, alias: ["bun rieu", "bun rieu cua", "rieu cua"], steps: ["Cua đồng xay (hoặc gói cua xay sẵn) hoà với nước, lọc lấy nước, bỏ bã", "Đun nước cua lửa vừa, khuấy nhẹ tới khi riêu nổi thành mảng thì hạ lửa, không khuấy nữa", "Phi hành, xào cà chua cho mềm rồi cho vào nồi cùng đậu phụ chiên", "Nêm mắm tôm, nước mắm, chút giấm bỗng hoặc me cho thanh chua", "Chan nước dùng lên bún, ăn với rau sống, rau muống bào"] },
+  { name: "Cơm tấm sườn nướng", ings: ["suon", "com"], method: "com", min: 60, alias: ["com tam", "com tam suon", "suon nuong"], steps: ["Sườn cốt lết ướp tỏi, hành tím băm, nước mắm, đường, mật ong, dầu hào, tiêu ít nhất 1 giờ (để qua đêm càng thấm)", "Nướng than hoặc nồi chiên không dầu 180–200 °C khoảng 15–20 phút, lật mặt giữa chừng", "Nấu cơm tấm hơi khô hạt", "Pha nước mắm chua ngọt; làm mỡ hành, đồ chua", "Dọn cơm với sườn, mỡ hành, đồ chua, dưa leo, chan nước mắm"] },
+  { name: "Bánh xèo", ings: ["tom", "thit"], method: "chien", min: 45, alias: ["banh xeo"], steps: ["Bột bánh xèo pha nước cốt dừa (hoặc nước), thêm bột nghệ, hành lá, để nghỉ 30 phút", "Tôm, thịt ba chỉ thái mỏng xào sơ; giá rửa sạch", "Chảo thật nóng, chút dầu, cho thịt tôm vào, đổ một vá bột, láng mỏng", "Thêm giá, đậy nắp 2–3 phút, mở nắp chiên tới khi bánh giòn rồi gập đôi", "Cuốn với rau sống, chấm nước mắm chua ngọt"] },
+  { name: "Gà luộc", ings: ["ga"], method: "luoc", min: 40, alias: ["ga luoc"], steps: ["Gà làm sạch, xát muối, gừng cho bớt mùi, rửa lại", "Cho gà vào nồi nước lạnh ngập, thêm gừng, hành, chút muối, đun sôi rồi hạ lửa nhỏ", "Luộc 20–30 phút tuỳ con, tắt bếp ngâm thêm 10 phút; chọc chỗ đùi không ra nước hồng là chín", "Vớt ra ngâm nước đá cho da giòn, chặt miếng; ăn với muối tiêu chanh, lá chanh"] },
+  { name: "Sườn xào chua ngọt", ings: ["suon"], method: "xao", min: 40, alias: ["suon xao chua ngot", "suon chua ngot", "suon ram"], steps: ["Sườn non chặt miếng, chần sơ, ướp nước mắm, tỏi, tiêu 15 phút", "Chiên hoặc áp chảo sườn cho vàng mặt", "Pha sốt: giấm (hoặc chanh), đường, nước mắm, tương cà, chút nước", "Phi tỏi, cho sườn và sốt vào, rim lửa nhỏ tới khi sốt sệt bám đều, rắc hành lá"] },
+  { name: "Tôm rim", ings: ["tom"], method: "kho", min: 20, alias: ["tom rim", "tom ram", "tom rim man"], steps: ["Tôm cắt râu, rửa sạch, để ráo", "Phi tỏi, hành tím, cho tôm vào đảo tới khi đỏ", "Nêm nước mắm, đường, chút nước; rim lửa nhỏ tới khi nước sệt và tôm bóng", "Rắc tiêu, hành lá"] },
+  { name: "Canh khổ qua nhồi thịt", ings: ["kho qua", "thit"], method: "canh", min: 40, alias: ["canh kho qua", "kho qua nhoi thit", "canh muop dang"], steps: ["Khổ qua cắt khúc, bỏ ruột, ngâm nước muối cho bớt đắng", "Thịt băm trộn nấm mèo, hành, tiêu, nước mắm; nhồi chặt vào khổ qua", "Nấu nước sôi (có thể với xương), thả khổ qua vào, hạ lửa nấu 20–25 phút tới khi mềm", "Nêm muối, thêm hành ngò"] },
+  { name: "Bún thịt nướng", ings: ["thit"], method: "tron", min: 45, alias: ["bun thit nuong"], steps: ["Thịt nạc vai thái mỏng, ướp sả, tỏi băm, nước mắm, đường, mật ong 30 phút", "Nướng hoặc áp chảo tới khi xém cạnh", "Pha nước mắm chua ngọt, làm mỡ hành, đồ chua", "Xếp bún, rau sống, thịt, đậu phộng rang, mỡ hành; chan nước mắm"] },
+  { name: "Gà kho gừng", ings: ["ga", "gung"], method: "kho", min: 35, alias: ["ga kho gung", "ga kho"], steps: ["Gà chặt miếng, ướp nước mắm, đường, gừng thái sợi, tiêu 15 phút", "Phi gừng, hành tím thơm, cho gà vào đảo săn", "Thêm chút nước, kho lửa nhỏ 20 phút tới khi gà mềm, nước sệt", "Rắc tiêu, hành lá"] },
+  { name: "Xôi đậu xanh", ings: ["nep", "dau xanh"], method: "com", veg: true, min: 60, sang: true, carry: true, alias: ["xoi", "xoi dau xanh"], steps: ["Ngâm nếp và đậu xanh cà vỏ 4–6 tiếng (hoặc qua đêm), để ráo, trộn chút muối", "Trộn nếp với đậu xanh, cho vào xửng hấp", "Hấp 30–40 phút, giữa chừng xới đều, rưới chút nước cho xôi dẻo", "Ăn với muối mè, ruốc hoặc mỡ hành"] },
 ];
+
 
 /** từ nguyên liệu người dùng gõ → khoá chuẩn (bỏ dấu) */
 const ING: [RegExp, string][] = [
@@ -82,6 +97,14 @@ const ING: [RegExp, string][] = [
   [/\bdua leo\b/, "dua leo"],
   [/\bhanh tay\b/, "hanh tay"],
   [/\bgao\b/, "gao"],
+  // 25/11
+  [/\b(suon|suon non|suon heo)\b/, "suon"],
+  [/\b(con tom|tom)\b/, "tom"],
+  [/\b(kho qua|muop dang)\b/, "kho qua"],
+  [/\b(con cua|cua dong|cua)\b/, "cua"],
+  [/\bgung\b/, "gung"],
+  [/\b(gao nep|nep)\b/, "nep"],
+  [/\bdau xanh\b/, "dau xanh"],
 ];
 
 function ingsOf(n: string): string[] {
@@ -108,8 +131,12 @@ const HOW_NAMED = /\b(cach (nau|lam)|nau (\S+ ){0,5}(the nao|sao|ra sao|nhu nao)
 export function isCookAsk(text: string): boolean {
   const n = ` ${normalizeVi(text).replace(/\bj\b/g, "gi").replace(/\bz\b/g, "vay")} `;
   if (/\b(tim quan|quan nao|o dau|gan day|dat ban|giao tan noi)\b/.test(n)) return false;
+  // 25/11: chủ quán hỏi đưa quán lên app ("cô có quán bún bò muốn đăng lên app thì làm sao") ≠ hỏi cách nấu
+  if (/\b((co|mo|ban|cua) (quan|tiem|xe)|dang len|len app|tren app|ung dung|kinh doanh|ban hang|khach hang)\b/.test(n)) return false;
   const ing = ingsOf(n).length > 0;
   const named = D.some((d) => [d.name, ...(d.alias ?? [])].some((x) => n.includes(` ${normalizeVi(x)} `)));
+  // 25/11: "nấu bún bò", "cách làm bánh xèo", "công thức phở" — động từ nấu đứng ngay trước tên món
+  if (named && /^\s*(?:(?:chi|chi minh|chi em|chi toi|day|huong dan|minh muon|muon|toi muon|em muon) )?(?:nau|lam|cach nau|cach lam|cong thuc|cong thuc nau|cong thuc lam)(?: mon)? \S/.test(n.trim())) return true;
   if (named && /\b(biet (nau|lam)|bit (nau|lam)|cach (nau|lam)|nau (sao|the nao|ra sao|nhu nao)|lam (sao|the nao|ra sao|nhu nao)|(nem|uop|kho) (sao|the nao|ra sao|nhu nao)( cho vua)?)\b/.test(n)) return true;
   return (COOK_VERB.test(n) && ASK_DISH.test(n)) || (ing && /\b(tu (lanh )?(con|co)|nha (con|co)|o nha co|trong tu)\b/.test(n) && (COOK_VERB.test(n) || ASK_DISH.test(n)))
     || /\bmon (chay|hap|xao|kho|canh)\b(?: \S+){0,4} (de lam|nhanh|don gian|gon)\b/.test(n)
@@ -155,6 +182,8 @@ export function cookReply(text: string, ctx = ""): string | null {
   if (HOW_NAMED.test(n) && !/\b(mon gi|nau gi|lam gi|mon nao|goi y|tu (lanh )?(con|co)|nha (con|co)|con (moi|it|chut))\b/.test(n)) return null;
   let pool = D.filter((d) => (!veg || d.veg) && (!noFry || d.method !== "chien") && (!steam || d.method === "hap") && (!dry || d.method !== "canh") && (!soup || d.method === "canh") && (!carry || d.carry || d.method === "com"));
   if (quick) pool = pool.filter((d) => d.min <= 20);
+  // 25/11 (câu thật "Gợi ý món ăn sáng" → từng ra "rau cải xào tỏi"): bữa sáng → món hợp bữa sáng
+  if (/\b(an sang|bua sang|mon sang|buoi sang|diem tam)\b/.test(n) && !have.length) pool = pool.filter((d) => d.sang);
   const score = (d: Dish) => {
     const hit = d.ings.filter((i) => have.includes(i)).length;
     const core = d.ings.slice(0, 2).filter((i) => have.includes(i)).length;
@@ -182,5 +211,17 @@ export function cookReply(text: string, ctx = ""): string | null {
   return `${head}\n\n${body}${tip}\n\nNgại nấu thì nói Lomi tìm quán gần bạn nha 😋`;
 }
 
-const NICE: Record<string, string> = { trung: "trứng", "ca chua": "cà chua", "dau phu": "đậu phụ", nam: "nấm", "rau cai": "rau cải", "rau muong": "rau muống", rau: "rau", mi: "mì", "ca rot": "cà rốt", com: "cơm nguội", "dau ha lan": "đậu Hà Lan", bap: "bắp", thit: "thịt", bo: "thịt bò", ga: "gà", gan: "gan", ca: "cá", "khoai tay": "khoai tây", khoai: "khoai", "bi do": "bí đỏ", "bong cai": "bông cải", "bap cai": "bắp cải", "dua leo": "dưa leo", "banh mi": "bánh mì", "hanh tay": "hành tây", gao: "gạo" };
+const NICE: Record<string, string> = { trung: "trứng", "ca chua": "cà chua", "dau phu": "đậu phụ", nam: "nấm", "rau cai": "rau cải", "rau muong": "rau muống", rau: "rau", mi: "mì", "ca rot": "cà rốt", com: "cơm nguội", "dau ha lan": "đậu Hà Lan", bap: "bắp", thit: "thịt", bo: "thịt bò", ga: "gà", gan: "gan", ca: "cá", "khoai tay": "khoai tây", khoai: "khoai", "bi do": "bí đỏ", "bong cai": "bông cải", "bap cai": "bắp cải", "dua leo": "dưa leo", "banh mi": "bánh mì", "hanh tay": "hành tây", gao: "gạo", suon: "sườn", tom: "tôm", "kho qua": "khổ qua", cua: "cua", gung: "gừng", nep: "nếp", "dau xanh": "đậu xanh" };
 const niceIng = (k: string) => NICE[k] ?? k;
+
+/** 25/11: tên món trong thư viện mà câu nhắc tới ("Vậy bún bò thì sao?") — null nếu không có. Ưu tiên tên dài nhất. */
+export function namedDish(text: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  let best: { name: string; len: number } | null = null;
+  for (const d of D)
+    for (const x of [d.name, ...(d.alias ?? [])]) {
+      const k = normalizeVi(x);
+      if (n.includes(` ${k} `) && (!best || k.length > best.len)) best = { name: d.name, len: k.length };
+    }
+  return best?.name ?? null;
+}
