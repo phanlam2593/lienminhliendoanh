@@ -3,7 +3,13 @@
  "kind": "condition",
  "display": "Đổ mồ hôi trộm",
  "names": [
-  "Đổ mồ hôi trộm"
+  "Đổ mồ hôi trộm",
+  "mồ hôi trộm",
+  "ra mồ hôi trộm",
+  "đổ mồ hôi ban đêm",
+  "ra mồ hôi ban đêm",
+  "ra mồ hôi khi ngủ",
+  "đổ mồ hôi khi ngủ"
  ],
  "about": [
   {

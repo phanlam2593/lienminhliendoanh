@@ -214,6 +214,8 @@ export function findMedTopicId(text0: string): string | null {
   const text = text0.replace(/(^|[\s,.])(bé|con|cháu|trẻ)(?: (?:nhà|của) (?:em|tôi|mình|tui|tớ|chị|anh|mk|t)| (?:tôi|mình|tui|tớ|mk))(?=[\s,.]|$)/giu, "$1$2");
   const b = bare(text);
   const a = acc(text);
+  // 25/11: "viêm gân là gì" — bỏ dấu trùng "viêm gan" nên thẻ viêm gân không có tên trần; gõ ĐÚNG DẤU "gân" thì là viêm gân
+  if (VR(/(^|\s)viêm gân(\s|$)/u).test(a) && !VR(/viêm gân (cổ tay|khuỷu tay|ở vai|gót chân|achilles|đầu gối|ngón tay cái)/u).test(a)) return "viem-gan-co";
   for (const k of NAME_KEYS) {
     if (!(k.short ? a.includes(k.acc) : b.includes(k.bare) && accentAgrees(a, k.acc))) continue;
     if (!standsAlone(a, k.acc.trim())) continue;

@@ -74,3 +74,24 @@ describe("25/11 — nấu ăn: món phổ biến, bữa sáng, câu nối", () =
     expect((await last(["hôm qua ăn quán bún bò ngon lắm"])).content).not.toMatch(/ghé mấy chỗ này/);
   }, T);
 });
+
+describe("25/11 (đợt 2) — bệnh / mẹo dân gian", () => {
+  it("'bài thuốc dân gian chữa tiểu đường' → danh sách mẹo có nguồn của tiểu đường (không phải thẻ cảnh báo chung); nói chuyện bỏ thuốc / dứt điểm thì vẫn cảnh báo", async () => {
+    expect((await last(["bài thuốc dân gian chữa tiểu đường"])).content).toMatch(/Mẹo dân gian cho tiểu đường/);
+    expect((await last(["bài thuốc nam chữa tiểu đường dứt điểm"])).content).toMatch(/NGUY HIỂM/);
+  }, T);
+  it("tên gọi thông dụng: mồ hôi trộm, sán lá gan, tiểu đêm, viêm gân (gõ đúng dấu) → đúng thẻ", async () => {
+    for (const [q, re] of [["mẹo chữa ra mồ hôi trộm", /mồ hôi trộm/], ["mẹo chữa sán lá gan", /sán lá gan/], ["mẹo chữa tiểu đêm", /tiểu đêm/], ["viêm gân là gì", /Viêm gân/]] as const) {
+      const m = await last([q]);
+      expect(m.stuck, q).toBeFalsy();
+      expect(m.content, q).toMatch(re);
+    }
+    expect((await last(["viêm gan là gì"])).content).toMatch(/\*\*Viêm gan\*\*/);
+  }, T);
+  it("'viêm đại tràng' (gọi chung) → hỏi lại bệnh nào, kèm nút; 'viêm đại tràng co thắt' → hội chứng ruột kích thích", async () => {
+    const m = await last(["bài thuốc dân gian chữa viêm đại tràng"]);
+    expect(m.quick).toContain("bài thuốc dân gian chữa hội chứng ruột kích thích");
+    expect((await last(["viêm đại tràng co thắt kiêng gì"])).content).toMatch(/Hội chứng ruột kích thích/);
+    expect((await last(["viêm loét đại tràng nên ăn gì"])).content).toMatch(/Viêm loét đại tràng/);
+  }, T);
+});

@@ -2200,6 +2200,19 @@ export function AiChat({
         }
       }
     }
+    // 25/11: "viêm đại tràng" người Việt dùng gọi chung nhiều bệnh khác nhau — kho có thẻ riêng (có nguồn) cho từng bệnh → hỏi lại bệnh nào
+    //   (trước: "bài thuốc dân gian chữa viêm đại tràng" ra danh sách mẹo chung chung, "viêm đại tràng là gì" không nhận ra).
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && VN(/\bviêm đại tràng\b/).test(` ${normalizeVi(raw)} `) && !VN(/\bviêm đại tràng (loét|màng giả|sigma|thiếu máu|co thắt|mạn tính do|vi thể)\b/).test(` ${normalizeVi(raw)} `)) {
+      const opts = ["viêm loét đại tràng", "hội chứng ruột kích thích", "viêm túi thừa", "viêm đại tràng màng giả"];
+      const rq = (nm: string) => (raw.match(/viêm đại tràng/iu) ? raw.replace(/viêm đại tràng/iu, nm) : `${nm} là gì`);
+      return localReply(q, {
+        role: "assistant",
+        content: "“Viêm đại tràng” người ta hay dùng để gọi **vài bệnh khác nhau**, mỗi bệnh cách chăm sóc một khác 🩺 Lomi có bài có nguồn cho từng bệnh:\n• **Viêm loét đại tràng** — bệnh viêm ruột mạn tính\n• **Hội chứng ruột kích thích** — hay được gọi là *đại tràng co thắt*\n• **Viêm túi thừa** đại tràng\n• **Viêm đại tràng màng giả** — thường liên quan tới dùng kháng sinh\n\nBạn đã được bác sĩ chẩn đoán là bệnh nào? Chạm chọn để Lomi trả lời đúng nha 👇 (Chưa đi khám thì nên khám để biết đúng bệnh.)",
+        local: true,
+        routed: "askback-what",
+        quick: opts.map(rq),
+      });
+    }
     // 19/11 (Kir duyệt bỏ "không nấu ăn"): hỏi NẤU GÌ / cách nấu ở nhà (lib/lomiCook) → gợi ý món, trước lớp chọn món / tìm quán / tâm sự
     //   (trước: "trời mưa ngại ra ngoài, nhà có mì, nấm… chỉ giúp món khô" → tâm sự chuyện mắc mưa; "chuẩn bị đồ ăn mang đi công viên" → chọn bánh mì).
     //   Nối hai lượt: "[Tủ lạnh còn đậu hũ và nấm.] Nấu cái đó kiểu gì…", "[Nay mình muốn nấu bữa tối…] trong tủ chỉ còn trứng với cà chua"
