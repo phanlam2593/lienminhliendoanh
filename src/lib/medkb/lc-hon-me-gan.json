@@ -7,66 +7,85 @@
  ],
  "about": [
   {
-   "text": "**Bệnh não gan** — nhóm bệnh: tiêu hóa, thần kinh - tinh thần.",
+   "text": "Bệnh não gan là khi gan không lọc được chất độc (như amoniac) khỏi máu, làm não hoạt động kém đi; có thể xảy ra đột ngột hoặc từ từ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: táo bón, run tay, lú lẫn, hôn mê, nám.",
+   "text": "Sớm: lú lẫn nhẹ, hay quên, kém tập trung, thay đổi giấc ngủ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nặng: nói líu, mất định hướng, run hoặc cử động bất thường ở tay, có thể mê man, hôn mê.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: dinh dưỡng không cân đối, ngộ độc rượu, viêm gan do siêu vi, suy gan nặng, hạ kali trong máu, ung thư gan, sử dụng thuốc lợi tiểu mạnh.",
+   "text": "Thường do xơ gan (do viêm gan, rượu, gan nhiễm mỡ).",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): xuất huyết tiêu hóa, nhiễm trùng gan, bệnh lý thận, thiếu hụt oxy máu, người bị xơ gan, nghiện rượu.",
+   "text": "Yếu tố khởi phát: xuất huyết tiêu hoá, nhiễm trùng, mất nước, táo bón, thuốc giảm đau gây nghiện hoặc thuốc an thần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan, bổ sung đầy đủ dinh dưỡng, cân bằng, tiêm phòng viêm gan B.",
+   "text": "Xử lý nguyên nhân (chảy máu, nhiễm trùng, rối loạn điện giải); dùng lactulose hoặc kháng sinh giảm amoniac theo chỉ định bác sĩ.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tránh thuốc an thần và thuốc chuyển hoá qua gan nếu bác sĩ chưa cho.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Người bệnh gan có thay đổi tinh thần, lú lẫn, ngủ khác thường → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Bệnh có thể nặng nhanh: lơ mơ, mất định hướng, khó đánh thức → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bệnh não gan – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hon-me-gan-120.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Hepatic encephalopathy",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000302.htm",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

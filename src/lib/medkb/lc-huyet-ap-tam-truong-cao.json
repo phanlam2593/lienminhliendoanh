@@ -7,60 +7,80 @@
  ],
  "about": [
   {
-   "text": "**Huyết áp tâm trương cao** — nhóm bệnh: tim mạch.",
+   "text": "Huyết áp gồm hai chỉ số; cao thường là từ 140/90 khi đo ở cơ sở y tế, hoặc từ 135/85 khi tự đo ở nhà.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, chóng mặt, đau ngực, buồn nôn, hoa mắt, mệt mỏi, đau đầu, khó thở, mờ mắt, phù.",
+   "text": "Thường không triệu chứng nên nhiều người không biết; hiếm khi đau đầu, nhìn mờ, đau ngực.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): gia đình có người bị tăng huyết áp, tuổi tác, bệnh tim mạch, rối loạn lipid máu.",
+   "text": "Tuổi cao, gia đình có người cao huyết áp, ăn mặn, thừa cân, hút thuốc, uống nhiều rượu, căng thẳng kéo dài.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị làm tăng nguy cơ bệnh tim, nhồi máu cơ tim, đột quỵ, suy tim, bệnh thận, sa sút trí tuệ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: hạn chế đồ uống có cồn, tập thể dục đều đặn, kiểm soát cân nặng, quản lý stress, giảm tiêu thụ muối, tăng cường tiêu thụ rau quả.",
+   "text": "Ăn uống cân bằng, giảm muối, vận động đều, giảm cân nếu cần, bớt rượu và cà phê, bỏ thuốc lá.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bác sĩ cho thuốc khi huyết áp rất cao, nguy cơ tim mạch cao hoặc thay đổi lối sống chưa đủ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Từ 40 tuổi mà quá 5 năm chưa đo huyết áp, hoặc nghĩ mình có nguy cơ → đi đo.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau ngực kèm vã mồ hôi, buồn nôn, choáng hoặc khó thở → gọi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Huyết áp tâm trương cao – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/huyet-ap-tam-truong-cao.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "High blood pressure (hypertension)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/high-blood-pressure-hypertension/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

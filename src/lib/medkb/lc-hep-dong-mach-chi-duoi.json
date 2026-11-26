@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Hẹp động mạch chi dưới** — nhóm bệnh: tim mạch, tứ chi.",
+   "text": "Hẹp động mạch chi dưới (bệnh động mạch ngoại biên) là bệnh lâu dài làm giảm máu đến chân, thường do động mạch hẹp hoặc tắc vì mảng mỡ xơ vữa.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn cương, chuột rút, thiếu máu, mệt mỏi, loét.",
+   "text": "Dấu hiệu chính: đau chân (thường ở bắp chân) khi đi bộ, đỡ sau vài phút nghỉ; ngoài ra rụng lông chân, da bóng hoặc đổi màu, tê, yếu, móng chân chậm mọc, vết loét lâu lành; có người không triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,27 +35,34 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể gây loét, hoại tử phải cắt cụt; tăng nguy cơ nhồi máu cơ tim, đột quỵ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ngừng hút thuốc lá, kiểm soát bệnh đái tháo đường, duy trì cân nặng khỏe mạnh, bắt đầu chương trình tập luyện thể dục, kiểm soát huyết áp và mỡ máu, tránh căng thẳng quá mức.",
+   "text": "Chưa chữa khỏi; chương trình tập đi bộ, thuốc giảm đau hoặc cải thiện lưu thông, phẫu thuật nong hoặc thông động mạch.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ăn uống lành mạnh, vận động, giữ cân nặng, kiểm soát huyết áp, mỡ máu, tiểu đường, bỏ thuốc lá.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau chân khi đi bộ đỡ khi nghỉ, đau chân liên tục nặng hơn về đêm, vết loét không lành, tê yếu dần → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hep-dong-mach-chi-duoi.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Peripheral arterial disease (PAD)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/peripheral-arterial-disease-pad/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

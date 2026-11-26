@@ -1,0 +1,898 @@
+{
+  "_note": "27/11 — Vòng LC 35 (đợt 15–18): NHS dvt, hypoglycaemia, high-blood-pressure, hip-fracture, PAD, brugada, varicose-veins; MedlinePlus 000479; dùng lại thẻ glôcôm, não gan, thoái hoá khớp đã kiểm — Claude đã mở kiểm.",
+  "lc-huyet-khoi-tinh-mach-sau-chi-duoi": {
+    "addSources": [
+      {
+        "title": "Deep vein thrombosis (DVT)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/"
+      }
+    ],
+    "about": [
+      [
+        "Huyết khối tĩnh mạch sâu là cục máu đông trong tĩnh mạch, thường ở chân; có thể rất nguy hiểm vì cục máu đông có thể trôi lên phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau nhức kiểu giật ở bắp chân hoặc đùi, thường một chân; sưng một chân; da quanh chỗ đau đỏ, tím hoặc sẫm; tĩnh mạch nổi rõ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Trên 60 tuổi, thừa cân, hút thuốc, từng bị huyết khối, dùng hormone hoặc thuốc tránh thai có estrogen, ung thư, suy tim, giãn tĩnh mạch; mới nằm viện, phẫu thuật, nằm liệt giường từ 3 ngày, đi xa trên 4 giờ, mang thai hoặc mới sinh trong 6 tuần, mất nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Siêu âm để chẩn đoán; điều trị bằng thuốc chống đông theo bác sĩ, thường ít nhất 3 tháng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: giữ cân nặng, vận động, uống đủ nước, không ngồi yên lâu (đứng dậy đi lại khoảng mỗi giờ), bỏ thuốc lá, bớt rượu; đi xa mặc đồ rộng, uống nước, đi lại khi có thể.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị huyết khối tĩnh mạch sâu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Có dấu hiệu huyết khối kèm khó thở hoặc đau ngực (có thể tắc mạch phổi) → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ha-duong-huyet-tieu-duong": {
+    "addSources": [
+      {
+        "title": "Low blood sugar (hypoglycaemia)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/low-blood-sugar-hypoglycaemia/"
+      }
+    ],
+    "about": [
+      [
+        "Hạ đường huyết thường là khi đường huyết dưới 4 mmol/L; chủ yếu đáng lo ở người tiểu đường dùng insulin hoặc một số thuốc tiểu đường.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đói, chóng mặt, lo âu hoặc cáu gắt, vã mồ hôi, run, tê môi, hồi hộp, mệt hoặc yếu, nhìn mờ, lú lẫn; nặng có thể co giật hoặc bất tỉnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dùng quá nhiều insulin hoặc thuốc tiểu đường, bỏ hoặc trễ bữa, vận động ngoài dự tính, uống rượu (nhất là khi đói).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có triệu chứng thì đo đường huyết nếu được; ăn uống thứ làm tăng đường nhanh như một ly nhỏ nước trái cây, nước ngọt có đường, viên glucose hoặc kẹo; đo lại sau 10–15 phút, vẫn dưới 4 thì lặp lại; khi đã trên 4 thì ăn thêm bánh, bánh mì hoặc bữa chính.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Người bất tỉnh thì không cho ăn uống; đặt nằm nghiêng an toàn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Người nghi hạ đường huyết nặng không đáp ứng bình thường hoặc bất tỉnh → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-huyet-ap-tam-thu-cao": {
+    "addSources": [
+      {
+        "title": "High blood pressure (hypertension)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/high-blood-pressure-hypertension/"
+      }
+    ],
+    "about": [
+      [
+        "Huyết áp gồm hai chỉ số; cao thường là từ 140/90 khi đo ở cơ sở y tế, hoặc từ 135/85 khi tự đo ở nhà.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng nên nhiều người không biết; hiếm khi đau đầu, nhìn mờ, đau ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tuổi cao, gia đình có người cao huyết áp, ăn mặn, thừa cân, hút thuốc, uống nhiều rượu, căng thẳng kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị làm tăng nguy cơ bệnh tim, nhồi máu cơ tim, đột quỵ, suy tim, bệnh thận, sa sút trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn uống cân bằng, giảm muối, vận động đều, giảm cân nếu cần, bớt rượu và cà phê, bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ cho thuốc khi huyết áp rất cao, nguy cơ tim mạch cao hoặc thay đổi lối sống chưa đủ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 40 tuổi mà quá 5 năm chưa đo huyết áp, hoặc nghĩ mình có nguy cơ → đi đo.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực kèm vã mồ hôi, buồn nôn, choáng hoặc khó thở → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-huyet-ap-tam-truong-cao": {
+    "addSources": [
+      {
+        "title": "High blood pressure (hypertension)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/high-blood-pressure-hypertension/"
+      }
+    ],
+    "about": [
+      [
+        "Huyết áp gồm hai chỉ số; cao thường là từ 140/90 khi đo ở cơ sở y tế, hoặc từ 135/85 khi tự đo ở nhà.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng nên nhiều người không biết; hiếm khi đau đầu, nhìn mờ, đau ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tuổi cao, gia đình có người cao huyết áp, ăn mặn, thừa cân, hút thuốc, uống nhiều rượu, căng thẳng kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị làm tăng nguy cơ bệnh tim, nhồi máu cơ tim, đột quỵ, suy tim, bệnh thận, sa sút trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn uống cân bằng, giảm muối, vận động đều, giảm cân nếu cần, bớt rượu và cà phê, bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ cho thuốc khi huyết áp rất cao, nguy cơ tim mạch cao hoặc thay đổi lối sống chưa đủ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 40 tuổi mà quá 5 năm chưa đo huyết áp, hoặc nghĩ mình có nguy cơ → đi đo.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực kèm vã mồ hôi, buồn nôn, choáng hoặc khó thở → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-gay-co-xuong-dui": {
+    "addSources": [
+      {
+        "title": "Broken hip (hip fracture)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hip-fracture/"
+      }
+    ],
+    "about": [
+      [
+        "Gãy cổ xương đùi (gãy xương hông) thường do ngã hoặc chấn thương, hay gặp hơn ở người lớn tuổi và người loãng xương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau hông, đùi trên hoặc bẹn; không đứng hay chịu lực lên chân được; khó cử động hông, chân; chân trông ngắn hơn hoặc lệch góc; sưng, bầm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Cần nhập viện ngay; thường phải mổ trong vòng một ngày: cố định bằng vít, đinh, nẹp hoặc thay một phần hay toàn bộ khớp háng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hồi phục mất vài tuần đến vài tháng, tập vật lý trị liệu; có thể không lấy lại hoàn toàn sức và cử động, cần gậy hoặc khung tập đi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau hông dữ dội sau ngã, không đi được hay không chịu lực được, tê bì → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hep-dong-mach-chi-duoi": {
+    "addSources": [
+      {
+        "title": "Peripheral arterial disease (PAD)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/peripheral-arterial-disease-pad/"
+      }
+    ],
+    "about": [
+      [
+        "Hẹp động mạch chi dưới (bệnh động mạch ngoại biên) là bệnh lâu dài làm giảm máu đến chân, thường do động mạch hẹp hoặc tắc vì mảng mỡ xơ vữa.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Dấu hiệu chính: đau chân (thường ở bắp chân) khi đi bộ, đỡ sau vài phút nghỉ; ngoài ra rụng lông chân, da bóng hoặc đổi màu, tê, yếu, móng chân chậm mọc, vết loét lâu lành; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể gây loét, hoại tử phải cắt cụt; tăng nguy cơ nhồi máu cơ tim, đột quỵ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi; chương trình tập đi bộ, thuốc giảm đau hoặc cải thiện lưu thông, phẫu thuật nong hoặc thông động mạch.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ăn uống lành mạnh, vận động, giữ cân nặng, kiểm soát huyết áp, mỡ máu, tiểu đường, bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau chân khi đi bộ đỡ khi nghỉ, đau chân liên tục nặng hơn về đêm, vết loét không lành, tê yếu dần → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-brugada": {
+    "addSources": [
+      {
+        "title": "Brugada syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/brugada-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Brugada là bệnh tim ít gặp ảnh hưởng nhịp tim, có thể đe doạ tính mạng; thường di truyền, hay gặp hơn ở nam và người gốc Đông Nam Á.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng, phát hiện tình cờ qua điện tâm đồ; khi có: ngất, chóng mặt, hồi hộp, co giật, khó thở; có thể gây rối loạn nhịp nguy hiểm dẫn đến ngừng tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Yếu tố khởi phát quan trọng là sốt; ngoài ra rượu nhiều, mất nước, gắng sức rất nặng, một số thuốc, cocaine.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Khi ốm, dùng paracetamol hoặc ibuprofen để tránh sốt cao; hỏi bác sĩ, dược sĩ trước khi dùng thuốc mới.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không triệu chứng thường chỉ cần theo dõi; người từng ngất hoặc ngừng tim, hay điện tim nguy cơ cao có thể cấy máy khử rung; người thân nên được kiểm tra.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt không hạ dù đã dùng thuốc hạ sốt ở người có Brugada → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Người bất tỉnh không thở bình thường, co giật, hoặc ngất không tỉnh sau một phút → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-gian-tinh-mach-chi-duoi": {
+    "addSources": [
+      {
+        "title": "Varicose veins",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/varicose-veins/"
+      }
+    ],
+    "about": [
+      [
+        "Giãn tĩnh mạch chi dưới là tĩnh mạch sưng, ngoằn ngoèo, thường ở chân, trông lổn nhổn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhức, nặng chân, ngứa, thay đổi da, sưng mắt cá; thường nặng hơn sau khi đứng lâu và đỡ khi nghỉ kê cao chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Van tĩnh mạch hoạt động kém làm máu ứ lại; nguy cơ cao hơn ở nữ, người lớn tuổi, thừa cân, mang thai, đứng hoặc ngồi lâu, có người nhà bị, từng bị huyết khối tĩnh mạch sâu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Giữ cân nặng, kê cao chân khi có thể, đi bộ đều, dưỡng ẩm da khô ngứa, tránh chấn thương chân, không đứng hoặc ngồi quá lâu, bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không phải lúc nào cũng cần điều trị; khi cần có đốt nhiệt tĩnh mạch, tiêm xơ, phẫu thuật, vớ áp lực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, ngứa, sưng chân, vết loét ở chân không lành sau 2 tuần, tĩnh mạch nặng dần → đi khám; tĩnh mạch giãn bị chảy máu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-glocom-tan-mach": {
+    "addSources": [
+      {
+        "title": "Glaucoma",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glaucoma/"
+      }
+    ],
+    "about": [
+      [
+        "Thiên đầu thống (glôcôm) là bệnh làm tổn thương dây thần kinh chính nối mắt với não, thường do áp lực trong mắt tăng; hay gặp ở người từ 50 tuổi, nguy cơ cao hơn khi có người thân bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng, hay phát hiện khi khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khởi phát đột ngột: đau mắt dữ dội, mắt đỏ, nhìn mờ, buồn nôn hoặc nôn, đau đầu, thấy quầng cầu vồng quanh đèn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị làm chậm tổn thương: thuốc nhỏ mắt, laser, phẫu thuật, tái khám đều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 50 tuổi hoặc có người nhà bị glôcôm → khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau mắt dữ dội, mắt đỏ, nhìn mờ, thấy quầng sáng quanh đèn → đi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-glocom-goc-mo-nguyen-phat": {
+    "addSources": [
+      {
+        "title": "Glaucoma",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glaucoma/"
+      }
+    ],
+    "about": [
+      [
+        "Thiên đầu thống (glôcôm) là bệnh làm tổn thương dây thần kinh chính nối mắt với não, thường do áp lực trong mắt tăng; hay gặp ở người từ 50 tuổi, nguy cơ cao hơn khi có người thân bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng, hay phát hiện khi khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khởi phát đột ngột: đau mắt dữ dội, mắt đỏ, nhìn mờ, buồn nôn hoặc nôn, đau đầu, thấy quầng cầu vồng quanh đèn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị làm chậm tổn thương: thuốc nhỏ mắt, laser, phẫu thuật, tái khám đều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 50 tuổi hoặc có người nhà bị glôcôm → khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau mắt dữ dội, mắt đỏ, nhìn mờ, thấy quầng sáng quanh đèn → đi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-glocom-goc-dong-nguyen-phat": {
+    "addSources": [
+      {
+        "title": "Glaucoma",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glaucoma/"
+      }
+    ],
+    "about": [
+      [
+        "Thiên đầu thống (glôcôm) là bệnh làm tổn thương dây thần kinh chính nối mắt với não, thường do áp lực trong mắt tăng; hay gặp ở người từ 50 tuổi, nguy cơ cao hơn khi có người thân bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng, hay phát hiện khi khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khởi phát đột ngột: đau mắt dữ dội, mắt đỏ, nhìn mờ, buồn nôn hoặc nôn, đau đầu, thấy quầng cầu vồng quanh đèn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị làm chậm tổn thương: thuốc nhỏ mắt, laser, phẫu thuật, tái khám đều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 50 tuổi hoặc có người nhà bị glôcôm → khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau mắt dữ dội, mắt đỏ, nhìn mờ, thấy quầng sáng quanh đèn → đi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hon-me-gan": {
+    "addSources": [
+      {
+        "title": "Hepatic encephalopathy",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000302.htm"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh não gan là khi gan không lọc được chất độc (như amoniac) khỏi máu, làm não hoạt động kém đi; có thể xảy ra đột ngột hoặc từ từ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sớm: lú lẫn nhẹ, hay quên, kém tập trung, thay đổi giấc ngủ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng: nói líu, mất định hướng, run hoặc cử động bất thường ở tay, có thể mê man, hôn mê.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do xơ gan (do viêm gan, rượu, gan nhiễm mỡ).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Yếu tố khởi phát: xuất huyết tiêu hoá, nhiễm trùng, mất nước, táo bón, thuốc giảm đau gây nghiện hoặc thuốc an thần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Xử lý nguyên nhân (chảy máu, nhiễm trùng, rối loạn điện giải); dùng lactulose hoặc kháng sinh giảm amoniac theo chỉ định bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh thuốc an thần và thuốc chuyển hoá qua gan nếu bác sĩ chưa cho.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Người bệnh gan có thay đổi tinh thần, lú lẫn, ngủ khác thường → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Bệnh có thể nặng nhanh: lơ mơ, mất định hướng, khó đánh thức → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hep-khe-khop-goi": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp gối); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hep-khe-khop-hang": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp háng); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ha-kali-mau": {
+    "addSources": [
+      {
+        "title": "Low blood potassium",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000479.htm"
+      }
+    ],
+    "about": [
+      [
+        "Hạ kali máu là khi lượng kali trong máu thấp hơn bình thường; kali là chất điện giải tế bào cần để hoạt động.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Giảm nhẹ thường không triệu chứng hoặc nhẹ: táo bón, mệt, yếu hoặc chuột rút cơ, tê bì; giảm nhiều có thể gây rối loạn nhịp tim, nhất là ở người có bệnh tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Một số thuốc (nhất là lợi tiểu), nôn hoặc tiêu chảy, lạm dụng thuốc nhuận tràng, bệnh thận mạn, thiếu magie, ra mồ hôi nhiều, một số bệnh di truyền.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhẹ thường bổ sung kali đường uống theo bác sĩ; nặng có thể truyền tĩnh mạch; thực phẩm giàu kali như chuối, rau bina, cá hồi có thể giúp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nôn hoặc tiêu chảy nhiều, hoặc đang dùng thuốc lợi tiểu mà mệt, yếu cơ, chuột rút → đi khám ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

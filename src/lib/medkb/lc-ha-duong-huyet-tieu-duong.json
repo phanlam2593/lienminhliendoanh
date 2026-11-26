@@ -7,46 +7,40 @@
  ],
  "about": [
   {
-   "text": "**Hạ đường huyết tiểu đường** — nhóm bệnh: nội tiết - chuyển hóa, bệnh thường gặp.",
+   "text": "Hạ đường huyết thường là khi đường huyết dưới 4 mmol/L; chủ yếu đáng lo ở người tiểu đường dùng insulin hoặc một số thuốc tiểu đường.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tim đập nhanh, da xanh xao, đổ mồ hôi, chóng mặt, buồn ngủ, nhức đầu, buồn nôn, ngứa ran, co giật, cáu gắt.",
+   "text": "Đói, chóng mặt, lo âu hoặc cáu gắt, vã mồ hôi, run, tê môi, hồi hộp, mệt hoặc yếu, nhìn mờ, lú lẫn; nặng có thể co giật hoặc bất tỉnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: sulfonylureas, meglitinides, insulin, đái tháo đường típ 2.",
+   "text": "Dùng quá nhiều insulin hoặc thuốc tiểu đường, bỏ hoặc trễ bữa, vận động ngoài dự tính, uống rượu (nhất là khi đói).",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): mắc đái tháo đường típ 1, từng bị hạ đường huyết trước đó, sử dụng quá liều thuốc hạ đường huyết, người bệnh mắc đái tháo đường lâu năm, tiêu chảy, xơ gan.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tự kiểm tra đường huyết, sử dụng thuốc, thẻ tên y tế.",
+   "text": "Có triệu chứng thì đo đường huyết nếu được; ăn uống thứ làm tăng đường nhanh như một ly nhỏ nước trái cây, nước ngọt có đường, viên glucose hoặc kẹo; đo lại sau 10–15 phút, vẫn dưới 4 thì lặp lại; khi đã trên 4 thì ăn thêm bánh, bánh mì hoặc bữa chính.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Người bất tỉnh thì không cho ăn uống; đặt nằm nghiêng an toàn.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +53,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Người nghi hạ đường huyết nặng không đáp ứng bình thường hoặc bất tỉnh → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Hạ đường huyết tiểu đường – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ha-duong-huyet-tieu-duong.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Low blood sugar (hypoglycaemia)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/low-blood-sugar-hypoglycaemia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

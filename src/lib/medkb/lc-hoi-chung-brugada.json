@@ -7,54 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Brugada** — nhóm bệnh: tim mạch.",
+   "text": "Hội chứng Brugada là bệnh tim ít gặp ảnh hưởng nhịp tim, có thể đe doạ tính mạng; thường di truyền, hay gặp hơn ở nam và người gốc Đông Nam Á.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tim đập nhanh, trầm cảm, ngất, sốt.",
+   "text": "Thường không triệu chứng, phát hiện tình cờ qua điện tâm đồ; khi có: ngất, chóng mặt, hồi hộp, co giật, khó thở; có thể gây rối loạn nhịp nguy hiểm dẫn đến ngừng tim.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): thuốc chẹn beta.",
+   "text": "Yếu tố khởi phát quan trọng là sốt; ngoài ra rượu nhiều, mất nước, gắng sức rất nặng, một số thuốc, cocaine.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Khi ốm, dùng paracetamol hoặc ibuprofen để tránh sốt cao; hỏi bác sĩ, dược sĩ trước khi dùng thuốc mới.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Không triệu chứng thường chỉ cần theo dõi; người từng ngất hoặc ngừng tim, hay điện tim nguy cơ cao có thể cấy máy khử rung; người thân nên được kiểm tra.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt không hạ dù đã dùng thuốc hạ sốt ở người có Brugada → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Người bất tỉnh không thở bình thường, co giật, hoặc ngất không tỉnh sau một phút → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Hội chứng Brugada – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-brugada-236.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Brugada syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/brugada-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

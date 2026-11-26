@@ -7,60 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Huyết khối tĩnh mạch sâu chi dưới** — nhóm bệnh: tim mạch, tứ chi.",
+   "text": "Huyết khối tĩnh mạch sâu là cục máu đông trong tĩnh mạch, thường ở chân; có thể rất nguy hiểm vì cục máu đông có thể trôi lên phổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: ho ra máu, đau ngực, khó thở, sưng, nám, phù, ho.",
+   "text": "Đau nhức kiểu giật ở bắp chân hoặc đùi, thường một chân; sưng một chân; da quanh chỗ đau đỏ, tím hoặc sẫm; tĩnh mạch nổi rõ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: yếu tố nguy cơ, giảm lưu lượng máu tĩnh mạch, tăng nguy cơ đông máu, đột quỵ, thiếu sót về gen, mắc phải.",
+   "text": "Trên 60 tuổi, thừa cân, hút thuốc, từng bị huyết khối, dùng hormone hoặc thuốc tránh thai có estrogen, ung thư, suy tim, giãn tĩnh mạch; mới nằm viện, phẫu thuật, nằm liệt giường từ 3 ngày, đi xa trên 4 giờ, mang thai hoặc mới sinh trong 6 tuần, mất nước.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì, mang thai, nằm khoa ICU.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Siêu âm để chẩn đoán; điều trị bằng thuốc chống đông theo bác sĩ, thường ít nhất 3 tháng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Phòng: giữ cân nặng, vận động, uống đủ nước, không ngồi yên lâu (đứng dậy đi lại khoảng mỗi giờ), bỏ thuốc lá, bớt rượu; đi xa mặc đồ rộng, uống nước, đi lại khi có thể.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi bị huyết khối tĩnh mạch sâu → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Có dấu hiệu huyết khối kèm khó thở hoặc đau ngực (có thể tắc mạch phổi) → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Huyết khối tĩnh mạch sâu chi dưới – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/huyet-khoi-tinh-mach-sau-chi-duoi.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Deep vein thrombosis (DVT)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

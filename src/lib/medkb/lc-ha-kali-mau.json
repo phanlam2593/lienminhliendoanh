@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Hạ kali máu** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Hạ kali máu là khi lượng kali trong máu thấp hơn bình thường; kali là chất điện giải tế bào cần để hoạt động.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chuột rút, táo bón, mệt mỏi, yếu cơ, đau cổ, ho.",
+   "text": "Giảm nhẹ thường không triệu chứng hoặc nhẹ: táo bón, mệt, yếu hoặc chuột rút cơ, tê bì; giảm nhiều có thể gây rối loạn nhịp tim, nhất là ở người có bệnh tim.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: tổn thương thận, ảnh hưởng của thuốc, hẹp động mạch thận, kháng sinh thuộc nhóm Aminoglycosides, thuốc chống nấm amphotericin B, sử dụng insulin, nhiễm kiềm máu, biếng ăn.",
+   "text": "Một số thuốc (nhất là lợi tiểu), nôn hoặc tiêu chảy, lạm dụng thuốc nhuận tràng, bệnh thận mạn, thiếu magie, ra mồ hôi nhiều, một số bệnh di truyền.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): rò đường tiêu hóa, loét dạ dày do dùng bột cam thảo.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nhẹ thường bổ sung kali đường uống theo bác sĩ; nặng có thể truyền tĩnh mạch; thực phẩm giàu kali như chuối, rau bina, cá hồi có thể giúp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nôn hoặc tiêu chảy nhiều, hoặc đang dùng thuốc lợi tiểu mà mệt, yếu cơ, chuột rút → đi khám ngay.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ha-kali-mau-997.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Low blood potassium",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000479.htm",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
