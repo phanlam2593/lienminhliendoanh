@@ -8,25 +8,31 @@
  ],
  "about": [
   {
-   "text": "**U mô đệm đường tiêu hóa (GISTs)** — nhóm bệnh: ung thư, bụng.",
+   "text": "U mô đệm đường tiêu hoá (GIST) là khối u ở ống tiêu hoá, hay gặp nhất ở dạ dày hoặc ruột non, thường được phát hiện ở người 40–70 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, phân có máu, chảy máu, đau bụng, buồn nôn, sụt cân, mệt mỏi, chán ăn, nôn.",
+   "text": "U nhỏ có thể không triệu chứng; u lớn gây đau hoặc chướng bụng, buồn nôn, nôn, chán ăn, sụt cân.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chảy máu trong ruột gây phân đen như hắc ín, thiếu máu, mệt yếu.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hội chứng GISTS gia đình, U sợi thần kinh, hội chứng Carney-Stratakis.",
+   "text": "Do thay đổi gen (khoảng 80% liên quan gen KIT); đa số xảy ra trong đời, không di truyền.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -48,9 +54,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau bụng, chướng bụng kéo dài, sụt cân không rõ lý do → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-mo-dem-duong-tieu-hoa-gists.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Gastrointestinal stromal tumor",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/gastrointestinal-stromal-tumor/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

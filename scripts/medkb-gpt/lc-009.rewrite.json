@@ -1,0 +1,331 @@
+{
+  "_note": "26/11 — Vòng LC 7 (Claude tự làm, đợt 99–100): MedlinePlus Genetics neuroblastoma, retinoblastoma, wilms-tumor, lynch-syndrome, gastrointestinal-stromal-tumor; MedlinePlus myelodysplasticsyndromes — Claude đã mở kiểm. Chưa mở được: u màng não, sacôm cơ vân, u nguyên tủy bào, u nguyên bào thần kinh đệm.",
+  "lc-u-nguyen-bao-than-kinh": {
+    "addSources": [
+      {
+        "title": "Neuroblastoma",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/neuroblastoma/"
+      }
+    ],
+    "about": [
+      [
+        "U nguyên bào thần kinh là ung thư hình thành khi tế bào thần kinh non phát triển mất kiểm soát, hay gặp nhất ở trẻ dưới 5 tuổi; hiếm ở người lớn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đa số bắt đầu ở mô thần kinh của tuyến thượng thận (nằm trên thận); cũng có thể ở bụng, ngực, cổ, vùng chậu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Quấy khóc, sốt, mệt, đau, biếng ăn, sụt cân, tiêu chảy.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tuỳ vị trí: bụng chướng, khó thở, đau xương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Đa số do đột biến xuất hiện trong đời, không di truyền; chỉ khoảng 1–2% có tính gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Là ung thư hay gặp nhất ở trẻ dưới 1 tuổi, khoảng 1 trên 100.000 trẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ sụt cân, sốt kéo dài, bụng chướng hoặc đau xương không rõ lý do → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-nguyen-bao-vong-mac": {
+    "addSources": [
+      {
+        "title": "Retinoblastoma",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/retinoblastoma/"
+      }
+    ],
+    "about": [
+      [
+        "U nguyên bào võng mạc là ung thư mắt hiếm, bắt đầu ở võng mạc, thường gặp ở trẻ nhỏ và hay được phát hiện trước 5 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Dấu hiệu sớm hay gặp nhất: đồng tử ánh trắng (như mắt mèo khi chụp ảnh có đèn flash).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Mắt lác, hai mắt không nhìn cùng hướng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Khoảng 1/3 trường hợp di truyền (có thể truyền cho con); 2/3 còn lại không di truyền.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường ở một mắt, nhưng khoảng 1/3 trẻ bị cả hai mắt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phát hiện sớm thường chữa được; không chữa, u có thể lan ra ngoài mắt và đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy đồng tử bé có ánh trắng hoặc mắt bé bị lác → đưa đi khám mắt sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-nguyen-bao-than": {
+    "addSources": [
+      {
+        "title": "Wilms tumor",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/wilms-tumor/"
+      }
+    ],
+    "about": [
+      [
+        "U nguyên bào thận (u Wilms) là ung thư thận chủ yếu ở trẻ em, hầu hết được phát hiện trước 10 tuổi; là ung thư thận hay gặp nhất ở trẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường thấy đầu tiên là khối u hoặc bụng sưng; có thể kèm đau bụng, sốt, tiểu ra máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Phần lớn không do di truyền và không tập trung trong gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Điều trị đúng, khoảng 90% trẻ sống; bệnh có thể tái phát tuỳ đặc điểm khối u.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sờ thấy khối ở bụng bé, bụng sưng, hoặc bé tiểu ra máu → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-lynch": {
+    "addSources": [
+      {
+        "title": "Lynch syndrome",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/lynch-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Lynch là bệnh di truyền làm tăng nguy cơ nhiều loại ung thư, hay gặp nhất là ung thư đại trực tràng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bản thân hội chứng không có dấu hiệu riêng; nguy cơ tăng với ung thư dạ dày, ruột non, gan, đường mật, đường tiết niệu, não, da, và ở nữ là buồng trứng, nội mạc tử cung.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Di truyền trội: chỉ cần một bản gen lỗi (MLH1, MSH2, MSH6, PMS2 hoặc EPCAM) là tăng nguy cơ; không phải ai mang gen cũng bị ung thư.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở Mỹ khoảng 1 trên 279 người mang biến thể gen này.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Ung thư ở người mang hội chứng thường xuất hiện ở tuổi 40–50.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Gia đình có nhiều người ung thư đại tràng hoặc nội mạc tử cung, nhất là khi còn trẻ → hỏi bác sĩ về tư vấn di truyền.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-mo-dem-duong-tieu-hoa-gists": {
+    "addSources": [
+      {
+        "title": "Gastrointestinal stromal tumor",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/gastrointestinal-stromal-tumor/"
+      }
+    ],
+    "about": [
+      [
+        "U mô đệm đường tiêu hoá (GIST) là khối u ở ống tiêu hoá, hay gặp nhất ở dạ dày hoặc ruột non, thường được phát hiện ở người 40–70 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "U nhỏ có thể không triệu chứng; u lớn gây đau hoặc chướng bụng, buồn nôn, nôn, chán ăn, sụt cân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chảy máu trong ruột gây phân đen như hắc ín, thiếu máu, mệt yếu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do thay đổi gen (khoảng 80% liên quan gen KIT); đa số xảy ra trong đời, không di truyền.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng, chướng bụng kéo dài, sụt cân không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-roi-loan-sinh-tuy": {
+    "addSources": [
+      {
+        "title": "Myelodysplastic Syndromes",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/myelodysplasticsyndromes.html"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng rối loạn sinh tuỷ (MDS) là nhóm bệnh hiếm, trong đó tế bào gốc máu không trưởng thành thành tế bào máu khoẻ, nên thiếu hồng cầu, bạch cầu và tiểu cầu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Giai đoạn sớm thường không triệu chứng, đôi khi phát hiện qua xét nghiệm máu định kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi có: khó thở, mệt yếu, da xanh hơn bình thường, dễ bầm hoặc chảy máu (chấm đỏ li ti dưới da), sốt hay nhiễm trùng thường xuyên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn ở người trên 60 tuổi, người từng hoá trị hoặc xạ trị, hoặc tiếp xúc một số hoá chất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị gồm truyền máu, thuốc, hoá trị, ghép tế bào gốc máu hoặc tuỷ xương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mệt, da xanh, dễ bầm tím hoặc hay nhiễm trùng kéo dài → đi khám, xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

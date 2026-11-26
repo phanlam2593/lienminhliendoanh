@@ -7,29 +7,36 @@
  ],
  "about": [
   {
-   "text": "**U nguyên bào thận** — nhóm bệnh: ung thư.",
+   "text": "U nguyên bào thận (u Wilms) là ung thư thận chủ yếu ở trẻ em, hầu hết được phát hiện trước 10 tuổi; là ung thư thận hay gặp nhất ở trẻ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, thở nhanh, đau bụng, sụt cân, táo bón, mệt mỏi, khó thở, chán ăn, sốt.",
+   "text": "Thường thấy đầu tiên là khối u hoặc bụng sưng; có thể kèm đau bụng, sốt, tiểu ra máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người da đen, tuổi, giới tính, tiền sử gia đình, dị tật bẩm sinh, hội chứng Beckwith-Wiedemann.",
+   "text": "Phần lớn không do di truyền và không tập trung trong gia đình.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Điều trị đúng, khoảng 90% trẻ sống; bệnh có thể tái phát tuỳ đặc điểm khối u.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Sinh hoạt / phòng ngừa: uống đủ nước để giúp thận hoạt động tốt.",
@@ -47,9 +54,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sờ thấy khối ở bụng bé, bụng sưng, hoặc bé tiểu ra máu → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nguyen-bao-than-1.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Wilms tumor",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/wilms-tumor/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,29 +7,48 @@
  ],
  "about": [
   {
-   "text": "**U nguyên bào thần kinh** — nhóm bệnh: ung thư, thần kinh - tinh thần.",
+   "text": "U nguyên bào thần kinh là ung thư hình thành khi tế bào thần kinh non phát triển mất kiểm soát, hay gặp nhất ở trẻ dưới 5 tuổi; hiếm ở người lớn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đa số bắt đầu ở mô thần kinh của tuyến thượng thận (nằm trên thận); cũng có thể ở bụng, ngực, cổ, vùng chậu.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi, thiếu máu, tiêu chảy, táo bón, mệt mỏi, khó thở, chán ăn, khối u, u cục, sốt.",
+   "text": "Quấy khóc, sốt, mệt, đau, biếng ăn, sụt cân, tiêu chảy.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tuỳ vị trí: bụng chướng, khó thở, đau xương.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): yếu tố mẹ - thai nhi, yếu tố di truyền, đái tháo đường thai kỳ, đột biến.",
+   "text": "Đa số do đột biến xuất hiện trong đời, không di truyền; chỉ khoảng 1–2% có tính gia đình.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Là ung thư hay gặp nhất ở trẻ dưới 1 tuổi, khoảng 1 trên 100.000 trẻ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
@@ -41,9 +60,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ sụt cân, sốt kéo dài, bụng chướng hoặc đau xương không rõ lý do → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nguyen-bao-than-kinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Neuroblastoma",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/neuroblastoma/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

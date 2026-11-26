@@ -7,35 +7,42 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Lynch** — nhóm bệnh: ung thư.",
+   "text": "Hội chứng Lynch là bệnh di truyền làm tăng nguy cơ nhiều loại ung thư, hay gặp nhất là ung thư đại trực tràng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiêu chảy, chảy máu, đau bụng, buồn nôn, táo bón, mệt mỏi, nôn, ho.",
+   "text": "Bản thân hội chứng không có dấu hiệu riêng; nguy cơ tăng với ung thư dạ dày, ruột non, gan, đường mật, đường tiết niệu, não, da, và ở nữ là buồng trứng, nội mạc tử cung.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: MLHL, MSH2, MSH6, PMS2, EPCAM.",
+   "text": "Di truyền trội: chỉ cần một bản gen lỗi (MLH1, MSH2, MSH6, PMS2 hoặc EPCAM) là tăng nguy cơ; không phải ai mang gen cũng bị ung thư.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): ung thư đại trực tràng, bệnh đa polyp tuyến gia đình.",
+   "text": "Ở Mỹ khoảng 1 trên 279 người mang biến thể gen này.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Ung thư ở người mang hội chứng thường xuất hiện ở tuổi 40–50.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
@@ -47,9 +54,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Gia đình có nhiều người ung thư đại tràng hoặc nội mạc tử cung, nhất là khi còn trẻ → hỏi bác sĩ về tư vấn di truyền.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-lynch.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Lynch syndrome",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/lynch-syndrome/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

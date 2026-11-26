@@ -7,35 +7,48 @@
  ],
  "about": [
   {
-   "text": "**U nguyên bào võng mạc** — nhóm bệnh: ung thư, bệnh trẻ em.",
+   "text": "U nguyên bào võng mạc là ung thư mắt hiếm, bắt đầu ở võng mạc, thường gặp ở trẻ nhỏ và hay được phát hiện trước 5 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, đau mắt, khối u, đỏ mắt, sưng.",
+   "text": "Dấu hiệu sớm hay gặp nhất: đồng tử ánh trắng (như mắt mèo khi chụp ảnh có đèn flash).",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Mắt lác, hai mắt không nhìn cùng hướng.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: di truyền, không di truyền.",
+   "text": "Khoảng 1/3 trường hợp di truyền (có thể truyền cho con); 2/3 còn lại không di truyền.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): người cha tiếp xúc với bức xạ, tuổi già hơn ở những người cha, hóa chất.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường ở một mắt, nhưng khoảng 1/3 trẻ bị cả hai mắt.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Phát hiện sớm thường chữa được; không chữa, u có thể lan ra ngoài mắt và đe doạ tính mạng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
@@ -47,9 +60,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy đồng tử bé có ánh trắng hoặc mắt bé bị lác → đưa đi khám mắt sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nguyen-bao-vong-mac.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Retinoblastoma",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/retinoblastoma/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
