@@ -1,0 +1,577 @@
+{
+  "_note": "26/11 — Vòng LC 20 (đợt 72–74): MedlinePlus 000261 (pyogenic liver abscess), 001519 (anorectal abscess), 000573 (DIC) — Claude đã mở kiểm. Thêm: MedlinePlus 003140 (frequent urination), 000534 (PNH). Thêm: MedlinePlus 000793 (ICP), 001407 (neuralgia), 003178 (muscle aches), 000440 (reactive arthritis).",
+  "lc-ap-xe-gan": {
+    "addSources": [
+      {
+        "title": "Pyogenic liver abscess",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000261.htm"
+      }
+    ],
+    "about": [
+      [
+        "Áp xe gan (do vi khuẩn) là ổ dịch mủ trong gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng trên bên phải; sốt kèm ớn lạnh, đổ mồ hôi đêm; vàng da, phân bạc màu, nước tiểu sẫm; buồn nôn, nôn, chán ăn, sụt cân, mệt yếu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nhiễm trùng trong ổ bụng (viêm ruột thừa, viêm túi thừa, thủng ruột), nhiễm trùng máu, nhiễm trùng đường mật, nội soi đường mật gần đây, chấn thương gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể đe doạ tính mạng, nhất là khi nhiều ổ áp xe; có thể biến chứng nhiễm trùng huyết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường dẫn lưu mủ bằng ống qua da; ít khi phải mổ; dùng kháng sinh kéo dài khoảng 4–6 tuần theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội, lú lẫn hoặc lơ mơ, sốt cao không hạ → đi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ap-xe-vung-hau-mon-truc-trang": {
+    "addSources": [
+      {
+        "title": "Anorectal abscess",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/001519.htm"
+      }
+    ],
+    "about": [
+      [
+        "Áp xe vùng hậu môn – trực tràng là ổ mủ ở vùng hậu môn và trực tràng; nam gặp nhiều hơn nữ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sưng quanh hậu môn, đau nhức liên tục, đau hơn khi đi ngoài, ho hoặc ngồi; có thể táo bón, chảy mủ, sốt, ớn lạnh, đổ mồ hôi đêm, mệt, đỏ và ấn đau.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ nhỏ thường là cục sưng đau ở hậu môn, bé hay quấy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tắc tuyến ở vùng hậu môn, nứt kẽ hậu môn bị nhiễm trùng, bệnh lây qua đường tình dục, chấn thương; ổ sâu có thể do bệnh Crohn, viêm túi thừa.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao hơn khi tiểu đường, viêm ruột, dùng corticoid, hoá trị, miễn dịch yếu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Kháng sinh đơn thuần thường không khỏi; điều trị chính là rạch dẫn lưu mủ, thường làm trong ngày với thuốc tê.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Sau đó ngâm hậu môn nước ấm, thuốc giảm đau, kháng sinh; tránh táo bón bằng uống đủ nước, ăn nhiều chất xơ, thuốc làm mềm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng hậu môn hoặc chảy dịch, sốt, ớn lạnh, hoặc tiểu đường khó kiểm soát → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dong-mau-noi-mach-rai-rac": {
+    "addSources": [
+      {
+        "title": "Disseminated intravascular coagulation (DIC)",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000573.htm"
+      }
+    ],
+    "about": [
+      [
+        "Đông máu nội mạch rải rác (DIC) là rối loạn nặng khi các protein điều hoà đông máu hoạt động quá mức: tạo cục máu đông nhỏ làm tắc máu nuôi cơ quan, hoặc dùng cạn yếu tố đông máu gây chảy máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Chảy máu nhiều chỗ, cục máu đông, bầm tím, tụt huyết áp, khó thở, lú lẫn hoặc thay đổi hành vi, sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do viêm, nhiễm trùng hoặc ung thư; yếu tố nguy cơ: phản ứng truyền máu, một số bệnh bạch cầu, viêm tuỵ, nhiễm trùng máu, bệnh gan, biến chứng thai kỳ, mới phẫu thuật, chấn thương nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể đe doạ tính mạng; tiên lượng tuỳ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có điều trị đặc hiệu; xử lý nguyên nhân và hỗ trợ như truyền huyết tương khi chảy máu nhiều, thuốc chống đông khi đông máu quá mức.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Chảy máu không cầm được → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-di-tieu-nhieu": {
+    "addSources": [
+      {
+        "title": "Frequent or urgent urination",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/003140.htm"
+      }
+    ],
+    "about": [
+      [
+        "Đi tiểu nhiều là phải tiểu thường xuyên hơn bình thường; tiểu gấp là cảm giác mắc tiểu đột ngột, mạnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp: nhiễm trùng tiểu, phì đại tiền liệt tuyến ở nam trung niên và lớn tuổi, viêm niệu đạo, viêm âm đạo, vấn đề thần kinh, uống cà phê.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ít gặp hơn: rượu, lo âu, ung thư bàng quang, mang thai, viêm bàng quang kẽ, thuốc lợi tiểu, bàng quang tăng hoạt, đột quỵ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ghi nhật ký giờ đi tiểu và lượng tiểu; tránh uống quá nhiều nước trước khi ngủ; bớt rượu và cà phê.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiểu nhiều, tiểu gấp mà không do mang thai hay uống nhiều nước; són tiểu; nước tiểu có máu, đục; tiết dịch dương vật, âm đạo → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Kèm sốt, đau lưng hoặc hông, nôn, rét run, hoặc khát nhiều, ăn nhiều, mệt, sụt cân nhanh → đi khám ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dai-huyet-sac-to-kich-phat-ve-dem": {
+    "addSources": [
+      {
+        "title": "Paroxysmal nocturnal hemoglobinuria (PNH)",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000534.htm"
+      }
+    ],
+    "about": [
+      [
+        "Đái huyết sắc tố kịch phát về đêm (PNH) là bệnh hiếm, hồng cầu bị vỡ sớm hơn bình thường; huyết sắc tố có thể ra theo nước tiểu, thường về đêm hoặc sáng sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nước tiểu sẫm màu lúc có lúc không; đau bụng hoặc lưng, đau đầu, khó thở, mệt, da xanh, đau ngực, dễ bầm hoặc chảy máu; một số người bị cục máu đông.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tế bào máu thiếu gen PIG-A nên không được bảo vệ khỏi một phần của hệ miễn dịch và bị phá huỷ; có thể đi kèm thiếu máu bất sản, rối loạn sinh tuỷ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ trường hợp: thuốc ức chế miễn dịch, truyền máu, bổ sung sắt và axit folic, thuốc chống đông, thuốc ngăn hồng cầu bị phá huỷ; ghép tuỷ có thể chữa khỏi. Nên tiêm phòng một số vi khuẩn theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy máu hoặc nước tiểu sẫm màu, triệu chứng nặng hơn hoặc có triệu chứng mới → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ap-luc-noi-so": {
+    "addSources": [
+      {
+        "title": "Increased intracranial pressure",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000793.htm"
+      }
+    ],
+    "about": [
+      [
+        "Tăng áp lực nội sọ là khi áp lực bên trong hộp sọ tăng lên, có thể là nguyên nhân hoặc hậu quả của tổn thương não; áp lực cao làm giảm máu lên não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ nhũ nhi: lơ mơ, khớp sọ giãn, thóp phồng, nôn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ lớn và người lớn: thay đổi hành vi, giảm tỉnh táo, đau đầu, li bì, yếu hoặc tê, rối loạn thị lực, co giật, nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dịch não tuỷ tăng hoặc có khối trong não như u, chảy máu, phù não; hay gặp sau vỡ phình mạch, chấn thương đầu, đột quỵ, viêm màng não, co giật, não úng thuỷ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Là cấp cứu, thường điều trị ở hồi sức tích cực: hỗ trợ thở, dẫn lưu dịch não tuỷ, thuốc giảm phù, xử lý nguyên nhân như u hay chảy máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau đầu dai dẳng, nhìn mờ, giảm tỉnh táo, dấu hiệu thần kinh bất thường hoặc co giật → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-tang-ap-luc-noi-so": {
+    "addSources": [
+      {
+        "title": "Increased intracranial pressure",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000793.htm"
+      }
+    ],
+    "about": [
+      [
+        "Tăng áp lực nội sọ là khi áp lực bên trong hộp sọ tăng lên, có thể là nguyên nhân hoặc hậu quả của tổn thương não; áp lực cao làm giảm máu lên não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ nhũ nhi: lơ mơ, khớp sọ giãn, thóp phồng, nôn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ lớn và người lớn: thay đổi hành vi, giảm tỉnh táo, đau đầu, li bì, yếu hoặc tê, rối loạn thị lực, co giật, nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dịch não tuỷ tăng hoặc có khối trong não như u, chảy máu, phù não; hay gặp sau vỡ phình mạch, chấn thương đầu, đột quỵ, viêm màng não, co giật, não úng thuỷ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Là cấp cứu, thường điều trị ở hồi sức tích cực: hỗ trợ thở, dẫn lưu dịch não tuỷ, thuốc giảm phù, xử lý nguyên nhân như u hay chảy máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau đầu dai dẳng, nhìn mờ, giảm tỉnh táo, dấu hiệu thần kinh bất thường hoặc co giật → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dau-day-than-kinh-lien-suon": {
+    "addSources": [
+      {
+        "title": "Neuralgia",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/001407.htm"
+      }
+    ],
+    "about": [
+      [
+        "Đau dây thần kinh là cơn đau nhói như điện giật chạy dọc đường đi của một dây thần kinh, do dây thần kinh bị kích thích hoặc tổn thương; đau dây thần kinh liên sườn là đau dọc dây thần kinh giữa các xương sườn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da dọc dây thần kinh rất nhạy, chạm nhẹ cũng đau; đau nhói, như dao đâm, hoặc âm ỉ nóng rát, đau hơn khi cử động.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Zona (đau sau zona), tiểu đường, bệnh thận mạn, một số nhiễm trùng, thuốc hoá trị, dây thần kinh bị chèn ép, chấn thương hoặc phẫu thuật; nhiều trường hợp không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân và mức độ: thuốc giảm đau, thuốc bôi hoặc miếng dán, một số thuốc tác động lên thần kinh theo đơn, phong bế thần kinh, vật lý trị liệu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bị zona, hoặc đau dây thần kinh không đỡ với thuốc giảm đau thông thường, hoặc đau dữ dội → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dau-nhuc-toan-than": {
+    "addSources": [
+      {
+        "title": "Muscle aches",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/003178.htm"
+      }
+    ],
+    "about": [
+      [
+        "Đau nhức cơ rất hay gặp, có thể ở nhiều cơ; cũng có thể là dấu hiệu bệnh toàn thân như nhiễm trùng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất: chấn thương (bong gân, căng cơ), vận động quá sức, căng thẳng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ít gặp hơn: một số thuốc (như statin), rối loạn điện giải, đau cơ xơ hoá, lupus, nhiễm trùng như cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, dùng paracetamol hoặc ibuprofen khi đau do vận động, chấn thương; chườm lạnh trong 24–72 giờ đầu sau chấn thương rồi chuyển chườm ấm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Xoa bóp, kéo giãn nhẹ; tập nhẹ đều đặn như đi bộ, đạp xe, bơi; ngủ đủ, giảm căng thẳng, khởi động trước khi tập.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau quá 3 ngày, đau dữ dội không rõ lý do, có dấu hiệu nhiễm trùng (sưng đỏ), bị ve đốt hoặc nổi ban, đau sau khi đổi liều thuốc → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Tăng cân đột ngột hoặc tiểu ít, khó thở hoặc khó nuốt, yếu cơ hay không cử động được, nôn kèm cứng cổ hoặc sốt cao → đi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-phan-ung": {
+    "addSources": [
+      {
+        "title": "Reactive arthritis",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000440.htm"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp phản ứng là viêm khớp xuất hiện sau một nhiễm trùng ở nơi khác trong cơ thể — bản thân khớp không bị nhiễm trùng; có thể ảnh hưởng cả mắt, da, đường tiết niệu sinh dục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường đầu tiên là đau khi tiểu; vài tuần sau viêm kết mạc, sốt nhẹ, đau và cứng khớp (gót chân, hông, gối, cổ chân, thắt lưng).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể có tổn thương da giống vảy nến ở lòng bàn tay, bàn chân, hoặc loét miệng nhỏ không đau.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; hay gặp ở nam 20–40 tuổi, sau nhiễm trùng tiết niệu sinh dục (thường do Chlamydia) hoặc nhiễm trùng đường ruột như ngộ độc thực phẩm; gen cũng có vai trò.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Kháng sinh nếu còn nhiễm trùng; thuốc kháng viêm, giảm đau cho khớp; tiêm steroid vào khớp sưng; thuốc điều trị cơ bản nếu không đỡ; vật lý trị liệu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: quan hệ tình dục an toàn, tránh ngộ độc thực phẩm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng khớp sau một đợt nhiễm trùng tiểu hoặc tiêu chảy; đỏ mắt kéo dài → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,43 +7,55 @@
  ],
  "about": [
   {
-   "text": "**Viêm khớp phản ứng** — nhóm bệnh: cơ - xương - khớp.",
+   "text": "Viêm khớp phản ứng là viêm khớp xuất hiện sau một nhiễm trùng ở nơi khác trong cơ thể — bản thân khớp không bị nhiễm trùng; có thể ảnh hưởng cả mắt, da, đường tiết niệu sinh dục.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng khớp, đau lưng, phát ban, sốt nhẹ, gầy sút, mệt mỏi, chán ăn, đau cổ, sưng.",
+   "text": "Thường đầu tiên là đau khi tiểu; vài tuần sau viêm kết mạc, sốt nhẹ, đau và cứng khớp (gót chân, hông, gối, cổ chân, thắt lưng).",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể có tổn thương da giống vảy nến ở lòng bàn tay, bàn chân, hoặc loét miệng nhỏ không đau.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vai trò của nhiễm trùng, campylobacter, chlamydia, clostridioides difficile, escherichia coli, salmonella, shigella, yersinia.",
+   "text": "Chưa rõ nguyên nhân; hay gặp ở nam 20–40 tuổi, sau nhiễm trùng tiết niệu sinh dục (thường do Chlamydia) hoặc nhiễm trùng đường ruột như ngộ độc thực phẩm; gen cũng có vai trò.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Kháng sinh nếu còn nhiễm trùng; thuốc kháng viêm, giảm đau cho khớp; tiêm steroid vào khớp sưng; thuốc điều trị cơ bản nếu không đỡ; vật lý trị liệu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Phòng bệnh: quan hệ tình dục an toàn, tránh ngộ độc thực phẩm.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau, sưng khớp sau một đợt nhiễm trùng tiểu hoặc tiêu chảy; đỏ mắt kéo dài → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-khop-phan-ung-256.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Reactive arthritis",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000440.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

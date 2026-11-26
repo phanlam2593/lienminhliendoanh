@@ -7,43 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Đau dây thần kinh liên sườn** — nhóm bệnh: thần kinh - tinh thần, ngực.",
+   "text": "Đau dây thần kinh là cơn đau nhói như điện giật chạy dọc đường đi của một dây thần kinh, do dây thần kinh bị kích thích hoặc tổn thương; đau dây thần kinh liên sườn là đau dọc dây thần kinh giữa các xương sườn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: ngứa ran, khối u, ngất, ho.",
+   "text": "Da dọc dây thần kinh rất nhạy, chạm nhẹ cũng đau; đau nhói, như dao đâm, hoặc âm ỉ nóng rát, đau hơn khi cử động.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: phẫu thuật lồng ngực, bệnh zona, thủy đậu, chấn thương, mang thai.",
+   "text": "Zona (đau sau zona), tiểu đường, bệnh thận mạn, một số nhiễm trùng, thuốc hoá trị, dây thần kinh bị chèn ép, chấn thương hoặc phẫu thuật; nhiều trường hợp không rõ nguyên nhân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ nguyên nhân và mức độ: thuốc giảm đau, thuốc bôi hoặc miếng dán, một số thuốc tác động lên thần kinh theo đơn, phong bế thần kinh, vật lý trị liệu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bị zona, hoặc đau dây thần kinh không đỡ với thuốc giảm đau thông thường, hoặc đau dữ dội → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dau-day-than-kinh-lien-suon.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Neuralgia",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001407.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

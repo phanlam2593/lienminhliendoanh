@@ -8,9 +8,9 @@
  ],
  "about": [
   {
-   "text": "**Đau nhức toàn thân** — nhóm bệnh: thần kinh - tinh thần, cơ - xương - khớp, tứ chi.",
+   "text": "Đau nhức cơ rất hay gặp, có thể ở nhiều cơ; cũng có thể là dấu hiệu bệnh toàn thân như nhiễm trùng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -24,44 +24,63 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: stress, mất nước, thiếu ngủ, viêm phổi, cảm lạnh hoặc cảm cúm, thiếu máu, thiếu vitamin D, hội chứng mệt mỏi mạn tính.",
+   "text": "Hay gặp nhất: chấn thương (bong gân, căng cơ), vận động quá sức, căng thẳng.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): thoái hóa xương khớp, thiếu máu, cảm lạnh.",
+   "text": "Ít gặp hơn: một số thuốc (như statin), rối loạn điện giải, đau cơ xơ hoá, lupus, nhiễm trùng như cúm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nghỉ ngơi, dùng paracetamol hoặc ibuprofen khi đau do vận động, chấn thương; chườm lạnh trong 24–72 giờ đầu sau chấn thương rồi chuyển chườm ấm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Xoa bóp, kéo giãn nhẹ; tập nhẹ đều đặn như đi bộ, đạp xe, bơi; ngủ đủ, giảm căng thẳng, khởi động trước khi tập.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau quá 3 ngày, đau dữ dội không rõ lý do, có dấu hiệu nhiễm trùng (sưng đỏ), bị ve đốt hoặc nổi ban, đau sau khi đổi liều thuốc → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Tăng cân đột ngột hoặc tiểu ít, khó thở hoặc khó nuốt, yếu cơ hay không cử động được, nôn kèm cứng cổ hoặc sốt cao → đi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Đau nhức toàn thân – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dau-nhuc-toan-than-63.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Muscle aches",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/003178.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

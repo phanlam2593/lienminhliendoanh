@@ -7,46 +7,40 @@
  ],
  "about": [
   {
-   "text": "**Áp lực nội sọ** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Tăng áp lực nội sọ là khi áp lực bên trong hộp sọ tăng lên, có thể là nguyên nhân hoặc hậu quả của tổn thương não; áp lực cao làm giảm máu lên não.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nhìn đôi, co giật, nhìn mờ, đau đầu, hôn mê, nôn.",
+   "text": "Trẻ nhũ nhi: lơ mơ, khớp sọ giãn, thóp phồng, nôn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Trẻ lớn và người lớn: thay đổi hành vi, giảm tỉnh táo, đau đầu, li bì, yếu hoặc tê, rối loạn thị lực, co giật, nôn.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: U não, não úng thủy, viêm màng não, viêm não, chấn thương sọ não, xuất huyết não, xuất huyết não thất, áp xe não.",
+   "text": "Dịch não tuỷ tăng hoặc có khối trong não như u, chảy máu, phù não; hay gặp sau vỡ phình mạch, chấn thương đầu, đột quỵ, viêm màng não, co giật, não úng thuỷ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tai nạn giao thông, béo phì, nhiễm độc vitamin A, thiếu máu thiếu sắt nặng.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bỏ thuốc lá, rượu bia.",
+   "text": "Là cấp cứu, thường điều trị ở hồi sức tích cực: hỗ trợ thở, dẫn lưu dịch não tuỷ, thuốc giảm phù, xử lý nguyên nhân như u hay chảy máu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +53,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau đầu dai dẳng, nhìn mờ, giảm tỉnh táo, dấu hiệu thần kinh bất thường hoặc co giật → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Áp lực nội sọ – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ap-luc-noi-so.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Increased intracranial pressure",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000793.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

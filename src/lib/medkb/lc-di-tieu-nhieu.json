@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Đi tiểu nhiều** — nhóm bệnh: thận - tiết niệu.",
+   "text": "Đi tiểu nhiều là phải tiểu thường xuyên hơn bình thường; tiểu gấp là cảm giác mắc tiểu đột ngột, mạnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,44 +23,57 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ung thư tuyến tiền liệt, viêm tuyến tiền liệt, tiểu không tự chủ, nhiễm trùng tiết niệu, thoát vị bàng quang, thuốc và chất kích thích, mang thai, viêm bàng quang sau xạ trị.",
+   "text": "Hay gặp: nhiễm trùng tiểu, phì đại tiền liệt tuyến ở nam trung niên và lớn tuổi, viêm niệu đạo, viêm âm đạo, vấn đề thần kinh, uống cà phê.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hẹp bao quy đầu, bệnh đái tháo đường, béo phì.",
+   "text": "Ít gặp hơn: rượu, lo âu, ung thư bàng quang, mang thai, viêm bàng quang kẽ, thuốc lợi tiểu, bàng quang tăng hoạt, đột quỵ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ghi nhật ký giờ đi tiểu và lượng tiểu; tránh uống quá nhiều nước trước khi ngủ; bớt rượu và cà phê.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiểu nhiều, tiểu gấp mà không do mang thai hay uống nhiều nước; són tiểu; nước tiểu có máu, đục; tiết dịch dương vật, âm đạo → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Kèm sốt, đau lưng hoặc hông, nôn, rét run, hoặc khát nhiều, ăn nhiều, mệt, sụt cân nhanh → đi khám ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Đi tiểu nhiều – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/di-tieu-nhieu-822.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Frequent or urgent urination",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/003140.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

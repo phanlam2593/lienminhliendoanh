@@ -7,55 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Đái huyết sắc tố kịch phát về đêm** — nhóm bệnh: máu.",
+   "text": "Đái huyết sắc tố kịch phát về đêm (PNH) là bệnh hiếm, hồng cầu bị vỡ sớm hơn bình thường; huyết sắc tố có thể ra theo nước tiểu, thường về đêm hoặc sáng sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn cương, tim đập nhanh, thiếu máu, đau ngực, chảy máu, vàng mắt, đau bụng, đau lưng, hồi hộp, bầm tím.",
+   "text": "Nước tiểu sẫm màu lúc có lúc không; đau bụng hoặc lưng, đau đầu, khó thở, mệt, da xanh, đau ngực, dễ bầm hoặc chảy máu; một số người bị cục máu đông.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: mạch máu.",
+   "text": "Tế bào máu thiếu gen PIG-A nên không được bảo vệ khỏi một phần của hệ miễn dịch và bị phá huỷ; có thể đi kèm thiếu máu bất sản, rối loạn sinh tuỷ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): nhiễm trùng, thai kỳ và giai đoạn sau sinh, tình trạng suy tủy tiến triển, mất nước hoặc lao động quá sức, thiếu máu.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: chủ động phòng tránh nhiễm trùng, tái khám định kỳ, tránh để cơ thể kiệt sức kéo dài, tái khám đúng hẹn.",
+   "text": "Tuỳ trường hợp: thuốc ức chế miễn dịch, truyền máu, bổ sung sắt và axit folic, thuốc chống đông, thuốc ngăn hồng cầu bị phá huỷ; ghép tuỷ có thể chữa khỏi. Nên tiêm phòng một số vi khuẩn theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy máu hoặc nước tiểu sẫm màu, triệu chứng nặng hơn hoặc có triệu chứng mới → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dai-huyet-sac-to-kich-phat-ve-dem.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Paroxysmal nocturnal hemoglobinuria (PNH)",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000534.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

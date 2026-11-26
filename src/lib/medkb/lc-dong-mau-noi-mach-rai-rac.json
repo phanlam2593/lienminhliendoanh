@@ -7,40 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Đông máu nội mạch rải rác** — nhóm bệnh: máu.",
+   "text": "Đông máu nội mạch rải rác (DIC) là rối loạn nặng khi các protein điều hoà đông máu hoạt động quá mức: tạo cục máu đông nhỏ làm tắc máu nuôi cơ quan, hoặc dùng cạn yếu tố đông máu gây chảy máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, ho ra máu, thở nhanh, đau ngực, nhức đầu, sốt nhẹ, mệt mỏi, khó thở, sưng, ngất.",
+   "text": "Chảy máu nhiều chỗ, cục máu đông, bầm tím, tụt huyết áp, khó thở, lú lẫn hoặc thay đổi hành vi, sốt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng huyết, biến chứng sản khoa, bệnh lý ác tính.",
+   "text": "Thường do viêm, nhiễm trùng hoặc ung thư; yếu tố nguy cơ: phản ứng truyền máu, một số bệnh bạch cầu, viêm tuỵ, nhiễm trùng máu, bệnh gan, biến chứng thai kỳ, mới phẫu thuật, chấn thương nặng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): phản ứng truyền máu, viêm tụy, bệnh gan, phẫu thuật hoặc gây mê gần đây, U máu, viêm tụy cấp.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể đe doạ tính mạng; tiên lượng tuỳ nguyên nhân.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không có điều trị đặc hiệu; xử lý nguyên nhân và hỗ trợ như truyền huyết tương khi chảy máu nhiều, thuốc chống đông khi đông máu quá mức.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -53,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Chảy máu không cầm được → gọi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Đông máu nội mạch rải rác – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dong-mau-noi-mach-rai-rac-264.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Disseminated intravascular coagulation (DIC)",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000573.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

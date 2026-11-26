@@ -7,66 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Áp xe gan** — nhóm bệnh: tiêu hóa, bụng.",
+   "text": "Áp xe gan (do vi khuẩn) là ổ dịch mủ trong gan.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi, đau bụng, sốt cao, khó thở, ớn lạnh, vàng da, sốt, ho.",
+   "text": "Đau bụng trên bên phải; sốt kèm ớn lạnh, đổ mồ hôi đêm; vàng da, phân bạc màu, nước tiểu sẫm; buồn nôn, nôn, chán ăn, sụt cân, mệt yếu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vi trùng, amip, nấm, candida.",
+   "text": "Nhiễm trùng trong ổ bụng (viêm ruột thừa, viêm túi thừa, thủng ruột), nhiễm trùng máu, nhiễm trùng đường mật, nội soi đường mật gần đây, chấn thương gan.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý đường mật, túi mật, chấn thương gan, nhiễm trùng huyết, viêm ruột thừa, đái tháo đường.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể đe doạ tính mạng, nhất là khi nhiều ổ áp xe; có thể biến chứng nhiễm trùng huyết.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bổ sung đầy đủ chất dinh dưỡng, không ăn đồ sống như tiết canh, gỏi cá, thực hiện ăn chín uống sôi.",
+   "text": "Thường dẫn lưu mủ bằng ống qua da; ít khi phải mổ; dùng kháng sinh kéo dài khoảng 4–6 tuần theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau bụng dữ dội, lú lẫn hoặc lơ mơ, sốt cao không hạ → đi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Áp xe gan – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ap-xe-gan-1.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Pyogenic liver abscess",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000261.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
