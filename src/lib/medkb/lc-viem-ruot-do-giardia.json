@@ -7,55 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Viêm ruột do Giardia** — nhóm bệnh: truyền nhiễm.",
+   "text": "Viêm ruột do Giardia là bệnh do ký sinh trùng Giardia sống trong ruột người và động vật.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, tiêu chảy, mất nước, khó tiêu, buồn nôn, mệt mỏi, chán ăn.",
+   "text": "Tiêu chảy nhiều lần, đầy hơi, phân mỡ và hôi, đau quặn bụng, buồn nôn, mất nước; thường xuất hiện 1–2 tuần sau khi nhiễm, kéo dài 2–6 tuần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: uống nước bị ô nhiễm, ăn thực phẩm bị ô nhiễm, tiếp xúc với người mang bệnh, ký sinh trùng.",
+   "text": "Lây qua nước, thức ăn, bề mặt, đồ vật bị nhiễm hoặc từ người sang người; chỉ cần nuốt vài mầm bệnh là có thể nhiễm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): trẻ em, không được sử dụng nước uống an toàn, quan hệ tình dục qua đường hậu môn, viêm ruột do Giardia, bệnh lây truyền qua đường tình dục.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: rửa tay, làm sạch nước trong tự nhiên, rửa thức ăn, ngậm miệng khi bơi, sử dụng nước đóng chai, quan hệ tình dục an toàn.",
+   "text": "Bác sĩ có thể kê thuốc; uống nhiều nước để tránh mất nước khi tiêu chảy.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay bằng xà phòng, tránh nuốt nước khi bơi, đun sôi hoặc lọc nước suối, sông, hồ trước khi uống hay nấu ăn, tránh tiếp xúc phân động vật.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiêu chảy kéo dài, phân mỡ hôi, có dấu hiệu mất nước → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-ruot-do-giardia-191.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Giardia",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/giardia/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

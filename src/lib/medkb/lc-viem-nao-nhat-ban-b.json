@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Viêm não Nhật Bản B** — nhóm bệnh: truyền nhiễm, đầu, bệnh trẻ em.",
+   "text": "Viêm não Nhật Bản là bệnh do virus, lây qua muỗi bị nhiễm; hay gặp nhất ở châu Á và một phần Tây Thái Bình Dương.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau bụng, co giật, sốt cao, đau đầu, chán ăn, đau cổ, hôn mê, ngứa, nôn, sốt.",
+   "text": "Phần lớn người nhiễm không có triệu chứng hoặc chỉ nhẹ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Một số ít bị viêm não: đau đầu, sốt, lú lẫn, co giật, yếu người, hôn mê.",
+   "src": [
+    1
    ]
   }
  ],
@@ -35,18 +41,25 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Khoảng 20–30% người bị viêm não tử vong.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: jevax, JEEV, imojev, sử dụng màn che, màn tránh muỗi, luôn tuân thủ hướng dẫn nấu chín thịt.",
+   "text": "Chưa có thuốc đặc trị; điều trị là giảm triệu chứng, thường phải nằm viện.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh tốt nhất là tránh muỗi đốt; có vắc xin phòng bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +72,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt kèm đau đầu, lú lẫn, co giật hoặc lơ mơ → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm não Nhật Bản B – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-nao-nhat-ban-b.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Japanese Encephalitis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/japanese-encephalitis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,60 +7,80 @@
  ],
  "about": [
   {
-   "text": "**Tăng bạch cầu đơn nhân** — nhóm bệnh: truyền nhiễm.",
+   "text": "Tăng bạch cầu đơn nhân nhiễm khuẩn (sốt tuyến) là bệnh do virus, thường là virus Epstein-Barr; hay gặp nhất ở tuổi 15–24.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mệt mỏi, sưng, sốt.",
+   "text": "Sốt cao, sưng hạch, đau họng, phát ban, đau đầu, mệt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: stress.",
+   "text": "Lây qua nước bọt: hôn, dùng chung ly, đũa muỗng; có thể lây từ trước khi có triệu chứng đến vài tháng sau khi bệnh.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): viêm nội tâm mạc, bệnh lao, bệnh mạch máu collagen, bệnh sarcoidosis, nhiễm trùng đơn bào hoặc ký sinh trùng, phục hồi tủy xương.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường tự khỏi, bắt đầu thấy đỡ sau 2–4 tuần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nghỉ ngơi, uống nhiều nước, dùng thuốc giảm đau hạ sốt thông thường; không cho trẻ dưới 16 tuổi uống aspirin.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tránh hoạt động gắng sức, kể cả chơi thể thao.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt rất cao, đau họng nặng hoặc không đỡ, sưng hai bên cổ, mệt lả → đi khám; khó thở hoặc nuốt đau → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Không nuốt nổi nước bọt, khó thở nhiều, đau bụng dữ dội → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Tăng bạch cầu đơn nhân – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/tang-bach-cau-don-nhan-266.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Glandular fever",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/glandular-fever/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

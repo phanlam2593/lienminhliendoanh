@@ -7,49 +7,61 @@
  ],
  "about": [
   {
-   "text": "**Lạc nội mạc trong cơ tử cung** — nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "text": "Lạc nội mạc trong cơ tử cung (adenomyosis) là khi lớp niêm mạc tử cung mọc vào lớp cơ thành tử cung; khác với lạc nội mạc tử cung ở nơi khác như buồng trứng. Thường gặp ở phụ nữ trên 35 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau vùng chậu, đau bụng kinh, xuất huyết, rong kinh, thiếu máu, chảy máu, phù.",
+   "text": "Đau bụng kinh, kinh nhiều, đau vùng chậu, chướng hoặc đầy bụng, đau khi hoặc sau quan hệ; có người không triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể làm khó có thai hơn và tăng nguy cơ sảy thai.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: tăng sinh nội mạc tử cung.",
+   "text": "Chưa rõ nguyên nhân; dễ gặp hơn nếu đã từng sinh con hoặc bị lạc nội mạc tử cung.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tăng số lần sinh con, có kinh sớm, chu kỳ kinh nguyệt ngắn, chỉ số khối cơ thể tăng cao, sử dụng thuốc tránh thai đường uống, sử dụng tamoxifen.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Vòng nội tiết, thuốc tránh thai nội tiết, thuốc giảm đau hoặc giảm chảy máu; nếu không đỡ có thể nút mạch tử cung hoặc cắt tử cung.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Cắt tử cung là cách duy nhất chữa khỏi, nhưng sau đó không thể mang thai.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Kinh đau hơn, nhiều hơn hoặc không đều; đau khi quan hệ; ra máu giữa kỳ hoặc sau quan hệ; chướng bụng khoảng 3 tuần → đi khám.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đau vùng chậu hoặc đau bụng kinh dữ dội, nặng hơn mọi khi mà thuốc giảm đau không đỡ → khám gấp.",
+   "src": [
+    1
    ]
   }
  ],
@@ -60,7 +72,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/lac-noi-mac-trong-co-tu-cung.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Adenomyosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/adenomyosis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

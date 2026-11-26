@@ -1,0 +1,572 @@
+{
+  "_note": "26/11 — Vòng LC 14 (đợt 89–90): NHS ovarian-cyst, male-menopause, adenomyosis — Claude đã mở kiểm. Thêm (đợt 85–87): CDC japanese-encephalitis, rotavirus, giardia; NHS glandular-fever, meningitis.",
+  "lc-nang-co-nang-buong-trung": {
+    "addSources": [
+      {
+        "title": "Ovarian cyst",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/ovarian-cyst/"
+      }
+    ],
+    "about": [
+      [
+        "Nang cơ năng buồng trứng là túi dịch hình thành trong chu kỳ kinh — loại nang hay gặp nhất, thường vô hại và tự hết sau thời gian ngắn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng; chỉ gây triệu chứng khi nang vỡ, to quá hoặc xoắn làm tắc máu nuôi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi có: đau vùng chậu, chướng bụng, kinh nhiều hoặc không đều, mau no.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số nang tự biến mất trong vài tháng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ kích thước, hình ảnh nang, có triệu chứng không và đã mãn kinh chưa; nang to, gây triệu chứng hoặc nghi ác tính có thể cần mổ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu nang buồng trứng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau vùng chậu đột ngột dữ dội, hoặc đau bụng kèm buồn nôn, nôn → đi khám cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-man-duc-nam": {
+    "addSources": [
+      {
+        "title": "The 'male menopause'",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/male-menopause/"
+      }
+    ],
+    "about": [
+      [
+        "\"Mãn dục nam\" là cách gọi chưa chính xác cho các triệu chứng một số nam giới gặp ở cuối tuổi 40 đến đầu 50; khác mãn kinh ở nữ vì testosterone giảm dần theo tuổi chứ không tụt đột ngột.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tâm trạng kém, giảm ham muốn, rối loạn cương, cáu gắt, giảm cơ, tăng mỡ bụng, thiếu năng lượng, ngủ kém, khó tập trung.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do lối sống (ngủ kém, ăn uống, ít vận động, uống nhiều rượu, hút thuốc) hoặc tâm lý (căng thẳng, trầm cảm, lo âu, áp lực công việc, gia đình, tiền bạc).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ít gặp hơn là suy sinh dục khởi phát muộn — thiếu testosterone thật sự, hay gặp ở người béo phì hoặc tiểu đường type 2.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Căng thẳng, lo âu: thuốc, liệu pháp trò chuyện như CBT, tập thể dục.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chỉ khi xét nghiệm máu và bác sĩ chuyên khoa xác định thiếu testosterone mới có thể bù testosterone.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các triệu chứng trên → đi khám để biết do tâm lý hay do nội tiết.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-lac-noi-mac-trong-co-tu-cung": {
+    "addSources": [
+      {
+        "title": "Adenomyosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/adenomyosis/"
+      }
+    ],
+    "about": [
+      [
+        "Lạc nội mạc trong cơ tử cung (adenomyosis) là khi lớp niêm mạc tử cung mọc vào lớp cơ thành tử cung; khác với lạc nội mạc tử cung ở nơi khác như buồng trứng. Thường gặp ở phụ nữ trên 35 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng kinh, kinh nhiều, đau vùng chậu, chướng hoặc đầy bụng, đau khi hoặc sau quan hệ; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể làm khó có thai hơn và tăng nguy cơ sảy thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; dễ gặp hơn nếu đã từng sinh con hoặc bị lạc nội mạc tử cung.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vòng nội tiết, thuốc tránh thai nội tiết, thuốc giảm đau hoặc giảm chảy máu; nếu không đỡ có thể nút mạch tử cung hoặc cắt tử cung.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Cắt tử cung là cách duy nhất chữa khỏi, nhưng sau đó không thể mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Kinh đau hơn, nhiều hơn hoặc không đều; đau khi quan hệ; ra máu giữa kỳ hoặc sau quan hệ; chướng bụng khoảng 3 tuần → đi khám.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau vùng chậu hoặc đau bụng kinh dữ dội, nặng hơn mọi khi mà thuốc giảm đau không đỡ → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-co-tuyen-tu-cung": {
+    "addSources": [
+      {
+        "title": "Adenomyosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/adenomyosis/"
+      }
+    ],
+    "about": [
+      [
+        "Lạc nội mạc trong cơ tử cung (adenomyosis) là khi lớp niêm mạc tử cung mọc vào lớp cơ thành tử cung; khác với lạc nội mạc tử cung ở nơi khác như buồng trứng. Thường gặp ở phụ nữ trên 35 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng kinh, kinh nhiều, đau vùng chậu, chướng hoặc đầy bụng, đau khi hoặc sau quan hệ; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể làm khó có thai hơn và tăng nguy cơ sảy thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; dễ gặp hơn nếu đã từng sinh con hoặc bị lạc nội mạc tử cung.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vòng nội tiết, thuốc tránh thai nội tiết, thuốc giảm đau hoặc giảm chảy máu; nếu không đỡ có thể nút mạch tử cung hoặc cắt tử cung.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Cắt tử cung là cách duy nhất chữa khỏi, nhưng sau đó không thể mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Kinh đau hơn, nhiều hơn hoặc không đều; đau khi quan hệ; ra máu giữa kỳ hoặc sau quan hệ; chướng bụng khoảng 3 tuần → đi khám.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau vùng chậu hoặc đau bụng kinh dữ dội, nặng hơn mọi khi mà thuốc giảm đau không đỡ → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-nao-nhat-ban-b": {
+    "addSources": [
+      {
+        "title": "About Japanese Encephalitis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/japanese-encephalitis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Viêm não Nhật Bản là bệnh do virus, lây qua muỗi bị nhiễm; hay gặp nhất ở châu Á và một phần Tây Thái Bình Dương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Phần lớn người nhiễm không có triệu chứng hoặc chỉ nhẹ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Một số ít bị viêm não: đau đầu, sốt, lú lẫn, co giật, yếu người, hôn mê.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Khoảng 20–30% người bị viêm não tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa có thuốc đặc trị; điều trị là giảm triệu chứng, thường phải nằm viện.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh tốt nhất là tránh muỗi đốt; có vắc xin phòng bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt kèm đau đầu, lú lẫn, co giật hoặc lơ mơ → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tang-bach-cau-don-nhan": {
+    "addSources": [
+      {
+        "title": "Glandular fever",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glandular-fever/"
+      }
+    ],
+    "about": [
+      [
+        "Tăng bạch cầu đơn nhân nhiễm khuẩn (sốt tuyến) là bệnh do virus, thường là virus Epstein-Barr; hay gặp nhất ở tuổi 15–24.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt cao, sưng hạch, đau họng, phát ban, đau đầu, mệt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua nước bọt: hôn, dùng chung ly, đũa muỗng; có thể lây từ trước khi có triệu chứng đến vài tháng sau khi bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi, bắt đầu thấy đỡ sau 2–4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng thuốc giảm đau hạ sốt thông thường; không cho trẻ dưới 16 tuổi uống aspirin.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh hoạt động gắng sức, kể cả chơi thể thao.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt rất cao, đau họng nặng hoặc không đỡ, sưng hai bên cổ, mệt lả → đi khám; khó thở hoặc nuốt đau → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Không nuốt nổi nước bọt, khó thở nhiều, đau bụng dữ dội → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tieu-chay-do-virus-rota": {
+    "addSources": [
+      {
+        "title": "About Rotavirus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/rotavirus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Virus Rota là nguyên nhân hay gặp gây tiêu chảy nhiều nước và nôn nặng, chủ yếu ở trẻ nhũ nhi và trẻ nhỏ; người lớn thường nhẹ hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bắt đầu khoảng 2 ngày sau khi nhiễm: tiêu chảy nhiều nước, nôn, sốt, đau bụng; nôn và tiêu chảy có thể kéo dài 3–8 ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua phân dính tay, đồ vật, thức ăn; dễ lây trong gia đình, bệnh viện, nhà trẻ; lây mạnh nhất khi đang có triệu chứng và 3 ngày đầu sau khi khỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc đặc trị; uống nhiều nước, dùng dung dịch bù nước (oresol) khi nhẹ. Kháng sinh không có tác dụng vì đây là virus.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vắc xin là cách phòng tốt nhất; rửa tay, giữ vệ sinh quan trọng nhưng chưa đủ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ có dấu hiệu mất nước: tiểu ít, khô miệng, chóng mặt khi đứng, khóc ít hoặc không có nước mắt, li bì hoặc quấy bất thường → đưa đi khám ngay (mất nước nặng có thể phải truyền dịch).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-ruot-do-giardia": {
+    "addSources": [
+      {
+        "title": "About Giardia",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/giardia/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Viêm ruột do Giardia là bệnh do ký sinh trùng Giardia sống trong ruột người và động vật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy nhiều lần, đầy hơi, phân mỡ và hôi, đau quặn bụng, buồn nôn, mất nước; thường xuất hiện 1–2 tuần sau khi nhiễm, kéo dài 2–6 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua nước, thức ăn, bề mặt, đồ vật bị nhiễm hoặc từ người sang người; chỉ cần nuốt vài mầm bệnh là có thể nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bác sĩ có thể kê thuốc; uống nhiều nước để tránh mất nước khi tiêu chảy.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng, tránh nuốt nước khi bơi, đun sôi hoặc lọc nước suối, sông, hồ trước khi uống hay nấu ăn, tránh tiếp xúc phân động vật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy kéo dài, phân mỡ hôi, có dấu hiệu mất nước → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mang-nao-do-vi-khuan": {
+    "addSources": [
+      {
+        "title": "Meningitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/meningitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm màng não là nhiễm trùng lớp màng bao quanh não và tuỷ sống; có thể rất nặng, đe doạ tính mạng nếu không điều trị kịp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Xuất hiện đột ngột: sốt kèm tay chân lạnh, cứng cổ, đau khớp hoặc cơ, đau đầu dữ dội tăng dần, sợ ánh sáng, lú lẫn, lơ mơ, khó đánh thức, phát ban không mất khi ấn ly lên.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ nhỏ: bỏ bú, khóc thét, thóp phồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do vi khuẩn lây khi tiếp xúc gần như hôn, dùng chung ly; người mang mầm bệnh mà không ốm cũng có thể lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Viêm màng não do vi khuẩn phải điều trị trong bệnh viện, thường ít nhất một tuần, bằng kháng sinh và dịch truyền.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể để lại di chứng: mất thính lực, thị lực, co giật, rối loạn vận động, trí nhớ; có thể tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vắc xin là một trong những cách phòng hiệu quả nhất (vắc xin não mô cầu, phế cầu…).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nghi viêm màng não → gọi cấp cứu hoặc đến cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
