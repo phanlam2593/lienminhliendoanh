@@ -7,49 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Viêm phổi RSV** — nhóm bệnh: truyền nhiễm, ngực.",
+   "text": "RSV (virus hợp bào hô hấp) là virus hay gặp, nhiễm mũi, họng, đường thở và phổi; thường chỉ gây triệu chứng nhẹ giống cảm lạnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: da xanh xao, thở khò khè, thở nhanh, sốt nhẹ, ho khan, sốt cao, hắt hơi, khó thở, tím tái, sổ mũi.",
+   "text": "Triệu chứng không đặc hiệu, khó phân biệt với cảm, cúm hay COVID-19.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người có hệ miễn dịch suy yếu, môi trường sống đông đúc, thiếu thông thoáng, không tiêm phòng đầy đủ, sinh non, bệnh phổi tắc nghẽn mãn tính, nhiễm trùng hô hấp.",
+   "text": "Trẻ dưới 6 tháng và người lớn tuổi hoặc có bệnh nền dễ bị nặng, phải nằm viện.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
- "care": [
+ "course": [
   {
-   "text": "Sinh hoạt / phòng ngừa: vệ sinh môi trường sống sạch sẽ, thông thoáng, tránh hút thuốc lá và khói thuốc trong nhà.",
+   "text": "RSV có thể gây viêm tiểu phế quản và viêm phổi — là nguyên nhân hay gặp nhất của hai bệnh này ở trẻ dưới 1 tuổi.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ca nặng có thể cần thở oxy, truyền dịch, hoặc thở máy; thường nằm viện vài ngày.",
    "src": [
-    0
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Có tiêm phòng (vắc xin, kháng thể) cho trẻ nhỏ, người lớn tuổi hoặc có nguy cơ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ nhỏ hoặc người lớn tuổi có triệu chứng hô hấp đáng lo → đi khám để bác sĩ đánh giá.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-phoi-rsv.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About RSV",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/rsv/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Bán hẹp bao quy đầu** — nhóm bệnh: sức khỏe sinh sản, sức khỏe giới tính, sinh dục.",
+   "text": "Hẹp bao quy đầu là khi bao quy đầu khó kéo tuột khỏi đầu dương vật.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Rất thường gặp ở trẻ nhỏ: nhiều bé đến khoảng 5 tuổi, có bé đến 10 tuổi hoặc hơn, bao quy đầu mới lỏng ra.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau đầu, đau cổ, sưng, phù.",
+   "text": "Thường không phải vấn đề, trừ khi gây sưng, đau, chảy máu, tiết dịch, có mùi hôi, đau khi tiểu, hay bị nhiễm trùng tiểu, đau khi cương.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -38,29 +44,48 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa dương vật thường xuyên bằng nước ấm và xà phòng không mùi; không dùng sản phẩm có hương thơm; không cố kéo bao quy đầu của trẻ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Ở trẻ thường tự lỏng theo tuổi nên hay không cần điều trị; khi cần có kem steroid bôi, kháng sinh nếu nhiễm trùng, hoặc cắt bao quy đầu.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bao quy đầu sưng, đau, chảy máu, tiết dịch, có mùi, hoặc đau khi tiểu, khi cương → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Bao quy đầu bị kéo lên rồi kẹt lại, không trả về được (thắt nghẹt bao quy đầu) → đây là cấp cứu, đến bệnh viện ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bán hẹp bao quy đầu – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ban-hep-bao-quy-dau.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Tight foreskin (phimosis)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/phimosis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

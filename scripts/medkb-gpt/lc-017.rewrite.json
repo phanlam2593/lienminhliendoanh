@@ -1,0 +1,379 @@
+{
+  "_note": "26/11 — Vòng LC 15 (đợt 84–87): CDC hantavirus, taeniasis, rsv; NHS phimosis — Claude đã mở kiểm.",
+  "lc-san-day": {
+    "addSources": [
+      {
+        "title": "About Taeniasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/taeniasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh sán dây (taeniasis) là nhiễm ký sinh trùng ở ruột do sán dây bò, sán dây lợn hoặc sán dây châu Á.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số nhẹ hoặc không triệu chứng; khi có: đau bụng, chán ăn, sụt cân, khó chịu dạ dày. Dấu hiệu dễ thấy nhất là thấy đốt sán theo phân ra ngoài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do ăn thịt bò hoặc thịt lợn sống, tái, chưa nấu chín có ấu trùng sán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khác với bệnh ấu trùng sán (gạo sán) — bệnh nặng hơn, xảy ra khi nuốt phải trứng sán dây lợn, có thể gây co giật, tổn thương cơ hoặc mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Cần bác sĩ chẩn đoán đúng rồi kê thuốc tẩy sán phù hợp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: nấu chín thịt — miếng thịt nguyên ít nhất 63°C rồi để nghỉ 3 phút, thịt xay ít nhất 71°C.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy đốt sán trong phân, hoặc đau bụng, sụt cân kéo dài sau khi ăn thịt tái sống → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-san-day-bo": {
+    "addSources": [
+      {
+        "title": "About Taeniasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/taeniasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Sán dây bò là loại sán dây lây qua thịt bò sống hoặc tái; sán có thể dài hơn nên hay gây triệu chứng hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số nhẹ hoặc không triệu chứng; khi có: đau bụng, chán ăn, sụt cân, khó chịu dạ dày. Dấu hiệu dễ thấy nhất là thấy đốt sán theo phân ra ngoài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do ăn thịt bò hoặc thịt lợn sống, tái, chưa nấu chín có ấu trùng sán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Sán dây bò không gây bệnh ấu trùng sán ở người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Cần bác sĩ chẩn đoán đúng rồi kê thuốc tẩy sán phù hợp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: nấu chín thịt — miếng thịt nguyên ít nhất 63°C rồi để nghỉ 3 phút, thịt xay ít nhất 71°C.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy đốt sán trong phân, hoặc đau bụng, sụt cân kéo dài sau khi ăn thịt tái sống → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-san-day-lon": {
+    "addSources": [
+      {
+        "title": "About Taeniasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/taeniasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Sán dây lợn là loại sán dây lây qua thịt lợn sống hoặc tái.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số nhẹ hoặc không triệu chứng; khi có: đau bụng, chán ăn, sụt cân, khó chịu dạ dày. Dấu hiệu dễ thấy nhất là thấy đốt sán theo phân ra ngoài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do ăn thịt bò hoặc thịt lợn sống, tái, chưa nấu chín có ấu trùng sán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu nuốt phải trứng sán dây lợn có thể mắc bệnh ấu trùng sán — nặng hơn, có thể gây co giật, tổn thương cơ hoặc mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Cần bác sĩ chẩn đoán đúng rồi kê thuốc tẩy sán phù hợp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: nấu chín thịt — miếng thịt nguyên ít nhất 63°C rồi để nghỉ 3 phút, thịt xay ít nhất 71°C.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy đốt sán trong phân, hoặc đau bụng, sụt cân kéo dài sau khi ăn thịt tái sống → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-sot-xuat-huyet-do-virus-hanta": {
+    "addSources": [
+      {
+        "title": "About Hantavirus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/hantavirus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Hantavirus là họ virus có thể gây bệnh nặng và tử vong; ở châu Á và châu Âu chủ yếu gây sốt xuất huyết kèm hội chứng thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt xuất huyết hội chứng thận: khởi đầu đột ngột với đau đầu, đau lưng, đau bụng, sốt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hội chứng phổi (ở châu Mỹ): mệt, sốt, đau cơ, sau đó ho và khó thở.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây chủ yếu khi tiếp xúc nước tiểu, phân hoặc nước bọt của chuột; hiếm khi do chuột cắn, cào.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Mức độ nặng tuỳ loại virus; có loại thường nhẹ, có loại nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa có thuốc đặc trị; điều trị gồm nghỉ ngơi, bù dịch, giảm triệu chứng; có người phải thở máy hoặc lọc máu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: bịt kín khe hở trong nhà, kho; đặt bẫy; dọn nguồn thức ăn thu hút chuột; hạn chế tiếp xúc chuột ở nhà, nơi làm việc, chỗ cắm trại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt kèm đau lưng, đau bụng dữ dội, hoặc ho, khó thở sau khi tiếp xúc nơi có chuột → đi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ban-hep-bao-quy-dau": {
+    "addSources": [
+      {
+        "title": "Tight foreskin (phimosis)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/phimosis/"
+      }
+    ],
+    "about": [
+      [
+        "Hẹp bao quy đầu là khi bao quy đầu khó kéo tuột khỏi đầu dương vật.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rất thường gặp ở trẻ nhỏ: nhiều bé đến khoảng 5 tuổi, có bé đến 10 tuổi hoặc hơn, bao quy đầu mới lỏng ra.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không phải vấn đề, trừ khi gây sưng, đau, chảy máu, tiết dịch, có mùi hôi, đau khi tiểu, hay bị nhiễm trùng tiểu, đau khi cương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Rửa dương vật thường xuyên bằng nước ấm và xà phòng không mùi; không dùng sản phẩm có hương thơm; không cố kéo bao quy đầu của trẻ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ thường tự lỏng theo tuổi nên hay không cần điều trị; khi cần có kem steroid bôi, kháng sinh nếu nhiễm trùng, hoặc cắt bao quy đầu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bao quy đầu sưng, đau, chảy máu, tiết dịch, có mùi, hoặc đau khi tiểu, khi cương → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Bao quy đầu bị kéo lên rồi kẹt lại, không trả về được (thắt nghẹt bao quy đầu) → đây là cấp cứu, đến bệnh viện ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-phoi-rsv": {
+    "addSources": [
+      {
+        "title": "About RSV",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/rsv/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "RSV (virus hợp bào hô hấp) là virus hay gặp, nhiễm mũi, họng, đường thở và phổi; thường chỉ gây triệu chứng nhẹ giống cảm lạnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Triệu chứng không đặc hiệu, khó phân biệt với cảm, cúm hay COVID-19.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Trẻ dưới 6 tháng và người lớn tuổi hoặc có bệnh nền dễ bị nặng, phải nằm viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "RSV có thể gây viêm tiểu phế quản và viêm phổi — là nguyên nhân hay gặp nhất của hai bệnh này ở trẻ dưới 1 tuổi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ca nặng có thể cần thở oxy, truyền dịch, hoặc thở máy; thường nằm viện vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có tiêm phòng (vắc xin, kháng thể) cho trẻ nhỏ, người lớn tuổi hoặc có nguy cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ nhỏ hoặc người lớn tuổi có triệu chứng hô hấp đáng lo → đi khám để bác sĩ đánh giá.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

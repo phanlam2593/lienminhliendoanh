@@ -7,46 +7,53 @@
  ],
  "about": [
   {
-   "text": "**Sốt xuất huyết do virus Hanta** — nhóm bệnh: truyền nhiễm.",
+   "text": "Hantavirus là họ virus có thể gây bệnh nặng và tử vong; ở châu Á và châu Âu chủ yếu gây sốt xuất huyết kèm hội chứng thận.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sợ ánh sáng, tiểu ra máu, tiểu nhiều, xuất huyết, khát nước, tiêu chảy, chảy máu, nhức đầu, đau bụng, đau lưng.",
+   "text": "Sốt xuất huyết hội chứng thận: khởi đầu đột ngột với đau đầu, đau lưng, đau bụng, sốt.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Hội chứng phổi (ở châu Mỹ): mệt, sốt, đau cơ, sau đó ho và khó thở.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: sốt xuất huyết hội chứng thận, sốt xuất huyết hội chứng phổi, virus Hanta.",
+   "text": "Lây chủ yếu khi tiếp xúc nước tiểu, phân hoặc nước bọt của chuột; hiếm khi do chuột cắn, cào.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): nhân viên trong phòng thí nghiệm, người nuôi động vật thí nghiệm, nhà sinh vật học, người hay đi cắm trại, độ tuổi, giới tính.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Mức độ nặng tuỳ loại virus; có loại thường nhẹ, có loại nặng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi tuyệt đối, môi trường cần thoáng mát và sạch sẽ, mặc quần áo thoáng và rộng, uống đủ nước, vệ sinh nhà ở thông thoáng, sạch sẽ, diệt chuột, tránh chuột làm ổ và sinh sản.",
+   "text": "Chưa có thuốc đặc trị; điều trị gồm nghỉ ngơi, bù dịch, giảm triệu chứng; có người phải thở máy hoặc lọc máu.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh: bịt kín khe hở trong nhà, kho; đặt bẫy; dọn nguồn thức ăn thu hút chuột; hạn chế tiếp xúc chuột ở nhà, nơi làm việc, chỗ cắm trại.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +66,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt kèm đau lưng, đau bụng dữ dội, hoặc ho, khó thở sau khi tiếp xúc nơi có chuột → đi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Sốt xuất huyết do virus Hanta – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/sot-xuat-huyet-do-virus-hanta-154.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Hantavirus",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/hantavirus/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
