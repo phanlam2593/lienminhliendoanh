@@ -7,9 +7,15 @@
  ],
  "about": [
   {
-   "text": "**Bàn chân khoèo** — nhóm bệnh: cơ - xương - khớp, bệnh trẻ em.",
+   "text": "Bàn chân khoèo là tình trạng ít gặp: em bé sinh ra có một hoặc cả hai bàn chân cong vào trong và xuống dưới.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Có thể phát hiện từ khi mang thai, hoặc sau khi sinh.",
+   "src": [
+    2
    ]
   }
  ],
@@ -23,39 +29,58 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: di truyền, môi trường, gen di truyền, hút thuốc khi mang thai.",
+   "text": "Thường không rõ vì sao bé bị.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): lịch sử gia đình, dị tật bẩm sinh, môi trường, không đủ nước ối khi mang thai, tật nứt đốt sống.",
+   "text": "Có thể có tính gia đình, hoặc đi kèm bệnh khác như nứt đốt sống.",
    "src": [
-    0
+    2
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Điều trị thường hiệu quả nếu bắt đầu sớm sau sinh.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không uống rượu.",
+   "text": "Điều trị thường theo phương pháp Ponseti, gồm 3 giai đoạn.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bó bột, mỗi tuần thay một lần trong khoảng 6 tuần, mỗi lần chỉnh dần tư thế bàn chân.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Sau khoảng 6 tuần bó bột, phần lớn bé cần một ca mổ nhỏ để chỉnh tư thế bàn chân.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Sau đó bé mang giày nẹp gần như cả ngày khoảng 3 tháng, rồi chỉ khi ngủ, có thể tới 5 tuổi.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bàn chân bé cong vào trong bất thường lúc mới sinh → khám chỉnh hình nhi sớm; đừng tự nắn kéo ở nhà.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -66,7 +91,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ban-chan-khoeo.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Clubfoot",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/club-foot/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Clubfoot",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/club-foot/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

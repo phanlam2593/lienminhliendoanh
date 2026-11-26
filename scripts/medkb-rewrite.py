@@ -22,7 +22,9 @@ for cid, ch in spec.items():
             continue
         new = [{"text": t, "src": [idx(x) for x in src]} for t, src in items]
         if sec.startswith("diet."):
-            card.setdefault("diet", {"avoid": [], "ok": [], "foods": []})[sec[5:]] = new
+            if not card.get("diet"):
+                card["diet"] = {"avoid": [], "ok": [], "foods": []}
+            card["diet"][sec[5:]] = new
         else:
             card[sec] = new
     for name, note in ch.get("foodNotes", {}).items():

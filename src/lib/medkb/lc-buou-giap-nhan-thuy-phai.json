@@ -7,17 +7,29 @@
  ],
  "about": [
   {
-   "text": "**Bướu giáp nhân thùy phải** — nhóm bệnh: nội tiết - chuyển hóa, bệnh thường gặp.",
+   "text": "Là khi có nhân giáp ở thùy phải tuyến giáp; vị trí không quyết định nhân lành hay ác.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Nhân giáp rất hay gặp và hơn 90% là lành tính.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đánh trống ngực, đổ mồ hôi, tiêu chảy, tăng cân, sụt cân, hồi hộp, táo bón, mệt mỏi, khối u, sưng.",
+   "text": "Phần lớn không có triệu chứng.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Nhân to có thể gây khó nuốt, khó thở; một số nhân gây cường giáp.",
+   "src": [
+    2
    ]
   }
  ],
@@ -38,35 +50,54 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: cá nước mặn và động vật có vỏ, rong biển, sản phẩm làm từ đậu nành, rau cần, rau cải bẹ.",
+   "text": "Kiểm tra bằng xét nghiệm TSH, siêu âm; chọc hút kim nhỏ khi cần.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nhân lành tính thường theo dõi bằng siêu âm mỗi 6–12 tháng.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nhân to nhanh, khàn tiếng, khó nuốt → đi khám.",
    "src": [
-    0
+    2
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở rõ → đi cấp cứu.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bướu giáp nhân thùy phải – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-giap-nhan-thuy-phai.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Thyroid Nodules",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/thyroid-nodules/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Thyroid Nodules",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/thyroid-nodules/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

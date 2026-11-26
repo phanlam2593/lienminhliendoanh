@@ -7,60 +7,97 @@
  ],
  "about": [
   {
-   "text": "**Block nhĩ thất** — nhóm bệnh: tim mạch, ngực.",
+   "text": "Block tim (block nhĩ thất) là khi tim đập quá chậm hoặc nhịp không đều.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Độ 1 thường không cần điều trị; độ 2 đôi khi cần; độ 3 (block hoàn toàn) thường cần điều trị.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đánh trống ngực, chóng mặt, thiếu máu, đau ngực, mệt mỏi, khó thở, lú lẫn, sưng, ngất.",
+   "text": "Có thể chóng mặt, ngất, đau ngực, mệt, khó thở.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Nhiều người không có triệu chứng, chỉ phát hiện khi làm xét nghiệm vì việc khác.",
+   "src": [
+    2
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh tim thiếu máu cục bộ, bệnh van tim, tim bẩm sinh, thuốc, tăng trương lực phế vị.",
+   "text": "Thường do bệnh tim như bệnh mạch vành hoặc nhồi máu cơ tim.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): dị tật tim di truyền, đau tim, bệnh Lyme.",
+   "text": "Một số loại thuốc cũng có thể gây ra; có em bé sinh ra đã bị (block tim bẩm sinh).",
    "src": [
-    0
+    2
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Triệu chứng nặng có thể cần đặt máy tạo nhịp để tim đập đều, không quá chậm.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Hay chóng mặt, mệt, khó thở hoặc từng ngất → đi khám tim mạch.",
    "src": [
-    0
+    2
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đã được chẩn đoán block tim mà đau ngực, khó thở nặng → gọi 115 ngay.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Có người ngất không gọi tỉnh được, hoặc không thở → gọi 115 ngay; đừng tự lái xe đến viện.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Block nhĩ thất – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/block-nhi-that-224.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Heart block",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/heart-block/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Heart block",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/heart-block/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

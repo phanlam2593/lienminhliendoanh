@@ -1,0 +1,337 @@
+{
+  "_note": "26/11 — Đợt ChatGPT 1–2 của Kir (20 thẻ). ChatGPT không ghi câu trích từng ý, nên Claude mở từng trang nguồn chính và CHỈ giữ ý có trên trang (WebFetch 26/11). Bỏ các ý ChatGPT tự thêm không có trên nguồn (vd Barrett: nhóm nguy cơ nam/da trắng/trên 50; bạch sản: rượu là nguyên nhân; bàn chân khoèo: 'một số trẻ' cần mổ — NHS ghi 'phần lớn'). Bỏ thẻ bướu mạch máu (tên quá rộng).",
+  "lc-barrett-thuc-quan": {
+    "addSources": [{ "title": "Barrett's Esophagus", "publisher": "NIDDK (NIH, Hoa Kỳ)", "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/barretts-esophagus" }],
+    "about": [["Barrett thực quản là khi lớp mô lót thực quản biến đổi, trở nên giống mô lót ruột.", ["+0"]]],
+    "causes": [["Bệnh trào ngược dạ dày – thực quản (GERD) làm tăng khả năng mắc Barrett thực quản.", ["+0"]]],
+    "course": [["Người bị Barrett thực quản có nguy cơ ung thư thực quản cao hơn.", ["+0"]]],
+    "care": [
+      ["Bác sĩ thường chẩn đoán bằng nội soi đường tiêu hoá trên và sinh thiết.", ["+0"]],
+      ["Điều trị có thể gồm thuốc, can thiệp qua nội soi và phẫu thuật — do bác sĩ chuyên khoa quyết định.", ["+0"]]
+    ],
+    "doctor": [["Bị trào ngược, ợ nóng kéo dài → đi khám tiêu hoá để được tư vấn có cần nội soi không.", ["+0"]]]
+  },
+  "lc-bien-dang-co-thien-nga": {
+    "addSources": [{ "title": "Swan-Neck Deformity (StatPearls)", "publisher": "NCBI Bookshelf (NIH, Hoa Kỳ)", "url": "https://www.ncbi.nlm.nih.gov/books/NBK525970/" }],
+    "about": [["Biến dạng cổ thiên nga là khi khớp giữa ngón tay bị duỗi ngược quá mức, còn khớp đầu ngón lại gập xuống.", ["+0"]]],
+    "causes": [
+      ["Do mất cân bằng hệ gân duỗi của ngón tay.", ["+0"]],
+      ["Hay gặp do viêm khớp dạng thấp, chấn thương gân ở đầu ngón, hoặc co cứng cơ sau đột quỵ, chấn thương sọ não.", ["+0"]],
+      ["Dạng do viêm khớp dạng thấp gặp ở nữ nhiều hơn.", ["+0"]]
+    ],
+    "course": [["Biến dạng nặng hoặc lâu năm khó chỉnh hết nếu không mổ; sau điều trị vẫn có thể còn biến dạng hoặc hạn chế cử động.", ["+0"]]],
+    "care": [
+      ["Bác sĩ khám tầm vận động từng khớp, có thể chụp X-quang và xét nghiệm viêm khớp dạng thấp.", ["+0"]],
+      ["Điều trị ban đầu: tập phục hồi chức năng bàn tay, kéo giãn và đeo nẹp chỉnh hình.", ["+0"]],
+      ["Trường hợp nặng có thể cần phẫu thuật; tập vật lý trị liệu là phần quan trọng.", ["+0"]]
+    ],
+    "doctor": [["Ngón tay bắt đầu cong vẹo, cứng hoặc đau → đi khám sớm, khi khớp còn mềm dễ chỉnh hơn.", ["+0"]]]
+  },
+  "lc-block-nhi-that": {
+    "addSources": [{ "title": "Heart block", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/heart-block/" }],
+    "about": [
+      ["Block tim (block nhĩ thất) là khi tim đập quá chậm hoặc nhịp không đều.", ["+0"]],
+      ["Độ 1 thường không cần điều trị; độ 2 đôi khi cần; độ 3 (block hoàn toàn) thường cần điều trị.", ["+0"]]
+    ],
+    "signs": [
+      ["Có thể chóng mặt, ngất, đau ngực, mệt, khó thở.", ["+0"]],
+      ["Nhiều người không có triệu chứng, chỉ phát hiện khi làm xét nghiệm vì việc khác.", ["+0"]]
+    ],
+    "causes": [
+      ["Thường do bệnh tim như bệnh mạch vành hoặc nhồi máu cơ tim.", ["+0"]],
+      ["Một số loại thuốc cũng có thể gây ra; có em bé sinh ra đã bị (block tim bẩm sinh).", ["+0"]]
+    ],
+    "care": [["Triệu chứng nặng có thể cần đặt máy tạo nhịp để tim đập đều, không quá chậm.", ["+0"]]],
+    "doctor": [["Hay chóng mặt, mệt, khó thở hoặc từng ngất → đi khám tim mạch.", ["+0"]]],
+    "emergency": [
+      ["Đã được chẩn đoán block tim mà đau ngực, khó thở nặng → gọi 115 ngay.", ["+0"]],
+      ["Có người ngất không gọi tỉnh được, hoặc không thở → gọi 115 ngay; đừng tự lái xe đến viện.", ["+0"]]
+    ]
+  },
+  "lc-bong-gan-co-chan": {
+    "addSources": [{ "title": "Sprains and strains", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/sprains-and-strains/" }],
+    "about": [["Bong gân cổ chân là khi dây chằng quanh khớp cổ chân bị xoắn hoặc rách, thường do lật cổ chân.", ["+0"]]],
+    "signs": [
+      ["Đau, sưng hoặc bầm quanh cổ chân.", ["+0"]],
+      ["Có thể không đặt chân xuống hoặc đi lại bình thường được.", ["+0"]]
+    ],
+    "causes": [["Không khởi động trước khi tập, cơ mệt và chơi thể thao là nguyên nhân thường gặp.", ["+0"]]],
+    "course": [
+      ["Phần lớn đỡ sau khoảng 2 tuần.", ["+0"]],
+      ["Vận động mạnh quá sớm có nguy cơ tổn thương thêm.", ["+0"]]
+    ],
+    "care": [
+      ["2–3 ngày đầu: hạn chế dồn sức lên chân đau, nghỉ ngơi.", ["+0"]],
+      ["Chườm lạnh (bọc khăn) tối đa 20 phút, cách 2–3 giờ một lần.", ["+0"]],
+      ["Băng ép và kê chân cao trên gối càng nhiều càng tốt.", ["+0"]],
+      ["Vài ngày đầu tránh chườm nóng, rượu bia và xoa bóp.", ["+0"]],
+      ["Bớt đau thì cử động nhẹ để khớp không bị cứng.", ["+0"]]
+    ],
+    "doctor": [
+      ["Không đứng lên được hoặc không đi nổi vài bước → đi khám.", ["+0"]],
+      ["Tự chăm sóc mà không đỡ → đi khám.", ["+0"]]
+    ],
+    "emergency": [["Cổ chân biến dạng, lệch hẳn → có thể gãy xương, cần đi cấp cứu chụp X-quang.", ["+0"]]]
+  },
+  "lc-ban-chan-khoeo": {
+    "addSources": [{ "title": "Clubfoot", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/club-foot/" }],
+    "about": [
+      ["Bàn chân khoèo là tình trạng ít gặp: em bé sinh ra có một hoặc cả hai bàn chân cong vào trong và xuống dưới.", ["+0"]],
+      ["Có thể phát hiện từ khi mang thai, hoặc sau khi sinh.", ["+0"]]
+    ],
+    "causes": [
+      ["Thường không rõ vì sao bé bị.", ["+0"]],
+      ["Có thể có tính gia đình, hoặc đi kèm bệnh khác như nứt đốt sống.", ["+0"]]
+    ],
+    "care": [
+      ["Điều trị thường theo phương pháp Ponseti, gồm 3 giai đoạn.", ["+0"]],
+      ["Bó bột, mỗi tuần thay một lần trong khoảng 6 tuần, mỗi lần chỉnh dần tư thế bàn chân.", ["+0"]],
+      ["Sau khoảng 6 tuần bó bột, phần lớn bé cần một ca mổ nhỏ để chỉnh tư thế bàn chân.", ["+0"]],
+      ["Sau đó bé mang giày nẹp gần như cả ngày khoảng 3 tháng, rồi chỉ khi ngủ, có thể tới 5 tuổi.", ["+0"]]
+    ],
+    "course": [["Điều trị thường hiệu quả nếu bắt đầu sớm sau sinh.", ["+0"]]],
+    "doctor": [["Bàn chân bé cong vào trong bất thường lúc mới sinh → khám chỉnh hình nhi sớm; đừng tự nắn kéo ở nhà.", ["+0"]]]
+  },
+  "lc-bang-quang-tang-hoat": {
+    "addSources": [{ "title": "Symptoms & Causes of Bladder Control Problems", "publisher": "NIDDK (NIH, Hoa Kỳ)", "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-control-problems/symptoms-causes" }],
+    "about": [["Bàng quang tăng hoạt là khi hay buồn tiểu đột ngột, gấp, khó nhịn.", ["+0", 0]]],
+    "signs": [
+      ["Buồn tiểu đột ngột, mạnh, không nhịn được.", ["+0"]],
+      ["Đi tiểu quá nhiều lần trong ngày (khoảng 8 lần trở lên).", ["+0"]],
+      ["Có thể són tiểu, kể cả khi ngủ.", ["+0"]]
+    ],
+    "causes": [
+      ["Vấn đề thần kinh là nguyên nhân thường gặp; đột quỵ, Parkinson, đa xơ cứng có thể ảnh hưởng thần kinh và cơ bàng quang.", ["+0"]],
+      ["Thói quen uống rượu, đồ uống có cà phê, nước có ga liên quan đến khó kiểm soát bàng quang.", ["+0"]]
+    ],
+    "care": [["Bác sĩ có thể điều trị bằng cách đổi thói quen sinh hoạt hoặc đổi thuốc đang dùng.", ["+0"]]],
+    "diet.avoid": [["Bớt rượu, cà phê và nước có ga nếu thấy làm buồn tiểu nhiều hơn.", ["+0"]]],
+    "doctor": [["Buồn tiểu gấp, đi tiểu nhiều lần hay són tiểu ảnh hưởng sinh hoạt → đi khám.", ["+0"]]]
+  },
+  "lc-beo-phi-do": {
+    "addSources": [{ "title": "Adult BMI Categories", "publisher": "CDC (Hoa Kỳ)", "url": "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" }],
+    "about": [
+      ["Béo phì độ 3 (béo phì nặng) là khi chỉ số BMI từ 40 trở lên, theo phân loại người lớn của CDC.", ["+0"]],
+      ["BMI chỉ là công cụ sàng lọc, cần xét cùng các yếu tố khác khi đánh giá sức khoẻ.", ["+0"]]
+    ],
+    "doctor": [["BMI từ 40 trở lên → nên gặp bác sĩ để đánh giá sức khoẻ và lập kế hoạch giảm cân phù hợp.", ["+0"]]]
+  },
+  "lc-buou-ba-dau": {
+    "addSources": [{ "title": "Skin cyst", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/skin-cyst/" }],
+    "about": [
+      ["Bướu bã đậu (nang da) là cục tròn dưới da, thường chứa dịch hoặc mủ.", ["+0"]],
+      ["Thường vô hại, **không phải ung thư** và không lây.", ["+0"]]
+    ],
+    "signs": [
+      ["Có thể mọc ở đầu, mặt, cổ, ngực, lưng và nhiều chỗ khác.", ["+0"]],
+      ["Đôi khi có một chấm nhỏ sẫm màu ở giữa.", ["+0"]],
+      ["Nếu nhiễm trùng thì sưng đỏ và đau.", ["+0"]]
+    ],
+    "care": [
+      ["Thường không cần điều trị.", ["+0"]],
+      ["**Đừng tự nặn** — vỡ ra có thể gây nhiễm trùng.", ["+0"]],
+      ["Nang to, đau, vướng víu có thể được bác sĩ mổ lấy ra.", ["+0"]]
+    ],
+    "doctor": [
+      ["Có cục dưới da mà không biết là gì → đi khám.", ["+0"]],
+      ["Cục sưng đỏ, đau (nghi nhiễm trùng) → khám sớm.", ["+0"]]
+    ]
+  },
+  "lc-buou-giap-keo": {
+    "addSources": [{ "title": "Goiter", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/goiter/" }],
+    "about": [
+      ["Bướu giáp keo là một dạng bướu giáp — tuyến giáp to ra bất thường.", ["+0", 0]],
+      ["Có bướu giáp không có nghĩa là tuyến giáp hoạt động sai.", ["+0"]]
+    ],
+    "causes": [["Nguyên nhân bướu giáp hay gặp: thiếu i-ốt, bệnh Hashimoto, bệnh Graves, hoặc tuyến giáp có nhân.", ["+0"]]],
+    "care": [
+      ["Bác sĩ thường xét nghiệm chức năng tuyến giáp và siêu âm; có thể chọc kim sinh thiết.", ["+0"]],
+      ["Bướu kèm hormone tuyến giáp bình thường thường không cần điều trị đặc biệt.", ["+0"]],
+      ["Mổ chủ yếu khi bướu to chèn ép đường thở.", ["+0"]]
+    ],
+    "doctor": [["Thấy cổ to ra, nuốt vướng → đi khám tuyến giáp.", ["+0"]]],
+    "emergency": [["Bướu to gây khó thở → đi cấp cứu.", ["+0"]]]
+  },
+  "lc-buou-giap-lan-toa": {
+    "addSources": [{ "title": "Goiter", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/goiter/" }],
+    "about": [
+      ["Bướu giáp lan toả là khi cả tuyến giáp to ra đều, không phải từng nhân riêng.", ["+0"]],
+      ["Có bướu giáp không có nghĩa là tuyến giáp hoạt động sai.", ["+0"]]
+    ],
+    "causes": [
+      ["Thiếu i-ốt là một trong những nguyên nhân phổ biến nhất trên thế giới.", ["+0"]],
+      ["Bệnh Graves (cường giáp) và Hashimoto (tự miễn phá huỷ tuyến giáp) cũng hay gây bướu giáp.", ["+0"]]
+    ],
+    "care": [
+      ["Bác sĩ xét nghiệm chức năng tuyến giáp, siêu âm; đôi khi xạ hình hoặc chọc kim.", ["+0"]],
+      ["Do Hashimoto kèm suy giáp: uống hormone tuyến giáp mỗi ngày theo đơn.", ["+0"]],
+      ["Do Graves: i-ốt phóng xạ thường làm bướu nhỏ đi hoặc hết.", ["+0"]],
+      ["Mổ chủ yếu khi bướu chèn ép đường thở.", ["+0"]]
+    ],
+    "doctor": [["Thấy cổ to ra, hoặc có dấu hiệu cường giáp / suy giáp → đi khám nội tiết.", ["+0"]]],
+    "emergency": [["Bướu to gây khó thở → đi cấp cứu.", ["+0"]]]
+  },
+  "lc-buou-giap-nhan": {
+    "addSources": [{ "title": "Thyroid Nodules", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/thyroid-nodules/" }],
+    "about": [
+      ["Nhân giáp là khối tế bào tuyến giáp phát triển bất thường, tạo thành cục trong tuyến giáp.", ["+0"]],
+      ["Rất hay gặp: tới 60 tuổi khoảng một nửa số người có nhân giáp, và hơn 90% là lành tính.", ["+0"]]
+    ],
+    "signs": [
+      ["Phần lớn không có triệu chứng, hay được phát hiện tình cờ.", ["+0"]],
+      ["Nhân to có thể chèn khí quản hoặc thực quản, gây khó thở, khó nuốt.", ["+0"]],
+      ["Một số nhân tiết thừa hormone, gây cường giáp.", ["+0"]]
+    ],
+    "causes": [["Phần lớn không rõ nguyên nhân; viêm tuyến giáp Hashimoto và thiếu i-ốt làm tăng nguy cơ.", ["+0"]]],
+    "care": [
+      ["Xét nghiệm máu (TSH) kiểm tra chức năng tuyến giáp nhưng không biết nhân lành hay ác.", ["+0"]],
+      ["Siêu âm là công cụ chính; chọc hút kim nhỏ dưới siêu âm để kiểm tra ung thư.", ["+0"]],
+      ["Nhân lành tính thường theo dõi bằng siêu âm mỗi 6–12 tháng; nghi ung thư thì thường mổ.", ["+0"]]
+    ],
+    "doctor": [["Sờ thấy cục ở cổ, cục to nhanh, khàn tiếng, khó nuốt → đi khám.", ["+0"]]],
+    "emergency": [["Khó thở rõ → đi cấp cứu.", ["+0"]]]
+  },
+  "lc-buou-giap-nhan-thuy-phai": {
+    "addSources": [{ "title": "Thyroid Nodules", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/thyroid-nodules/" }],
+    "about": [
+      ["Là khi có nhân giáp ở thùy phải tuyến giáp; vị trí không quyết định nhân lành hay ác.", ["+0"]],
+      ["Nhân giáp rất hay gặp và hơn 90% là lành tính.", ["+0"]]
+    ],
+    "signs": [
+      ["Phần lớn không có triệu chứng.", ["+0"]],
+      ["Nhân to có thể gây khó nuốt, khó thở; một số nhân gây cường giáp.", ["+0"]]
+    ],
+    "care": [
+      ["Kiểm tra bằng xét nghiệm TSH, siêu âm; chọc hút kim nhỏ khi cần.", ["+0"]],
+      ["Nhân lành tính thường theo dõi bằng siêu âm mỗi 6–12 tháng.", ["+0"]]
+    ],
+    "doctor": [["Nhân to nhanh, khàn tiếng, khó nuốt → đi khám.", ["+0"]]],
+    "emergency": [["Khó thở rõ → đi cấp cứu.", ["+0"]]]
+  },
+  "lc-buou-giap-da-nhan": {
+    "addSources": [
+      { "title": "Thyroid Nodules", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/thyroid-nodules/" },
+      { "title": "Goiter", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/goiter/" }
+    ],
+    "about": [
+      ["Bướu giáp đa nhân là khi tuyến giáp có nhiều nhân làm tuyến to ra.", ["+1"]],
+      ["Là nguyên nhân bướu giáp hay gặp; nguyên nhân sinh ra chưa rõ.", ["+1"]]
+    ],
+    "signs": [
+      ["Thường không có triệu chứng.", ["+0"]],
+      ["Bướu to có thể chèn ép gây khó nuốt, khó thở; nhân tiết thừa hormone gây cường giáp.", ["+0"]]
+    ],
+    "care": [
+      ["Bác sĩ xem có một hay nhiều nhân bằng siêu âm, xét nghiệm TSH, chọc kim nhân nghi ngờ.", ["+0"]],
+      ["Hormone tuyến giáp bình thường thì thường không cần điều trị đặc biệt.", ["+1"]],
+      ["Mổ khi bướu chèn ép đường thở hoặc nhân nghi ung thư.", ["+0", "+1"]]
+    ],
+    "doctor": [["Bướu to nhanh, khàn tiếng, khó nuốt → đi khám.", ["+0"]]],
+    "emergency": [["Khó thở rõ → đi cấp cứu.", ["+1"]]]
+  },
+  "lc-buou-giap-da-nhan-2-thuy": {
+    "addSources": [
+      { "title": "Thyroid Nodules", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/thyroid-nodules/" },
+      { "title": "Goiter", "publisher": "American Thyroid Association", "url": "https://www.thyroid.org/goiter/" }
+    ],
+    "about": [["Là bướu giáp đa nhân có nhân ở cả thùy phải và thùy trái tuyến giáp.", ["+1"]]],
+    "signs": [
+      ["Thường không có triệu chứng, hay phát hiện tình cờ khi siêu âm.", ["+0"]],
+      ["Bướu to có thể gây khó nuốt, khó thở.", ["+0"]]
+    ],
+    "care": [
+      ["Mỗi nhân được đánh giá riêng bằng siêu âm; chọc kim nhân nghi ngờ.", ["+0"]],
+      ["Hormone tuyến giáp bình thường thì thường chỉ theo dõi.", ["+1"]]
+    ],
+    "doctor": [["Bướu to nhanh, khàn tiếng, khó nuốt → đi khám.", ["+0"]]],
+    "emergency": [["Khó thở rõ → đi cấp cứu.", ["+1"]]]
+  },
+  "lc-buou-hoat-dich-co-tay": {
+    "addSources": [{ "title": "Ganglion cyst", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/ganglion-cyst/" }],
+    "about": [["Bướu hoạt dịch (hạch gân) là cục chứa dịch dưới da, thường ở cổ tay hoặc bàn tay.", ["+0"]]],
+    "signs": [["Thường không đau, nhưng có thể đau khi hoặc sau khi cử động khớp đó.", ["+0"]]],
+    "course": [["Thường tự hết, có khi mất vài tháng đến một năm.", ["+0"]]],
+    "care": [
+      ["**Đừng tự bóp vỡ** — có thể gây nhiễm trùng hoặc tổn thương da.", ["+0"]],
+      ["Bác sĩ có thể hút dịch bằng kim, tiêm thuốc giảm sưng, hoặc mổ nhỏ cắt bỏ.", ["+0"]]
+    ],
+    "doctor": [
+      ["Lo về cục, cục to dần, hoặc cục cứng không di động → đi khám.", ["+0"]],
+      ["Cục rất đau, nóng, đỏ → khám gấp.", ["+0"]]
+    ]
+  },
+  "lc-buou-mau": {
+    "addSources": [{ "title": "Hemangioma", "publisher": "Mayo Clinic (Hoa Kỳ)", "url": "https://www.mayoclinic.org/diseases-conditions/hemangioma/symptoms-causes/syc-20352334" }],
+    "about": [
+      ["Bướu máu (u máu) là vết bớt đỏ tươi do mạch máu mọc thừa ở da, lành tính.", ["+0"]],
+      ["Xuất hiện lúc sinh hoặc trong tháng đầu đời.", ["+0"]]
+    ],
+    "signs": [
+      ["Trông như cục mềm hoặc mảng đỏ phẳng, hay ở mặt, da đầu, ngực, lưng.", ["+0"]],
+      ["Năm đầu có thể lớn nhanh thành cục gồ, rồi nhạt dần.", ["+0"]]
+    ],
+    "causes": [["Hay gặp hơn ở bé gái, bé sinh non hoặc nhẹ cân.", ["+0"]]],
+    "course": [
+      ["Nhiều u máu hết trước 5 tuổi, phần lớn hết trước 10 tuổi.", ["+0"]],
+      ["Có thể loét gây đau, chảy máu, sẹo hoặc nhiễm trùng; hiếm khi ảnh hưởng nhìn, thở, nghe.", ["+0"]]
+    ],
+    "care": [["Đừng tự bôi thuốc hay chọc vỡ.", ["+0"]]],
+    "doctor": [
+      ["U máu chảy máu, loét hoặc trông như nhiễm trùng → đưa bé đi khám.", ["+0"]],
+      ["U ảnh hưởng mắt, thở, ăn uống → khám ngay.", ["+0"]]
+    ]
+  },
+  "lc-buou-tim": {
+    "addSources": [{ "title": "Cardiac Tumor", "publisher": "Cleveland Clinic (Hoa Kỳ)", "url": "https://my.clevelandclinic.org/health/diseases/22914-cardiac-tumor" }],
+    "about": [
+      ["Bướu tim là khối u mọc trong tim; có thể lành tính hoặc ác tính.", ["+0"]],
+      ["U nguyên phát bắt đầu từ tim; u di căn lan từ nơi khác đến tim.", ["+0"]],
+      ["Khoảng 85% u tim nguyên phát là lành tính.", ["+0"]]
+    ],
+    "signs": [["Có người không có triệu chứng hoặc rất nhẹ; triệu chứng tuỳ loại và vị trí u.", ["+0"]]],
+    "care": [
+      ["Siêu âm tim giúp phát hiện u.", ["+0"]],
+      ["Mổ cắt u là cách điều trị đầu tiên cho nhiều u lành; ngoài ra có hoá trị, xạ trị hoặc theo dõi.", ["+0"]]
+    ],
+    "doctor": [["Khó thở, hồi hộp, đau ngực hoặc ngất không rõ lý do → đi khám tim mạch.", ["+0", 0]]],
+    "emergency": [["Đau ngực dữ dội, khó thở nặng hoặc ngất → gọi 115.", [0]]]
+  },
+  "lc-bach-san": {
+    "addSources": [{ "title": "Leukoplakia", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/leukoplakia/" }],
+    "about": [["Bạch sản là mảng trắng trong miệng, hay ở trên hoặc dưới lưỡi, mặt trong má, nướu.", ["+0"]]],
+    "signs": [
+      ["Mảng trắng **không chà hay cạo đi được** (khác với nấm miệng).", ["+0"]],
+      ["Thường không đau.", ["+0"]]
+    ],
+    "causes": [
+      ["Chưa rõ nguyên nhân chính xác; hút thuốc và nhai thuốc lá được cho là làm tăng nguy cơ.", ["+0"]],
+      ["Bạch sản dạng lông do virus Epstein-Barr, gặp ở người suy giảm miễn dịch; dạng này không có nguy cơ ung thư miệng.", ["+0"]]
+    ],
+    "course": [["Có một khả năng nhỏ tiến triển thành ung thư miệng theo thời gian, nên cần khám định kỳ.", ["+0"]]],
+    "care": [
+      ["Không phải lúc nào cũng cần điều trị; thường tái khám định kỳ.", ["+0"]],
+      ["Bỏ thuốc lá; bớt hoặc bỏ rượu có thể giúp mảng nhỏ đi hoặc hết.", ["+0"]],
+      ["Mảng có nguy cơ thành ung thư có thể được mổ hoặc laser loại bỏ.", ["+0"]]
+    ],
+    "doctor": [["Mảng trắng trong miệng không tự hết → đi khám nha sĩ hoặc bác sĩ.", ["+0"]]]
+  },
+  "lc-bach-tang": {
+    "addSources": [{ "title": "Albinism", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001479.htm" }],
+    "about": [
+      ["Bạch tạng là khi cơ thể thiếu melanin — chất tạo màu cho tóc, da và mống mắt.", ["+0"]],
+      ["Do biến đổi gen, có thể di truyền trong gia đình.", ["+0"]]
+    ],
+    "signs": [
+      ["Dạng da – mắt: tóc, da, mống mắt trắng hoặc hồng, kèm vấn đề về mắt.", ["+0"]],
+      ["Dạng mắt chỉ ảnh hưởng mắt.", ["+0"]],
+      ["Mắt có thể giật nhanh, sợ ánh sáng, nhìn kém.", ["+0"]]
+    ],
+    "course": [["Dễ cháy nắng và có nguy cơ ung thư da.", ["+0"]]],
+    "care": [
+      ["Tránh nắng, dùng kem chống nắng, mặc đồ che kín; kính râm chống UV giúp bớt chói.", ["+0"]],
+      ["Điều trị nhằm giảm triệu chứng: đeo kính, đôi khi mổ cơ mắt.", ["+0"]],
+      ["Gia đình có người bạch tạng nên được tư vấn di truyền.", ["+0"]]
+    ],
+    "doctor": [["Da có thay đổi lạ (nốt mới, vết lâu lành) hoặc thị lực kém đi → đi khám.", ["+0"]]]
+  }
+}

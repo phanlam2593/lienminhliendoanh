@@ -7,49 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Bướu máu** — nhóm bệnh: da - tóc - móng, máu, bệnh trẻ em.",
+   "text": "Bướu máu (u máu) là vết bớt đỏ tươi do mạch máu mọc thừa ở da, lành tính.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Xuất hiện lúc sinh hoặc trong tháng đầu đời.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, sưng, loét, phù, ho.",
+   "text": "Trông như cục mềm hoặc mảng đỏ phẳng, hay ở mặt, da đầu, ngực, lưng.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Năm đầu có thể lớn nhanh thành cục gồ, rồi nhạt dần.",
+   "src": [
+    2
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: stress oxy hóa.",
+   "text": "Hay gặp hơn ở bé gái, bé sinh non hoặc nhẹ cân.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): trẻ sơ sinh da trắng, trẻ gái, trẻ sinh non, trẻ sơ sinh có mẹ lớn tuổi, có tính chất gia đình, sinh non.",
-   "src": [
-    0
+    2
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiều u máu hết trước 5 tuổi, phần lớn hết trước 10 tuổi.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Có thể loét gây đau, chảy máu, sẹo hoặc nhiễm trùng; hiếm khi ảnh hưởng nhìn, thở, nghe.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Đừng tự bôi thuốc hay chọc vỡ.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "U máu chảy máu, loét hoặc trông như nhiễm trùng → đưa bé đi khám.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "U ảnh hưởng mắt, thở, ăn uống → khám ngay.",
+   "src": [
+    2
    ]
   }
  ],
@@ -60,7 +85,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-mau.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Hemangioma",
+   "publisher": "Mayo Clinic (Hoa Kỳ)",
+   "url": "https://www.mayoclinic.org/diseases-conditions/hemangioma/symptoms-causes/syc-20352334",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Hemangioma",
+   "publisher": "Mayo Clinic (Hoa Kỳ)",
+   "url": "https://www.mayoclinic.org/diseases-conditions/hemangioma/symptoms-causes/syc-20352334",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

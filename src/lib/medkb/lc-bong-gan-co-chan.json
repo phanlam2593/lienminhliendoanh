@@ -7,66 +7,122 @@
  ],
  "about": [
   {
-   "text": "**Bong gân cổ chân** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Bong gân cổ chân là khi dây chằng quanh khớp cổ chân bị xoắn hoặc rách, thường do lật cổ chân.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng, viêm, viêm khớp cổ chân.",
+   "text": "Đau, sưng hoặc bầm quanh cổ chân.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Có thể không đặt chân xuống hoặc đi lại bình thường được.",
+   "src": [
+    2
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: trật khớp, bị tác động lên cổ chân.",
+   "text": "Không khởi động trước khi tập, cơ mệt và chơi thể thao là nguyên nhân thường gặp.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): chấn thương mắt cá chân trước đó, mắt cá chân.",
-   "src": [
-    0
+    2
    ]
   }
  ],
- "course": [],
- "care": [
+ "course": [
   {
-   "text": "Sinh hoạt / phòng ngừa: mang giày vừa vặn phù hợp, hạn chế đi giày cao gót.",
+   "text": "Phần lớn đỡ sau khoảng 2 tuần.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Vận động mạnh quá sớm có nguy cơ tổn thương thêm.",
    "src": [
-    0
+    2
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "2–3 ngày đầu: hạn chế dồn sức lên chân đau, nghỉ ngơi.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Chườm lạnh (bọc khăn) tối đa 20 phút, cách 2–3 giờ một lần.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Băng ép và kê chân cao trên gối càng nhiều càng tốt.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Vài ngày đầu tránh chườm nóng, rượu bia và xoa bóp.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Bớt đau thì cử động nhẹ để khớp không bị cứng.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Không đứng lên được hoặc không đi nổi vài bước → đi khám.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Tự chăm sóc mà không đỡ → đi khám.",
+   "src": [
+    2
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Cổ chân biến dạng, lệch hẳn → có thể gãy xương, cần đi cấp cứu chụp X-quang.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bong gân cổ chân – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/bong-gan-co-chan.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Sprains and strains",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/sprains-and-strains/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Sprains and strains",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/sprains-and-strains/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

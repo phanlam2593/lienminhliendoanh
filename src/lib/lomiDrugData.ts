@@ -78,6 +78,8 @@ export const TRUSTED = [
   "cancerresearchuk.org", "macmillan.org.uk",
   // 30/10: FAO (Liên Hợp Quốc) lưu bản PDF Bảng thành phần thực phẩm Việt Nam của Viện Dinh dưỡng – Bộ Y tế (lib/vnFoodData).
   "fao.org",
+  // 26/11: bệnh viện học thuật phi lợi nhuận (như Mayo Clinic) và hội chuyên khoa tuyến giáp Hoa Kỳ — làm lại thẻ Long Châu (u tim, nhân giáp, bướu giáp).
+  "clevelandclinic.org", "thyroid.org",
   // 04/11: MHRA (cơ quan quản lý thuốc Anh, trên gov.uk) — giới hạn 5 ngày xịt thông mũi; PCDS (Hội Da liễu chăm sóc ban đầu Anh) — hướng dẫn bôi thuốc trị ghẻ (lib/lomiDrugIndex).
   "gov.uk", "pcds.org.uk",
   // 04/11: Kir duyệt dùng tra cứu dược liệu / dược chất của Nhà thuốc FPT Long Châu làm nguồn THAM KHẢO cho phần y học cổ truyền

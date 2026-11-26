@@ -7,17 +7,35 @@
  ],
  "about": [
   {
-   "text": "**Bạch tạng** — nhóm bệnh: nội tiết - chuyển hóa, da.",
+   "text": "Bạch tạng là khi cơ thể thiếu melanin — chất tạo màu cho tóc, da và mống mắt.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Do biến đổi gen, có thể di truyền trong gia đình.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sợ ánh sáng, tàn nhang, chảy máu, bầm tím, khối u, đỏ da, nám, phù, ho.",
+   "text": "Dạng da – mắt: tóc, da, mống mắt trắng hoặc hồng, kèm vấn đề về mắt.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Dạng mắt chỉ ảnh hưởng mắt.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Mắt có thể giật nhanh, sợ ánh sáng, nhìn kém.",
+   "src": [
+    2
    ]
   }
  ],
@@ -29,27 +47,40 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Dễ cháy nắng và có nguy cơ ung thư da.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: chăm sóc mắt, chăm sóc da, chất đạm, chất béo, chất bột đường, vitamin và khoáng chất.",
+   "text": "Tránh nắng, dùng kem chống nắng, mặc đồ che kín; kính râm chống UV giúp bớt chói.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị nhằm giảm triệu chứng: đeo kính, đôi khi mổ cơ mắt.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Gia đình có người bạch tạng nên được tư vấn di truyền.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Da có thay đổi lạ (nốt mới, vết lâu lành) hoặc thị lực kém đi → đi khám.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -60,7 +91,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/bach-tang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Albinism",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001479.htm",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Albinism",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001479.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

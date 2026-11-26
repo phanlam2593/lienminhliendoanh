@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Bướu hoạt dịch cổ tay** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Bướu hoạt dịch (hạch gân) là cục chứa dịch dưới da, thường ở cổ tay hoặc bàn tay.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co giật, khối u, sưng, nám, sốt.",
+   "text": "Thường không đau, nhưng có thể đau khi hoặc sau khi cử động khớp đó.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -35,21 +35,40 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường tự hết, có khi mất vài tháng đến một năm.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "**Đừng tự bóp vỡ** — có thể gây nhiễm trùng hoặc tổn thương da.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Bác sĩ có thể hút dịch bằng kim, tiêm thuốc giảm sưng, hoặc mổ nhỏ cắt bỏ.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo về cục, cục to dần, hoặc cục cứng không di động → đi khám.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Cục rất đau, nóng, đỏ → khám gấp.",
+   "src": [
+    2
    ]
   }
  ],
@@ -60,7 +79,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-hoat-dich-co-tay.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Ganglion cyst",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/ganglion-cyst/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Ganglion cyst",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/ganglion-cyst/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

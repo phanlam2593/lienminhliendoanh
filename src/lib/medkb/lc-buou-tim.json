@@ -7,17 +7,29 @@
  ],
  "about": [
   {
-   "text": "**Bướu tim** — nhóm bệnh: nội tiết - chuyển hóa, ngực.",
+   "text": "Bướu tim là khối u mọc trong tim; có thể lành tính hoặc ác tính.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "U nguyên phát bắt đầu từ tim; u di căn lan từ nơi khác đến tim.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Khoảng 85% u tim nguyên phát là lành tính.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn kinh nguyệt, tiêu chảy, mất ngủ, run tay, vàng da, nôn, nám, phù.",
+   "text": "Có người không có triệu chứng hoặc rất nhẹ; triệu chứng tuỳ loại và vị trí u.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -38,35 +50,55 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bảo vệ mắt, hạn chế chất độc hại, tâm lý khỏe mạnh.",
+   "text": "Siêu âm tim giúp phát hiện u.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Mổ cắt u là cách điều trị đầu tiên cho nhiều u lành; ngoài ra có hoá trị, xạ trị hoặc theo dõi.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó thở, hồi hộp, đau ngực hoặc ngất không rõ lý do → đi khám tim mạch.",
+   "src": [
+    2,
+    0
+   ]
+  }
+ ],
+ "emergency": [
+  {
+   "text": "Đau ngực dữ dội, khó thở nặng hoặc ngất → gọi 115.",
    "src": [
     0
    ]
   }
  ],
- "emergency": [],
  "sources": [
   {
    "title": "Bướu tim – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-tim.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cardiac Tumor",
+   "publisher": "Cleveland Clinic (Hoa Kỳ)",
+   "url": "https://my.clevelandclinic.org/health/diseases/22914-cardiac-tumor",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Cardiac Tumor",
+   "publisher": "Cleveland Clinic (Hoa Kỳ)",
+   "url": "https://my.clevelandclinic.org/health/diseases/22914-cardiac-tumor",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,60 +7,103 @@
  ],
  "about": [
   {
-   "text": "**Bướu giáp nhân** — nhóm bệnh: nội tiết - chuyển hóa, cổ.",
+   "text": "Nhân giáp là khối tế bào tuyến giáp phát triển bất thường, tạo thành cục trong tuyến giáp.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Rất hay gặp: tới 60 tuổi khoảng một nửa số người có nhân giáp, và hơn 90% là lành tính.",
+   "src": [
+    2
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đánh trống ngực, xuất huyết, khàn tiếng, tiêu chảy, ngứa ran, tăng cân, trầm cảm, sụt cân, hồi hộp, táo bón.",
+   "text": "Phần lớn không có triệu chứng, hay được phát hiện tình cờ.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Nhân to có thể chèn khí quản hoặc thực quản, gây khó thở, khó nuốt.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Một số nhân tiết thừa hormone, gây cường giáp.",
+   "src": [
+    2
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bướu giáp keo, U nang tuyến giáp, viêm tuyến giáp, bướu giáp đa nhân, ung thư tuyến giáp, cường giáp.",
+   "text": "Phần lớn không rõ nguyên nhân; viêm tuyến giáp Hashimoto và thiếu i-ốt làm tăng nguy cơ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): giới tính nữ, tuổi càng cao, thiếu i-ốt, tiền sử chiếu xạ vùng đầu cổ, đái tháo đường, thiết máu thiếu sắt.",
-   "src": [
-    0
+    2
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Xét nghiệm máu (TSH) kiểm tra chức năng tuyến giáp nhưng không biết nhân lành hay ác.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Siêu âm là công cụ chính; chọc hút kim nhỏ dưới siêu âm để kiểm tra ung thư.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Nhân lành tính thường theo dõi bằng siêu âm mỗi 6–12 tháng; nghi ung thư thì thường mổ.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sờ thấy cục ở cổ, cục to nhanh, khàn tiếng, khó nuốt → đi khám.",
    "src": [
-    0
+    2
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở rõ → đi cấp cứu.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bướu giáp nhân – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-giap-nhan-1.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Thyroid Nodules",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/thyroid-nodules/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Thyroid Nodules",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/thyroid-nodules/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

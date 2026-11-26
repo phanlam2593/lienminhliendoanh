@@ -7,9 +7,15 @@
  ],
  "about": [
   {
-   "text": "**Béo phì độ 3** — nhóm bệnh: nội tiết - chuyển hóa, bụng.",
+   "text": "Béo phì độ 3 (béo phì nặng) là khi chỉ số BMI từ 40 trở lên, theo phân loại người lớn của CDC.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "BMI chỉ là công cụ sàng lọc, cần xét cùng các yếu tố khác khi đánh giá sức khoẻ.",
+   "src": [
+    2
    ]
   }
  ],
@@ -53,9 +59,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "BMI từ 40 trở lên → nên gặp bác sĩ để đánh giá sức khoẻ và lập kế hoạch giảm cân phù hợp.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -66,7 +72,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/beo-phi-do-3.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Adult BMI Categories",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Adult BMI Categories",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Biến dạng cổ thiên nga** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Biến dạng cổ thiên nga là khi khớp giữa ngón tay bị duỗi ngược quá mức, còn khớp đầu ngón lại gập xuống.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -23,39 +23,58 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: chấn thương.",
+   "text": "Do mất cân bằng hệ gân duỗi của ngón tay.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người bệnh viêm khớp dạng thấp, người bệnh viêm khớp vẩy nến, người bệnh bại não, người bệnh xơ cứng bì, người bệnh sau đột quỵ não, người bệnh Parkinson.",
+   "text": "Hay gặp do viêm khớp dạng thấp, chấn thương gân ở đầu ngón, hoặc co cứng cơ sau đột quỵ, chấn thương sọ não.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Dạng do viêm khớp dạng thấp gặp ở nữ nhiều hơn.",
+   "src": [
+    2
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Biến dạng nặng hoặc lâu năm khó chỉnh hết nếu không mổ; sau điều trị vẫn có thể còn biến dạng hoặc hạn chế cử động.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: cà chua.",
+   "text": "Bác sĩ khám tầm vận động từng khớp, có thể chụp X-quang và xét nghiệm viêm khớp dạng thấp.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị ban đầu: tập phục hồi chức năng bàn tay, kéo giãn và đeo nẹp chỉnh hình.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Trường hợp nặng có thể cần phẫu thuật; tập vật lý trị liệu là phần quan trọng.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ngón tay bắt đầu cong vẹo, cứng hoặc đau → đi khám sớm, khi khớp còn mềm dễ chỉnh hơn.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -66,7 +85,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/bien-dang-co-thien-nga.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Swan-Neck Deformity (StatPearls)",
+   "publisher": "NCBI Bookshelf (NIH, Hoa Kỳ)",
+   "url": "https://www.ncbi.nlm.nih.gov/books/NBK525970/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Swan-Neck Deformity (StatPearls)",
+   "publisher": "NCBI Bookshelf (NIH, Hoa Kỳ)",
+   "url": "https://www.ncbi.nlm.nih.gov/books/NBK525970/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

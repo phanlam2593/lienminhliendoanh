@@ -7,9 +7,15 @@
  ],
  "about": [
   {
-   "text": "**Bướu giáp lan tỏa** — nhóm bệnh: nội tiết - chuyển hóa, cổ.",
+   "text": "Bướu giáp lan toả là khi cả tuyến giáp to ra đều, không phải từng nhân riêng.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Có bướu giáp không có nghĩa là tuyến giáp hoạt động sai.",
+   "src": [
+    2
    ]
   }
  ],
@@ -23,50 +29,81 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bướu giáp lan tỏa nhiễm độc, thiếu i-ốt, nhiễm trùng, bướu cổ sinh lý, goitrogens, tiếp xúc với bức xạ, tự miễn dịch, bệnh u hạt.",
+   "text": "Thiếu i-ốt là một trong những nguyên nhân phổ biến nhất trên thế giới.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì, tình trạng đề kháng insulin, hội chứng chuyển hóa, tiền sử gia đình mắc bệnh tuyến giáp.",
+   "text": "Bệnh Graves (cường giáp) và Hashimoto (tự miễn phá huỷ tuyến giáp) cũng hay gây bướu giáp.",
    "src": [
-    0
+    2
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bướu giáp lan tỏa không nhiễm độc, bướu giáp lan tỏa nhiễm độc.",
+   "text": "Bác sĩ xét nghiệm chức năng tuyến giáp, siêu âm; đôi khi xạ hình hoặc chọc kim.",
    "src": [
-    0
+    2
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Do Hashimoto kèm suy giáp: uống hormone tuyến giáp mỗi ngày theo đơn.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Do Graves: i-ốt phóng xạ thường làm bướu nhỏ đi hoặc hết.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "Mổ chủ yếu khi bướu chèn ép đường thở.",
+   "src": [
+    2
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy cổ to ra, hoặc có dấu hiệu cường giáp / suy giáp → đi khám nội tiết.",
    "src": [
-    0
+    2
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Bướu to gây khó thở → đi cấp cứu.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bướu giáp lan tỏa – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/buou-giap-lan-toa.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Goiter",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/goiter/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Goiter",
+   "publisher": "American Thyroid Association",
+   "url": "https://www.thyroid.org/goiter/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
