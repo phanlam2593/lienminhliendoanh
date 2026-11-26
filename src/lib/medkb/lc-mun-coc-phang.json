@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Mụn cóc phẳng** — nhóm bệnh: da - tóc - móng, da.",
+   "text": "Mụn cóc (hạt cơm) là những cục nhỏ vô hại trên da do virus, hay ở tay, gối, ngón tay; mọc ở bàn chân thì dễ đau hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,39 +23,40 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ung thư cổ tử cung.",
+   "text": "Lây qua bề mặt nhiễm virus hoặc tiếp xúc da gần; da ướt hoặc trầy xước dễ lây hơn; có thể vài tháng sau mới mọc.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): trên da có vết thương hoặc trầy xước, mụn trứng cá, mụn nhọt, ung thư.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường tự hết nhưng có thể mất vài tháng đến vài năm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tránh làm trầy xước da của bạn, ngủ từ 6 đến 8 tiếng/ngày, uống ít nhất 2 lít nước mỗi ngày, giữ cho da luôn sạch sẽ, ngủ đủ giấc trong ngày, tránh thức khuya, tiêm phòng vaccine HPV.",
+   "text": "Rửa tay sau khi chạm mụn; dán băng khi đi bơi; thay tất hằng ngày nếu mụn ở chân; không dùng chung khăn, tất, giày; không gãi, cạy, cắn mụn.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Dược sĩ có thể tư vấn kem, miếng dán, xịt — có thể mất đến 3 tháng, dễ kích ứng da, không phải lúc nào cũng hiệu quả; không dùng trên mặt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Mụn ở mặt hoặc bộ phận sinh dục, chảy máu hoặc thay đổi hình dạng, hay mọc lại, rất to hoặc đau → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/mun-coc-phang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Warts and verrucas",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/warts-and-verrucas/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

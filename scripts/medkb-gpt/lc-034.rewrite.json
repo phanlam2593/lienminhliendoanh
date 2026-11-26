@@ -1,0 +1,656 @@
+{
+  "_note": "27/11 — Vòng LC 32 (đợt 28–30): NHS warts-and-verrucas, sleep-apnoea, carbon-monoxide-poisoning, trigger-finger, stomach-ulcer, diabetic-ketoacidosis — Claude đã mở kiểm. Thêm: NHS urinary-tract-infections, teeth-grinding, colour-vision-deficiency.",
+  "lc-mun-coc-hat-com": {
+    "addSources": [
+      {
+        "title": "Warts and verrucas",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/warts-and-verrucas/"
+      }
+    ],
+    "about": [
+      [
+        "Mụn cóc (hạt cơm) là những cục nhỏ vô hại trên da do virus, hay ở tay, gối, ngón tay; mọc ở bàn chân thì dễ đau hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua bề mặt nhiễm virus hoặc tiếp xúc da gần; da ướt hoặc trầy xước dễ lây hơn; có thể vài tháng sau mới mọc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự hết nhưng có thể mất vài tháng đến vài năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Rửa tay sau khi chạm mụn; dán băng khi đi bơi; thay tất hằng ngày nếu mụn ở chân; không dùng chung khăn, tất, giày; không gãi, cạy, cắn mụn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Dược sĩ có thể tư vấn kem, miếng dán, xịt — có thể mất đến 3 tháng, dễ kích ứng da, không phải lúc nào cũng hiệu quả; không dùng trên mặt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mụn ở mặt hoặc bộ phận sinh dục, chảy máu hoặc thay đổi hình dạng, hay mọc lại, rất to hoặc đau → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-mun-coc-phang": {
+    "addSources": [
+      {
+        "title": "Warts and verrucas",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/warts-and-verrucas/"
+      }
+    ],
+    "about": [
+      [
+        "Mụn cóc (hạt cơm) là những cục nhỏ vô hại trên da do virus, hay ở tay, gối, ngón tay; mọc ở bàn chân thì dễ đau hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua bề mặt nhiễm virus hoặc tiếp xúc da gần; da ướt hoặc trầy xước dễ lây hơn; có thể vài tháng sau mới mọc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự hết nhưng có thể mất vài tháng đến vài năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Rửa tay sau khi chạm mụn; dán băng khi đi bơi; thay tất hằng ngày nếu mụn ở chân; không dùng chung khăn, tất, giày; không gãi, cạy, cắn mụn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Dược sĩ có thể tư vấn kem, miếng dán, xịt — có thể mất đến 3 tháng, dễ kích ứng da, không phải lúc nào cũng hiệu quả; không dùng trên mặt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mụn ở mặt hoặc bộ phận sinh dục, chảy máu hoặc thay đổi hình dạng, hay mọc lại, rất to hoặc đau → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ngung-tho-khi-ngu-do-tac-nghen": {
+    "addSources": [
+      {
+        "title": "Sleep apnoea",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sleep-apnoea/"
+      }
+    ],
+    "about": [
+      [
+        "Ngưng thở khi ngủ do tắc nghẽn là khi đường thở hẹp lại lúc ngủ, làm hơi thở ngừng rồi thở lại nhiều lần; cần điều trị vì có thể dẫn đến bệnh nặng hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ban đêm: có lúc ngừng thở, thở hổn hển, khịt mũi hoặc nghẹn, hay thức giấc, ngáy to (người ngủ cùng hay nhận ra trước).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ban ngày: mệt mỏi, khó tập trung, tâm trạng thất thường, đau đầu buổi sáng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Liên quan béo phì, cổ to, tuổi cao, tiền sử gia đình, rượu, hút thuốc, amidan hoặc VA to, ngủ nằm ngửa.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Giảm cân, bỏ thuốc lá, bớt rượu, vận động đều, ngủ nghiêng; tránh thuốc ngủ nếu bác sĩ không cho.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Máy thở áp lực dương (CPAP) đeo khi ngủ giúp giữ đường thở mở, hiệu quả nhất khi dùng mỗi đêm; ngoài ra có dụng cụ đẩy hàm, phẫu thuật như cắt amidan.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Buồn ngủ nhiều ban ngày thì không nên lái xe cho đến khi kiểm soát được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ngáy to, ngừng thở khi ngủ, luôn mệt ban ngày → đi khám, nên đưa người ngủ cùng đi để kể lại.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ngo-doc-carbon-monoxide": {
+    "addSources": [
+      {
+        "title": "Carbon monoxide poisoning",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/carbon-monoxide-poisoning/"
+      }
+    ],
+    "about": [
+      [
+        "Khí CO (carbon monoxide) là khí độc không màu, không mùi, hít phải có thể ngộ độc nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau đầu, chóng mặt, buồn nôn, yếu, mệt, lú lẫn, đau ngực hoặc đau cơ, khó thở, đỏ bừng mặt, mất thị lực; triệu chứng có thể đỡ khi ra ngoài rồi tái lại khi vào lại nơi đó.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thiết bị đốt gas, dầu, than, củi lắp đặt hoặc bảo trì kém (bình nóng lạnh, bếp, lò sưởi), máy phát điện; nướng than, bếp cắm trại trong nhà; nổ máy xe trong chỗ kín như gara.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tắt thiết bị nghi ngờ nếu an toàn, ra ngoài chỗ thoáng, đi khám; chưa quay lại khi chưa được khuyên.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: lắp báo động CO ở phòng có thiết bị đốt nhiên liệu, bảo trì định kỳ, giữ phòng thông thoáng; không nướng than, dùng bếp cồn trong nhà; không nổ máy xe trong chỗ kín.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở, bỗng lú lẫn, bất tỉnh, đau ngực hoặc đau cơ → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ngon-tay-lo-xo": {
+    "addSources": [
+      {
+        "title": "Trigger finger",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/trigger-finger/"
+      }
+    ],
+    "about": [
+      [
+        "Ngón tay lò xo là khi ngón tay hoặc ngón cái bị kẹt ở tư thế gập rồi bật kêu tách khi duỗi, do gân ngón tay dày lên và vướng khi gập.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ngón bị kẹt, kêu tách khi duỗi, đau, cứng, đôi khi phải dùng tay kia đẩy mới duỗi được; thường nặng hơn buổi sáng và khi dùng tay nhiều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ nguyên nhân, đôi khi do chấn thương; nguy cơ cao hơn ở người trên 40 tuổi, tiểu đường, viêm khớp dạng thấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có thể tự đỡ; giảm việc làm nặng thêm, dùng thuốc giảm đau như ibuprofen.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu kéo dài: nẹp giữ ngón thẳng, tiêm steroid, mổ khi các cách khác không hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ hoặc ảnh hưởng sinh hoạt hằng ngày → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-h-pylori-hp": {
+    "addSources": [
+      {
+        "title": "Stomach ulcer",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/stomach-ulcer/"
+      }
+    ],
+    "about": [
+      [
+        "Vi khuẩn H. pylori là một nguyên nhân chính gây loét dạ dày, tá tràng; đa số khỏi khi được điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng trên, có thể nóng rát, thường nặng hơn về đêm; khó tiêu, ợ nóng, đầy bụng, buồn nôn hoặc nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ngoài H. pylori, dùng thuốc giảm đau kháng viêm thường xuyên, hút thuốc và tuổi cao cũng làm tăng nguy cơ loét.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Xét nghiệm hơi thở, phân hoặc máu tìm H. pylori; có thể nội soi dạ dày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Điều trị bằng kháng sinh diệt H. pylori kèm thuốc giảm tiết axit theo bác sĩ (từ 1 tuần đến 2 tháng); bỏ thuốc lá, tránh dùng thuốc kháng viêm thường xuyên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khó tiêu không đỡ khi điều trị, đau nặng dần hoặc kéo dài, kèm sụt cân, chán ăn, khó nuốt, nôn liên tục → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu đỏ tươi hoặc như bã cà phê, đi ngoài phân đen hoặc có máu, đau bụng dữ dội, đau ngực đột ngột → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-toan-ceton": {
+    "addSources": [
+      {
+        "title": "Diabetic ketoacidosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/diabetic-ketoacidosis/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm toan ceton là biến chứng nặng của tiểu đường: thiếu insulin làm thể ceton tích tụ trong máu, có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khát, tiểu nhiều, đau bụng, buồn nôn hoặc nôn, tiêu chảy, thở sâu, hơi thở mùi trái cây, mệt hoặc lú lẫn, nhìn mờ; thường xuất hiện trong khoảng 24 giờ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chủ yếu ở người tiểu đường type 1, cũng gặp ở type 2 dùng insulin; có thể là dấu hiệu đầu tiên của tiểu đường type 1 chưa được chẩn đoán, nhất là ở trẻ em.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khởi phát do ốm, chấn thương, phẫu thuật, kinh nguyệt hoặc dùng thiếu insulin.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đo đường huyết thường xuyên, thử ceton khi đường cao hoặc đang ốm; làm theo hướng dẫn ngày ốm của đội điều trị; không bao giờ tự ngưng hay bỏ cữ insulin, kể cả khi không ăn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Điều trị ở bệnh viện: truyền insulin, dịch và theo dõi biến chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Ceton máu trên 3 mmol/L, ceton niệu từ 2+, hoặc có triệu chứng mà không biết mức ceton → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-trung-tiet-nieu": {
+    "addSources": [
+      {
+        "title": "Urinary tract infections (UTIs)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm trùng tiết niệu ảnh hưởng các phần của đường tiểu như bàng quang, niệu đạo, thận; không phải lúc nào cũng cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau rát khi tiểu, tiểu nhiều hoặc gấp, nước tiểu đục hoặc có máu, đau bụng dưới hoặc lưng, sốt, mệt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ em có thể quấy, đái dầm, nôn; người già yếu hoặc đặt ống thông có thể lú lẫn, són tiểu nặng hơn, rét run.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do vi khuẩn từ phân vào đường tiểu qua niệu đạo; nữ dễ bị hơn vì niệu đạo ngắn; nguy cơ tăng khi mang thai, mãn kinh, đặt ống thông, tiểu đường, miễn dịch yếu, sỏi thận, phì đại tiền liệt tuyến, lau từ sau ra trước, uống ít nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng paracetamol giảm đau, hạ sốt; uống đủ nước để nước tiểu nhạt màu; tránh cà phê, rượu, nước ép.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: lau từ trước ra sau, uống đủ nước, giữ vùng kín sạch khô, đi tiểu sớm sau quan hệ, mặc đồ lót cotton, tránh xà phòng có hương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 65 tuổi, trẻ em, nam giới, tiểu đường, mang thai, đặt ống thông, tiểu ra máu, miễn dịch yếu, không đỡ sau 48 giờ, hay tái phát → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Lú lẫn, lơ mơ, khó nói → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-trung-duong-tiet-nieu-o-nu": {
+    "addSources": [
+      {
+        "title": "Urinary tract infections (UTIs)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm trùng tiết niệu ảnh hưởng các phần của đường tiểu như bàng quang, niệu đạo, thận; không phải lúc nào cũng cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau rát khi tiểu, tiểu nhiều hoặc gấp, nước tiểu đục hoặc có máu, đau bụng dưới hoặc lưng, sốt, mệt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ em có thể quấy, đái dầm, nôn; người già yếu hoặc đặt ống thông có thể lú lẫn, són tiểu nặng hơn, rét run.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do vi khuẩn từ phân vào đường tiểu qua niệu đạo; nữ dễ bị hơn vì niệu đạo ngắn; nguy cơ tăng khi mang thai, mãn kinh, đặt ống thông, tiểu đường, miễn dịch yếu, sỏi thận, phì đại tiền liệt tuyến, lau từ sau ra trước, uống ít nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng paracetamol giảm đau, hạ sốt; uống đủ nước để nước tiểu nhạt màu; tránh cà phê, rượu, nước ép.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: lau từ trước ra sau, uống đủ nước, giữ vùng kín sạch khô, đi tiểu sớm sau quan hệ, mặc đồ lót cotton, tránh xà phòng có hương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 65 tuổi, trẻ em, nam giới, tiểu đường, mang thai, đặt ống thông, tiểu ra máu, miễn dịch yếu, không đỡ sau 48 giờ, hay tái phát → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Lú lẫn, lơ mơ, khó nói → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nghien-rang-khi-ngu": {
+    "addSources": [
+      {
+        "title": "Teeth grinding (bruxism)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/teeth-grinding/"
+      }
+    ],
+    "about": [
+      [
+        "Nghiến răng có thể xảy ra khi thức hoặc khi ngủ, thường liên quan căng thẳng hoặc lo âu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau hàm, răng mòn hoặc mẻ và ê buốt hơn, đau đầu, đau tai, ngủ kém.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là căng thẳng, lo âu; ngoài ra ngáy, ngưng thở khi ngủ, một số thuốc, hút thuốc, uống nhiều rượu hoặc cà phê.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tập thư giãn (thở, nghe nhạc, vận động); đi ngủ đúng giờ, phòng tối và yên tĩnh; dùng thuốc giảm đau, chườm lạnh hàm 20–30 phút khi đau; tránh nhai kẹo cao su, đồ cứng; bớt thuốc lá, rượu, cà phê.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi cần, nha sĩ làm máng nhai đeo ban đêm để bảo vệ răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Răng tổn thương hoặc ê buốt, đau hàm, mặt, tai, người ngủ cùng thấy nghiến răng, hoặc lo trẻ nghiến răng → khám nha.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-mu-mau": {
+    "addSources": [
+      {
+        "title": "Colour vision deficiency (colour blindness)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/colour-vision-deficiency/"
+      }
+    ],
+    "about": [
+      [
+        "Mù màu (rối loạn sắc giác) là nhìn màu khác đa số mọi người và khó phân biệt một số màu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó phân biệt màu; ở trẻ có thể thấy tô sai màu khi vẽ hoặc khó xếp theo màu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Có thể di truyền, có từ khi sinh; cũng có thể xuất hiện ở bất kỳ tuổi nào do bệnh mắt như glôcôm, tiểu đường, đa xơ cứng, chấn thương mắt hoặc đầu, đột quỵ, một số thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thể di truyền không có cách điều trị, đa số người tự thích nghi; nếu do bệnh hoặc thuốc thì điều trị bệnh hoặc đổi thuốc có thể giúp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bạn hoặc con có dấu hiệu mù màu → đi khám mắt, xin kiểm tra sắc giác.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

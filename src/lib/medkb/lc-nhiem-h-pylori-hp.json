@@ -8,54 +8,73 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm H.pylori (HP)** — nhóm bệnh: tiêu hóa.",
+   "text": "Vi khuẩn H. pylori là một nguyên nhân chính gây loét dạ dày, tá tràng; đa số khỏi khi được điều trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nóng rát, buồn nôn, ợ hơi, sưng, loét, nôn.",
+   "text": "Đau bụng trên, có thể nóng rát, thường nặng hơn về đêm; khó tiêu, ợ nóng, đầy bụng, buồn nôn hoặc nôn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: H, vi khuẩn H.",
+   "text": "Ngoài H. pylori, dùng thuốc giảm đau kháng viêm thường xuyên, hút thuốc và tuổi cao cũng làm tăng nguy cơ loét.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Xét nghiệm hơi thở, phân hoặc máu tìm H. pylori; có thể nội soi dạ dày.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Điều trị bằng kháng sinh diệt H. pylori kèm thuốc giảm tiết axit theo bác sĩ (từ 1 tuần đến 2 tháng); bỏ thuốc lá, tránh dùng thuốc kháng viêm thường xuyên.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó tiêu không đỡ khi điều trị, đau nặng dần hoặc kéo dài, kèm sụt cân, chán ăn, khó nuốt, nôn liên tục → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Nôn ra máu đỏ tươi hoặc như bã cà phê, đi ngoài phân đen hoặc có máu, đau bụng dữ dội, đau ngực đột ngột → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Nhiễm H.pylori (HP) – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-h-pylori-hp-199.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Stomach ulcer",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/stomach-ulcer/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
