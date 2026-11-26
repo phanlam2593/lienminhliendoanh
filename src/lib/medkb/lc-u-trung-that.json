@@ -7,55 +7,62 @@
  ],
  "about": [
   {
-   "text": "**U trung thất** — nhóm bệnh: ung thư, ngực.",
+   "text": "U trung thất là khối u mọc ở trung thất — vùng giữa ngực, nằm giữa hai lá phổi, chứa tim, mạch máu lớn, khí quản, tuyến ức và thực quản.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thở khò khè, nghẹt mũi, thiếu máu, đau ngực, nuốt đau, rụng tóc, buồn nôn, sụt cân, sốt cao, mệt mỏi.",
+   "text": "Gần một nửa không có triệu chứng, chỉ tình cờ thấy khi chụp X-quang ngực.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khi có, triệu chứng do u chèn ép: đau ngực, ho, ho ra máu, khàn tiếng, đổ mồ hôi đêm, khó thở, sốt kèm ớn lạnh.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: lymphoma, bướu giáp, trung thất trước, trung thất giữa, trung thất sau.",
+   "text": "Ở trẻ em, u hay nằm ở phía sau và thường lành tính, hay xuất phát từ dây thần kinh.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): Ở trẻ em, Ở người lớn, người cao tuổi.",
+   "text": "Ở người lớn, u hay nằm ở phía trước và thường là ung thư (u lympho, u tế bào mầm, u tuyến ức), gặp nhiều ở tuổi trung niên trở lên.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tiên lượng tuỳ loại u; u có thể chèn ép tuỷ sống hoặc lan sang tim, mạch máu lớn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tránh hút thuốc.",
+   "text": "Điều trị tuỳ loại: u tuyến ức thường mổ; u tế bào mầm thường hoá trị; u lympho dùng thuốc nhắm đích, hoá trị, có thể thêm xạ trị; u thần kinh phía sau chủ yếu mổ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ho kéo dài, khàn tiếng, đau ngực hoặc đổ mồ hôi đêm không rõ lý do → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-trung-that-422.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Mediastinal tumor",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001086.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

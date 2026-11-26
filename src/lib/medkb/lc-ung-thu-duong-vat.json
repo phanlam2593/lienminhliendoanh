@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Ung thư dương vật** — nhóm bệnh: ung thư, bệnh nam giới.",
+   "text": "Ung thư dương vật rất hiếm, chủ yếu ở da dương vật và hay gặp ở nam giới trên 50 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng hạch, chảy máu, phát ban, nổi cục, khối u, sưng, loét, nám, mụn.",
+   "text": "Thường ở bao quy đầu hoặc quy đầu: khối u, cục hay vết loét không lành sau 4 tuần; phát ban; chảy máu ở dương vật hoặc dưới bao quy đầu; dịch tiết có mùi; khó kéo bao quy đầu; da đổi màu.",
    "src": [
-    0
+    2
+   ]
+  },
+  {
+   "text": "Ít gặp hơn: nổi cục ở bẹn, mệt mỏi, đau bụng, sụt cân không rõ lý do.",
+   "src": [
+    2
    ]
   }
  ],
@@ -35,7 +41,14 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiều dấu hiệu trên có thể do bệnh khác, nhưng vẫn nên khám vì phát hiện sớm giúp điều trị dễ hơn.",
+   "src": [
+    2
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Sinh hoạt / phòng ngừa: cắt bao quy đầu khi cần thiết, bỏ thuốc lá hoặc tránh khói thuốc lá.",
@@ -53,9 +66,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Dương vật thay đổi hình dạng, màu da, có dịch, chảy máu, hoặc vết loét lâu lành → đi khám, đừng ngại; bác sĩ gặp những chuyện này thường xuyên.",
    "src": [
-    0
+    2
    ]
   }
  ],
@@ -66,7 +79,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-duong-vat-450.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Penile cancer",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/penile-cancer/",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Symptoms of penile cancer",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/penile-cancer/symptoms/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

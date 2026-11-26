@@ -1,0 +1,124 @@
+{
+  "_note": "26/11 — Vòng LC 6 (Claude tự làm, đợt 101–103 còn sót): NHS penile-cancer (+ symptoms), MedlinePlus 001086 mediastinal tumors — Claude đã mở kiểm. Chưa mở được nguồn: DCIS, u thần kinh nội tiết, u tủy sống, u tế bào khổng lồ.",
+  "lc-ung-thu-duong-vat": {
+    "addSources": [
+      {
+        "title": "Penile cancer",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/penile-cancer/"
+      },
+      {
+        "title": "Symptoms of penile cancer",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/penile-cancer/symptoms/"
+      }
+    ],
+    "about": [
+      [
+        "Ung thư dương vật rất hiếm, chủ yếu ở da dương vật và hay gặp ở nam giới trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường ở bao quy đầu hoặc quy đầu: khối u, cục hay vết loét không lành sau 4 tuần; phát ban; chảy máu ở dương vật hoặc dưới bao quy đầu; dịch tiết có mùi; khó kéo bao quy đầu; da đổi màu.",
+        [
+          "+1"
+        ]
+      ],
+      [
+        "Ít gặp hơn: nổi cục ở bẹn, mệt mỏi, đau bụng, sụt cân không rõ lý do.",
+        [
+          "+1"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiều dấu hiệu trên có thể do bệnh khác, nhưng vẫn nên khám vì phát hiện sớm giúp điều trị dễ hơn.",
+        [
+          "+1"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Dương vật thay đổi hình dạng, màu da, có dịch, chảy máu, hoặc vết loét lâu lành → đi khám, đừng ngại; bác sĩ gặp những chuyện này thường xuyên.",
+        [
+          "+1"
+        ]
+      ]
+    ]
+  },
+  "lc-u-trung-that": {
+    "addSources": [
+      {
+        "title": "Mediastinal tumor",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/001086.htm"
+      }
+    ],
+    "about": [
+      [
+        "U trung thất là khối u mọc ở trung thất — vùng giữa ngực, nằm giữa hai lá phổi, chứa tim, mạch máu lớn, khí quản, tuyến ức và thực quản.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Gần một nửa không có triệu chứng, chỉ tình cờ thấy khi chụp X-quang ngực.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi có, triệu chứng do u chèn ép: đau ngực, ho, ho ra máu, khàn tiếng, đổ mồ hôi đêm, khó thở, sốt kèm ớn lạnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ở trẻ em, u hay nằm ở phía sau và thường lành tính, hay xuất phát từ dây thần kinh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở người lớn, u hay nằm ở phía trước và thường là ung thư (u lympho, u tế bào mầm, u tuyến ức), gặp nhiều ở tuổi trung niên trở lên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tiên lượng tuỳ loại u; u có thể chèn ép tuỷ sống hoặc lan sang tim, mạch máu lớn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị tuỳ loại: u tuyến ức thường mổ; u tế bào mầm thường hoá trị; u lympho dùng thuốc nhắm đích, hoá trị, có thể thêm xạ trị; u thần kinh phía sau chủ yếu mổ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho kéo dài, khàn tiếng, đau ngực hoặc đổ mồ hôi đêm không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
