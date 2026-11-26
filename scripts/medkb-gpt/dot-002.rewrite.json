@@ -1,0 +1,170 @@
+{
+  "_note": "26/11 — Đợt 2 do Claude viết lại (không qua ChatGPT): giữ nguyên ý và nguồn của thẻ cũ, câu ngắn, mỗi dòng một ý, bỏ tên nguồn trong câu. Ý mới chỉ lấy từ trang NHS Claude đã mở kiểm (WebFetch 26/11): goitre, vitiligo, addisons-disease, coeliac-disease, crohns-disease.",
+  "buou-giap": {
+    "about": [
+      ["Bướu giáp (bướu cổ) là khối sưng ở phía trước cổ do tuyến giáp to ra.", [0, 2]],
+      ["Tuyến giáp có thể to đều, hoặc có một hay nhiều cục (nhân giáp).", [1]],
+      ["Bướu giáp có thể đi kèm chức năng tuyến giáp bình thường, cường giáp hoặc suy giáp.", [1]],
+      ["Bướu giáp thường không nghiêm trọng và thường không phải ung thư, nhưng nên được bác sĩ kiểm tra.", [0, 2]]
+    ],
+    "signs": [
+      ["Dấu hiệu chính là sưng ở phía trước cổ, thường không đau, có thể chỉ một bên.", [0, 1, 2]],
+      ["Nhiều người không có dấu hiệu nào khác ngoài cổ sưng.", [1]],
+      ["Bướu lớn có thể gây ho dai dẳng, khàn tiếng, cảm giác vướng trong họng, khó nuốt hoặc khó thở.", [0, 1, 2]],
+      ["Có thể kèm dấu hiệu suy giáp (mệt, sợ lạnh, da khô, táo bón) hoặc cường giáp (sụt cân, tim đập nhanh, sợ nóng, run tay).", [1, 2]]
+    ],
+    "causes": [
+      ["Thiếu i-ốt là nguyên nhân phổ biến nhất trên thế giới; ít gặp ở nơi dùng muối i-ốt.", [1, 2]],
+      ["Nguyên nhân khác: cường giáp, suy giáp, bệnh tự miễn (Hashimoto, Graves), viêm tuyến giáp, nhân giáp.", [0, 1, 2]],
+      ["Thay đổi nội tiết khi dậy thì, mang thai hoặc mãn kinh cũng có thể làm tuyến giáp to ra.", [1, 2]],
+      ["Một số thuốc (như lithium, amiodarone) và hút thuốc làm tăng nguy cơ.", [1, 2]],
+      ["Ung thư tuyến giáp là nguyên nhân hiếm gặp: khoảng 5% người có nhân giáp được phát hiện ung thư.", [0, 1]],
+      ["Nguy cơ cao hơn ở nữ, người trên 40 tuổi, người có người thân bị bệnh tuyến giáp, hoặc từng xạ trị vùng cổ, ngực.", [1, 2]]
+    ],
+    "course": [
+      ["Đa số bướu giáp nhỏ, không gây vấn đề, đôi khi không cần điều trị.", [0, 1]],
+      ["Bướu giáp đơn thuần có thể tự nhỏ đi hoặc lớn dần.", [2]],
+      ["Bướu lớn có thể chèn ép đường thở, gây khó thở.", [1]],
+      ["Một số trường hợp dẫn đến suy giáp, hoặc bướu tự tiết hormone gây cường giáp.", [2]]
+    ],
+    "care": [
+      ["Bác sĩ thường khám cổ, xét nghiệm máu và siêu âm; đôi khi cần xạ hình hoặc chọc kim sinh thiết.", [0, 2]],
+      ["Thường chỉ điều trị khi bướu gây triệu chứng; do suy giáp hay cường giáp thì thường dùng thuốc.", [0, 2]],
+      ["Tuỳ nguyên nhân, bác sĩ có thể dùng thuốc hormone tuyến giáp, bổ sung i-ốt, i-ốt phóng xạ hoặc mổ.", [2]],
+      ["Bướu gây khó thở, khó nuốt có thể cần mổ cắt một phần hoặc toàn bộ tuyến giáp — do bác sĩ chuyên khoa quyết định.", [0]],
+      ["Dùng muối i-ốt giúp phòng phần lớn bướu giáp đơn thuần.", [2]]
+    ],
+    "doctor": [
+      ["Thấy sưng ở trước cổ, hoặc nghĩ mình bị bướu giáp → nên đi khám, dù thường không nghiêm trọng.", [0, 2]]
+    ],
+    "emergency": [
+      ["Khó thở hoặc thở khò khè → gọi 115 hoặc đến cấp cứu ngay; đừng tự lái xe đi.", [0]]
+    ],
+    "foodNotes": {
+      "muối ăn có iod": "Nên dùng: muối i-ốt giúp phòng hầu hết bướu giáp đơn thuần do thiếu i-ốt."
+    }
+  },
+  "bach-bien": {
+    "about": [
+      ["Bạch biến là bệnh da kéo dài, xuất hiện các mảng da trắng do thiếu melanin (sắc tố da).", [0]],
+      ["Mảng trắng có thể ở bất kỳ đâu, hay gặp ở mặt, cổ, bàn tay và các nếp gấp da.", [0]],
+      ["Bệnh cũng có thể ảnh hưởng mắt, trong miệng và mũi.", [1]],
+      ["Bạch biến **không lây**, không do nhiễm trùng.", [0]]
+    ],
+    "signs": [
+      ["Mảng da thường nhợt màu lúc đầu rồi dần trắng hẳn.", [0]],
+      ["Bờ mảng có thể trơn hoặc nham nhở, đôi khi hơi đỏ hoặc hơi nâu.", [0]],
+      ["Thường không gây khó chịu, nhưng mảng đôi khi hơi ngứa.", [0]],
+      ["Ở da đầu, tóc vùng đó có thể bạc hoặc trắng; có người bạc tóc sớm.", [0, 1]],
+      ["Có người chỉ vài mảng nhỏ, có người nhiều mảng lớn; không đoán trước được bệnh lan bao nhiêu.", [0]]
+    ],
+    "causes": [
+      ["Da bị trắng vì không đủ tế bào tạo sắc tố hoạt động.", [0]],
+      ["Dạng thường gặp nhất được cho là bệnh tự miễn: hệ miễn dịch phá huỷ tế bào tạo sắc tố.", [0]],
+      ["Dễ mắc hơn nếu người thân bị bạch biến, hoặc bản thân có bệnh tự miễn khác.", [0, 1]],
+      ["Bệnh có thể khởi phát sau căng thẳng lớn, tổn thương da (cháy nắng nặng, vết cắt) hoặc thay đổi nội tiết như dậy thì.", [0]],
+      ["Thường bắt đầu trước 40 tuổi.", [1]]
+    ],
+    "course": [
+      ["Bệnh kéo dài; các mảng trắng thường tồn tại vĩnh viễn.", [0]],
+      ["Điều trị không ngăn được bệnh lan, và hiệu quả thường không kéo dài.", [0]]
+    ],
+    "care": [
+      ["Vùng da trắng dễ cháy nắng: cẩn thận khi ra nắng, dùng kem chống nắng chỉ số SPF cao.", [0, 1]],
+      ["Kem che khuyết điểm hoặc mỹ phẩm có thể che các mảng nhỏ.", [0, 1]],
+      ["Nếu bệnh nặng hoặc làm bạn buồn, có thể cân nhắc điều trị.", [0]],
+      ["Kem thuốc steroid có thể giúp lấy lại một phần màu da; dùng lâu có thể làm mỏng da, rạn da.", [0]],
+      ["Cách điều trị gồm thuốc, chiếu đèn và phẫu thuật; không phải cách nào cũng hợp mọi người, nhiều cách có tác dụng phụ.", [1]]
+    ],
+    "doctor": [
+      ["Nên đi khám da liễu để được chẩn đoán: bác sĩ khám da, có thể soi đèn UV và xét nghiệm tuyến giáp.", [0]],
+      ["Bệnh nặng hoặc làm bạn buồn, tự ti → hỏi bác sĩ về cách điều trị.", [0]]
+    ]
+  },
+  "benh-addison": {
+    "addSources": [
+      { "title": "Addison's disease", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/addisons-disease/" }
+    ],
+    "about": [
+      ["Bệnh Addison (suy tuyến thượng thận) là khi tuyến thượng thận, nằm trên thận, không tạo đủ hormone cortisol và aldosterone.", [0]],
+      ["Đây là bệnh hiếm, hay gặp ở tuổi 30–50, nữ nhiều hơn nam.", [0, "+0"]]
+    ],
+    "signs": [
+      ["Lúc đầu: kiệt sức, buồn chán, chán ăn, sụt cân, khát nhiều — dễ nhầm với trầm cảm hay cúm.", [0]],
+      ["Về sau: chóng mặt khi đứng dậy, yếu cơ, chuột rút, da sạm từng mảng, thèm đồ mặn.", [0, "+0"]]
+    ],
+    "causes": [
+      ["Thường do hệ miễn dịch tấn công nhầm tuyến thượng thận; có thể có tính gia đình.", [0, "+0"]],
+      ["Nguyên nhân khác: lao, nhiễm trùng, chảy máu tuyến thượng thận, ung thư di căn, sau mổ tuyến thượng thận.", [0]]
+    ],
+    "course": [
+      ["Được điều trị đúng, người bệnh vẫn sống khoẻ với tuổi thọ bình thường.", ["+0"]]
+    ],
+    "care": [
+      ["Phải dùng thuốc thay thế hormone **hằng ngày suốt đời** theo đơn.", [0, "+0"]],
+      ["Luôn mang theo thẻ cảnh báo đang dùng steroid / vòng y tế ghi rõ bệnh.", [0, "+0"]],
+      ["Khi ốm, chấn thương, mổ hay căng thẳng thường phải tăng thuốc theo \"quy tắc ngày ốm\" bác sĩ nội tiết dặn; luôn có sẵn thuốc dự phòng.", [0]]
+    ],
+    "doctor": [
+      ["Mệt kéo dài, sụt cân không rõ lý do, chóng mặt, buồn chán, da sạm từng mảng → đi khám để tìm nguyên nhân.", [0, "+0"]]
+    ],
+    "emergency": [
+      ["**Cơn suy thượng thận cấp**: mất nước nặng, nôn, tiêu chảy, da tái lạnh ẩm, thở nhanh nông, chóng mặt, lơ mơ, lú lẫn hoặc bất tỉnh → gọi **115**, báo rõ người bệnh bị Addison.", [0, "+0"]],
+      ["Đã tự tiêm thuốc cấp cứu rồi vẫn phải gọi 115.", ["+0"]]
+    ]
+  },
+  "benh-celiac": {
+    "about": [
+      ["Celiac là bệnh tự miễn: khi ăn gluten, hệ miễn dịch tấn công chính ruột non, làm khó hấp thu dưỡng chất.", [0]],
+      ["Gluten là chất đạm có trong lúa mì, lúa mạch và lúa mạch đen.", [0]]
+    ]
+  },
+  "benh-crohn": {
+    "about": [
+      ["Bệnh Crohn là bệnh lâu dài, trong đó một phần đường tiêu hoá bị viêm.", [0, 1]],
+      ["Chưa có thuốc chữa khỏi, nhưng điều trị giúp kiểm soát triệu chứng.", [0, 1]],
+      ["Bệnh thường bắt đầu ở tuổi thanh thiếu niên và người trẻ (hay nhất 20–29 tuổi), nhưng gặp được ở mọi lứa tuổi.", [0, 1]]
+    ],
+    "signs": [
+      ["Hay gặp nhất: tiêu chảy, đau quặn bụng và sụt cân.", [3]],
+      ["Có thể có máu hoặc nhầy trong phân, mệt mỏi, chán ăn, sốt, đau quanh hậu môn.", [0, 3]],
+      ["Triệu chứng lúc bùng lên, lúc lắng xuống; mỗi đợt bùng phát kéo dài từ vài ngày đến vài tháng.", [0]],
+      ["Bệnh còn có thể ảnh hưởng khớp, mắt và da; trẻ em có thể chậm lớn, dậy thì muộn.", [0, 3]],
+      ["Dễ nhầm với hội chứng ruột kích thích, viêm loét đại tràng hoặc bệnh celiac.", [0]]
+    ],
+    "causes": [
+      ["Hệ miễn dịch tấn công một phần đường tiêu hoá; nguyên nhân chính xác chưa rõ.", [0, 3]],
+      ["Di truyền, môi trường và vi khuẩn đường ruột đều có thể góp phần.", [3]],
+      ["Dễ mắc hơn nếu cha mẹ, anh chị em bị bệnh.", [0, 3]],
+      ["Hút thuốc có thể làm tăng gấp đôi nguy cơ.", [3]],
+      ["Vừa bị nhiễm khuẩn đường ruột, hoặc mổ ruột thừa vài năm gần đây cũng làm tăng nguy cơ.", [0]]
+    ],
+    "course": [
+      ["Đây là bệnh suốt đời, lúc bùng phát lúc lui bệnh.", [0]],
+      ["Biến chứng có thể gặp: rò, nứt hậu môn, hẹp hoặc thủng ruột, thiếu vitamin, ung thư ruột.", [0]],
+      ["Người có nguy cơ ung thư ruột cao có thể được nội soi đại tràng định kỳ.", [0]]
+    ],
+    "care": [
+      ["Ăn uống lành mạnh, cân đối; đừng tự thay đổi lớn chế độ ăn khi chưa hỏi bác sĩ.", [0]],
+      ["Ghi nhật ký triệu chứng, món ăn, thuốc và căng thẳng để tìm điều làm bệnh nặng lên.", [0]],
+      ["Không hút thuốc vì dễ làm bệnh bùng phát.", [0, 4]],
+      ["Không tự dùng thuốc giảm đau nhóm NSAID như ibuprofen nếu bác sĩ không dặn.", [0, 4]],
+      ["Thuốc gồm nhóm kháng viêm (corticoid, mesalazine), ức chế miễn dịch và thuốc sinh học — do bác sĩ chuyên khoa chọn.", [0, 4]],
+      ["Trẻ em hoặc người không dùng được corticoid có thể được dùng chế độ dinh dưỡng lỏng đặc biệt thay thuốc.", [0, 4]],
+      ["Nếu thuốc không hiệu quả, có thể cần mổ cắt đoạn ruột bị bệnh; bệnh vẫn có thể quay lại ở đoạn khác.", [0]],
+      ["Đang dùng thuốc ức chế miễn dịch thì hỏi bác sĩ trước khi tiêm vắc-xin sống.", [0, 4]]
+    ],
+    "diet.avoid": [
+      ["Đừng thay đổi lớn chế độ ăn khi chưa hỏi đội ngũ điều trị.", [0]],
+      ["Mỗi người có món làm tiêu chảy, đầy hơi hay táo bón khác nhau — ghi nhật ký ăn uống để tìm ra.", [0, 2]]
+    ],
+    "diet.ok": [
+      ["Ăn uống lành mạnh, cân đối; chưa có chế độ ăn hay món nào được chứng minh chữa được bệnh.", [0, 2]],
+      ["Ăn đa dạng có thể giúp vi khuẩn tốt trong ruột; bác sĩ có thể khuyên ăn thêm trái cây và rau.", [2]],
+      ["Bác sĩ có thể cho dùng thêm vitamin nếu cơ thể hấp thu không đủ — hỏi trước khi tự dùng.", [1, 2]]
+    ],
+    "foodNotes": {
+      "trái cây và rau": "Được — bác sĩ có thể khuyên ăn nhiều trái cây và rau hơn; hỏi bác sĩ cho trường hợp của bạn."
+    }
+  }
+}
