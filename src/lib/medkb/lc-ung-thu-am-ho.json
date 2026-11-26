@@ -7,15 +7,21 @@
  ],
  "about": [
   {
-   "text": "**Ung thư âm hộ** — nhóm bệnh: ung thư, bệnh nữ giới, sinh dục.",
+   "text": "Ung thư âm hộ là loại ung thư hiếm, hình thành ở bộ phận sinh dục ngoài của nữ (âm hộ).",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, ngứa, loét, mụn, ho.",
+   "text": "Da vùng âm hộ thay đổi: đổi màu, hoặc mọc cục trông như mụn cóc hay vết loét.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể ngứa kéo dài, đau hoặc chảy máu vùng âm hộ.",
    "src": [
     0
    ]
@@ -23,22 +29,36 @@
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): nhiễm Human papillomavirus, nghiện thuốc lá nặng, lichen xơ hoá.",
+   "text": "Nguy cơ cao hơn nếu từng nhiễm virus HPV hoặc từng bị mụn cóc sinh dục.",
+   "src": [
+    1,
+    0
+   ]
+  },
+  {
+   "text": "Hút thuốc lá nặng và bệnh da lichen xơ hoá cũng làm tăng nguy cơ.",
    "src": [
     0
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tổn thương tiền ung thư (VIN) không phải lúc nào cũng thành ung thư, nhưng nên điều trị sớm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan, quan hệ tình dục an toàn, tiêm vắc xin ngừa HPV, gardasil 9, gardasil.",
+   "text": "Điều trị tuỳ sức khoẻ chung và mức độ tiến triển của ung thư — do bác sĩ chuyên khoa quyết định.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng ngừa: tiêm vắc-xin HPV, quan hệ tình dục an toàn, không hút thuốc.",
    "src": [
     0
    ]
@@ -47,8 +67,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy da âm hộ đổi màu, mọc cục, loét, ngứa hay chảy máu kéo dài → đi khám phụ khoa sớm.",
    "src": [
+    1,
     0
    ]
   }
@@ -60,7 +81,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-am-ho-377.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Vulvar Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/vulvarcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -1,0 +1,120 @@
+{
+  "_note": "26/11 — Vòng LC 1 (Claude tự làm, đi từ cuối danh sách): thẻ Long Châu mỏng → viết lại từ trang MedlinePlus / NHS đã mở kiểm (WebFetch 26/11). Nguồn 0 = Long Châu (giữ), +0/+1 = nguồn mới.",
+  "lc-ung-thu-am-ho": {
+    "addSources": [
+      { "title": "Vulvar Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/vulvarcancer.html" }
+    ],
+    "about": [["Ung thư âm hộ là loại ung thư hiếm, hình thành ở bộ phận sinh dục ngoài của nữ (âm hộ).", ["+0"]]],
+    "signs": [
+      ["Da vùng âm hộ thay đổi: đổi màu, hoặc mọc cục trông như mụn cóc hay vết loét.", ["+0"]],
+      ["Có thể ngứa kéo dài, đau hoặc chảy máu vùng âm hộ.", [0]]
+    ],
+    "causes": [
+      ["Nguy cơ cao hơn nếu từng nhiễm virus HPV hoặc từng bị mụn cóc sinh dục.", ["+0", 0]],
+      ["Hút thuốc lá nặng và bệnh da lichen xơ hoá cũng làm tăng nguy cơ.", [0]]
+    ],
+    "course": [["Tổn thương tiền ung thư (VIN) không phải lúc nào cũng thành ung thư, nhưng nên điều trị sớm.", ["+0"]]],
+    "care": [
+      ["Điều trị tuỳ sức khoẻ chung và mức độ tiến triển của ung thư — do bác sĩ chuyên khoa quyết định.", ["+0"]],
+      ["Phòng ngừa: tiêm vắc-xin HPV, quan hệ tình dục an toàn, không hút thuốc.", [0]]
+    ],
+    "doctor": [["Thấy da âm hộ đổi màu, mọc cục, loét, ngứa hay chảy máu kéo dài → đi khám phụ khoa sớm.", ["+0", 0]]]
+  },
+  "lc-ung-thu-am-dao": {
+    "addSources": [
+      { "title": "Vaginal Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/vaginalcancer.html" },
+      { "title": "Vaginal cancer", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/vaginal-cancer/" }
+    ],
+    "about": [
+      ["Ung thư âm đạo là loại ung thư rất hiếm, bắt đầu ở âm đạo.", ["+0", "+1"]],
+      ["Bệnh thường tiến triển rất chậm.", ["+1"]]
+    ],
+    "signs": [
+      ["Giai đoạn sớm thường không có triệu chứng.", ["+0"]],
+      ["Có thể gặp: chảy máu âm đạo bất thường, khí hư lạ, đau vùng chậu, có khối u.", [0]]
+    ],
+    "causes": [
+      ["Gần như luôn do nhiễm một số loại virus HPV.", ["+1", "+0"]],
+      ["Dễ mắc hơn ở người từ 60 tuổi, người từng dùng thuốc diethylstilbestrol (DES), hoặc nhiễm HIV.", ["+0", 0]]
+    ],
+    "course": [
+      ["Mức độ nặng tuỳ khối u to hay nhỏ, đã lan chưa và sức khoẻ chung.", ["+1"]],
+      ["Phát hiện sớm thì thường chữa khỏi được.", ["+0"]]
+    ],
+    "care": [["Điều trị có thể gồm phẫu thuật, xạ trị và/hoặc hoá trị — do bác sĩ chuyên khoa quyết định.", ["+0"]]],
+    "doctor": [["Có dấu hiệu nghi ung thư âm đạo (như chảy máu bất thường) → đi khám càng sớm càng tốt.", ["+1"]]]
+  },
+  "lc-ung-thu-ong-hau-mon": {
+    "addSources": [
+      { "title": "Anal Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/analcancer.html" }
+    ],
+    "about": [["Ung thư hậu môn là ung thư hình thành ở các mô của hậu môn.", ["+0"]]],
+    "signs": [
+      ["Chảy máu ở hậu môn, có cục gần hậu môn.", ["+0"]],
+      ["Đau hoặc cảm giác nặng ở hậu môn, ngứa hoặc tiết dịch.", ["+0"]],
+      ["Thay đổi thói quen đi ngoài.", ["+0"]]
+    ],
+    "causes": [
+      ["Phần lớn ung thư hậu môn liên quan đến nhiễm virus HPV.", ["+0"]],
+      ["Ai cũng có thể mắc, nhưng dễ hơn nếu nhiễm HIV, suy giảm miễn dịch hoặc hút thuốc.", ["+0", 0]]
+    ],
+    "care": [
+      ["Điều trị gồm xạ trị, hoá trị và phẫu thuật; cách nào tuỳ mức độ bệnh, sức khoẻ và mong muốn của người bệnh.", ["+0"]],
+      ["Phòng ngừa: tiêm vắc-xin HPV, bỏ thuốc lá.", [0]]
+    ],
+    "doctor": [["Chảy máu hậu môn, có cục hoặc đau kéo dài → đi khám sớm.", ["+0", 0]]]
+  },
+  "lc-ung-thu-vu-o-nam": {
+    "addSources": [
+      { "title": "Male Breast Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/malebreastcancer.html" }
+    ],
+    "about": [
+      ["Ung thư vú gặp ở nữ nhiều hơn hẳn, nhưng nam giới cũng có thể mắc.", ["+0"]],
+      ["Hay gặp nhất ở nam giới 60–70 tuổi.", ["+0"]]
+    ],
+    "signs": [
+      ["Phần lớn nam giới bị ung thư vú có cục ở vú (dù đa số cục ở vú không phải ung thư).", ["+0"]],
+      ["Có thể kèm da vú lõm, nhăn; núm vú hoặc da đỏ, tróc vảy; núm vú tiết dịch.", ["+0"]]
+    ],
+    "causes": [
+      ["Yếu tố nguy cơ: từng tiếp xúc tia xạ, gia đình có người bị ung thư vú.", ["+0"]],
+      ["Tuổi cao, đột biến gen, hội chứng Klinefelter, bệnh gan, béo phì cũng liên quan.", [0]]
+    ],
+    "care": [["Điều trị thường là phẫu thuật cắt bỏ tuyến vú — do bác sĩ chuyên khoa quyết định.", ["+0"]]],
+    "doctor": [["Nam giới sờ thấy cục ở vú, hoặc núm vú tiết dịch, da vú thay đổi → đi khám sớm.", ["+0"]]]
+  },
+  "lc-ung-thu-te-bao-hac-to": {
+    "addSources": [
+      { "title": "Melanoma", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/melanoma.html" }
+    ],
+    "about": [["Ung thư hắc tố (melanoma) là loại ung thư da nguy hiểm nhất.", ["+0"]]],
+    "signs": [
+      ["Dấu hiệu đầu tiên thường là nốt ruồi thay đổi kích thước, hình dạng, màu sắc hoặc cảm giác khi sờ.", ["+0"]],
+      ["Nốt ruồi thay đổi trong vài tuần đến vài tháng là dấu hiệu cần chú ý.", ["+0"]],
+      ["Đa số khối u hắc tố có vùng màu đen hoặc đen xanh.", ["+0"]]
+    ],
+    "causes": [["Yếu tố nguy cơ: tia cực tím (cháy nắng), da sáng màu, nốt ruồi bẩm sinh, dùng thuốc ức chế miễn dịch.", [0]]],
+    "care": [
+      ["Phẫu thuật là bước điều trị đầu tiên ở mọi giai đoạn; có thể thêm hoá trị, xạ trị, liệu pháp sinh học hoặc nhắm trúng đích.", ["+0"]],
+      ["Phòng ngừa: tránh cháy nắng, không tắm nắng nhân tạo.", [0]]
+    ],
+    "doctor": [["Nốt ruồi mới, hoặc nốt ruồi cũ thay đổi, ngứa, chảy máu → đi khám da liễu sớm.", ["+0", 0]]]
+  },
+  "lc-ung-thu-tuyen-nuoc-bot": {
+    "addSources": [
+      { "title": "Salivary Gland Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/salivaryglandcancer.html" }
+    ],
+    "about": [["Ung thư tuyến nước bọt là một loại ung thư vùng đầu cổ, hiếm gặp.", ["+0"]]],
+    "signs": [
+      ["Có thể không có triệu chứng.", ["+0"]],
+      ["Hoặc thấy cục ở tai, má, hàm, môi hay trong miệng; dịch chảy ra từ tai.", ["+0"]],
+      ["Khó nuốt, khó há miệng rộng; tê, yếu hoặc đau ở mặt.", ["+0"]]
+    ],
+    "causes": [["Hút thuốc và nhiễm virus EBV được nêu là yếu tố liên quan.", [0]]],
+    "care": [
+      ["Bác sĩ chẩn đoán bằng khám, chụp chiếu và sinh thiết.", ["+0"]],
+      ["Điều trị có thể gồm phẫu thuật, xạ trị và/hoặc hoá trị.", ["+0"]]
+    ],
+    "doctor": [["Có cục ở má, hàm, quanh tai hoặc mặt tê, yếu không rõ lý do → đi khám sớm.", ["+0"]]]
+  }
+}

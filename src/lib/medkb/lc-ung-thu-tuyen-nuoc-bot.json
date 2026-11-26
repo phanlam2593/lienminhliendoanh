@@ -7,29 +7,35 @@
  ],
  "about": [
   {
-   "text": "**Ung thư tuyến nước bọt** — nhóm bệnh: ung thư, đầu.",
+   "text": "Ung thư tuyến nước bọt là một loại ung thư vùng đầu cổ, hiếm gặp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, mệt mỏi, yếu cơ, khối u, sưng, sốt.",
+   "text": "Có thể không có triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Hoặc thấy cục ở tai, má, hàm, môi hay trong miệng; dịch chảy ra từ tai.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Khó nuốt, khó há miệng rộng; tê, yếu hoặc đau ở mặt.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột biến AND.",
-   "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc, EBV.",
+   "text": "Hút thuốc và nhiễm virus EBV được nêu là yếu tố liên quan.",
    "src": [
     0
    ]
@@ -38,24 +44,24 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: đánh răng, súc miệng bằng nước muối ấm sau bữa ăn, giữ ẩm miệng bằng nước hoặc kẹo không đường, tránh sử dụng đồ uống chứa caffeine và cồn.",
+   "text": "Bác sĩ chẩn đoán bằng khám, chụp chiếu và sinh thiết.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị có thể gồm phẫu thuật, xạ trị và/hoặc hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có cục ở má, hàm, quanh tai hoặc mặt tê, yếu không rõ lý do → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +72,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-tuyen-nuoc-bot-322.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Salivary Gland Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/salivaryglandcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

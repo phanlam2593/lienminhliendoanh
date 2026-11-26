@@ -7,29 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Ung thư tế bào biểu mô thận** — nhóm bệnh: ung thư, thận - tiết niệu.",
+   "text": "Ung thư thận (ung thư tế bào biểu mô thận) hình thành ở lớp lót các ống rất nhỏ bên trong thận.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Càng lớn tuổi càng dễ mắc.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi đêm, xuất huyết, thiếu máu, đau họng, đầy bụng, co giật, sụt cân, táo bón, mệt mỏi, khó thở.",
+   "text": "Lúc đầu có thể không có triệu chứng; triệu chứng xuất hiện khi khối u lớn dần.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể gặp: tiểu ra máu, sờ thấy cục ở bụng, sụt cân không rõ lý do, đau một bên hông kéo dài, chán ăn.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: béo phì, tăng huyết áp.",
+   "text": "Yếu tố nguy cơ: hút thuốc, một số bệnh di truyền, lạm dụng thuốc giảm đau lâu ngày.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá, béo phì, tăng huyết áp, bệnh thận mãn tính, viêm gan C, xạ trị trước đó ở vùng bụng.",
+   "text": "Béo phì, tăng huyết áp, bệnh thận mạn cũng liên quan.",
    "src": [
     0
    ]
@@ -38,13 +50,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bỏ hút thuốc lá, giảm cân nếu có thừa cân.",
+   "text": "Điều trị tuỳ tuổi, sức khoẻ chung và mức độ bệnh: phẫu thuật, hoá trị, xạ trị, liệu pháp sinh học hoặc nhắm trúng đích.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng ngừa: bỏ thuốc lá, giảm cân nếu thừa cân.",
    "src": [
     0
    ]
@@ -53,9 +65,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiểu ra máu, có cục ở bụng, đau hông kéo dài hoặc sụt cân không rõ lý do → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +78,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-te-bao-bieu-mo-than.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Kidney Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/kidneycancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

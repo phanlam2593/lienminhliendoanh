@@ -7,29 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Ung thư vú ở nam** — nhóm bệnh: ung thư, ngực.",
+   "text": "Ung thư vú gặp ở nữ nhiều hơn hẳn, nhưng nam giới cũng có thể mắc.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Hay gặp nhất ở nam giới 60–70 tuổi.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng, nám, tiết dịch từ núm vú, ung thư vú.",
+   "text": "Phần lớn nam giới bị ung thư vú có cục ở vú (dù đa số cục ở vú không phải ung thư).",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể kèm da vú lõm, nhăn; núm vú hoặc da đỏ, tróc vảy; núm vú tiết dịch.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hạch bạch huyết.",
+   "text": "Yếu tố nguy cơ: từng tiếp xúc tia xạ, gia đình có người bị ung thư vú.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, đột biến gen, hội chứng Klinefelter, bệnh gan, thừa cân béo phì, chấn thương.",
+   "text": "Tuổi cao, đột biến gen, hội chứng Klinefelter, bệnh gan, béo phì cũng liên quan.",
    "src": [
     0
    ]
@@ -38,24 +50,18 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tập thể dục, kiểm soát cân nặng, tập trung vào thực phẩm giàu chất dinh dưỡng, uống đủ nước, hạn chế sử dụng rượu và thuốc lá.",
+   "text": "Điều trị thường là phẫu thuật cắt bỏ tuyến vú — do bác sĩ chuyên khoa quyết định.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nam giới sờ thấy cục ở vú, hoặc núm vú tiết dịch, da vú thay đổi → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +72,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-vu-o-nam.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Male Breast Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/malebreastcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

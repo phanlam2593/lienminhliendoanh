@@ -1,0 +1,54 @@
+{
+  "_note": "26/11 — Vòng LC 1 (phần 2): MedlinePlus kidneycancer, adrenalglandcancer, geographic tongue (ency 001049) — Claude đã mở kiểm.",
+  "lc-ung-thu-te-bao-bieu-mo-than": {
+    "addSources": [{ "title": "Kidney Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/kidneycancer.html" }],
+    "about": [
+      ["Ung thư thận (ung thư tế bào biểu mô thận) hình thành ở lớp lót các ống rất nhỏ bên trong thận.", ["+0"]],
+      ["Càng lớn tuổi càng dễ mắc.", ["+0"]]
+    ],
+    "signs": [
+      ["Lúc đầu có thể không có triệu chứng; triệu chứng xuất hiện khi khối u lớn dần.", ["+0"]],
+      ["Có thể gặp: tiểu ra máu, sờ thấy cục ở bụng, sụt cân không rõ lý do, đau một bên hông kéo dài, chán ăn.", ["+0"]]
+    ],
+    "causes": [
+      ["Yếu tố nguy cơ: hút thuốc, một số bệnh di truyền, lạm dụng thuốc giảm đau lâu ngày.", ["+0"]],
+      ["Béo phì, tăng huyết áp, bệnh thận mạn cũng liên quan.", [0]]
+    ],
+    "care": [
+      ["Điều trị tuỳ tuổi, sức khoẻ chung và mức độ bệnh: phẫu thuật, hoá trị, xạ trị, liệu pháp sinh học hoặc nhắm trúng đích.", ["+0"]],
+      ["Phòng ngừa: bỏ thuốc lá, giảm cân nếu thừa cân.", [0]]
+    ],
+    "doctor": [["Tiểu ra máu, có cục ở bụng, đau hông kéo dài hoặc sụt cân không rõ lý do → đi khám.", ["+0"]]]
+  },
+  "lc-ung-thu-tuyen-thuong-than": {
+    "addSources": [{ "title": "Adrenal Gland Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/adrenalglandcancer.html" }],
+    "about": [
+      ["Tuyến thượng thận nằm ở phía trên mỗi quả thận.", ["+0"]],
+      ["Phần lớn khối u tuyến thượng thận là lành tính; ung thư tuyến thượng thận hiếm gặp.", ["+0"]]
+    ],
+    "signs": [
+      ["Triệu chứng tuỳ loại khối u.", ["+0"]],
+      ["Có thể gặp: chướng bụng, đau lưng, tăng cân, yếu cơ, buồn nôn.", [0]]
+    ],
+    "causes": [["Một số hội chứng di truyền (như Li-Fraumeni, Lynch, Beckwith-Wiedemann) làm tăng nguy cơ.", [0]]],
+    "care": [["Điều trị có thể gồm phẫu thuật, hoá trị hoặc xạ trị — do bác sĩ chuyên khoa quyết định.", ["+0"]]],
+    "doctor": [["Có triệu chứng kéo dài như trên, nhất là khi gia đình có hội chứng di truyền liên quan ung thư → đi khám.", [0]]]
+  },
+  "lc-viem-luoi-ban-do": {
+    "addSources": [{ "title": "Geographic tongue", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001049.htm" }],
+    "about": [["Lưỡi bản đồ là tình trạng lành tính: lưỡi có các mảng trông như bản đồ.", ["+0"]]],
+    "signs": [
+      ["Lưỡi có hoa văn như bản đồ, các mảng thay đổi vị trí từ ngày này sang ngày khác.", ["+0"]],
+      ["Có mảng đỏ trơn hoặc vết loét; đôi khi đau hoặc rát.", ["+0"]]
+    ],
+    "causes": [["Chưa rõ nguyên nhân chính xác; đồ ăn nóng, cay hoặc rượu có thể gây kích ứng.", ["+0"]]],
+    "course": [["Vô hại nhưng có thể khó chịu và kéo dài lâu.", ["+0"]]],
+    "care": [
+      ["Thường không cần điều trị; bác sĩ thường chỉ cần nhìn lưỡi để chẩn đoán.", ["+0"]],
+      ["Bớt đồ nóng, cay và rượu nếu thấy rát hơn.", ["+0"]],
+      ["Nếu khó chịu, bác sĩ có thể cho gel bôi hoặc nước súc miệng có thuốc.", ["+0"]]
+    ],
+    "doctor": [["Triệu chứng kéo dài hơn 10 ngày → đi khám.", ["+0"]]],
+    "emergency": [["Khó thở, lưỡi sưng to, khó nói, khó nhai hoặc khó nuốt → đi cấp cứu ngay.", ["+0"]]]
+  }
+}

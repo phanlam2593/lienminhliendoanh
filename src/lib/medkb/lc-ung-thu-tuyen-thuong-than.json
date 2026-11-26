@@ -7,15 +7,27 @@
  ],
  "about": [
   {
-   "text": "**Ung thư tuyến thượng thận** — nhóm bệnh: ung thư.",
+   "text": "Tuyến thượng thận nằm ở phía trên mỗi quả thận.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Phần lớn khối u tuyến thượng thận là lành tính; ung thư tuyến thượng thận hiếm gặp.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, đau lưng, rụng tóc, buồn nôn, tăng cân, yếu cơ, nôn, nám, sốt, phù.",
+   "text": "Triệu chứng tuỳ loại khối u.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể gặp: chướng bụng, đau lưng, tăng cân, yếu cơ, buồn nôn.",
    "src": [
     0
    ]
@@ -23,13 +35,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: DNA.",
-   "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hội chứng Beckwith-Wiedemann, khu phức hợp Carney, hội chứng Li-Fraumeni, hội chứng Lynch, đa sản nội tiết, loại 1.",
+   "text": "Một số hội chứng di truyền (như Li-Fraumeni, Lynch, Beckwith-Wiedemann) làm tăng nguy cơ.",
    "src": [
     0
    ]
@@ -38,16 +44,16 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị có thể gồm phẫu thuật, hoá trị hoặc xạ trị — do bác sĩ chuyên khoa quyết định.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có triệu chứng kéo dài như trên, nhất là khi gia đình có hội chứng di truyền liên quan ung thư → đi khám.",
    "src": [
     0
    ]
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-tuyen-thuong-than-323.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Adrenal Gland Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/adrenalglandcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
