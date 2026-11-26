@@ -8,55 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Brucella** — nhóm bệnh: truyền nhiễm, bệnh trẻ em.",
+   "text": "Bệnh Brucella là nhiễm vi khuẩn Brucella, lây từ động vật sang người; rất hiếm khi lây giữa người với người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau thượng vị, sưng đau, sốt cao, mệt mỏi, đau đầu, chán ăn, ớn lạnh, yếu cơ, sưng, sốt.",
+   "text": "Sốt, mệt, vã mồ hôi, đau đầu, đau nhức, chán ăn, người mệt mỏi; có người bị lâu mới được chẩn đoán.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: brucella melitensis, brucella suis, brucella abortus, brucella canis, vi khuẩn Gram âm, thông qua quan hệ tình dục.",
+   "text": "Ăn thịt chưa chín, uống sữa hoặc ăn chế phẩm sữa chưa tiệt trùng; tiếp xúc động vật bệnh, mô hoặc dịch của chúng, thú săn.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): nông dân làm việc tại nông trại, thợ săn, quan hệ tình dục không an toàn.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị đúng có thể thành mạn tính: viêm khớp, nhiễm trùng tim, mệt kéo dài, trầm cảm, gan lách to.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ăn chín, uống sôi, gừng, tiêm vắc xin phòng bệnh Brucella cho vật nuôi.",
+   "text": "Điều trị bằng kháng sinh theo bác sĩ sau khi có xét nghiệm, kéo dài ít nhất 6–8 tuần; hồi phục có thể mất vài tuần đến vài tháng. Báo bác sĩ nếu đang mang thai hoặc dị ứng thuốc.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh: không ăn thịt tái, không dùng sữa chưa chắc đã tiệt trùng; người giết mổ, thú y, thợ săn nên mang găng, kính, áo choàng, khẩu trang.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt kéo dài, vã mồ hôi, đau nhức sau khi uống sữa tươi chưa tiệt trùng hoặc tiếp xúc gia súc → đi khám và kể cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-brucella.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Brucellosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/brucellosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -8,43 +8,55 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Chagas** — nhóm bệnh: truyền nhiễm.",
+   "text": "Bệnh Chagas do ký sinh trùng Trypanosoma cruzi, hay gặp ở vùng nông thôn Mexico, Trung và Nam Mỹ; khoảng 8 triệu người mắc, nhiều người không biết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, nổi hạch, táo bón, sưng, ngất, nôn, nám, sốt, phù.",
+   "text": "Giai đoạn cấp (vài tuần, vài tháng đầu): thường nhẹ hoặc không triệu chứng — sốt, mệt, sưng mí mắt.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Giai đoạn mạn (nhiều năm, suốt đời): đa số không triệu chứng, nhưng khoảng 20–30% bị bệnh tim hoặc tiêu hoá nặng: tim to, suy tim, loạn nhịp, đột tử.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: trypanosoma cruzi, triatominae, T, ghép tạng.",
+   "text": "Lây chủ yếu khi tiếp xúc phân của bọ xít hút máu (bọ hôn); không lây qua tiếp xúc thông thường; có thể lây qua truyền máu, ghép tạng, mẹ sang con.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chẩn đoán bằng xét nghiệm máu; thuốc diệt ký sinh trùng hiệu quả nhất khi dùng sớm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chưa có vắc xin hay thuốc phòng; cách phòng tốt nhất là tránh bọ xít hút máu đốt khi đến vùng có bệnh.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Từng sống hoặc đi đến vùng có bệnh và lo bị nhiễm → hỏi bác sĩ để xét nghiệm máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -55,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-chagas-226.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Chagas Disease",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/chagas/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

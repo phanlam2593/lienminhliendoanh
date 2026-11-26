@@ -8,40 +8,53 @@
  ],
  "about": [
   {
-   "text": "**Bệnh virus Nipah** — nhóm bệnh: truyền nhiễm, thần kinh - tinh thần.",
+   "text": "Virus Nipah gây bệnh nặng, lây giữa động vật và người, đôi khi giữa người với người; dơi ăn quả mang virus ở châu Á, Nam Thái Bình Dương, Úc. Từng có dịch ở Bangladesh, Ấn Độ, Malaysia, Philippines, Singapore.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau họng, buồn ngủ, nhức đầu, co giật, đau đầu, khó thở, lú lẫn, hôn mê, nôn, nám.",
+   "text": "Thường 4–14 ngày sau nhiễm: sốt, đau đầu, ho, đau họng, khó thở.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Một số bị viêm não: lú lẫn, lơ mơ, co giật, có thể hôn mê trong 24–48 giờ.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: paramyxoviridae, paramyxovirus.",
+   "text": "Lây khi tiếp xúc lợn hoặc dơi nhiễm bệnh, ăn uống đồ bị nhiễm (như nhựa cây chà là sống), hoặc tiếp xúc gần dịch cơ thể người bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Khoảng 40–70% người mắc tử vong.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi và chăm sóc sức khỏe, hỗ trợ hô hấp, hỗ trợ tinh thần, đun sôi nước chà là mới thu thập.",
+   "text": "Chưa có thuốc điều trị được cấp phép; chăm sóc hỗ trợ: nghỉ ngơi, bù nước, kiểm soát triệu chứng.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ở vùng có bệnh: rửa tay, tránh dơi và lợn ốm, tránh nơi dơi đậu, không uống nhựa chà là sống hoặc ăn trái cây dơi có thể đã cắn.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,14 +67,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt kèm lú lẫn, lơ mơ, co giật sau khi ở vùng có dịch → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bệnh virus Nipah – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-virus-nipah.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Nipah Virus",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/nipah-virus/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

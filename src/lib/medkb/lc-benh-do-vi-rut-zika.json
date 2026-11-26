@@ -8,49 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh do vi-rút Zika** — nhóm bệnh: truyền nhiễm.",
+   "text": "Zika là bệnh do virus, lây chủ yếu qua muỗi đốt; gặp ở vùng nhiệt đới và cận nhiệt đới châu Phi, châu Mỹ, Nam Á, Tây Thái Bình Dương.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: phát ban, đau khớp, đau đầu, yếu cơ, đau cổ, sốt, phù.",
+   "text": "Nhiều người không triệu chứng hoặc nhẹ: sốt, phát ban, đau đầu, đau khớp, đau cơ, đỏ mắt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: muỗi Andes.",
+   "text": "Ngoài muỗi đốt, còn lây qua quan hệ tình dục, mẹ sang con khi mang thai, qua máu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): mang thai, quan hệ tình dục không an toàn.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiễm khi mang thai có thể gây dị tật bẩm sinh nặng và các vấn đề thai kỳ khác.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không có thuốc đặc trị, kháng sinh không có tác dụng; nghỉ ngơi, uống nhiều nước, thuốc giảm đau không kê đơn giúp đỡ triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chưa có vắc xin; phòng bằng tránh muỗi đốt, dùng bao cao su hoặc không quan hệ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có triệu chứng sau khi bị muỗi đốt ở vùng có Zika, nhất là khi đang mang thai → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-do-vi-rut-zika-250.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Zika",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/zika/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

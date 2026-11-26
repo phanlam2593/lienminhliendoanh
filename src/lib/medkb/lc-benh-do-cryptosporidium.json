@@ -8,55 +8,55 @@
  ],
  "about": [
   {
-   "text": "**Bệnh do Cryptosporidium** — nhóm bệnh: truyền nhiễm, tiêu hóa.",
+   "text": "Bệnh do Cryptosporidium là bệnh tiêu chảy do một ký sinh trùng rất nhỏ gây ra.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiêu chảy, mất nước, đau bụng, buồn nôn, sốt nhẹ, ho.",
+   "text": "Hay gặp nhất là tiêu chảy toàn nước; có người không triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Bắt đầu 2–10 ngày (trung bình 7 ngày) sau khi nhiễm, kéo dài 1–2 tuần.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ký sinh trùng.",
+   "text": "Lây qua phân của người hoặc động vật nhiễm bệnh, có trong nước, thức ăn, đất hoặc bề mặt bị nhiễm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): HIV/AIDS.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ăn đa dạng và cân đối, tăng cường vitamin và khoáng chất, uống đủ nước, hạn chế chất béo bão hòa và cholesterol.",
+   "text": "Đa số người khoẻ tự khỏi không cần điều trị.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay bằng xà phòng sau đi vệ sinh, thay tã, trước khi ăn hoặc chuẩn bị đồ ăn, đồ uống, đá.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi bị bệnh → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-do-cryptosporidium.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Cryptosporidium",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/cryptosporidium/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -8,9 +8,9 @@
  ],
  "about": [
   {
-   "text": "**Bệnh viêm màng não do Haemophilus** — nhóm bệnh: truyền nhiễm, đầu.",
+   "text": "Bệnh do vi khuẩn Haemophilus influenzae (không phải virus cúm); có loại nhẹ như viêm tai ở trẻ, có loại nặng như viêm màng não, nhiễm trùng máu. Type b (Hib) được biết nhiều nhất.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -24,39 +24,40 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: H, haemophilus influenzae, nhiễm trùng đường hô hấp trên.",
+   "text": "Lây qua giọt bắn đường hô hấp, phần lớn từ người mang vi khuẩn ở mũi họng mà không ốm; chủ yếu ảnh hưởng trẻ dưới 5 tuổi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): nhiễm trùng tai, thành viên gia đình bị nhiễm H, chủng tộc người Mỹ bản địa, thai kỳ, tuổi lớn, nhiễm trùng xoang.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiễm trùng nặng có thể để lại di chứng lâu dài hoặc tử vong.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: luôn giữ vệ sinh cá nhân sạch sẽ, bệnh nhân cần lạc quan.",
+   "text": "Điều trị bằng kháng sinh; ca nặng cần nằm viện, hỗ trợ thở.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Vắc xin Hib phòng bệnh do type b, khuyến cáo cho mọi trẻ dưới 5 tuổi; rửa tay, tránh tiếp xúc gần người bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ dưới 5 tuổi chưa tiêm vắc xin Hib → hỏi bác sĩ để tiêm phòng; người tiếp xúc gần ca bệnh Hib có thể được cho kháng sinh dự phòng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-viem-mang-nao-do-haemophilus-169.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Haemophilus influenzae Disease",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/hi-disease/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

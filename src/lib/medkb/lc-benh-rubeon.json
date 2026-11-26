@@ -8,55 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh rubeon** — nhóm bệnh: truyền nhiễm.",
+   "text": "Rubella (rubeon, sởi Đức) là bệnh truyền nhiễm do virus, khác virus sởi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: giảm thính lực, chảy nước mắt, chảy nước mũi, tiêu chảy, nổi hạch, phát ban, đau khớp, sốt cao, mệt mỏi, sổ mũi.",
+   "text": "Thường nhẹ: sốt nhẹ, đau họng, phát ban bắt đầu ở mặt rồi lan ra toàn thân; có người không triệu chứng nhưng vẫn lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: rubella, rubivirus, togaviridae, virus Rubella.",
+   "text": "Lây khi người bệnh ho, hắt hơi; lây từ khoảng 1 tuần trước khi phát ban đến khoảng 7 ngày sau.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ có thai, trẻ sơ sinh, nữ giới trước độ tuổi có kinh nguyệt, khí hậu lạnh, kinh nguyệt.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiễm khi mang thai có thể lây sang thai nhi, gây sảy thai hoặc dị tật bẩm sinh nặng (hội chứng rubella bẩm sinh).",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: mặc ấm, cần nghỉ ngơi đầy đủ, ăn uống đầy đủ dinh dưỡng, bổ sung vitamin, vệ sinh nhà ở sạch sẽ.",
+   "text": "Không có thuốc đặc trị; ca nhẹ nghỉ ngơi, dùng thuốc hạ sốt như paracetamol.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Vắc xin MMR (sởi – quai bị – rubella) phòng bệnh rất hiệu quả.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đang mang thai mà tiếp xúc người bị rubella hoặc nổi ban, sốt → báo bác sĩ ngay.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-rubeon-252.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Rubella",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/rubella/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

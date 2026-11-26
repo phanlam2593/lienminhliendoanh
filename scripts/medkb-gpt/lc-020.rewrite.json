@@ -1,0 +1,747 @@
+{
+  "_note": "26/11 — Vòng LC 18 (đợt 76–77): CDC chagas, cryptosporidium, zika, chikungunya, nipah — Claude đã mở kiểm. Thêm: CDC brucellosis, leishmaniasis, rubella, paragonimus, angiostrongylus, hi-disease.",
+  "lc-benh-chagas": {
+    "addSources": [
+      {
+        "title": "About Chagas Disease",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/chagas/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Chagas do ký sinh trùng Trypanosoma cruzi, hay gặp ở vùng nông thôn Mexico, Trung và Nam Mỹ; khoảng 8 triệu người mắc, nhiều người không biết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Giai đoạn cấp (vài tuần, vài tháng đầu): thường nhẹ hoặc không triệu chứng — sốt, mệt, sưng mí mắt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Giai đoạn mạn (nhiều năm, suốt đời): đa số không triệu chứng, nhưng khoảng 20–30% bị bệnh tim hoặc tiêu hoá nặng: tim to, suy tim, loạn nhịp, đột tử.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây chủ yếu khi tiếp xúc phân của bọ xít hút máu (bọ hôn); không lây qua tiếp xúc thông thường; có thể lây qua truyền máu, ghép tạng, mẹ sang con.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu; thuốc diệt ký sinh trùng hiệu quả nhất khi dùng sớm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chưa có vắc xin hay thuốc phòng; cách phòng tốt nhất là tránh bọ xít hút máu đốt khi đến vùng có bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từng sống hoặc đi đến vùng có bệnh và lo bị nhiễm → hỏi bác sĩ để xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-do-cryptosporidium": {
+    "addSources": [
+      {
+        "title": "About Cryptosporidium",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/cryptosporidium/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh do Cryptosporidium là bệnh tiêu chảy do một ký sinh trùng rất nhỏ gây ra.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hay gặp nhất là tiêu chảy toàn nước; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bắt đầu 2–10 ngày (trung bình 7 ngày) sau khi nhiễm, kéo dài 1–2 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua phân của người hoặc động vật nhiễm bệnh, có trong nước, thức ăn, đất hoặc bề mặt bị nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đa số người khoẻ tự khỏi không cần điều trị.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng sau đi vệ sinh, thay tã, trước khi ăn hoặc chuẩn bị đồ ăn, đồ uống, đá.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị bệnh → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-do-vi-rut-zika": {
+    "addSources": [
+      {
+        "title": "About Zika",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/zika/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Zika là bệnh do virus, lây chủ yếu qua muỗi đốt; gặp ở vùng nhiệt đới và cận nhiệt đới châu Phi, châu Mỹ, Nam Á, Tây Thái Bình Dương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng hoặc nhẹ: sốt, phát ban, đau đầu, đau khớp, đau cơ, đỏ mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ngoài muỗi đốt, còn lây qua quan hệ tình dục, mẹ sang con khi mang thai, qua máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiễm khi mang thai có thể gây dị tật bẩm sinh nặng và các vấn đề thai kỳ khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc đặc trị, kháng sinh không có tác dụng; nghỉ ngơi, uống nhiều nước, thuốc giảm đau không kê đơn giúp đỡ triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chưa có vắc xin; phòng bằng tránh muỗi đốt, dùng bao cao su hoặc không quan hệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng sau khi bị muỗi đốt ở vùng có Zika, nhất là khi đang mang thai → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chikungunya": {
+    "addSources": [
+      {
+        "title": "About Chikungunya",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/chikungunya/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Chikungunya là bệnh do virus lây qua muỗi đốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hay gặp nhất: sốt và đau khớp; có thể kèm đau đầu, đau cơ, sưng khớp, phát ban.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người bệnh có thể truyền virus sang muỗi trong tuần đầu bị bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc đặc trị; nghỉ ngơi, uống nhiều nước, dùng paracetamol giảm triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh aspirin và thuốc kháng viêm như ibuprofen cho đến khi loại trừ sốt xuất huyết, vì nguy cơ chảy máu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bằng tránh muỗi đốt; người bệnh tránh bị muỗi đốt trong tuần đầu; có vắc xin cho một số người đi du lịch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt, đau khớp sau khi bị muỗi đốt → đi khám để phân biệt với sốt xuất huyết.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-virus-nipah": {
+    "addSources": [
+      {
+        "title": "About Nipah Virus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/nipah-virus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Virus Nipah gây bệnh nặng, lây giữa động vật và người, đôi khi giữa người với người; dơi ăn quả mang virus ở châu Á, Nam Thái Bình Dương, Úc. Từng có dịch ở Bangladesh, Ấn Độ, Malaysia, Philippines, Singapore.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường 4–14 ngày sau nhiễm: sốt, đau đầu, ho, đau họng, khó thở.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Một số bị viêm não: lú lẫn, lơ mơ, co giật, có thể hôn mê trong 24–48 giờ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây khi tiếp xúc lợn hoặc dơi nhiễm bệnh, ăn uống đồ bị nhiễm (như nhựa cây chà là sống), hoặc tiếp xúc gần dịch cơ thể người bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Khoảng 40–70% người mắc tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa có thuốc điều trị được cấp phép; chăm sóc hỗ trợ: nghỉ ngơi, bù nước, kiểm soát triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở vùng có bệnh: rửa tay, tránh dơi và lợn ốm, tránh nơi dơi đậu, không uống nhựa chà là sống hoặc ăn trái cây dơi có thể đã cắn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt kèm lú lẫn, lơ mơ, co giật sau khi ở vùng có dịch → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-brucella": {
+    "addSources": [
+      {
+        "title": "About Brucellosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/brucellosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Brucella là nhiễm vi khuẩn Brucella, lây từ động vật sang người; rất hiếm khi lây giữa người với người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt, mệt, vã mồ hôi, đau đầu, đau nhức, chán ăn, người mệt mỏi; có người bị lâu mới được chẩn đoán.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ăn thịt chưa chín, uống sữa hoặc ăn chế phẩm sữa chưa tiệt trùng; tiếp xúc động vật bệnh, mô hoặc dịch của chúng, thú săn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị đúng có thể thành mạn tính: viêm khớp, nhiễm trùng tim, mệt kéo dài, trầm cảm, gan lách to.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh theo bác sĩ sau khi có xét nghiệm, kéo dài ít nhất 6–8 tuần; hồi phục có thể mất vài tuần đến vài tháng. Báo bác sĩ nếu đang mang thai hoặc dị ứng thuốc.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: không ăn thịt tái, không dùng sữa chưa chắc đã tiệt trùng; người giết mổ, thú y, thợ săn nên mang găng, kính, áo choàng, khẩu trang.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt kéo dài, vã mồ hôi, đau nhức sau khi uống sữa tươi chưa tiệt trùng hoặc tiếp xúc gia súc → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-do-nhiem-leishmania": {
+    "addSources": [
+      {
+        "title": "About Leishmaniasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/leishmaniasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Leishmania do ký sinh trùng Leishmania, gặp ở khoảng 90 nước vùng nhiệt đới, cận nhiệt đới, nhiều hơn ở nông thôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể da (hay gặp nhất): vết loét da, thường không đau.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể niêm mạc: loét ở mũi, miệng, họng, có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể nội tạng: ảnh hưởng lách, gan, tuỷ xương; không điều trị thường tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây chủ yếu qua vết đốt của ruồi cát cái nhiễm bệnh (thường không đau, khó nhận ra), hoạt động mạnh từ chập tối đến sáng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị tuỳ loại ký sinh trùng; một số vết loét da tự lành nhưng có thể mất vài tháng đến vài năm và để sẹo; thể nội tạng phải điều trị sớm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chưa có vắc xin hay thuốc phòng; cách tốt nhất là tránh ruồi cát đốt; đã bị rồi vẫn có thể bị lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có vết loét da lâu lành sau khi ở vùng có bệnh → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-rubeon": {
+    "addSources": [
+      {
+        "title": "About Rubella",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/rubella/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Rubella (rubeon, sởi Đức) là bệnh truyền nhiễm do virus, khác virus sởi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường nhẹ: sốt nhẹ, đau họng, phát ban bắt đầu ở mặt rồi lan ra toàn thân; có người không triệu chứng nhưng vẫn lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây khi người bệnh ho, hắt hơi; lây từ khoảng 1 tuần trước khi phát ban đến khoảng 7 ngày sau.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiễm khi mang thai có thể lây sang thai nhi, gây sảy thai hoặc dị tật bẩm sinh nặng (hội chứng rubella bẩm sinh).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc đặc trị; ca nhẹ nghỉ ngơi, dùng thuốc hạ sốt như paracetamol.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vắc xin MMR (sởi – quai bị – rubella) phòng bệnh rất hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đang mang thai mà tiếp xúc người bị rubella hoặc nổi ban, sốt → báo bác sĩ ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-san-la-phoi": {
+    "addSources": [
+      {
+        "title": "About Paragonimiasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/paragonimus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh sán lá phổi do sán Paragonimus sống ở phổi; hiếm khi lan lên hệ thần kinh gây triệu chứng giống viêm màng não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường đầu tiên là tiêu chảy, đau bụng (trong 2–15 ngày); sau đó sốt, đau ngực, mệt, ho khan rồi có thể khạc đờm màu gỉ sắt hoặc lẫn máu — dễ nhầm với lao.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do ăn cua, tôm càng nước ngọt sống, tái, ngâm hoặc muối có ấu trùng sán.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng thuốc theo đơn bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không ăn cua, tôm càng nước ngọt sống; nấu chín kỹ; tránh món truyền thống dùng hải sản nước ngọt chưa chín.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho kéo dài, khạc đờm gỉ sắt hoặc có máu, từng ăn cua đá, tôm suối sống → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-angiostrongyliasis": {
+    "addSources": [
+      {
+        "title": "About Angiostrongylus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/angiostrongylus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Giun phổi chuột (Angiostrongylus) là ký sinh trùng chủ yếu ở chuột, hay liên quan nhất với viêm màng não tăng bạch cầu ái toan — viêm màng bao não và tuỷ sống, hiếm gặp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng hoặc nhẹ; khi viêm màng não: đau đầu, cứng cổ, tê rần hoặc đau da, sốt nhẹ, buồn nôn, nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chủ yếu do ăn ốc, sên sống hoặc chưa chín; có khi do rau sống dính ốc sên nhỏ; tôm, cua, ếch có thể mang mầm bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số tự khỏi không cần điều trị, nhưng triệu chứng có thể kéo dài vài tuần đến vài tháng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị chủ yếu giảm triệu chứng như giảm đau, giảm phản ứng miễn dịch; ca nặng cần điều trị thêm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không ăn ốc, sên, ếch, tôm sống hoặc tái; đeo găng và rửa tay khi cầm ốc sên; rửa kỹ rau sống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau đầu, cứng cổ, tê rần da sau khi ăn ốc hoặc rau sống → đi khám ngay và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mang-nao-do-tang-bach-cau-ai-toan": {
+    "addSources": [
+      {
+        "title": "About Angiostrongylus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/angiostrongylus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Giun phổi chuột (Angiostrongylus) là ký sinh trùng chủ yếu ở chuột, hay liên quan nhất với viêm màng não tăng bạch cầu ái toan — viêm màng bao não và tuỷ sống, hiếm gặp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng hoặc nhẹ; khi viêm màng não: đau đầu, cứng cổ, tê rần hoặc đau da, sốt nhẹ, buồn nôn, nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chủ yếu do ăn ốc, sên sống hoặc chưa chín; có khi do rau sống dính ốc sên nhỏ; tôm, cua, ếch có thể mang mầm bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số tự khỏi không cần điều trị, nhưng triệu chứng có thể kéo dài vài tuần đến vài tháng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị chủ yếu giảm triệu chứng như giảm đau, giảm phản ứng miễn dịch; ca nặng cần điều trị thêm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không ăn ốc, sên, ếch, tôm sống hoặc tái; đeo găng và rửa tay khi cầm ốc sên; rửa kỹ rau sống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau đầu, cứng cổ, tê rần da sau khi ăn ốc hoặc rau sống → đi khám ngay và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-viem-mang-nao-do-haemophilus": {
+    "addSources": [
+      {
+        "title": "About Haemophilus influenzae Disease",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/hi-disease/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh do vi khuẩn Haemophilus influenzae (không phải virus cúm); có loại nhẹ như viêm tai ở trẻ, có loại nặng như viêm màng não, nhiễm trùng máu. Type b (Hib) được biết nhiều nhất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua giọt bắn đường hô hấp, phần lớn từ người mang vi khuẩn ở mũi họng mà không ốm; chủ yếu ảnh hưởng trẻ dưới 5 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiễm trùng nặng có thể để lại di chứng lâu dài hoặc tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh; ca nặng cần nằm viện, hỗ trợ thở.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vắc xin Hib phòng bệnh do type b, khuyến cáo cho mọi trẻ dưới 5 tuổi; rửa tay, tránh tiếp xúc gần người bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ dưới 5 tuổi chưa tiêm vắc xin Hib → hỏi bác sĩ để tiêm phòng; người tiếp xúc gần ca bệnh Hib có thể được cho kháng sinh dự phòng.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
