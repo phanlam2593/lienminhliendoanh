@@ -7,66 +7,79 @@
  ],
  "about": [
   {
-   "text": "**Suy tim mạn tính** — nhóm bệnh: tim mạch, xem theo bộ phận cơ thể, bệnh thường gặp.",
+   "text": "Suy tim là khi tim không bơm máu hiệu quả — không có nghĩa tim đã hoặc sắp ngừng đập; chưa chữa khỏi nhưng điều trị và thay đổi lối sống giúp kiểm soát.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thở khò khè, ho có đờm, đau ngực, buồn nôn, tăng cân, mệt mỏi, khó thở, chán ăn, ngất, vảy.",
+   "text": "Khó thở khi sinh hoạt hằng ngày hoặc khi nằm; mệt, yếu, chóng mặt bất thường; phù bàn chân, mắt cá, chân, bụng; tăng cân đột ngột; ho về đêm hoặc khạc đờm bọt hồng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh tim bẩm sinh, viêm cơ tim, bệnh cơ tim, rối loạn nhịp tim, uống rượu quá mức, thiếu máu, bệnh tuyến giáp.",
+   "text": "Do nhồi máu cơ tim, nhiễm trùng, hoặc tim chịu áp lực lâu ngày vì cao huyết áp, bệnh mạch vành; ngoài ra bệnh van tim, bệnh cơ tim, rối loạn nhịp, bệnh thận, thiếu máu, bệnh tuyến giáp.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người bệnh thiếu máu , bệnh tuyến giáp, bệnh mạch vành, nhồi máu cơ tim, bệnh van tim, tăng huyết áp cao, rối loạn nhịp tim.",
+   "text": "Nguy cơ cao hơn ở người từ 65 tuổi, thừa cân, hút thuốc, uống nhiều rượu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ngừng hút thuốc lá, hạn chế uống rượu, giảm cân, cân bản thân hàng ngày, hạn chế ăn muối, không hút thuốc lá.",
+   "text": "Thuốc lợi tiểu, thuốc giãn mạch, thuốc chẹn beta theo bác sĩ; có thể phẫu thuật, sửa thay van, đặt máy tạo nhịp; mọi người nên được phục hồi chức năng tim.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Uống thuốc đúng đơn, cân thường xuyên, tiêm phòng cúm, vận động, ăn uống cân bằng, giữ cân nặng, bỏ thuốc lá, bớt rượu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dấu hiệu suy tim → đi khám; khó thở khi nằm hoặc khi sinh hoạt, khạc đờm bọt hồng, tăng cân đột ngột → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở nặng, môi hoặc da tái xanh, xám, hoặc ngất không tỉnh lại bình thường → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Suy tim mạn tính – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/suy-tim-man-tinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Heart failure",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/heart-failure/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

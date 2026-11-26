@@ -1,0 +1,729 @@
+{
+  "_note": "27/11 — Vòng LC 29 (đợt 38–41): NHS heart-failure, kidney-stones, bladder-stones, cleft-lip-and-palate, bowel-incontinence, glaucoma — Claude đã mở kiểm. Thêm: NHS gallstones, coronary-heart-disease.",
+  "lc-suy-tim-man-tinh": {
+    "addSources": [
+      {
+        "title": "Heart failure",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-failure/"
+      }
+    ],
+    "about": [
+      [
+        "Suy tim là khi tim không bơm máu hiệu quả — không có nghĩa tim đã hoặc sắp ngừng đập; chưa chữa khỏi nhưng điều trị và thay đổi lối sống giúp kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở khi sinh hoạt hằng ngày hoặc khi nằm; mệt, yếu, chóng mặt bất thường; phù bàn chân, mắt cá, chân, bụng; tăng cân đột ngột; ho về đêm hoặc khạc đờm bọt hồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do nhồi máu cơ tim, nhiễm trùng, hoặc tim chịu áp lực lâu ngày vì cao huyết áp, bệnh mạch vành; ngoài ra bệnh van tim, bệnh cơ tim, rối loạn nhịp, bệnh thận, thiếu máu, bệnh tuyến giáp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao hơn ở người từ 65 tuổi, thừa cân, hút thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc lợi tiểu, thuốc giãn mạch, thuốc chẹn beta theo bác sĩ; có thể phẫu thuật, sửa thay van, đặt máy tạo nhịp; mọi người nên được phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống thuốc đúng đơn, cân thường xuyên, tiêm phòng cúm, vận động, ăn uống cân bằng, giữ cân nặng, bỏ thuốc lá, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu suy tim → đi khám; khó thở khi nằm hoặc khi sinh hoạt, khạc đờm bọt hồng, tăng cân đột ngột → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nặng, môi hoặc da tái xanh, xám, hoặc ngất không tỉnh lại bình thường → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-suy-tim-trai": {
+    "addSources": [
+      {
+        "title": "Heart failure",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-failure/"
+      }
+    ],
+    "about": [
+      [
+        "Suy tim là khi tim không bơm máu hiệu quả — không có nghĩa tim đã hoặc sắp ngừng đập; chưa chữa khỏi nhưng điều trị và thay đổi lối sống giúp kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở khi sinh hoạt hằng ngày hoặc khi nằm; mệt, yếu, chóng mặt bất thường; phù bàn chân, mắt cá, chân, bụng; tăng cân đột ngột; ho về đêm hoặc khạc đờm bọt hồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do nhồi máu cơ tim, nhiễm trùng, hoặc tim chịu áp lực lâu ngày vì cao huyết áp, bệnh mạch vành; ngoài ra bệnh van tim, bệnh cơ tim, rối loạn nhịp, bệnh thận, thiếu máu, bệnh tuyến giáp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao hơn ở người từ 65 tuổi, thừa cân, hút thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc lợi tiểu, thuốc giãn mạch, thuốc chẹn beta theo bác sĩ; có thể phẫu thuật, sửa thay van, đặt máy tạo nhịp; mọi người nên được phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống thuốc đúng đơn, cân thường xuyên, tiêm phòng cúm, vận động, ăn uống cân bằng, giữ cân nặng, bỏ thuốc lá, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu suy tim → đi khám; khó thở khi nằm hoặc khi sinh hoạt, khạc đờm bọt hồng, tăng cân đột ngột → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nặng, môi hoặc da tái xanh, xám, hoặc ngất không tỉnh lại bình thường → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-suy-tim-phai": {
+    "addSources": [
+      {
+        "title": "Heart failure",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-failure/"
+      }
+    ],
+    "about": [
+      [
+        "Suy tim là khi tim không bơm máu hiệu quả — không có nghĩa tim đã hoặc sắp ngừng đập; chưa chữa khỏi nhưng điều trị và thay đổi lối sống giúp kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở khi sinh hoạt hằng ngày hoặc khi nằm; mệt, yếu, chóng mặt bất thường; phù bàn chân, mắt cá, chân, bụng; tăng cân đột ngột; ho về đêm hoặc khạc đờm bọt hồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do nhồi máu cơ tim, nhiễm trùng, hoặc tim chịu áp lực lâu ngày vì cao huyết áp, bệnh mạch vành; ngoài ra bệnh van tim, bệnh cơ tim, rối loạn nhịp, bệnh thận, thiếu máu, bệnh tuyến giáp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao hơn ở người từ 65 tuổi, thừa cân, hút thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc lợi tiểu, thuốc giãn mạch, thuốc chẹn beta theo bác sĩ; có thể phẫu thuật, sửa thay van, đặt máy tạo nhịp; mọi người nên được phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống thuốc đúng đơn, cân thường xuyên, tiêm phòng cúm, vận động, ăn uống cân bằng, giữ cân nặng, bỏ thuốc lá, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu suy tim → đi khám; khó thở khi nằm hoặc khi sinh hoạt, khạc đờm bọt hồng, tăng cân đột ngột → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nặng, môi hoặc da tái xanh, xám, hoặc ngất không tỉnh lại bình thường → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-suy-tim-giai-doan-cuoi": {
+    "addSources": [
+      {
+        "title": "Heart failure",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-failure/"
+      }
+    ],
+    "about": [
+      [
+        "Suy tim là khi tim không bơm máu hiệu quả — không có nghĩa tim đã hoặc sắp ngừng đập; chưa chữa khỏi nhưng điều trị và thay đổi lối sống giúp kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở khi sinh hoạt hằng ngày hoặc khi nằm; mệt, yếu, chóng mặt bất thường; phù bàn chân, mắt cá, chân, bụng; tăng cân đột ngột; ho về đêm hoặc khạc đờm bọt hồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do nhồi máu cơ tim, nhiễm trùng, hoặc tim chịu áp lực lâu ngày vì cao huyết áp, bệnh mạch vành; ngoài ra bệnh van tim, bệnh cơ tim, rối loạn nhịp, bệnh thận, thiếu máu, bệnh tuyến giáp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao hơn ở người từ 65 tuổi, thừa cân, hút thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc lợi tiểu, thuốc giãn mạch, thuốc chẹn beta theo bác sĩ; có thể phẫu thuật, sửa thay van, đặt máy tạo nhịp; mọi người nên được phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống thuốc đúng đơn, cân thường xuyên, tiêm phòng cúm, vận động, ăn uống cân bằng, giữ cân nặng, bỏ thuốc lá, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu suy tim → đi khám; khó thở khi nằm hoặc khi sinh hoạt, khạc đờm bọt hồng, tăng cân đột ngột → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nặng, môi hoặc da tái xanh, xám, hoặc ngất không tỉnh lại bình thường → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-soi-tiet-nieu": {
+    "addSources": [
+      {
+        "title": "Kidney stones",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/kidney-stones/"
+      }
+    ],
+    "about": [
+      [
+        "Sỏi tiết niệu hình thành khi một số chất trong nước tiểu tích tụ và kết tinh trong thận; sỏi nhỏ thường không triệu chứng và có thể tự ra theo nước tiểu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sỏi to: đau dữ dội ở hông bụng hoặc thắt lưng, có thể lan xuống bẹn, tinh hoàn hoặc vùng kín, đau từng cơn; có thể sốt, ớn lạnh, buồn nôn, nôn, tiểu nhiều lần, nước tiểu đục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ tăng khi thiếu nước, có bệnh như hội chứng chuyển hoá, một số thuốc; dễ tái phát khi ăn nhiều đạm ít chất xơ, ít vận động, hay nhiễm trùng tiểu, có người nhà bị hoặc từng bị sỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đa số điều trị tại nhà: uống nhiều nước, thuốc giảm đau, chống nôn, thuốc giúp sỏi ra (có thể mất vài tuần); sỏi to cần tán sỏi hoặc thủ thuật ở bệnh viện.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: người lớn uống khoảng 2,5–3 lít nước mỗi ngày; bớt nước có ga, cà phê, rượu; ăn đủ canxi, ăn nhạt; nước tiểu sẫm là dấu hiệu thiếu nước. Không tự thay đổi chế độ ăn nhiều mà chưa hỏi bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng sỏi → cần được khám gấp; đau dữ dội, sốt, ớn lạnh → khám gấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-soi-nieu-quan": {
+    "addSources": [
+      {
+        "title": "Kidney stones",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/kidney-stones/"
+      }
+    ],
+    "about": [
+      [
+        "Sỏi tiết niệu hình thành khi một số chất trong nước tiểu tích tụ và kết tinh trong thận; sỏi nhỏ thường không triệu chứng và có thể tự ra theo nước tiểu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sỏi to: đau dữ dội ở hông bụng hoặc thắt lưng, có thể lan xuống bẹn, tinh hoàn hoặc vùng kín, đau từng cơn; có thể sốt, ớn lạnh, buồn nôn, nôn, tiểu nhiều lần, nước tiểu đục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ tăng khi thiếu nước, có bệnh như hội chứng chuyển hoá, một số thuốc; dễ tái phát khi ăn nhiều đạm ít chất xơ, ít vận động, hay nhiễm trùng tiểu, có người nhà bị hoặc từng bị sỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đa số điều trị tại nhà: uống nhiều nước, thuốc giảm đau, chống nôn, thuốc giúp sỏi ra (có thể mất vài tuần); sỏi to cần tán sỏi hoặc thủ thuật ở bệnh viện.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: người lớn uống khoảng 2,5–3 lít nước mỗi ngày; bớt nước có ga, cà phê, rượu; ăn đủ canxi, ăn nhạt; nước tiểu sẫm là dấu hiệu thiếu nước. Không tự thay đổi chế độ ăn nhiều mà chưa hỏi bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng sỏi → cần được khám gấp; đau dữ dội, sốt, ớn lạnh → khám gấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-soi-bang-quang": {
+    "addSources": [
+      {
+        "title": "Bladder stones",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/bladder-stones/"
+      }
+    ],
+    "about": [
+      [
+        "Sỏi bàng quang là những viên cứng hình thành dần khi bàng quang không làm rỗng hết; sỏi nhỏ có thể tự ra, sỏi to thường cần lấy ra. Hay gặp ở nam, hiếm ở trẻ em.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng dưới, đau rát khi tiểu, tiểu nhiều kể cả ban đêm, tiểu ra máu, tiểu khó hoặc bí tiểu, hay nhiễm trùng tiểu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Phì đại tiền liệt tuyến, sa bàng quang, tổn thương thần kinh bàng quang, túi thừa bàng quang, táo bón.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường nội soi bàng quang để lấy hoặc tán sỏi, kèm điều trị nguyên nhân để tránh tái phát.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống nhiều nước, không nhịn tiểu, tiểu xong chờ 10–20 giây rồi thử tiểu lại, ăn nhiều rau quả tránh táo bón.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng dưới không đỡ, đau khi tiểu, thay đổi số lần tiểu, tiểu khó → đi khám; sốt, tiểu ra máu, đau dữ dội khi tiểu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-sut-moi-va-ho-ham-ech": {
+    "addSources": [
+      {
+        "title": "Cleft lip and palate",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cleft-lip-and-palate/"
+      }
+    ],
+    "about": [
+      [
+        "Sứt môi, hở hàm ếch là khe hở ở môi trên, vòm miệng hoặc cả hai, có từ khi sinh do các phần của mặt không liền lại khi thai phát triển.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ nguyên nhân và hầu như không phải do bố mẹ làm gì khi mang thai; một số ít liên quan gen, hút thuốc, rượu, béo phì, thiếu axit folic, một số thuốc đầu thai kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đa số chỉ xảy ra một lần; nếu đã có một con bị hoặc bố mẹ bị, khả năng con sau bị khoảng 2–8%.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bé có thể khó bú vì không ngậm kín; dễ viêm tai, ứ dịch tai ảnh hưởng nghe; răng có thể mọc lệch, dễ sâu; nếu không sửa vòm, lời nói có thể không rõ hoặc giọng mũi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Mổ sửa môi thường lúc khoảng 3–6 tháng, sửa vòm lúc khoảng 6–12 tháng; kèm hỗ trợ bú, theo dõi thính lực, trị liệu ngôn ngữ, chăm sóc răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bé sinh ra bị sứt môi, hở hàm ếch → được theo dõi ở trung tâm chuyên khoa với kế hoạch chăm sóc lâu dài.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-son-phan": {
+    "addSources": [
+      {
+        "title": "Bowel incontinence",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/bowel-incontinence/"
+      }
+    ],
+    "about": [
+      [
+        "Són phân là không kiểm soát được việc đi ngoài: rỉ phân ngoài ý muốn hoặc không kịp vào nhà vệ sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường có nhiều nguyên nhân: một số đồ ăn uống (cay, cà phê), cơ quanh hậu môn yếu (tuổi tác, nội tiết, sinh con), bệnh tiêu hoá (táo bón, hội chứng ruột kích thích, Crohn), giảm cảm nhận buồn đi ngoài (sa sút trí tuệ, tổn thương thần kinh).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đi ngoài vào giờ cố định như sau bữa ăn; ngồi kê chân lên ghế thấp cho gối cao hơn hông, hơi cúi người; ghi nhật ký món ăn làm nặng thêm; không rặn; tập cơ sàn chậu; ăn cân bằng; bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ có thể xem lại chế độ ăn, thuốc, cho thuốc làm chậm hoặc mềm phân, tập phản hồi sinh học; mổ khi các cách khác không hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị són phân hoặc thay đổi đi ngoài kéo dài → đi khám; phân đen hoặc đỏ sẫm, tiêu chảy ra máu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thien-dau-thong": {
+    "addSources": [
+      {
+        "title": "Glaucoma",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glaucoma/"
+      }
+    ],
+    "about": [
+      [
+        "Thiên đầu thống (glôcôm) là bệnh làm tổn thương dây thần kinh chính nối mắt với não, thường do áp lực trong mắt tăng; hay gặp ở người từ 50 tuổi, nguy cơ cao hơn khi có người thân bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng, hay phát hiện khi khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khởi phát đột ngột: đau mắt dữ dội, mắt đỏ, nhìn mờ, buồn nôn hoặc nôn, đau đầu, thấy quầng cầu vồng quanh đèn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị làm chậm tổn thương: thuốc nhỏ mắt, laser, phẫu thuật, tái khám đều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 50 tuổi hoặc có người nhà bị glôcôm → khám mắt định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau mắt dữ dội, mắt đỏ, nhìn mờ, thấy quầng sáng quanh đèn → đi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-soi-ong-mat-chu": {
+    "addSources": [
+      {
+        "title": "Gallstones",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/gallstones/"
+      }
+    ],
+    "about": [
+      [
+        "Sỏi mật hình thành trong túi mật và có thể kẹt ở ống mật (ống nối túi mật với gan, tuỵ); sỏi ống mật chủ cần được điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sỏi chặn ống mật gây cơn đau quặn mật: đau bụng dữ dội liên tục từ 30 phút đến vài giờ, thường giữa bụng hoặc dưới sườn phải, có thể buồn nôn, nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dễ gặp hơn ở người trên 40 tuổi, nữ giới, béo phì, ăn nhiều mỡ ít chất xơ, sụt cân nhanh, tiểu đường, bệnh Crohn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tắc có thể gây viêm túi mật, viêm tuỵ, vàng da (kèm ngứa, nước tiểu sẫm, phân bạc màu).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Sỏi ống mật chủ có thể lấy qua nội soi mật tuỵ ngược dòng (ERCP); điều trị chính cho sỏi mật có triệu chứng là mổ cắt túi mật; trong lúc chờ có thể dùng thuốc giảm đau, ăn ít mỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng kéo dài trên 30 phút → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội đột ngột, đau lan ra lưng kèm nôn, sốt cao hoặc rét run, vàng da vàng mắt → đi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thieu-mau-co-tim": {
+    "addSources": [
+      {
+        "title": "Coronary heart disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/coronary-heart-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Thiếu máu cơ tim (bệnh mạch vành) xảy ra khi mỡ tích tụ trong động mạch vành làm tắc hoặc gián đoạn máu nuôi tim; là nguyên nhân tử vong hàng đầu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau thắt ngực, khó thở, đau ở cổ, vai, hàm hoặc tay, choáng hay buồn nôn; có người không triệu chứng cho đến khi được chẩn đoán.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Xơ vữa động mạch; hút thuốc, uống nhiều rượu thường xuyên, mỡ máu cao, huyết áp cao, tiểu đường.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng điều trị giúp kiểm soát triệu chứng và giảm nguy cơ nhồi máu cơ tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thay đổi lối sống, thuốc, nong mạch đặt stent hoặc phẫu thuật theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: ăn uống cân bằng, vận động, bỏ thuốc lá, kiểm soát mỡ máu và đường huyết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau tức ngực khi gắng sức, khó thở → đi khám tim mạch.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,55 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Thiếu máu cơ tim** — nhóm bệnh: tim mạch.",
+   "text": "Thiếu máu cơ tim (bệnh mạch vành) xảy ra khi mỡ tích tụ trong động mạch vành làm tắc hoặc gián đoạn máu nuôi tim; là nguyên nhân tử vong hàng đầu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đánh trống ngực, đổ mồ hôi, chóng mặt, thiếu máu, đau ngực, khó tiêu, buồn nôn, tăng cân, đầy bụng, mệt mỏi.",
+   "text": "Đau thắt ngực, khó thở, đau ở cổ, vai, hàm hoặc tay, choáng hay buồn nôn; có người không triệu chứng cho đến khi được chẩn đoán.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh, động mạch vành, cục máu đông, co thắt động mạch vành, sử dụng cocain, bóc tách động mạch vành, bệnh động mạch vành.",
+   "text": "Xơ vữa động mạch; hút thuốc, uống nhiều rượu thường xuyên, mỡ máu cao, huyết áp cao, tiểu đường.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá, béo phì, tuổi cao, đái tháo đường, tăng huyết áp, rối loạn lipid máu.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không chữa khỏi, nhưng điều trị giúp kiểm soát triệu chứng và giảm nguy cơ nhồi máu cơ tim.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: thực phẩm giàu chất xơ, thực phẩm giàu vitamin C, ngũ cốc nguyên hạt, rượu vang đỏ và trà xanh, thực phẩm giàu Omega-3, thực phẩm giàu vitamin E.",
+   "text": "Thay đổi lối sống, thuốc, nong mạch đặt stent hoặc phẫu thuật theo bác sĩ.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh: ăn uống cân bằng, vận động, bỏ thuốc lá, kiểm soát mỡ máu và đường huyết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau tức ngực khi gắng sức, khó thở → đi khám tim mạch.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thieu-mau-co-tim-416.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Coronary heart disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/coronary-heart-disease/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
