@@ -7,55 +7,68 @@
  ],
  "about": [
   {
-   "text": "**Tăng huyết áp trong thai kỳ** — nhóm bệnh: sức khỏe sinh sản.",
+   "text": "Tăng huyết áp khi mang thai gồm: cao huyết áp có từ trước, cao huyết áp xuất hiện khi mang thai (thai kỳ), và tiền sản giật — vấn đề ở nhau thai thường làm huyết áp tăng, hay sau tuần 20.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khi mang thai, huyết áp từ 140/90 mmHg là cao; từ 160/110 mmHg là cao nặng.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, chóng mặt, nhức đầu, nhìn đôi, buồn nôn, tăng cân, co giật, mệt mỏi, đau đầu, khó thở.",
+   "text": "Cao huyết áp thường không có triệu chứng, nên cần đi khám thai đủ các lần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh tuyến giáp, bệnh tiểu đường, bệnh lý ở thận, chủng tộc người Mỹ gốc Phi.",
+   "text": "Tiền sản giật dễ gặp hơn nếu đã cao huyết áp trước khi mang thai, từng bị tiền sản giật, hoặc mẹ, chị em gái từng bị.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, bệnh nền, thừa cân/ béo phì, tiền sản giật, bệnh thận, đa thai.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tiền sản giật có thể ảnh hưởng thận, gan, não; không điều trị có thể nguy hiểm cho cả mẹ và bé.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tránh hút thuốc và đồ uống có chứa cồn, tránh mang thai, sinh nở khi tuổi đã cao.",
+   "text": "Mỗi lần khám thai đều đo huyết áp và thử đạm nước tiểu.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Đang uống thuốc huyết áp mà muốn có thai hoặc vừa biết có thai → báo bác sĩ ngay, vì có thể phải đổi thuốc.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Vận động đều, ăn uống cân bằng; khám lại 6–8 tuần sau sinh.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo lắng về huyết áp khi mang thai → liên hệ bác sĩ, nữ hộ sinh sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +79,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/tang-huyet-ap-trong-thai-ky.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "High blood pressure (hypertension) and pregnancy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/pregnancy/related-conditions/complications/high-blood-pressure/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

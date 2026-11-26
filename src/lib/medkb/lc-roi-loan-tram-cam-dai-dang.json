@@ -7,60 +7,79 @@
  ],
  "about": [
   {
-   "text": "**Rối loạn trầm cảm dai dẳng** — nhóm bệnh: tâm thần, đầu.",
+   "text": "Rối loạn trầm cảm dai dẳng (trước gọi là loạn khí sắc) là trầm cảm kéo dài: tâm trạng buồn, u ám hầu hết các ngày trong ít nhất 2 năm; ở trẻ em và tuổi teen có thể là cáu gắt, chỉ cần kéo dài 1 năm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: trầm cảm, mất ngủ, mệt mỏi, chán ăn, lo âu.",
+   "text": "Gần như lúc nào cũng có từ hai dấu hiệu: tuyệt vọng, thay đổi giấc ngủ, thiếu năng lượng, tự ti, thay đổi ăn uống, kém tập trung; hay nhìn bản thân và tương lai một cách tiêu cực.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: yếu tố di truyền, yếu tố môi trường, yếu tố tâm lý.",
+   "text": "Chưa rõ nguyên nhân; có thể có tính gia đình, hay gặp ở nữ; đa số người bệnh cũng có ít nhất một đợt trầm cảm nặng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tập thể dục mỗi ngày, tập thể dục.",
+   "text": "Ngủ đủ, ăn uống lành mạnh, vận động đều, tránh rượu và chất cấm, gần gũi người hỗ trợ mình.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thuốc thường có ích nhưng có thể chậm hơn; không tự ngưng thuốc, bác sĩ sẽ hướng dẫn giảm dần.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Liệu pháp trò chuyện như CBT, nhóm hỗ trợ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thường xuyên thấy buồn chán, hoặc triệu chứng nặng dần → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Có dấu hiệu nguy cơ tự tử như cho đi đồ đạc, nói về cái chết, bỗng bình thản sau thời gian lo âu, thu mình → tìm trợ giúp khẩn cấp ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Rối loạn trầm cảm dai dẳng – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/roi-loan-tram-cam-dai-dang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Persistent depressive disorder",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000918.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

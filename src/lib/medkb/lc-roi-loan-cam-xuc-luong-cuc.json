@@ -7,54 +7,85 @@
  ],
  "about": [
   {
-   "text": "**Rối loạn cảm xúc lưỡng cực** — nhóm bệnh: tâm thần.",
+   "text": "Rối loạn cảm xúc lưỡng cực là bệnh tâm thần với những thay đổi tâm trạng cực độ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: trầm cảm, mất ngủ, ảo giác, mệt mỏi, sưng, loét, nám, phù, ho.",
+   "text": "Hưng cảm (nặng) hoặc hưng cảm nhẹ: rất vui, phấn khích, bốc đồng, ý nghĩ dồn dập.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Trầm cảm: buồn, rất mệt, tuyệt vọng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Mỗi đợt thường kéo dài vài ngày đến vài tuần; giữa các đợt có thể ổn định hàng tuần, tháng hoặc năm.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: serotonin, amphetamine, thuốc giao cảm kích thích, rượu bia.",
+   "text": "Chưa rõ nguyên nhân; nguy cơ cao hơn nếu cha mẹ, anh chị em bị; liên quan sang chấn thời thơ ấu, biến cố căng thẳng, dùng chất như cần sa, cocaine.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không chữa khỏi nhưng kiểm soát được bằng thuốc ổn định khí sắc và liệu pháp trò chuyện như CBT.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Không tự ngưng thuốc khi chưa hỏi bác sĩ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thay đổi tâm trạng kéo dài hoặc ảnh hưởng cuộc sống hằng ngày, hoặc điều trị không hiệu quả → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Có ý nghĩ tự tử hoặc làm hại bản thân → tìm trợ giúp khẩn cấp ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Rối loạn cảm xúc lưỡng cực – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/roi-loan-cam-xuc-luong-cuc-69.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Bipolar disorder",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/mental-health/conditions/bipolar-disorder/overview/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**U não thứ phát** — nhóm bệnh: ung thư, đầu.",
+   "text": "U não thứ phát là ung thư từ nơi khác trong cơ thể lan vào não.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: liệt nửa người, buồn nôn, co giật, đau đầu, khối u, hôn mê, nôn, nám, sốt, phù.",
+   "text": "Tuỳ vùng não: đau đầu, co giật, buồn nôn, nôn, buồn ngủ, thay đổi trí nhớ hoặc tính cách, yếu liệt một bên, rối loạn nhìn hoặc nói.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có người không có triệu chứng sớm, hoặc triệu chứng xuất hiện từ từ.",
+   "src": [
+    1
    ]
   }
  ],
@@ -38,18 +44,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ loại, vị trí, kích thước u và sức khoẻ người bệnh: thuốc steroid giảm phù, thuốc trị triệu chứng, mổ lấy u an toàn nhất có thể, xạ trị, hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên, nhất là đau đầu khác hẳn mọi khi hoặc ngày càng nặng → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nao-thu-phat.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Brain tumours",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/brain-tumours/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

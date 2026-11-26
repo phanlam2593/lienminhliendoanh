@@ -7,55 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Chậm phát triển tâm thần** — nhóm bệnh: tâm thần.",
+   "text": "Chậm phát triển tâm thần (khuyết tật trí tuệ, khuyết tật học tập) ảnh hưởng cách một người học điều mới, kéo dài suốt đời.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: phù, IQ, tâm thần.",
+   "text": "Khó hiểu thông tin phức tạp, khó học một số kỹ năng, khó tự chăm sóc hoặc sống một mình.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hội chứng down.",
+   "text": "Không phải lúc nào cũng rõ nguyên nhân; có thể do vấn đề ảnh hưởng sự phát triển não trước sinh, lúc sinh hoặc thời thơ ấu, như bệnh tật hay thay đổi gen.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): viêm màng não, tiền sản giật.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiều người vẫn đi làm, có các mối quan hệ và sống tự lập.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bổ sung folate.",
+   "text": "Có hỗ trợ cho gia đình, cha mẹ và người chăm sóc; người được chẩn đoán có thể được giới thiệu đến các chuyên gia y tế khác.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo con chậm học, chậm hiểu so với bạn cùng tuổi → đưa đi khám để được đánh giá.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/cham-phat-trien-tam-than-45.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Learning disabilities",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/learning-disabilities/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

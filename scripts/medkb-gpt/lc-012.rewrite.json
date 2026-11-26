@@ -1,0 +1,71 @@
+{
+  "_note": "26/11 — Vòng LC 10 (Claude tự làm, đợt 94–96): NHS heavy-periods, prostatitis, fibroids, bartholins-cyst — Claude đã mở kiểm. Chưa mở được: xoắn tinh hoàn, trichomonas (lỗi trang).",
+  "lc-xuat-huyet-tu-cung-bat-thuong": {
+    "addSources": [{ "title": "Heavy periods", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/heavy-periods/" }],
+    "about": [["Ra máu kinh nhiều là chuyện hay gặp và có thể bình thường với một số người; cần điều trị khi ảnh hưởng sinh hoạt.", ["+0"]]],
+    "signs": [
+      ["Phải thay băng vệ sinh mỗi 1–2 giờ, dùng hai loại cùng lúc, hành kinh quá 7 ngày, ra cục máu đông to (khoảng 2,5 cm), thấm ra quần áo hoặc ga giường.", ["+0"]],
+      ["Phải bỏ việc thường ngày, hay mệt hoặc hụt hơi.", ["+0"]]
+    ],
+    "causes": [
+      ["Có thể bình thường và thay đổi ở những năm đầu có kinh, sau sinh, gần mãn kinh.", ["+0"]],
+      ["Đôi khi do u xơ tử cung, lạc nội mạc tử cung, viêm vùng chậu, rối loạn đông máu, một số thuốc chống đông; hiếm khi là dấu hiệu ung thư tử cung.", ["+0"]]
+    ],
+    "care": [["Không phải lúc nào cũng cần điều trị; bác sĩ có thể cho vòng nội tiết, thuốc tránh thai, thuốc giảm chảy máu hoặc giảm đau kháng viêm; xét nghiệm máu kiểm tra thiếu máu thiếu sắt.", ["+0"]]],
+    "doctor": [["Kinh nhiều ảnh hưởng cuộc sống hoặc kéo dài, đau bụng kinh dữ dội, ra máu giữa hai kỳ kinh hoặc sau quan hệ, kinh nhiều kèm đau khi tiểu, đại tiện hay quan hệ → đi khám.", ["+0"]]]
+  },
+  "lc-viem-tuyen-tien-liet-cap-tinh": {
+    "addSources": [{ "title": "Prostatitis", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/prostatitis/" }],
+    "about": [["Viêm tuyến tiền liệt là tình trạng viêm tuyến nhỏ nằm dưới bàng quang ở nam giới; có thể nặng và cần được khám gấp.", ["+0"]]],
+    "signs": [["Đau buốt, rát khi tiểu; khó tiểu, phải rặn, tiểu nhiều lần; đau dương vật, bìu, tinh hoàn hoặc hậu môn, đau khi xuất tinh; sốt.", ["+0"]]],
+    "causes": [["Thường do nhiễm trùng, như nhiễm trùng đường tiểu.", ["+0"]]],
+    "course": [["Điều trị kháng sinh, đa số thấy đỡ trong khoảng 2 tuần, khỏi hẳn có thể mất vài tuần.", ["+0"]]],
+    "care": [["Dùng kháng sinh theo bác sĩ và uống hết liệu trình; uống nhiều nước, có thể dùng thuốc giảm đau thông thường.", ["+0"]]],
+    "doctor": [["Có các dấu hiệu trên → đi khám; không tiểu được, hoặc 48 giờ sau khi uống kháng sinh không đỡ hay nặng hơn → khám gấp.", ["+0"]]],
+    "emergency": [["Bỗng lú lẫn, nói ngọng, da hoặc môi tái xanh, phát ban không mất khi ấn, khó thở nhiều → gọi cấp cứu (có thể là nhiễm trùng huyết).", ["+0"]]]
+  },
+  "lc-viem-tuyen-tien-liet-man-tinh": {
+    "addSources": [{ "title": "Prostatitis", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/prostatitis/" }],
+    "about": [["Viêm tuyến tiền liệt mạn tính là khi triệu chứng viêm tuyến tiền liệt kéo dài từ 3 tháng trở lên.", ["+0"]]],
+    "signs": [["Đau, rát khi tiểu; khó tiểu, tiểu nhiều lần; đau dương vật, bìu, tinh hoàn hoặc hậu môn, đau khi xuất tinh.", ["+0"]]],
+    "causes": [["Thường không rõ nguyên nhân; có thể do nhiễm trùng, viêm, hoặc cả hai.", ["+0"]]],
+    "care": [
+      ["Có thể gồm kháng sinh và thuốc khác, liệu pháp trò chuyện, vật lý trị liệu; bác sĩ tiết niệu có thể tham gia điều trị.", ["+0"]],
+      ["Uống nhiều nước, có thể dùng thuốc giảm đau thông thường để đỡ triệu chứng.", ["+0"]]
+    ],
+    "doctor": [["Có các dấu hiệu trên → đi khám; không tiểu được → khám gấp.", ["+0"]]],
+    "emergency": [["Sốt kèm lú lẫn, môi tái xanh, khó thở nhiều → gọi cấp cứu.", ["+0"]]]
+  },
+  "lc-u-co-tron-tu-cung": {
+    "addSources": [{ "title": "Fibroids", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/fibroids/" }],
+    "about": [["U cơ trơn tử cung (u xơ tử cung) là khối u lành tính hay gặp, mọc trong hoặc quanh tử cung, chủ yếu ở người chưa mãn kinh.", ["+0"]]],
+    "signs": [
+      ["Nhiều người không có triệu chứng.", ["+0"]],
+      ["Khi có: kinh nhiều hoặc đau, đau bụng hoặc thắt lưng, thay đổi tiểu tiện, rối loạn đại tiện, đau khi quan hệ, khó có thai.", ["+0"]]
+    ],
+    "causes": [["Chưa rõ nguyên nhân; nguy cơ cao hơn khi chưa mãn kinh, chưa từng mang thai đủ tháng, béo phì, cao huyết áp, tiểu đường, người gốc Á hoặc gốc Phi, có người thân bị u xơ.", ["+0"]]],
+    "care": [
+      ["Không triệu chứng thì không cần điều trị.", ["+0"]],
+      ["Đau hoặc ra máu nhiều: thuốc giảm đau, thuốc giảm chảy máu, thuốc nội tiết; nếu không đỡ có thể mổ bóc u, cắt tử cung hoặc nút mạch. Người muốn có con nên bàn kỹ với bác sĩ vì một số cách ảnh hưởng khả năng sinh sản.", ["+0"]]
+    ],
+    "doctor": [["Có triệu chứng ảnh hưởng sinh hoạt, công việc, hoặc thuốc giảm đau không đỡ → đi khám.", ["+0"]]]
+  },
+  "lc-u-nang-tuyen-bartholin": {
+    "addSources": [{ "title": "Bartholin's cyst", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/bartholins-cyst/" }],
+    "about": [["U nang tuyến Bartholin là cục u gần cửa âm đạo, hay gặp ở tuổi 20–50 và thường tự hết.", ["+0"]]],
+    "signs": [
+      ["Cục mềm, thường không đau ở một bên cửa âm đạo, từ cỡ hạt đậu đến quả bóng golf; khó chịu khi đi, ngồi, quan hệ; sưng một bên môi âm hộ.", ["+0"]],
+      ["Nếu nhiễm trùng (áp xe): đau dữ dội quanh chỗ sưng, dịch có mùi, sốt, mệt.", ["+0"]]
+    ],
+    "causes": [["Do tuyến nhỏ ở âm đạo bị tắc, thường không rõ lý do; nhiễm trùng (kể cả bệnh lây qua đường tình dục như lậu, chlamydia) có thể biến u nang thành áp xe.", ["+0"]]],
+    "care": [
+      ["Ngâm nước ấm vài lần mỗi ngày trong 3–4 ngày, hoặc chườm khăn ấm; có thể dùng thuốc giảm đau thông thường.", ["+0"]],
+      ["Không tự nặn hay chích vì dễ nhiễm trùng; nếu tự vỡ thì giữ sạch, khô.", ["+0"]],
+      ["Bị nhiễm trùng thường dùng kháng sinh; nếu không đỡ hoặc tái phát nhiều, bác sĩ có thể làm thủ thuật dẫn lưu.", ["+0"]]
+    ],
+    "doctor": [
+      ["Có cục u ở trong hoặc quanh âm đạo → đi khám.", ["+0"]],
+      ["Cục to nhanh, đau tăng trong vài giờ hay vài ngày, có mủ, sốt, sưng nóng đỏ → khám gấp.", ["+0"]]
+    ]
+  }
+}

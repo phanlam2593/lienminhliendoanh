@@ -1,0 +1,434 @@
+{
+  "_note": "26/11 — Vòng LC 9 (Claude tự làm, đợt 96–97): NHS learning-disabilities, agoraphobia, ADHD, bipolar-disorder; MedlinePlus Genetics pompe-disease — Claude đã mở kiểm.",
+  "lc-cham-phat-trien-tam-than": {
+    "addSources": [
+      {
+        "title": "Learning disabilities",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/learning-disabilities/"
+      }
+    ],
+    "about": [
+      [
+        "Chậm phát triển tâm thần (khuyết tật trí tuệ, khuyết tật học tập) ảnh hưởng cách một người học điều mới, kéo dài suốt đời.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó hiểu thông tin phức tạp, khó học một số kỹ năng, khó tự chăm sóc hoặc sống một mình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Không phải lúc nào cũng rõ nguyên nhân; có thể do vấn đề ảnh hưởng sự phát triển não trước sinh, lúc sinh hoặc thời thơ ấu, như bệnh tật hay thay đổi gen.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiều người vẫn đi làm, có các mối quan hệ và sống tự lập.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có hỗ trợ cho gia đình, cha mẹ và người chăm sóc; người được chẩn đoán có thể được giới thiệu đến các chuyên gia y tế khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Lo con chậm học, chậm hiểu so với bạn cùng tuổi → đưa đi khám để được đánh giá.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chung-so-khoang-rong": {
+    "addSources": [
+      {
+        "title": "Agoraphobia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/mental-health/conditions/agoraphobia/overview/"
+      }
+    ],
+    "about": [
+      [
+        "Chứng sợ khoảng rộng là sợ những tình huống khó thoát ra hoặc không có ai giúp nếu có chuyện — không chỉ là sợ chỗ rộng; người bệnh có thể né xe buýt, trung tâm mua sắm hoặc không dám ra khỏi nhà.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khi gặp tình huống căng thẳng có thể lên cơn hoảng loạn: tim đập nhanh, thở gấp, vã mồ hôi, buồn nôn; dần né ra ngoài hoặc phụ thuộc người khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Có thể là biến chứng của rối loạn hoảng sợ, khi cơn hoảng loạn gắn với một số nơi; có người chưa từng lên cơn mà sợ tội phạm, bệnh tật, tai nạn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động đều, ăn uống lành mạnh, bớt rượu, chất kích thích và cà phê.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi lên cơn hoảng loạn: đứng yên tại chỗ, nhìn vào một vật trước mặt, thở chậm và sâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Liệu pháp trò chuyện như CBT; nếu chưa đỡ, bác sĩ có thể kê thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị sợ khoảng rộng, hoặc tự giúp không đỡ → đi khám (có thể hỏi bác sĩ qua điện thoại nếu chưa sẵn sàng đến trực tiếp).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-adhd": {
+    "addSources": [
+      {
+        "title": "ADHD in children and young people",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/attention-deficit-hyperactivity-disorder-adhd/"
+      }
+    ],
+    "about": [
+      [
+        "ADHD (tăng động giảm chú ý) ảnh hưởng khả năng tập trung, làm khó ngồi yên; triệu chứng thường bắt đầu trước 12 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Kém chú ý: dễ xao nhãng, khó làm theo hướng dẫn, hay quên việc hằng ngày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tăng động, bốc đồng: bồn chồn, nói ồn ào, không yên, khó chờ đến lượt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhiều trẻ nhỏ hiếu động mà không phải ADHD; mệt, lo âu, căng thẳng cũng gây biểu hiện tương tự. Bé gái dễ bị bỏ sót vì triệu chứng kém chú ý khó nhận ra.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Không phải lúc nào cũng rõ; hay có tính gia đình do gen; liên quan sinh non, động kinh, chấn thương não, tự kỷ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Gồm thay đổi sinh hoạt, hỗ trợ ở nhà và ở trường, thuốc, liệu pháp trò chuyện như CBT.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thuốc phải do bác sĩ chuyên khoa ADHD bắt đầu và theo dõi; không phải ai cũng cần dùng thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trước tiên trao đổi với giáo viên; nếu vẫn lo hoặc hỗ trợ ở nhà, ở trường không giúp được → đưa trẻ đi khám để được đánh giá.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-roi-loan-cam-xuc-luong-cuc": {
+    "addSources": [
+      {
+        "title": "Bipolar disorder",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/mental-health/conditions/bipolar-disorder/overview/"
+      }
+    ],
+    "about": [
+      [
+        "Rối loạn cảm xúc lưỡng cực là bệnh tâm thần với những thay đổi tâm trạng cực độ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hưng cảm (nặng) hoặc hưng cảm nhẹ: rất vui, phấn khích, bốc đồng, ý nghĩ dồn dập.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trầm cảm: buồn, rất mệt, tuyệt vọng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Mỗi đợt thường kéo dài vài ngày đến vài tuần; giữa các đợt có thể ổn định hàng tuần, tháng hoặc năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; nguy cơ cao hơn nếu cha mẹ, anh chị em bị; liên quan sang chấn thời thơ ấu, biến cố căng thẳng, dùng chất như cần sa, cocaine.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi nhưng kiểm soát được bằng thuốc ổn định khí sắc và liệu pháp trò chuyện như CBT.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không tự ngưng thuốc khi chưa hỏi bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thay đổi tâm trạng kéo dài hoặc ảnh hưởng cuộc sống hằng ngày, hoặc điều trị không hiệu quả → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Có ý nghĩ tự tử hoặc làm hại bản thân → tìm trợ giúp khẩn cấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-pompe": {
+    "addSources": [
+      {
+        "title": "Pompe disease",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/pompe-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Pompe là bệnh di truyền, trong đó glycogen (một loại đường phức tạp) tích tụ trong tế bào, làm tổn thương cơ và các cơ quan khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể khởi phát ở trẻ nhũ nhi (vài tháng đầu đến khoảng 1 tuổi): yếu cơ, trương lực cơ kém, gan to, tim to hoặc dị tật tim, chậm vận động, khó thở nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể khởi phát muộn (trẻ lớn đến người lớn, thường nhẹ hơn): yếu dần, nhất là ở chân và thân, có thể khó thở đến suy hô hấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do đột biến gen GAA (gen tạo men phân giải glycogen); di truyền lặn — cần cả hai bản gen lỗi, cha mẹ thường chỉ mang gen mà không có biểu hiện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Ở Mỹ khoảng 1 trên 40.000 người mắc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bé yếu cơ, mềm người, chậm vận động hoặc khó thở → đưa đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-nao-nguyen-phat": {
+    "addSources": [
+      {
+        "title": "Brain tumours",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/brain-tumours/"
+      }
+    ],
+    "about": [
+      [
+        "U não là khối tế bào trong não sinh sôi bất thường, mất kiểm soát; u nguyên phát là u bắt đầu ngay tại não.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "U lành tính phát triển chậm, ít tái phát sau điều trị; u ác tính thường độ cao, dễ mọc lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tuỳ vùng não: đau đầu, co giật, buồn nôn, nôn, buồn ngủ, thay đổi trí nhớ hoặc tính cách, yếu liệt một bên, rối loạn nhìn hoặc nói.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có người không có triệu chứng sớm, hoặc triệu chứng xuất hiện từ từ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Phần lớn chưa rõ nguyên nhân; nguy cơ tăng theo tuổi, tiếp xúc phóng xạ (rất ít trường hợp), tiền sử gia đình, một số bệnh di truyền như u xơ thần kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Gặp ở mọi tuổi kể cả trẻ em, nhưng nhiều hơn ở người lớn tuổi. U lành tính thường đáp ứng tốt, có thể hồi phục hoàn toàn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ loại, vị trí, kích thước u và sức khoẻ người bệnh: thuốc steroid giảm phù, thuốc trị triệu chứng, mổ lấy u an toàn nhất có thể, xạ trị, hoá trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên, nhất là đau đầu khác hẳn mọi khi hoặc ngày càng nặng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-nao-thu-phat": {
+    "addSources": [
+      {
+        "title": "Brain tumours",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/brain-tumours/"
+      }
+    ],
+    "about": [
+      [
+        "U não thứ phát là ung thư từ nơi khác trong cơ thể lan vào não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tuỳ vùng não: đau đầu, co giật, buồn nôn, nôn, buồn ngủ, thay đổi trí nhớ hoặc tính cách, yếu liệt một bên, rối loạn nhìn hoặc nói.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có người không có triệu chứng sớm, hoặc triệu chứng xuất hiện từ từ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ loại, vị trí, kích thước u và sức khoẻ người bệnh: thuốc steroid giảm phù, thuốc trị triệu chứng, mổ lấy u an toàn nhất có thể, xạ trị, hoá trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên, nhất là đau đầu khác hẳn mọi khi hoặc ngày càng nặng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

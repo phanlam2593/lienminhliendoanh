@@ -7,49 +7,62 @@
  ],
  "about": [
   {
-   "text": "**U não nguyên phát** — nhóm bệnh: ung thư, đầu.",
+   "text": "U não là khối tế bào trong não sinh sôi bất thường, mất kiểm soát; u nguyên phát là u bắt đầu ngay tại não.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "U lành tính phát triển chậm, ít tái phát sau điều trị; u ác tính thường độ cao, dễ mọc lại.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, nhìn đôi, buồn nôn, trầm cảm, co giật, nhìn mờ, ảo giác, mệt mỏi, đau đầu, khối u.",
+   "text": "Tuỳ vùng não: đau đầu, co giật, buồn nôn, nôn, buồn ngủ, thay đổi trí nhớ hoặc tính cách, yếu liệt một bên, rối loạn nhìn hoặc nói.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có người không có triệu chứng sớm, hoặc triệu chứng xuất hiện từ từ.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: di truyền, bức xạ, tuổi tác, hóa chất, hội chứng Li-Fraumeni.",
+   "text": "Phần lớn chưa rõ nguyên nhân; nguy cơ tăng theo tuổi, tiếp xúc phóng xạ (rất ít trường hợp), tiền sử gia đình, một số bệnh di truyền như u xơ thần kinh.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, tiếp xúc bức xạ, di truyền, béo phì.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Gặp ở mọi tuổi kể cả trẻ em, nhưng nhiều hơn ở người lớn tuổi. U lành tính thường đáp ứng tốt, có thể hồi phục hoàn toàn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ loại, vị trí, kích thước u và sức khoẻ người bệnh: thuốc steroid giảm phù, thuốc trị triệu chứng, mổ lấy u an toàn nhất có thể, xạ trị, hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên, nhất là đau đầu khác hẳn mọi khi hoặc ngày càng nặng → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nao-nguyen-phat.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Brain tumours",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/brain-tumours/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

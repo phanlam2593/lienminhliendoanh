@@ -7,60 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Viêm tuyến tiền liệt mạn tính** — nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "text": "Viêm tuyến tiền liệt mạn tính là khi triệu chứng viêm tuyến tiền liệt kéo dài từ 3 tháng trở lên.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: buồn nôn, ớn lạnh, đau cổ, ngứa, nôn, nám, sốt, ho.",
+   "text": "Đau, rát khi tiểu; khó tiểu, tiểu nhiều lần; đau dương vật, bìu, tinh hoàn hoặc hậu môn, đau khi xuất tinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng đường tiết niệu, sỏi tuyến tiền liệt, căng thẳng tâm lý, nhiễm trùng, stress.",
+   "text": "Thường không rõ nguyên nhân; có thể do nhiễm trùng, viêm, hoặc cả hai.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý về đường tiết niệu, phì đại tiền liệt tuyến, HIV/AIDS.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Có thể gồm kháng sinh và thuốc khác, liệu pháp trò chuyện, vật lý trị liệu; bác sĩ tiết niệu có thể tham gia điều trị.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Uống nhiều nước, có thể dùng thuốc giảm đau thông thường để đỡ triệu chứng.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên → đi khám; không tiểu được → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt kèm lú lẫn, môi tái xanh, khó thở nhiều → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm tuyến tiền liệt mạn tính – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-tuyen-tien-liet-man-tinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Prostatitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/prostatitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

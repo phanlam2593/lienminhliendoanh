@@ -7,54 +7,86 @@
  ],
  "about": [
   {
-   "text": "**Rối loạn dạng cơ thể** — nhóm bệnh: tâm thần, thần kinh - tinh thần.",
+   "text": "Rối loạn dạng cơ thể (rối loạn triệu chứng cơ thể) là khi lo âu cực độ về các triệu chứng cơ thể, vẫn kéo dài dù xét nghiệm bình thường và đã được trấn an. Triệu chứng là có thật; vấn đề chính là phản ứng quá mức với chúng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: trầm cảm, mệt mỏi, khó thở, lo âu, phù, ho.",
+   "text": "Hay gặp: đau, mệt hoặc yếu, khó thở.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Kéo dài từ 6 tháng: sợ triệu chứng nhẹ là bệnh nặng, đi khám nhiều lần mà vẫn nghi ngờ kết quả bình thường, khó sinh hoạt.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): rối loạn sử dụng chất gây nghiện, lạm dụng rượu, bị lạm dụng thể chất và tình dục, bị bỏ bê trong thời thơ ấu, lối sống hỗn loạn, sang chấn tâm lý, bệnh mạn tính trong thời thơ ấu.",
+   "text": "Chưa rõ hẳn; thường bắt đầu trước 30 tuổi, hay gặp ở nữ; có thể liên quan cách nhìn tiêu cực, nhạy cảm với cảm giác đau, gia đình, cách nuôi dạy, di truyền.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Là bệnh kéo dài; không điều trị có thể ảnh hưởng công việc, các mối quan hệ, sức khoẻ và tăng nguy cơ trầm cảm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Liệu pháp nhận thức hành vi (CBT) có thể giúp; thuốc chống trầm cảm hỗ trợ khi kèm lo âu, trầm cảm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nên theo một bác sĩ chính để tránh xét nghiệm, điều trị không cần thiết hoặc rủi ro.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo về triệu chứng cơ thể đến mức không sinh hoạt được, hoặc có dấu hiệu lo âu, trầm cảm → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Có ý nghĩ tự tử → tìm trợ giúp khẩn cấp ngay, đến cơ sở cấp cứu gần nhất.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Rối loạn dạng cơ thể – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/roi-loan-dang-co-the.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Somatic symptom disorder",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000955.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

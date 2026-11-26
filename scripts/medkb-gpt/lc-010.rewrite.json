@@ -1,0 +1,71 @@
+{
+  "_note": "26/11 — Vòng LC 8 (Claude tự làm, đợt 98): NHS dissociative-disorders, health-anxiety; MedlinePlus 000955 (somatic symptom disorder), 000918 (persistent depressive disorder) — Claude đã mở kiểm. Bỏ qua: các rối loạn nhân cách (trang NHS không mô tả từng loại), rối loạn phát triển lan toả.",
+  "lc-roi-loan-phan-ly": {
+    "addSources": [{ "title": "Dissociative disorders", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/" }],
+    "about": [["Rối loạn phân ly là nhóm bệnh gây vấn đề cả về tinh thần lẫn cơ thể; phân ly là cách tâm trí đối phó với căng thẳng quá sức.", ["+0"]]],
+    "signs": [
+      ["Cảm giác tách rời khỏi bản thân và thế giới xung quanh, hoặc thấy mọi thứ không thật.", ["+0"]],
+      ["Quên từng khoảng thông tin cá nhân hoặc sự việc, vượt xa mức hay quên bình thường; không chắc mình là ai.", ["+0"]]
+    ],
+    "causes": [["Nhiều người từng trải qua sang chấn thời thơ ấu; phân ly có thể hình thành như cách đối phó với những trải nghiệm quá sức.", ["+0"]]],
+    "care": [
+      ["Có thể hồi phục; thường dùng liệu pháp trò chuyện để xử lý nguyên nhân và học cách kiểm soát các cơn.", ["+0"]],
+      ["Không có thuốc chữa phân ly trực tiếp, nhưng thuốc chống trầm cảm có thể giúp nếu kèm trầm cảm, lo âu.", ["+0"]]
+    ],
+    "doctor": [["Triệu chứng làm mình lo lắng, ảnh hưởng cuộc sống → đi khám để được giới thiệu chuyên gia sức khoẻ tâm thần.", ["+0"]]],
+    "emergency": [["Có ý nghĩ tự tử → nói ngay với người mình tin tưởng, hoặc đến cơ sở cấp cứu gần nhất.", ["+0"]]]
+  },
+  "lc-roi-loan-da-nhan-cach": {
+    "addSources": [{ "title": "Dissociative disorders", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/mental-health/conditions/dissociative-disorders/" }],
+    "about": [["Rối loạn đa nhân cách nay gọi là rối loạn nhận dạng phân ly (DID), một dạng của rối loạn phân ly, trong đó người bệnh có những nhận dạng khác biệt.", ["+0"]]],
+    "signs": [["Thấy tách rời khỏi bản thân, có những khoảng trống trí nhớ, không chắc mình là ai.", ["+0"]]],
+    "causes": [["Nhiều người từng trải qua sang chấn thời thơ ấu; phân ly là cách tâm trí đối phó.", ["+0"]]],
+    "care": [["Có thể hồi phục; thường dùng liệu pháp trò chuyện; thuốc chống trầm cảm có thể giúp nếu kèm trầm cảm, lo âu.", ["+0"]]],
+    "doctor": [["Triệu chứng gây lo lắng, ảnh hưởng cuộc sống → đi khám để được giới thiệu chuyên gia sức khoẻ tâm thần.", ["+0"]]],
+    "emergency": [["Có ý nghĩ tự tử → nói ngay với người mình tin tưởng, hoặc đến cơ sở cấp cứu gần nhất.", ["+0"]]]
+  },
+  "lc-roi-loan-lo-au-benh-tat": {
+    "addSources": [{ "title": "Health anxiety", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/mental-health/conditions/health-anxiety/" }],
+    "about": [["Rối loạn lo âu bệnh tật là khi lo mình bị bệnh hoặc sắp bị bệnh nhiều đến mức chi phối cuộc sống; có liên quan đến rối loạn ám ảnh cưỡng chế (OCD).", ["+0"]]],
+    "signs": [
+      ["Luôn lo về sức khoẻ; hay kiểm tra cơ thể tìm cục u, tê, đau; tra cứu thông tin bệnh trên mạng liên tục.", ["+0"]],
+      ["Hay hỏi người khác để được trấn an; né mọi thứ liên quan đến bệnh nặng; lo bác sĩ hay xét nghiệm bỏ sót.", ["+0"]],
+      ["Chính sự lo âu có thể gây đau đầu, tim đập nhanh, dễ bị nhầm là dấu hiệu bệnh.", ["+0"]]
+    ],
+    "care": [
+      ["Ghi lại mỗi lần kiểm tra cơ thể, tra cứu hay hỏi trấn an, rồi giảm dần; viết nỗi lo ra cạnh một suy nghĩ cân bằng hơn.", ["+0"]],
+      ["Khi muốn kiểm tra, đánh lạc hướng bằng đi dạo hoặc gọi cho bạn; tập thở thư giãn; dần quay lại các hoạt động đang né.", ["+0"]],
+      ["Bác sĩ có thể giới thiệu liệu pháp trò chuyện như CBT, hoặc kê thuốc chống lo âu.", ["+0"]]
+    ],
+    "doctor": [["Nỗi lo sức khoẻ khiến mình không sống bình thường được, hoặc tự giúp không hiệu quả → đi khám.", ["+0"]]]
+  },
+  "lc-roi-loan-dang-co-the": {
+    "addSources": [{ "title": "Somatic symptom disorder", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000955.htm" }],
+    "about": [["Rối loạn dạng cơ thể (rối loạn triệu chứng cơ thể) là khi lo âu cực độ về các triệu chứng cơ thể, vẫn kéo dài dù xét nghiệm bình thường và đã được trấn an. Triệu chứng là có thật; vấn đề chính là phản ứng quá mức với chúng.", ["+0"]]],
+    "signs": [
+      ["Hay gặp: đau, mệt hoặc yếu, khó thở.", ["+0"]],
+      ["Kéo dài từ 6 tháng: sợ triệu chứng nhẹ là bệnh nặng, đi khám nhiều lần mà vẫn nghi ngờ kết quả bình thường, khó sinh hoạt.", ["+0"]]
+    ],
+    "causes": [["Chưa rõ hẳn; thường bắt đầu trước 30 tuổi, hay gặp ở nữ; có thể liên quan cách nhìn tiêu cực, nhạy cảm với cảm giác đau, gia đình, cách nuôi dạy, di truyền.", ["+0"]]],
+    "course": [["Là bệnh kéo dài; không điều trị có thể ảnh hưởng công việc, các mối quan hệ, sức khoẻ và tăng nguy cơ trầm cảm.", ["+0"]]],
+    "care": [
+      ["Liệu pháp nhận thức hành vi (CBT) có thể giúp; thuốc chống trầm cảm hỗ trợ khi kèm lo âu, trầm cảm.", ["+0"]],
+      ["Nên theo một bác sĩ chính để tránh xét nghiệm, điều trị không cần thiết hoặc rủi ro.", ["+0"]]
+    ],
+    "doctor": [["Lo về triệu chứng cơ thể đến mức không sinh hoạt được, hoặc có dấu hiệu lo âu, trầm cảm → đi khám.", ["+0"]]],
+    "emergency": [["Có ý nghĩ tự tử → tìm trợ giúp khẩn cấp ngay, đến cơ sở cấp cứu gần nhất.", ["+0"]]]
+  },
+  "lc-roi-loan-tram-cam-dai-dang": {
+    "addSources": [{ "title": "Persistent depressive disorder", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000918.htm" }],
+    "about": [["Rối loạn trầm cảm dai dẳng (trước gọi là loạn khí sắc) là trầm cảm kéo dài: tâm trạng buồn, u ám hầu hết các ngày trong ít nhất 2 năm; ở trẻ em và tuổi teen có thể là cáu gắt, chỉ cần kéo dài 1 năm.", ["+0"]]],
+    "signs": [["Gần như lúc nào cũng có từ hai dấu hiệu: tuyệt vọng, thay đổi giấc ngủ, thiếu năng lượng, tự ti, thay đổi ăn uống, kém tập trung; hay nhìn bản thân và tương lai một cách tiêu cực.", ["+0"]]],
+    "causes": [["Chưa rõ nguyên nhân; có thể có tính gia đình, hay gặp ở nữ; đa số người bệnh cũng có ít nhất một đợt trầm cảm nặng.", ["+0"]]],
+    "care": [
+      ["Ngủ đủ, ăn uống lành mạnh, vận động đều, tránh rượu và chất cấm, gần gũi người hỗ trợ mình.", ["+0"]],
+      ["Thuốc thường có ích nhưng có thể chậm hơn; không tự ngưng thuốc, bác sĩ sẽ hướng dẫn giảm dần.", ["+0"]],
+      ["Liệu pháp trò chuyện như CBT, nhóm hỗ trợ.", ["+0"]]
+    ],
+    "doctor": [["Thường xuyên thấy buồn chán, hoặc triệu chứng nặng dần → đi khám.", ["+0"]]],
+    "emergency": [["Có dấu hiệu nguy cơ tự tử như cho đi đồ đạc, nói về cái chết, bỗng bình thản sau thời gian lo âu, thu mình → tìm trợ giúp khẩn cấp ngay.", ["+0"]]]
+  }
+}

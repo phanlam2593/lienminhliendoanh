@@ -7,49 +7,67 @@
  ],
  "about": [
   {
-   "text": "**U nang tuyến Bartholin** — nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "text": "U nang tuyến Bartholin là cục u gần cửa âm đạo, hay gặp ở tuổi 20–50 và thường tự hết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau khi quan hệ, sưng đau, sốt cao, khối u, sưng, sốt, ho.",
+   "text": "Cục mềm, thường không đau ở một bên cửa âm đạo, từ cỡ hạt đậu đến quả bóng golf; khó chịu khi đi, ngồi, quan hệ; sưng một bên môi âm hộ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nếu nhiễm trùng (áp xe): đau dữ dội quanh chỗ sưng, dịch có mùi, sốt, mệt.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: neisseria gonorrhoeae, bệnh lậu, chlamydia trachomatis, gây bệnh Chlamydia, escherichia coli, streptococcus pneumoniae, haemophilus influenzae.",
+   "text": "Do tuyến nhỏ ở âm đạo bị tắc, thường không rõ lý do; nhiễm trùng (kể cả bệnh lây qua đường tình dục như lậu, chlamydia) có thể biến u nang thành áp xe.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): đang có hoạt động tình dục, phụ nữ có thai, hẹp ống tuyến Bartholin bẩm sinh.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ngâm nước ấm vài lần mỗi ngày trong 3–4 ngày, hoặc chườm khăn ấm; có thể dùng thuốc giảm đau thông thường.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Không tự nặn hay chích vì dễ nhiễm trùng; nếu tự vỡ thì giữ sạch, khô.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Bị nhiễm trùng thường dùng kháng sinh; nếu không đỡ hoặc tái phát nhiều, bác sĩ có thể làm thủ thuật dẫn lưu.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có cục u ở trong hoặc quanh âm đạo → đi khám.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Cục to nhanh, đau tăng trong vài giờ hay vài ngày, có mủ, sốt, sưng nóng đỏ → khám gấp.",
+   "src": [
+    1
    ]
   }
  ],
@@ -60,7 +78,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-nang-tuyen-bartholin.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Bartholin's cyst",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/bartholins-cyst/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

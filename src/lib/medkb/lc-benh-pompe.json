@@ -8,22 +8,42 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Pompe** — nhóm bệnh: tâm thần, bệnh trẻ em.",
+   "text": "Bệnh Pompe là bệnh di truyền, trong đó glycogen (một loại đường phức tạp) tích tụ trong tế bào, làm tổn thương cơ và các cơ quan khác.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, chuột rút, mệt mỏi, khó thở, yếu cơ, đau cổ, uể oải, sưng, nám, phù.",
+   "text": "Thể khởi phát ở trẻ nhũ nhi (vài tháng đầu đến khoảng 1 tuổi): yếu cơ, trương lực cơ kém, gan to, tim to hoặc dị tật tim, chậm vận động, khó thở nặng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể khởi phát muộn (trẻ lớn đến người lớn, thường nhẹ hơn): yếu dần, nhất là ở chân và thân, có thể khó thở đến suy hô hấp.",
+   "src": [
+    1
    ]
   }
  ],
- "causes": [],
- "course": [],
+ "causes": [
+  {
+   "text": "Do đột biến gen GAA (gen tạo men phân giải glycogen); di truyền lặn — cần cả hai bản gen lỗi, cha mẹ thường chỉ mang gen mà không có biểu hiện.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "course": [
+  {
+   "text": "Ở Mỹ khoảng 1 trên 40.000 người mắc.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
@@ -35,9 +55,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bé yếu cơ, mềm người, chậm vận động hoặc khó thở → đưa đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -48,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-pompe.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Pompe disease",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/pompe-disease/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

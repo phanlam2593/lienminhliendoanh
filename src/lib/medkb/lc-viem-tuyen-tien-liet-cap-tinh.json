@@ -7,66 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Viêm tuyến tiền liệt cấp tính** — nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "text": "Viêm tuyến tiền liệt là tình trạng viêm tuyến nhỏ nằm dưới bàng quang ở nam giới; có thể nặng và cần được khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: có mùi hôi, ớn lạnh, bí tiểu, sưng, nám, sốt.",
+   "text": "Đau buốt, rát khi tiểu; khó tiểu, phải rặn, tiểu nhiều lần; đau dương vật, bìu, tinh hoàn hoặc hậu môn, đau khi xuất tinh; sốt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vi khuẩn, nhiễm khuẩn chlamydia.",
+   "text": "Thường do nhiễm trùng, như nhiễm trùng đường tiểu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): uống không đủ nước, đặt ống thông tiểu, bị nhiễm trùng tiểu, có tiền sử viêm tuyến tiền liệt, bị viêm tinh hoàn, nhiễm HIV/AIDS.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Điều trị kháng sinh, đa số thấy đỡ trong khoảng 2 tuần, khỏi hẳn có thể mất vài tuần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tắm nước ấm hoặc tắm, ngồi trên đệm, tránh căng thẳng, châm cứu, thảo dược rửa, chườm,…, tránh uống rượu, caffeine,….",
+   "text": "Dùng kháng sinh theo bác sĩ và uống hết liệu trình; uống nhiều nước, có thể dùng thuốc giảm đau thông thường.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên → đi khám; không tiểu được, hoặc 48 giờ sau khi uống kháng sinh không đỡ hay nặng hơn → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Bỗng lú lẫn, nói ngọng, da hoặc môi tái xanh, phát ban không mất khi ấn, khó thở nhiều → gọi cấp cứu (có thể là nhiễm trùng huyết).",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm tuyến tiền liệt cấp tính – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-tuyen-tien-liet-cap-tinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Prostatitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/prostatitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
