@@ -7,34 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng suy hô hấp cấp** — nhóm bệnh: hô hấp, ngực.",
+   "text": "Hội chứng suy hô hấp cấp (ARDS) là bệnh nặng khi phổi ngừng hoạt động bình thường, thường là biến chứng của một bệnh nặng khác; có thể đe doạ tính mạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, thở nhanh, đau ngực, trầm cảm, khó thở, lú lẫn, yếu cơ, lo âu, phù, ho.",
+   "text": "Khó thở, thở nhanh nông.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng huyết, viêm phổi hít, truyền máu, viêm tụy, tổn thương do hít phải, quá liều thuốc, đuối nước hoặc gần chết đuối.",
+   "text": "Chủ yếu ở người đang ốm nặng: nhiễm trùng huyết, viêm phổi, viêm tuỵ cấp, hít phải chất nôn hoặc thức ăn, đuối nước, hít khói, chấn thương nặng, truyền máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không phải lúc nào cũng chữa được; sau khi qua có thể còn khó thở, yếu cơ, đau kéo dài.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị ở hồi sức tích cực: thở oxy, thở máy, thuốc (như kháng sinh nếu nhiễm trùng), truyền dịch.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -47,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột khó thở kèm tức ngực, đau tay, hàm hoặc lưng, buồn nôn, ho ra máu, đau hoặc sưng chân → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Hội chứng suy hô hấp cấp – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-suy-ho-hap-cap.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Acute respiratory distress syndrome (ARDS)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/acute-respiratory-distress-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -7,43 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Cushing** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Hội chứng Cushing là bệnh hiếm do cơ thể có quá nhiều cortisol; hay gặp nhất do dùng thuốc steroid liều cao lâu ngày.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn kinh nguyệt, rối loạn cương, tăng cân, mệt mỏi, đau đầu, yếu cơ, nám, mụn, phù.",
+   "text": "Thường xuất hiện từ từ: tích mỡ ở cổ, lưng trên, ngực, bụng nhưng tay chân gầy; mặt tròn, đỏ; dễ bầm, rạn da; yếu cơ nhất là cánh tay, đùi; thay đổi tâm trạng, giảm ham muốn, kinh không đều, rậm lông.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Ở trẻ: béo phì và thấp so với tuổi.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): tiểu đường tuýp 2.",
+   "text": "Hay gặp nhất là dùng steroid liều cao kéo dài; ít hơn là khối u lành ở tuyến yên hoặc tuyến thượng thận tiết nhiều cortisol.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ nguyên nhân: giảm dần liều steroid theo bác sĩ (không tự ngưng), thuốc giảm tiết cortisol, xạ trị hoặc mổ lấy khối u.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên, nhất là khi đang dùng steroid → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-cushing-295.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cushing's syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cushings-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

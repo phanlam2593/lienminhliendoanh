@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Sudeck** — nhóm bệnh: cơ - xương - khớp, thần kinh - tinh thần.",
+   "text": "Hội chứng Sudeck (hội chứng đau vùng phức hợp, CRPS) gây đau kéo dài dữ dội hơn mức bình thường nhiều, thường sau một chấn thương; hay ở một tay hoặc chân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu không tự chủ, tiểu nhiều, tiêu chảy, đau bụng, buồn nôn, trầm cảm, táo bón, khó thở, lo âu, sưng.",
+   "text": "Da nhạy cảm đến mức chạm nhẹ, va nhẹ hay thay đổi nhiệt độ cũng đau nhói; vùng bị có thể sưng, cứng, đổi màu và nhiệt độ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: chấn thương, viêm quanh khớp vai, phẫu thuật, nằm bất động lâu, sử dụng thuốc, nội soi khớp.",
+   "text": "Chưa rõ nguyên nhân, được cho là cơ thể phản ứng quá mức bất thường sau chấn thương.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, giới, đột quỵ não, đái tháo đường.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Triệu chứng thường đỡ dần, nhưng có người đau nhiều năm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không chữa khỏi nhưng kiểm soát được: tự quản lý, vật lý trị liệu phục hồi, thuốc giảm đau thần kinh, hỗ trợ tâm lý như CBT; điều trị sớm có thể giúp giảm triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sau chấn thương mà đau dữ dội kéo dài, da nhạy cảm bất thường, sưng, đổi màu → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-sudeck.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Complex regional pain syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/complex-regional-pain-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

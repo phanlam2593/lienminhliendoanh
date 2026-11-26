@@ -1,0 +1,643 @@
+{
+  "_note": "27/11 — Vòng LC 34 (đợt 19–21): NHS restless-legs, cushings, klinefelters, marfan, raynauds, sjogrens — Claude đã mở kiểm. Thêm (đợt 21–22): NHS stevens-johnson, turner, heartburn-and-acid-reflux, CRPS, long-qt, ARDS.",
+  "lc-hoi-chung-chan-khong-nghi": {
+    "addSources": [
+      {
+        "title": "Restless legs syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/restless-legs-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng chân không nghỉ gây thôi thúc mạnh phải cử động chân, thường khi nghỉ ngơi ban đêm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Rất muốn cử động chân; cảm giác kiến bò, giật giật, ngứa hoặc đau ở chân; thường nặng hơn về đêm, làm mất ngủ; có người bị cả ở tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Được cho là liên quan thiếu sắt và chất dẫn truyền dopamine; thường không rõ nguyên nhân, dễ bị hơn khi có người nhà bị; có thể đi kèm mang thai, thiếu máu thiếu sắt, bệnh thận, một số thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động ban ngày, ngủ đúng giờ, phòng tối yên tĩnh, tắm nước ấm hoặc chườm ấm trước khi ngủ; khi bị thì đi lại, kéo giãn, xoa bóp chân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh cà phê sau buổi trưa, rượu ít nhất 2 giờ trước khi ngủ, bữa lớn hoặc tập nặng buổi tối, màn hình trước giờ ngủ, ngủ ngày; bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Điều trị nguyên nhân như bổ sung sắt khi thiếu; bác sĩ có thể xem lại thuốc đang dùng hoặc kê thuốc khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng làm mất ngủ, ảnh hưởng tinh thần, hoặc tự chăm sóc không đỡ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-cushing": {
+    "addSources": [
+      {
+        "title": "Cushing's syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cushings-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Cushing là bệnh hiếm do cơ thể có quá nhiều cortisol; hay gặp nhất do dùng thuốc steroid liều cao lâu ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường xuất hiện từ từ: tích mỡ ở cổ, lưng trên, ngực, bụng nhưng tay chân gầy; mặt tròn, đỏ; dễ bầm, rạn da; yếu cơ nhất là cánh tay, đùi; thay đổi tâm trạng, giảm ham muốn, kinh không đều, rậm lông.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ: béo phì và thấp so với tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là dùng steroid liều cao kéo dài; ít hơn là khối u lành ở tuyến yên hoặc tuyến thượng thận tiết nhiều cortisol.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: giảm dần liều steroid theo bác sĩ (không tự ngưng), thuốc giảm tiết cortisol, xạ trị hoặc mổ lấy khối u.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên, nhất là khi đang dùng steroid → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-klinefelter": {
+    "addSources": [
+      {
+        "title": "Klinefelter syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/klinefelters-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Klinefelter (XXY) là khi bé trai sinh ra có thêm một nhiễm sắc thể X; nhiều người không biết mình bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ nhỏ: chậm biết ngồi, đi, nói, cơ yếu. Trẻ lớn: nhút nhát, khó khăn học tập, thiếu năng lượng. Tuổi teen: cao hơn mong đợi, tay chân dài, ít râu lông, ngực to. Người lớn: vô sinh, giảm ham muốn, tinh hoàn nhỏ chắc, rối loạn cương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu tìm nhiễm sắc thể X thừa.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không chữa khỏi nhưng điều trị được các vấn đề: bổ sung testosterone, hỗ trợ ngôn ngữ, học tập, tâm lý, vật lý trị liệu; hỗ trợ sinh sản giúp có con.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tăng nhẹ nguy cơ tiểu đường type 2, loãng xương, bệnh tim, tuyến giáp, trầm cảm; ăn uống lành mạnh, vận động, không hút thuốc giúp giảm nguy cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bé trai chậm phát triển, tuổi dậy thì bất thường, hoặc nam giới khó có con → đi khám nội tiết.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-marfan": {
+    "addSources": [
+      {
+        "title": "Marfan syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/marfan-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Marfan là rối loạn mô liên kết; dấu hiệu điển hình: người cao, tay chân và ngón dài mảnh, dị tật tim, lệch thuỷ tinh thể.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường di truyền từ một bên bố mẹ: con có 1 phần 2 khả năng mắc; khoảng 1/4 trường hợp là đột biến mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Biểu hiện rất khác nhau nên khó chẩn đoán; lo ngại chính là khi tim và động mạch chủ bị ảnh hưởng nhiều, có thể làm giảm tuổi thọ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi; đội chuyên khoa theo dõi sát để kiểm soát triệu chứng và giảm biến chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Người cao gầy tay chân dài bất thường, gia đình có người bị Marfan → đi khám tim mạch, mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-raynaud": {
+    "addSources": [
+      {
+        "title": "Raynaud's",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/raynauds/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Raynaud là bệnh hay gặp, máu đến ngón tay, ngón chân giảm; thường không gây vấn đề nặng nhưng đôi khi là dấu hiệu bệnh khác.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ngón tay, ngón chân đổi màu trắng, xanh tím hoặc đỏ khi lạnh, lo âu, căng thẳng; có thể đau, tê, kiến bò; có khi ở tai, mũi, môi; kéo dài vài phút đến vài giờ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Khởi phát do lạnh, lo âu, căng thẳng; có thể liên quan bệnh khác, một số thuốc, dùng dụng cụ rung lâu ngày, cà phê.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Giữ nhà ấm, mặc ấm nhất là tay chân; tránh thay đổi nhiệt độ đột ngột; vận động đều; tập thở hoặc yoga; bỏ thuốc lá; bớt cà phê.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng có thể dùng thuốc cải thiện tuần hoàn theo bác sĩ; có thể xét nghiệm tìm bệnh như viêm khớp dạng thấp, lupus.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng nặng hoặc nặng dần, ảnh hưởng sinh hoạt, chỉ ở một bên, kèm đau khớp, phát ban, yếu cơ, mới bị lần đầu sau 30 tuổi, hoặc trẻ dưới 12 tuổi → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-sjogren": {
+    "addSources": [
+      {
+        "title": "Sjögren's syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sjogrens-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Sjögren là khi các tuyến tiết dịch như nước mắt, nước bọt hoạt động kém do hệ miễn dịch tấn công; gặp ở nữ nhiều hơn nam; đa số sống thọ như người bình thường.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khô mắt, khô miệng, đau nhức cơ khớp, rất mệt; triệu chứng lúc nặng lúc nhẹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi; thuốc giữ ẩm mắt, miệng, giảm đau, đôi khi dùng steroid ngắn ngày theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Uống nhiều nước; đánh răng 2–3 lượt trong ngày bằng kem có fluor; dùng máy tạo ẩm; đeo kính râm ôm mặt khi ra ngoài; không hút thuốc; hạn chế đọc hoặc nhìn màn hình lâu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khô mắt, khô miệng kéo dài kèm mệt, đau khớp → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-stevens-johnson": {
+    "addSources": [
+      {
+        "title": "Stevens-Johnson syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/stevens-johnson-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Stevens-Johnson là phản ứng da hiếm nhưng nặng, thường do dùng một số thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bắt đầu giống cúm: sốt, đau họng, ho, đau khớp; rồi phát ban (thường từ thân trên lan ra), mọc mụn nước vỡ thành vết loét đau, da dễ bong; có thể loét miệng, mắt, đường tiểu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay do phản ứng thuốc, nhất là một số thuốc chống động kinh, kháng sinh, thuốc giảm đau kháng viêm; ở trẻ đôi khi do nhiễm trùng; nguy cơ cao hơn nếu từng bị hoặc miễn dịch yếu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện, có khi hồi sức: ngưng thuốc nghi ngờ, truyền dịch, chăm sóc vết thương da, giảm đau, thuốc giảm viêm và chống nhiễm trùng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Ban lan rộng, da phồng rộp hoặc bong, thở khò khè, tức ngực hoặc họng, khó thở, khó nói, sưng miệng, mặt, mắt → gọi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-turner": {
+    "addSources": [
+      {
+        "title": "Turner syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/turner-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Turner là bệnh di truyền chỉ gặp ở nữ, do thiếu hoàn toàn hoặc một phần một nhiễm sắc thể giới tính; không phòng được và thường không liên quan tuổi bố mẹ hay việc làm khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hầu như ai cũng nhỏ hơn bình thường khi sinh và thấp hơn trung bình khi lớn; buồng trứng kém phát triển ảnh hưởng dậy thì và gây vô sinh; trí tuệ thường bình thường, đôi khi khó khăn học tập.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu; có thể nghi từ khi mang thai.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không chữa khỏi nhưng hỗ trợ được: liệu pháp hormone giúp tăng trưởng và dậy thì, hỗ trợ học tập, tâm lý, hỗ trợ sinh sản; kiểm tra định kỳ huyết áp, mật độ xương, tuyến giáp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bé gái thấp rõ so với tuổi hoặc dậy thì muộn → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-trao-nguoc-da-day-thuc-quan": {
+    "addSources": [
+      {
+        "title": "Heartburn and acid reflux",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heartburn-and-acid-reflux/"
+      }
+    ],
+    "about": [
+      [
+        "Trào ngược dạ dày thực quản là khi axit dạ dày trào lên phía họng gây ợ nóng; xảy ra thường xuyên thì gọi là bệnh trào ngược (GERD).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nóng rát giữa ngực, vị chua trong miệng; ho hoặc nấc tái diễn, khàn tiếng, hôi miệng, đầy hơi, buồn nôn; nặng hơn sau ăn, khi nằm hoặc cúi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ; yếu tố khởi phát: cà phê, rượu, sô cô la, đồ béo, cay, thừa cân, hút thuốc, mang thai, căng thẳng, thuốc giảm đau như ibuprofen, thoát vị khe hoành.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn bữa nhỏ nhiều bữa; giảm cân nếu cần; tránh món gây triệu chứng; bỏ thuốc lá, bớt rượu; không ăn trong 3–4 giờ trước khi ngủ; tránh quần áo bó bụng; kê cao đầu giường 10–20 cm (không chồng thêm gối).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thuốc trung hoà axit chỉ đỡ tạm; bác sĩ có thể cho thuốc giảm tiết axit trong 4 hoặc 8 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ợ nóng hầu như hằng ngày, thay đổi lối sống và thuốc không đỡ, hoặc kèm nghẹn thức ăn, nôn nhiều, sụt cân không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-sudeck": {
+    "addSources": [
+      {
+        "title": "Complex regional pain syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/complex-regional-pain-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng Sudeck (hội chứng đau vùng phức hợp, CRPS) gây đau kéo dài dữ dội hơn mức bình thường nhiều, thường sau một chấn thương; hay ở một tay hoặc chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da nhạy cảm đến mức chạm nhẹ, va nhẹ hay thay đổi nhiệt độ cũng đau nhói; vùng bị có thể sưng, cứng, đổi màu và nhiệt độ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân, được cho là cơ thể phản ứng quá mức bất thường sau chấn thương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Triệu chứng thường đỡ dần, nhưng có người đau nhiều năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi nhưng kiểm soát được: tự quản lý, vật lý trị liệu phục hồi, thuốc giảm đau thần kinh, hỗ trợ tâm lý như CBT; điều trị sớm có thể giúp giảm triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sau chấn thương mà đau dữ dội kéo dài, da nhạy cảm bất thường, sưng, đổi màu → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-qt-keo-dai": {
+    "addSources": [
+      {
+        "title": "Long QT syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/long-qt-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng QT kéo dài là bệnh tim hiếm, thường di truyền, có thể gây rối loạn nhịp tim nguy hiểm, nhưng có thể giảm nguy cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hồi hộp, tim đập nhanh hoặc không đều; có thể ngất, co giật, ngừng tim; nhiều người không triệu chứng, phát hiện tình cờ qua điện tâm đồ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chủ yếu do gen; ngoài ra một số thuốc (kháng sinh, kháng histamin, chống trầm cảm, thuốc tim), bệnh tim khác, chảy máu não, kali, magie hoặc canxi máu rất thấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đa số dùng thuốc chẹn beta theo bác sĩ; người nguy cơ cao có thể cấy máy khử rung; ăn thực phẩm giàu kali.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh gắng sức nặng (kể cả bơi), mất nước, nước tăng lực nhiều caffeine, tiếng động lớn đột ngột như chuông báo thức, căng thẳng; hỏi bác sĩ, dược sĩ trước khi dùng thuốc hay thực phẩm chức năng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Người bất tỉnh không thở bình thường, co giật, hoặc ngất không tỉnh lại sau một phút → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-hoi-chung-suy-ho-hap-cap": {
+    "addSources": [
+      {
+        "title": "Acute respiratory distress syndrome (ARDS)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/acute-respiratory-distress-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng suy hô hấp cấp (ARDS) là bệnh nặng khi phổi ngừng hoạt động bình thường, thường là biến chứng của một bệnh nặng khác; có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở, thở nhanh nông.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chủ yếu ở người đang ốm nặng: nhiễm trùng huyết, viêm phổi, viêm tuỵ cấp, hít phải chất nôn hoặc thức ăn, đuối nước, hít khói, chấn thương nặng, truyền máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không phải lúc nào cũng chữa được; sau khi qua có thể còn khó thở, yếu cơ, đau kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở hồi sức tích cực: thở oxy, thở máy, thuốc (như kháng sinh nếu nhiễm trùng), truyền dịch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột khó thở kèm tức ngực, đau tay, hàm hoặc lưng, buồn nôn, ho ra máu, đau hoặc sưng chân → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

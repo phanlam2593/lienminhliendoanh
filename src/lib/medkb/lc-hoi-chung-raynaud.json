@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Raynaud** — nhóm bệnh: tim mạch.",
+   "text": "Hội chứng Raynaud là bệnh hay gặp, máu đến ngón tay, ngón chân giảm; thường không gây vấn đề nặng nhưng đôi khi là dấu hiệu bệnh khác.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn cảm giác.",
+   "text": "Ngón tay, ngón chân đổi màu trắng, xanh tím hoặc đỏ khi lạnh, lo âu, căng thẳng; có thể đau, tê, kiến bò; có khi ở tai, mũi, môi; kéo dài vài phút đến vài giờ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: lupus ban đỏ.",
+   "text": "Khởi phát do lạnh, lo âu, căng thẳng; có thể liên quan bệnh khác, một số thuốc, dùng dụng cụ rung lâu ngày, cà phê.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý tuyến giáp.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Giữ nhà ấm, mặc ấm nhất là tay chân; tránh thay đổi nhiệt độ đột ngột; vận động đều; tập thở hoặc yoga; bỏ thuốc lá; bớt cà phê.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nặng có thể dùng thuốc cải thiện tuần hoàn theo bác sĩ; có thể xét nghiệm tìm bệnh như viêm khớp dạng thấp, lupus.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Triệu chứng nặng hoặc nặng dần, ảnh hưởng sinh hoạt, chỉ ở một bên, kèm đau khớp, phát ban, yếu cơ, mới bị lần đầu sau 30 tuổi, hoặc trẻ dưới 12 tuổi → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-raynaud-632.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Raynaud's",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/raynauds/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

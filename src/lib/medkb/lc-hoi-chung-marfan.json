@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Marfan** — nhóm bệnh: tim mạch, da.",
+   "text": "Hội chứng Marfan là rối loạn mô liên kết; dấu hiệu điển hình: người cao, tay chân và ngón dài mảnh, dị tật tim, lệch thuỷ tinh thể.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,27 +23,34 @@
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): yếu tố di truyền.",
+   "text": "Thường di truyền từ một bên bố mẹ: con có 1 phần 2 khả năng mắc; khoảng 1/4 trường hợp là đột biến mới.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Biểu hiện rất khác nhau nên khó chẩn đoán; lo ngại chính là khi tim và động mạch chủ bị ảnh hưởng nhiều, có thể làm giảm tuổi thọ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không chữa khỏi; đội chuyên khoa theo dõi sát để kiểm soát triệu chứng và giảm biến chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Người cao gầy tay chân dài bất thường, gia đình có người bị Marfan → đi khám tim mạch, mắt.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-marfan-237.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Marfan syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/marfan-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

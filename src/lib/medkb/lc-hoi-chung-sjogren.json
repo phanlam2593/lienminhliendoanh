@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Sjogren** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Hội chứng Sjögren là khi các tuyến tiết dịch như nước mắt, nước bọt hoạt động kém do hệ miễn dịch tấn công; gặp ở nữ nhiều hơn nam; đa số sống thọ như người bình thường.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng hạch, khô miệng, cứng khớp, nóng rát, phát ban, ngứa ran, ho khan, mệt mỏi, đau đầu, khó thở.",
+   "text": "Khô mắt, khô miệng, đau nhức cơ khớp, rất mệt; triệu chứng lúc nặng lúc nhẹ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -38,18 +38,24 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chưa chữa khỏi; thuốc giữ ẩm mắt, miệng, giảm đau, đôi khi dùng steroid ngắn ngày theo bác sĩ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Uống nhiều nước; đánh răng 2–3 lượt trong ngày bằng kem có fluor; dùng máy tạo ẩm; đeo kính râm ôm mặt khi ra ngoài; không hút thuốc; hạn chế đọc hoặc nhìn màn hình lâu.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khô mắt, khô miệng kéo dài kèm mệt, đau khớp → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-sjogren-1268.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Sjögren's syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/sjogrens-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

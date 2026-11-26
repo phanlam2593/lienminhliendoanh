@@ -7,40 +7,34 @@
  ],
  "about": [
   {
-   "text": "**Hội chứng Stevens-Johnson** — nhóm bệnh: dị ứng, da - tóc - móng, da.",
+   "text": "Hội chứng Stevens-Johnson là phản ứng da hiếm nhưng nặng, thường do dùng một số thuốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu mũi, xuất huyết, loét miệng, bọng nước, mụn nước, sốt cao, mệt mỏi, đau đầu, khó thở, nổi mẩn.",
+   "text": "Bắt đầu giống cúm: sốt, đau họng, ho, đau khớp; rồi phát ban (thường từ thân trên lan ra), mọc mụn nước vỡ thành vết loét đau, da dễ bong; có thể loét miệng, mắt, đường tiểu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: allopurinol, meloxicam, lupus ban đỏ hệ thống.",
+   "text": "Hay do phản ứng thuốc, nhất là một số thuốc chống động kinh, kháng sinh, thuốc giảm đau kháng viêm; ở trẻ đôi khi do nhiễm trùng; nguy cơ cao hơn nếu từng bị hoặc miễn dịch yếu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): viêm phổi, bệnh HIV/AIDS.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị ở bệnh viện, có khi hồi sức: ngưng thuốc nghi ngờ, truyền dịch, chăm sóc vết thương da, giảm đau, thuốc giảm viêm và chống nhiễm trùng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -53,14 +47,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Ban lan rộng, da phồng rộp hoặc bong, thở khò khè, tức ngực hoặc họng, khó thở, khó nói, sưng miệng, mặt, mắt → gọi cấp cứu ngay, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Hội chứng Stevens-Johnson – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-stevens-johnson-1098.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Stevens-Johnson syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/stevens-johnson-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
