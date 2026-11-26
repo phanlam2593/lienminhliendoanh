@@ -7,46 +7,40 @@
  ],
  "about": [
   {
-   "text": "**Động kinh toàn thể** — nhóm bệnh: thần kinh - tinh thần.",
+   "text": "Động kinh là bệnh của não gây các cơn co giật; có các loại cơn ảnh hưởng toàn thân hoặc làm mất ý thức ngắn: co cứng – co giật, co cứng, mất trương lực, cơn vắng ý thức, giật cơ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, buồn ngủ, ngứa ran, co giật, hoa mắt, ảo giác, sốt cao, đau đầu, lú lẫn, nám.",
+   "text": "Trong cơn có thể: cứng hoặc mềm người, ngã, giật, tiểu không tự chủ, nhìn chằm chằm không đáp; thường kéo dài vài giây đến vài phút rồi tự hết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh Alzheimer, di truyền học, bệnh tự kỷ, chấn thương đầu, khối u não.",
+   "text": "Do thay đổi hoạt động điện bình thường của não; thường liên quan gen, đôi khi do tổn thương não sau chấn thương đầu, đột quỵ, nhiễm trùng; nhiều trường hợp không rõ nguyên nhân.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): cảm xúc căng thẳng, thuốc, vitamin hoặc thực phẩm chức năng, thiếu ngủ, thai kỳ, sử dụng rượu hoặc ma túy, mắc bệnh, chẳng hạn như nhiễm trùng.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc, hạn chế uống rượu bia, cân đối dinh dưỡng, chất béo lành mạnh, hạn chế chất kích thích, giám sát và ghi chép.",
+   "text": "Hiện chưa chữa khỏi nhưng thường kiểm soát được; điều trị chính là thuốc chống động kinh, phải uống đúng theo đơn.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Một số người cần phẫu thuật não, máy kích thích dây thần kinh phế vị hoặc chế độ ăn ketogenic.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +53,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Cơn co giật đầu tiên, cơn kéo dài trên 5 phút, không tỉnh lại như mọi khi, hoặc từ 3 cơn trở lên trong 24 giờ → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Động kinh toàn thể – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dong-kinh-toan-the.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Epilepsy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/epilepsy/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

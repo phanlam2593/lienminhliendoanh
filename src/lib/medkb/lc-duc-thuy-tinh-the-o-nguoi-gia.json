@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Đục thủy tinh thể ở người già** — nhóm bệnh: mắt, bệnh người già.",
+   "text": "Đục thuỷ tinh thể là khi thấu kính trong mắt bị đục, gây nhìn mờ và không điều trị thì có thể mất thị lực; chủ yếu ở người lớn tuổi, nguy cơ tăng từ 60 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nhìn mờ, nhìn mờ, cận thị giả, chói mắt, giảm thị lực, diện đồng tử trắng, màu sắc trông nhạt nhòa.",
+   "text": "Thường tiến triển chậm, hay ở cả hai mắt: nhìn mờ, khó nhìn ban đêm, khó đọc hay xem TV, chói, nhìn đôi, thấy quầng quanh đèn, màu sắc nhạt (nhất là màu xanh); phải đổi kính thường hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: mống mắt, đục nhân thể thủy tinh, đục vỏ thể thủy tinh.",
+   "text": "Yếu tố nguy cơ: tuổi cao, chấn thương hoặc mổ mắt, bệnh mắt khác, dùng steroid lâu dài, hút thuốc, gia đình có người bị, nữ giới, phơi nắng không bảo vệ, tiểu đường type 2, cao huyết áp.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì, suy giảm miễn dịch.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không cần điều trị ngay; khi ảnh hưởng sinh hoạt thì mổ thay thấu kính nhân tạo, gây tê tại chỗ, đa số về trong ngày; hai mắt mổ vào các ngày khác nhau.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Trong lúc chờ, kính mạnh hơn và đèn sáng hơn có thể giúp.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dấu hiệu đục thuỷ tinh thể → đi khám mắt.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/duc-thuy-tinh-the-o-nguoi-gia-547.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cataracts in adults",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cataracts/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Đau dạ dày không do viêm loét** — nhóm bệnh: tiêu hóa, bụng.",
+   "text": "Đau dạ dày không do viêm loét (khó tiêu chức năng) thường không phải dấu hiệu bệnh nặng và có thể tự xử lý.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nôn ra máu, phân đen, nóng rát, buồn nôn, khó thở, ợ hơi, loét.",
+   "text": "Ợ nóng (nóng rát ngực, hay sau ăn), đầy bụng, chướng, buồn nôn, ợ hơi, trào thức ăn hoặc dịch đắng lên.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đau dạ dày.",
+   "text": "Axit dạ dày kích ứng niêm mạc dạ dày hoặc họng; dễ bị khi uống cà phê, rượu, ăn cà chua, sô cô la, đồ béo, cay; thừa cân, hút thuốc, mang thai, căng thẳng, thuốc giảm đau như ibuprofen, thoát vị hoành.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc, aspirin, ibuprofen.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bớt trà, cà phê, nước ngọt có ga, rượu; kê cao đầu và ngực khi ngủ; giảm cân nếu thừa; không ăn trong 3–4 giờ trước khi ngủ; tránh bữa nhiều dầu mỡ, cay; bỏ thuốc lá.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Không tự dùng ibuprofen, aspirin; dược sĩ có thể tư vấn thuốc trung hoà axit hoặc giảm tiết axit.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó tiêu tái đi tái lại, đau nhiều, sụt cân không rõ lý do, khó nuốt, nôn nhiều lần, thiếu máu thiếu sắt, sờ thấy khối ở bụng, nôn ra máu hoặc đi ngoài ra máu → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dau-da-day-khong-do-viem-loet-453.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Indigestion",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/indigestion/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

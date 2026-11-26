@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Đái máu** — nhóm bệnh: thận - tiết niệu.",
+   "text": "Đái máu là khi nước tiểu có màu hồng tươi, đỏ hoặc nâu sẫm do lẫn máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,15 +23,21 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhiễm khuẩn đường tiết niệu, nhiễm khuẩn ở thận, sỏi niệu, bệnh thận, ung thư, rối loạn di truyền, chấn thương thận, thuốc.",
+   "text": "Nhiễm trùng tiểu (rát khi tiểu, mắc tiểu liên tục, nước tiểu hôi đục, sốt, đau hông lưng); sỏi thận (đau quặn từng cơn ở hông, lưng, bẹn, buồn nôn); phì đại tiền liệt tuyến ở nam trên 50 tuổi.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): lạc nội mạc tử cung, sỏi thận.",
+   "text": "Đái máu cũng có thể là dấu hiệu ung thư, nên phải được kiểm tra; phát hiện sớm thì dễ điều trị hơn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể nhầm: ăn củ dền làm nước tiểu hồng; vài thuốc làm nước tiểu đỏ, nâu; máu từ hậu môn hoặc kinh nguyệt.",
+   "src": [
+    1
    ]
   }
  ],
@@ -47,9 +53,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy máu trong nước tiểu, dù ít hay không chắc → đi khám gấp, đừng tự chẩn đoán.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dai-mau-574.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Blood in urine",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/blood-in-urine/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -1,0 +1,364 @@
+{
+  "_note": "26/11 — Vòng LC 19 (đợt 74–75): NHS epilepsy, cataracts, diabetes-insipidus, blood-in-urine, night-sweats — Claude đã mở kiểm. Thêm: NHS indigestion.",
+  "lc-dong-kinh-cuc-bo": {
+    "addSources": [
+      {
+        "title": "Epilepsy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/epilepsy/"
+      }
+    ],
+    "about": [
+      [
+        "Động kinh là bệnh của não gây các cơn co giật; động kinh cục bộ là khi cơn gây cảm giác, cảm nhận hoặc cử động bất thường.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trong cơn có thể: cứng hoặc mềm người, ngã, giật, tiểu không tự chủ, nhìn chằm chằm không đáp, cảm giác lạ, hành vi lạ như bồn chồn; thường kéo dài vài giây đến vài phút rồi tự hết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do thay đổi hoạt động điện bình thường của não; thường liên quan gen, đôi khi do tổn thương não sau chấn thương đầu, đột quỵ, nhiễm trùng; nhiều trường hợp không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Hiện chưa chữa khỏi nhưng thường kiểm soát được; điều trị chính là thuốc chống động kinh, phải uống đúng theo đơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Một số người cần phẫu thuật não, máy kích thích dây thần kinh phế vị hoặc chế độ ăn ketogenic.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Cơn co giật đầu tiên, cơn kéo dài trên 5 phút, không tỉnh lại như mọi khi, hoặc từ 3 cơn trở lên trong 24 giờ → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dong-kinh-toan-the": {
+    "addSources": [
+      {
+        "title": "Epilepsy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/epilepsy/"
+      }
+    ],
+    "about": [
+      [
+        "Động kinh là bệnh của não gây các cơn co giật; có các loại cơn ảnh hưởng toàn thân hoặc làm mất ý thức ngắn: co cứng – co giật, co cứng, mất trương lực, cơn vắng ý thức, giật cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trong cơn có thể: cứng hoặc mềm người, ngã, giật, tiểu không tự chủ, nhìn chằm chằm không đáp; thường kéo dài vài giây đến vài phút rồi tự hết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do thay đổi hoạt động điện bình thường của não; thường liên quan gen, đôi khi do tổn thương não sau chấn thương đầu, đột quỵ, nhiễm trùng; nhiều trường hợp không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Hiện chưa chữa khỏi nhưng thường kiểm soát được; điều trị chính là thuốc chống động kinh, phải uống đúng theo đơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Một số người cần phẫu thuật não, máy kích thích dây thần kinh phế vị hoặc chế độ ăn ketogenic.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Cơn co giật đầu tiên, cơn kéo dài trên 5 phút, không tỉnh lại như mọi khi, hoặc từ 3 cơn trở lên trong 24 giờ → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-duc-thuy-tinh-the-o-nguoi-gia": {
+    "addSources": [
+      {
+        "title": "Cataracts in adults",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cataracts/"
+      }
+    ],
+    "about": [
+      [
+        "Đục thuỷ tinh thể là khi thấu kính trong mắt bị đục, gây nhìn mờ và không điều trị thì có thể mất thị lực; chủ yếu ở người lớn tuổi, nguy cơ tăng từ 60 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường tiến triển chậm, hay ở cả hai mắt: nhìn mờ, khó nhìn ban đêm, khó đọc hay xem TV, chói, nhìn đôi, thấy quầng quanh đèn, màu sắc nhạt (nhất là màu xanh); phải đổi kính thường hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Yếu tố nguy cơ: tuổi cao, chấn thương hoặc mổ mắt, bệnh mắt khác, dùng steroid lâu dài, hút thuốc, gia đình có người bị, nữ giới, phơi nắng không bảo vệ, tiểu đường type 2, cao huyết áp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không cần điều trị ngay; khi ảnh hưởng sinh hoạt thì mổ thay thấu kính nhân tạo, gây tê tại chỗ, đa số về trong ngày; hai mắt mổ vào các ngày khác nhau.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trong lúc chờ, kính mạnh hơn và đèn sáng hơn có thể giúp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu đục thuỷ tinh thể → đi khám mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dai-thao-nhat": {
+    "addSources": [
+      {
+        "title": "Diabetes insipidus",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/diabetes-insipidus/"
+      }
+    ],
+    "about": [
+      [
+        "Đái tháo nhạt là bệnh hiếm, khiến tiểu rất nhiều và hay khát; không liên quan bệnh tiểu đường type 1, type 2.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khát dữ dội, tiểu nhiều kể cả ban đêm; nặng có thể tiểu đến 20 lít mỗi ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Liên quan hormone AVP giúp thận giữ nước. Thiếu AVP: vùng dưới đồi hoặc tuyến yên bị tổn thương (nhiễm trùng, phẫu thuật, u não, chấn thương đầu), khoảng 1/3 không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kháng AVP: thận không đáp ứng với AVP, do tổn thương thận, di truyền hoặc thuốc như lithium.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thiếu AVP nhẹ có thể chỉ cần uống thêm nước; khi cần, bác sĩ cho thuốc thay thế AVP (desmopressin); kháng AVP thường điều trị bằng thuốc lợi tiểu nhóm thiazide.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Luôn khát, tiểu nhiều hơn bình thường, hay mắc tiểu từng chút một → đi khám (người lớn khoẻ thường đi tiểu khoảng 4–7 lượt trong 24 giờ; trẻ đi tiểu trên 10 lượt một ngày nên đi khám).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dai-mau": {
+    "addSources": [
+      {
+        "title": "Blood in urine",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/blood-in-urine/"
+      }
+    ],
+    "about": [
+      [
+        "Đái máu là khi nước tiểu có màu hồng tươi, đỏ hoặc nâu sẫm do lẫn máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nhiễm trùng tiểu (rát khi tiểu, mắc tiểu liên tục, nước tiểu hôi đục, sốt, đau hông lưng); sỏi thận (đau quặn từng cơn ở hông, lưng, bẹn, buồn nôn); phì đại tiền liệt tuyến ở nam trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đái máu cũng có thể là dấu hiệu ung thư, nên phải được kiểm tra; phát hiện sớm thì dễ điều trị hơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể nhầm: ăn củ dền làm nước tiểu hồng; vài thuốc làm nước tiểu đỏ, nâu; máu từ hậu môn hoặc kinh nguyệt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy máu trong nước tiểu, dù ít hay không chắc → đi khám gấp, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-do-mo-hoi-trom": {
+    "addSources": [
+      {
+        "title": "Night sweats",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/night-sweats/"
+      }
+    ],
+    "about": [
+      [
+        "Đổ mồ hôi trộm (đổ mồ hôi đêm) là ra mồ hôi nhiều đến ướt sũng quần áo ngủ và chăn ga, kể cả khi phòng mát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp: bốc hoả thời mãn kinh, lo âu, một số thuốc (chống trầm cảm, steroid, giảm đau), hạ đường huyết, rượu hoặc chất kích thích, chứng tăng tiết mồ hôi (vô hại); có khi không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường không cần điều trị riêng; bác sĩ sẽ tìm triệu chứng khác, có thể đổi thuốc nếu nghi do thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đổ mồ hôi đêm thường xuyên làm thức giấc hoặc lo lắng; kèm sốt rất cao, ớn lạnh, ho, tiêu chảy; hoặc kèm sụt cân không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dau-da-day-khong-do-viem-loet": {
+    "addSources": [
+      {
+        "title": "Indigestion",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/indigestion/"
+      }
+    ],
+    "about": [
+      [
+        "Đau dạ dày không do viêm loét (khó tiêu chức năng) thường không phải dấu hiệu bệnh nặng và có thể tự xử lý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ợ nóng (nóng rát ngực, hay sau ăn), đầy bụng, chướng, buồn nôn, ợ hơi, trào thức ăn hoặc dịch đắng lên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Axit dạ dày kích ứng niêm mạc dạ dày hoặc họng; dễ bị khi uống cà phê, rượu, ăn cà chua, sô cô la, đồ béo, cay; thừa cân, hút thuốc, mang thai, căng thẳng, thuốc giảm đau như ibuprofen, thoát vị hoành.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bớt trà, cà phê, nước ngọt có ga, rượu; kê cao đầu và ngực khi ngủ; giảm cân nếu thừa; không ăn trong 3–4 giờ trước khi ngủ; tránh bữa nhiều dầu mỡ, cay; bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không tự dùng ibuprofen, aspirin; dược sĩ có thể tư vấn thuốc trung hoà axit hoặc giảm tiết axit.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khó tiêu tái đi tái lại, đau nhiều, sụt cân không rõ lý do, khó nuốt, nôn nhiều lần, thiếu máu thiếu sắt, sờ thấy khối ở bụng, nôn ra máu hoặc đi ngoài ra máu → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
