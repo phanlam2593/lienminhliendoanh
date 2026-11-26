@@ -1242,6 +1242,10 @@ export function expandTeen(text: string): string {
   s = s.replace(VR(/(^|[^\p{L}])bn (tiền|tuổi|lâu|ngày|năm|tháng|giờ|cái|người|điểm|lần|k)(?![\p{L}])/giu), "$1bao nhiêu $2");
   s = s.replace(VR(/(^|[^\p{L}])(ng|người) (iu|yêu)(?![\p{L}])/giu), "$1người yêu");
   s = s.replace(VR(/(^|[^\p{L}])bn(?![\p{L}])/giu), "$1bạn");
+  // 27/11 (Kir: "A chưa bh trúng số :((" bị đáp chúc mừng): "bh" sau chữ phủ định là "bao giờ" ("chưa bh", "k bh"),
+  //   còn lại là "bây giờ" ("bh a đang ở nhà", "ngay bh").
+  s = s.replace(VR(/(^|[^\p{L}])(chưa|không|ko|k|kh|chẳng|chả|hông|hong|chua|khong) (bh|bgio|bjo|bao h)(?![\p{L}])/giu), "$1$2 bao giờ");
+  s = s.replace(VR(/(^|[^\p{L}])bh(?![\p{L}])/giu), "$1bây giờ");
   // "lm j", "làm j" → làm gì; "m/t + động từ" là mày/tao (khác "5 m" = mét); "nv quán" = nhân viên.
   // (05/11: câu gõ KHÔNG DẤU — "la voi dung lm j" — giữ không dấu "lam gi" để bộ đoán dấu vẫn đọc cả câu; chèn "làm gì" có dấu
   //   làm câu thành nửa có dấu, bộ đoán dấu bỏ qua → "la voi" không ra "lá vối")

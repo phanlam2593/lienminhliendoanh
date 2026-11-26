@@ -241,11 +241,15 @@ export const EVENTS: Ev[] = [
 
 // Những chữ có thể đứng TRƯỚC cụm trạng thái mà câu vẫn là nói về chính mình ("hôm nay a đang chán quá", "ở nhà một mình chán ghê").
 const SELF_LEAD = new Set("oix a anh e em c chi minh toi tui to t tao dang thay cam hom nay bua gio toi sang trua chieu dem qua lai cu hoi o nha mot ma sao troi oi ui haiz haizz u thi that su day dao luc nay may bay hay van con cung luon".split(" "));
+// (so trên câu KHÔNG DẤU n — VN tự đối chiếu dạng có dấu)
+const NEG_GOOD = VN(/(^|\s)(không|ko|k|kh|chẳng|chả|hông|hong|chưa|kbh)( (bao giờ|bao h|bh|từng|hề|có|được|đc|còn|thể))*\s*$/);
 export function eventOf(n: string): Ev | undefined {
   const s = ` ${n} `;
   return EVENTS.find((e) => {
     const m = e.re.exec(s);
     if (!m) return false;
+    // 27/11 (Kir: "A chưa bh trúng số :(("): chuyện vui bị phủ định ngay trước ("chưa bao giờ trúng số", "chưa được tăng lương") không phải tin vui.
+    if (e.good && NEG_GOOD.test(s.slice(0, m.index))) return false;
     // Chuyện của chính người nói: trước cụm đó không có một danh từ khác làm chủ ngữ ("công việc", "phim này", "quán đó"…).
     return !e.selfOnly || s.slice(0, m.index).trim().split(" ").every((w) => !w || SELF_LEAD.has(w));
   });

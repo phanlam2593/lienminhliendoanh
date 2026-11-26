@@ -379,6 +379,23 @@ const STATES: StateDef[] = [
     }),
   },
   {
+    // 27/11 (Kir: "A chưa bh trúng số :((" bị đáp "Hay quá trời luôn 🎊… ăn mừng"): tin vui bị PHỦ ĐỊNH
+    //   ("chưa bao giờ trúng số", "không đậu", "chưa được tăng lương", "mua vé số mà không trúng") là chuyện hơi buồn / than nhẹ.
+    id: "nogood",
+    re: W("(chưa|không|ko|k|kh|kbh|chẳng|chả|hông|hong|chua|khong)( (bao giờ|bao h|bh|từng|hề|có|được|đc|dc|còn|thể|mua|ai))* (trúng (xổ số|vé số|số|thưởng|giải|vietlott|độc đắc)|trúng(?= (gì|hết|cả|nổi|lần nào|bao giờ|luôn|nữa)(?![\\p{L}])| ?$)|(được )?(tăng lương|thăng chức|lên chức|nhận việc|khen|thưởng)|đậu|đỗ|có việc)|(vé số|xổ số|vietlott)( \\p{L}+){0,4} (không|chưa|chẳng|chả|ko|k|hông) (trúng|ăn)"),
+    reply: (m, s) => {
+      if (VR(/trúng (số|xổ số|vé số|vietlott|độc đắc)|vé số|xổ số|vietlott/u).test(s))
+        return { text: pick([
+          "Huhu chưa tới lượt bạn thôi mà 😆 Vé số thì mình coi như mua niềm vui, đừng dồn nhiều tiền vào nha. Mà nếu trúng thật thì bạn tính làm gì đầu tiên nè?",
+          "Ui, khoản này Lomi cũng chưa trúng lần nào nè 🥲 Vé số coi như mua chút hy vọng thôi, đừng mua nhiều quá nha. Dạo này bạn đang cần tiền cho việc gì hả?",
+        ]) };
+      return { text: pick([
+        "Chưa được như mong muốn chắc cũng hơi nản ha 😔 Chuyện sao vậy, kể Lomi nghe với?",
+        "Ui, vậy là chưa được như ý rồi 🥺 Bạn đang thấy buồn hay chỉ hơi tiếc thôi? Kể Lomi nghe nè.",
+      ]) };
+    },
+  },
+  {
     id: "goodnews",
     re: W("(vừa|mới) (trúng|được|đậu|đỗ|nhận|thắng|lên)( \\p{L}+)*( số| giải| lương| chức| việc| điểm| tiền| học bổng| đại học| phỏng vấn)|trúng số|đậu (đại học|phỏng vấn|rồi)|được (tăng lương|thăng chức|nhận việc|điểm cao|khen)|(vừa |mới )sinh (em bé|con trai|con gái|con|bé)|sinh em bé rồi"),
     reply: () => ({ text: pick(["Wow chúc mừng bạn nha 🎉🥳 Tin vui vậy là phải ăn mừng chút xíu rồi! Kể Lomi nghe chi tiết đi nào!", "Hay quá trời luôn 🎊 Lomi vui lây nè! Bạn định ăn mừng thế nào vậy?"]) }),
@@ -452,7 +469,9 @@ export function senseState(raw: string, only?: string[]): SenseReply | null {
     // 21/10 (QA V3): "nghiện chơi game, mất cả việc" — không phải đang chơi game cho vui.
     if (d.id === "gaming" && VR(/(?<![\p{L}])(nghiện|nghien|mất việc|mat viec|bỏ bê|bo be)(?![\p{L}])/u).test(s)) continue;
     // 21/10 (QA V2 Q77): "mà vẫn không thấy vui" — trạng thái bị PHỦ ĐỊNH ngay trước thì không phải đang vui / đang chán.
-    if (VR(/(?<![\p{L}])(không|ko|chẳng|chả|hông|chưa|đâu có)( (thấy|cảm thấy|còn|hề|được))*\s*$/u).test(s.slice(0, idx))) continue;
+    if (VR(/(?<![\p{L}])(không|ko|k|chẳng|chả|hông|chưa|đâu có|kbh)( (thấy|cảm thấy|còn|hề|được|bao giờ|bao h|bh|từng|có))*\s*$/u).test(s.slice(0, idx))) continue;
+    // 27/11: mặt buồn ":((", "huhu" đi kèm thì không phải tin vui / đang vui.
+    if ((d.id === "goodnews" || d.id === "happy") && VR(/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu).test(raw)) continue;
     // 08/10: câu lược chủ ngữ chỉ nhận khi trạng thái đứng ĐẦU câu (trước nó chỉ có từ đệm / thời gian): "đói quá", "hôm nay mệt ghê".
     // "máy lạnh hư rồi", "điện thoại hết pin" có danh từ khác đứng trước → đang nói về đồ vật, không phải kể về mình.
     const lead = LEAD_ONLY.test(s.slice(0, idx));
@@ -462,7 +481,7 @@ export function senseState(raw: string, only?: string[]): SenseReply | null {
     // Chuyện buôn bán ("sáng đông khách lắm, chiều thì ế") nhận ở bất kỳ vị trí nào, nhưng phải thật sự nói về khách / quán / bán —
     // "điện thoại hết pin", "nhiều việc quá" có chữ "hết", "nhiều" mà không phải chuyện kinh doanh.
     const bizTalk = d.id === "biz_state" && VR(/(?<![\p{L}])(khách|đơn|doanh thu|quán|tiệm|bán|ế)(?![\p{L}])/u).test(s);
-    if (d.id === "weather" ? lead : d.id === "biz_state" ? bizTalk : selfSub || okShort) {
+    if (d.id === "weather" ? lead : d.id === "biz_state" ? bizTalk : d.id === "nogood" || selfSub || okShort) {
       const r = d.reply(m, s);
       return { ...r, intent: `state:${d.id}`, talk: true };
     }
