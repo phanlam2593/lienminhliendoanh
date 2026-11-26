@@ -1,0 +1,457 @@
+{
+  "_note": "27/11 — Vòng LC 30 (đợt 34–37): NHS sarcoidosis, vascular-dementia, temporomandibular-disorder-tmd, hearing-loss — Claude đã mở kiểm. Thêm: NHS mitral-valve-problems (heart valve disease), hypoparathyroidism.",
+  "lc-sarcoid": {
+    "addSources": [
+      {
+        "title": "Sarcoidosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sarcoidosis/"
+      }
+    ],
+    "about": [
+      [
+        "Sarcoidosis là bệnh hiếm, tạo những đám mô sưng nhỏ (u hạt) trong các cơ quan, hay gặp nhất ở phổi (khoảng 9/10 người), hạch bạch huyết và da.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tuỳ cơ quan: nốt sưng đau ở da, khó thở, ho khan dai dẳng; ngoài ra mệt, đau khớp, mắt đỏ đau, đau đầu, sưng hạch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; có thể liên quan tiếp xúc nấm mốc, đất, phấn hoa, bụi silic, nhiễm trùng, gen và hệ miễn dịch; không lây, không di truyền. Thường bắt đầu ở tuổi 30–40, hay gặp ở nữ hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiều người tự hết trong vài tháng đến vài năm; một số nặng dần và có thể tổn thương cơ quan lâu dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhiều người không cần điều trị riêng; khi cần thường dùng steroid, có thể thêm thuốc ức chế miễn dịch theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho khan kéo dài, khó thở, nốt đau ở da hoặc đỏ mắt kéo dài → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-sarcoidosis": {
+    "addSources": [
+      {
+        "title": "Sarcoidosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sarcoidosis/"
+      }
+    ],
+    "about": [
+      [
+        "Sarcoidosis là bệnh hiếm, tạo những đám mô sưng nhỏ (u hạt) trong các cơ quan, hay gặp nhất ở phổi (khoảng 9/10 người), hạch bạch huyết và da.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tuỳ cơ quan: nốt sưng đau ở da, khó thở, ho khan dai dẳng; ngoài ra mệt, đau khớp, mắt đỏ đau, đau đầu, sưng hạch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; có thể liên quan tiếp xúc nấm mốc, đất, phấn hoa, bụi silic, nhiễm trùng, gen và hệ miễn dịch; không lây, không di truyền. Thường bắt đầu ở tuổi 30–40, hay gặp ở nữ hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiều người tự hết trong vài tháng đến vài năm; một số nặng dần và có thể tổn thương cơ quan lâu dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhiều người không cần điều trị riêng; khi cần thường dùng steroid, có thể thêm thuốc ức chế miễn dịch theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho khan kéo dài, khó thở, nốt đau ở da hoặc đỏ mắt kéo dài → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-sa-sut-tri-tue-do-mach-mau-nao": {
+    "addSources": [
+      {
+        "title": "Vascular dementia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/vascular-dementia/"
+      }
+    ],
+    "about": [
+      [
+        "Sa sút trí tuệ do mạch máu não là dạng sa sút trí tuệ hay gặp, do máu lên não giảm; hiếm dưới 65 tuổi và thường nặng dần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có thể bắt đầu đột ngột hoặc từ từ: suy nghĩ chậm, khó lập kế hoạch và hiểu, kém tập trung, thay đổi tâm trạng, hành vi, lú lẫn, đi đứng mất thăng bằng; có thể giảm trí nhớ, ngôn ngữ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Máu lên não giảm làm hỏng rồi chết tế bào não: do mạch máu nhỏ hẹp hoặc tắc, một cơn đột quỵ, hoặc nhiều cơn thiếu máu não thoáng qua.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay liên quan huyết áp cao, tiểu đường, hút thuốc, thừa cân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi, nhưng điều trị nguyên nhân có thể làm chậm bệnh: ăn uống lành mạnh, giảm cân, bỏ thuốc lá, vận động, bớt rượu, thuốc huyết áp, mỡ máu, chống huyết khối theo bác sĩ; vật lý trị liệu, hoạt động trị liệu, liệu pháp tâm lý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu sớm, nhất là người trên 65 tuổi → đi khám sớm; lo cho người thân thì khuyên họ đi khám và đi cùng.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-roi-loan-khop-thai-duong-ham": {
+    "addSources": [
+      {
+        "title": "Temporomandibular disorder (TMD)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/"
+      }
+    ],
+    "about": [
+      [
+        "Rối loạn khớp thái dương hàm ảnh hưởng cử động hàm, cơ nhai và khớp giữa hàm dưới với hộp sọ; thường không nặng và hay tự đỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau quanh hàm, tai hoặc thái dương; kêu lục cục, lạo xạo khi cử động hàm; đau đầu vùng thái dương; khó há miệng hết cỡ hoặc kẹt hàm; đau hơn khi nhai hoặc căng thẳng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nghiến răng, khớp hao mòn, va đập vào đầu mặt, căng thẳng, khớp cắn lệch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn đồ mềm, dùng thuốc giảm đau thông thường; chườm lạnh hoặc ấm (bọc khăn), xoa nhẹ cơ đau; tập thư giãn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh nhai kẹo cao su, cắn móng tay hay đầu bút, cắn thức ăn bằng răng cửa, ngáp to, nghiến chặt răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Kéo dài không đỡ → đi khám; nghi nghiến răng → khám nha; không ăn uống được, đau đầu dữ dội thường xuyên, nhìn đôi, kẹt hàm → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-thai-duong-ham": {
+    "addSources": [
+      {
+        "title": "Temporomandibular disorder (TMD)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/temporomandibular-disorder-tmd/"
+      }
+    ],
+    "about": [
+      [
+        "Rối loạn khớp thái dương hàm ảnh hưởng cử động hàm, cơ nhai và khớp giữa hàm dưới với hộp sọ; thường không nặng và hay tự đỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau quanh hàm, tai hoặc thái dương; kêu lục cục, lạo xạo khi cử động hàm; đau đầu vùng thái dương; khó há miệng hết cỡ hoặc kẹt hàm; đau hơn khi nhai hoặc căng thẳng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nghiến răng, khớp hao mòn, va đập vào đầu mặt, căng thẳng, khớp cắn lệch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn đồ mềm, dùng thuốc giảm đau thông thường; chườm lạnh hoặc ấm (bọc khăn), xoa nhẹ cơ đau; tập thư giãn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh nhai kẹo cao su, cắn móng tay hay đầu bút, cắn thức ăn bằng răng cửa, ngáp to, nghiến chặt răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Kéo dài không đỡ → đi khám; nghi nghiến răng → khám nha; không ăn uống được, đau đầu dữ dội thường xuyên, nhìn đôi, kẹt hàm → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-suy-giam-thinh-luc": {
+    "addSources": [
+      {
+        "title": "Hearing loss",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hearing-loss/"
+      }
+    ],
+    "about": [
+      [
+        "Suy giảm thính lực rất hay gặp, nhất là khi lớn tuổi, và có thể do nguyên nhân chữa được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó nghe rõ, nhất là chỗ ồn; hay phải nhờ người khác nhắc lại; mở TV, nhạc to hơn người khác; khó nghe điện thoại, khó theo kịp câu chuyện; mệt vì phải tập trung nghe.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Giảm dần hai tai do tuổi tác hoặc tiếp xúc tiếng ồn lâu dài; viêm tai; ráy tai tích tụ; thủng màng nhĩ; viêm mê đạo, bệnh Ménière (kèm chóng mặt, ù tai).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: kháng sinh nếu nhiễm trùng, nhỏ thuốc hoặc lấy ráy tai; nghe kém vĩnh viễn thường dùng máy trợ thính, có người cần cấy ốc tai.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Để âm lượng tai nghe vừa phải, đeo bảo vệ tai chỗ ồn; không cho ngón tay hay tăm bông vào tai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghe kém dần, hoặc không đỡ sau điều trị viêm tai, ráy tai → đi khám; đột ngột nghe kém, nghe kém nhanh trong vài ngày, hoặc kèm đau tai, chảy dịch → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-sa-van-2-la": {
+    "addSources": [
+      {
+        "title": "Heart valve disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/mitral-valve-problems/"
+      }
+    ],
+    "about": [
+      [
+        "Sa van 2 lá là khi van hai lá (ở tim trái) không đóng kín hoàn toàn và có thể bị hở; van hai lá là một trong những van hay bị bệnh nhất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở, mệt hoặc yếu, chóng mặt, hồi hộp, phù mắt cá hoặc bàn chân, đau tức ngực; có người không triệu chứng, chỉ phát hiện khi bác sĩ nghe thấy tiếng thổi ở tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Bẩm sinh; thay đổi theo tuổi (nhất là khi hút thuốc, huyết áp cao, mỡ máu cao); bệnh như thấp tim, bệnh cơ tim, viêm nội tâm mạc; tổn thương sau nhồi máu cơ tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhẹ không triệu chứng có thể chỉ cần tái khám định kỳ; có triệu chứng hoặc nặng thì dùng thuốc theo bác sĩ; nặng thường cần mổ sửa hoặc thay van.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Hay khó thở, mệt, chóng mặt khi sinh hoạt; hồi hộp lặp lại hoặc kéo dài; phù chân; đau ngực lúc có lúc không → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở dữ dội; đau ngực đột ngột lan ra tay, lưng, cổ, hàm hoặc kéo dài trên 15 phút; đau ngực kèm khó thở, hồi hộp → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-suy-can-giap": {
+    "addSources": [
+      {
+        "title": "Hypoparathyroidism",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hypoparathyroidism/"
+      }
+    ],
+    "about": [
+      [
+        "Suy cận giáp là bệnh hiếm, các tuyến cận giáp nhỏ ở cổ hoạt động kém nên canxi máu có thể xuống quá thấp; thường điều trị được bằng thuốc bổ sung.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tê bì, kiến bò hoặc nóng rát ở tay, chân, mặt; đau, cứng, chuột rút cơ; đau bụng; móng giòn, tóc khô, da khô; đục thuỷ tinh thể.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn: lú lẫn, nhịp tim không đều, co giật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là tuyến cận giáp bị tổn thương khi mổ vùng cổ, đầu (như mổ tuyến giáp); ngoài ra bệnh tự miễn, một số bệnh di truyền hiếm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bổ sung canxi và vitamin D theo bác sĩ, thường suốt đời; ăn nhiều thực phẩm giàu canxi (sữa, rau lá xanh, đậu nành, đậu phụ); xét nghiệm máu định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sau mổ tuyến giáp hoặc vùng cổ mà bị tê bì, chuột rút → đi khám, xét nghiệm canxi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Co giật lần đầu hoặc kéo dài trên 5 phút → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Sarcoid** — nhóm bệnh: máu.",
+   "text": "Sarcoidosis là bệnh hiếm, tạo những đám mô sưng nhỏ (u hạt) trong các cơ quan, hay gặp nhất ở phổi (khoảng 9/10 người), hạch bạch huyết và da.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đánh trống ngực, đổ mồ hôi đêm, thở khò khè, sưng hạch, tức ngực, đau khớp, nhìn mờ, đau mắt, ho khan, mệt mỏi.",
+   "text": "Tuỳ cơ quan: nốt sưng đau ở da, khó thở, ho khan dai dẳng; ngoài ra mệt, đau khớp, mắt đỏ đau, đau đầu, sưng hạch.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: propionibacterium acnes, mycobacteria, mycobacterium tuberculosis, viêm, vi khuẩn Propionibacterium acnes và Mycobacteria.",
+   "text": "Chưa rõ nguyên nhân; có thể liên quan tiếp xúc nấm mốc, đất, phấn hoa, bụi silic, nhiễm trùng, gen và hệ miễn dịch; không lây, không di truyền. Thường bắt đầu ở tuổi 30–40, hay gặp ở nữ hơn.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi và giới tính, chủng tộc, tiền sử gia đình.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiều người tự hết trong vài tháng đến vài năm; một số nặng dần và có thể tổn thương cơ quan lâu dài.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nhiều người không cần điều trị riêng; khi cần thường dùng steroid, có thể thêm thuốc ức chế miễn dịch theo bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ho khan kéo dài, khó thở, nốt đau ở da hoặc đỏ mắt kéo dài → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/sarcoid-265.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Sarcoidosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/sarcoidosis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

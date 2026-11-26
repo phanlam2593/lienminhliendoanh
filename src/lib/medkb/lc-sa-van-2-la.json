@@ -7,54 +7,67 @@
  ],
  "about": [
   {
-   "text": "**Sa van 2 lá** — nhóm bệnh: tim mạch.",
+   "text": "Sa van 2 lá là khi van hai lá (ở tim trái) không đóng kín hoàn toàn và có thể bị hở; van hai lá là một trong những van hay bị bệnh nhất.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tim đập nhanh, chóng mặt, đau ngực, mệt mỏi, khó thở, nám, ho.",
+   "text": "Khó thở, mệt hoặc yếu, chóng mặt, hồi hộp, phù mắt cá hoặc bàn chân, đau tức ngực; có người không triệu chứng, chỉ phát hiện khi bác sĩ nghe thấy tiếng thổi ở tim.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): dị tật tim bẩm sinh, bệnh Grave, vẹo cột sống ,…, rối loạn mô liên kết, hội chứng Marfan, hội chứng Ehlers-Danlos.",
+   "text": "Bẩm sinh; thay đổi theo tuổi (nhất là khi hút thuốc, huyết áp cao, mỡ máu cao); bệnh như thấp tim, bệnh cơ tim, viêm nội tâm mạc; tổn thương sau nhồi máu cơ tim.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nhẹ không triệu chứng có thể chỉ cần tái khám định kỳ; có triệu chứng hoặc nặng thì dùng thuốc theo bác sĩ; nặng thường cần mổ sửa hoặc thay van.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Hay khó thở, mệt, chóng mặt khi sinh hoạt; hồi hộp lặp lại hoặc kéo dài; phù chân; đau ngực lúc có lúc không → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở dữ dội; đau ngực đột ngột lan ra tay, lưng, cổ, hàm hoặc kéo dài trên 15 phút; đau ngực kèm khó thở, hồi hộp → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Sa van 2 lá – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/sa-van-2-la-313.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Heart valve disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/mitral-valve-problems/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

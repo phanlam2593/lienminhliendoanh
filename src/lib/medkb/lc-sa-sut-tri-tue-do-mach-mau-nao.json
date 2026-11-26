@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Sa sút trí tuệ do mạch máu não** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Sa sút trí tuệ do mạch máu não là dạng sa sút trí tuệ hay gặp, do máu lên não giảm; hiếm dưới 65 tuổi và thường nặng dần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: suy giảm trí nhớ, loạn thần.",
+   "text": "Có thể bắt đầu đột ngột hoặc từ từ: suy nghĩ chậm, khó lập kế hoạch và hiểu, kém tập trung, thay đổi tâm trạng, hành vi, lú lẫn, đi đứng mất thăng bằng; có thể giảm trí nhớ, ngôn ngữ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhồi máu não, đái tháo đường, bệnh động mạch lớn, xơ vữa mạch máu, bệnh động mạch nhỏ, yếu tố nguy cơ, hội chứng amyloid não.",
+   "text": "Máu lên não giảm làm hỏng rồi chết tế bào não: do mạch máu nhỏ hẹp hoặc tắc, một cơn đột quỵ, hoặc nhiều cơn thiếu máu não thoáng qua.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): huyết áp cao, cholesterol cao, tiểu đường, béo phì, hút thuốc, bệnh tim.",
+   "text": "Hay liên quan huyết áp cao, tiểu đường, hút thuốc, thừa cân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không chữa khỏi, nhưng điều trị nguyên nhân có thể làm chậm bệnh: ăn uống lành mạnh, giảm cân, bỏ thuốc lá, vận động, bớt rượu, thuốc huyết áp, mỡ máu, chống huyết khối theo bác sĩ; vật lý trị liệu, hoạt động trị liệu, liệu pháp tâm lý.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dấu hiệu sớm, nhất là người trên 65 tuổi → đi khám sớm; lo cho người thân thì khuyên họ đi khám và đi cùng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/sa-sut-tri-tue-do-mach-mau-nao-33.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Vascular dementia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/vascular-dementia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

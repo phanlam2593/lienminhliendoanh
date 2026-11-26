@@ -7,47 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Suy cận giáp** — nhóm bệnh: nội tiết - chuyển hóa, cổ.",
+   "text": "Suy cận giáp là bệnh hiếm, các tuyến cận giáp nhỏ ở cổ hoạt động kém nên canxi máu có thể xuống quá thấp; thường điều trị được bằng thuốc bổ sung.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau bụng kinh, đau bụng, rụng tóc, trầm cảm, co giật, mệt mỏi, đau đầu, khó thở, co rút, yếu cơ.",
+   "text": "Tê bì, kiến bò hoặc nóng rát ở tay, chân, mặt; đau, cứng, chuột rút cơ; đau bụng; móng giòn, tóc khô, da khô; đục thuỷ tinh thể.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nặng hơn: lú lẫn, nhịp tim không đều, co giật.",
+   "src": [
+    1
    ]
   }
  ],
- "causes": [],
+ "causes": [
+  {
+   "text": "Hay gặp nhất là tuyến cận giáp bị tổn thương khi mổ vùng cổ, đầu (như mổ tuyến giáp); ngoài ra bệnh tự miễn, một số bệnh di truyền hiếm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bổ sung canxi và vitamin D theo bác sĩ, thường suốt đời; ăn nhiều thực phẩm giàu canxi (sữa, rau lá xanh, đậu nành, đậu phụ); xét nghiệm máu định kỳ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sau mổ tuyến giáp hoặc vùng cổ mà bị tê bì, chuột rút → đi khám, xét nghiệm canxi.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Co giật lần đầu hoặc kéo dài trên 5 phút → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Suy cận giáp – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/suy-can-giap-297.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Hypoparathyroidism",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/hypoparathyroidism/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
