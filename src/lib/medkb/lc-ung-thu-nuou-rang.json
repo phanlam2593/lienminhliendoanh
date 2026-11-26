@@ -7,15 +7,22 @@
  ],
  "about": [
   {
-   "text": "**Ung thư nướu răng** — nhóm bệnh: ung thư, răng - hàm - mặt.",
+   "text": "Ung thư nướu răng là một dạng ung thư miệng, thường bắt đầu ở lớp tế bào phủ bề mặt trong miệng.",
    "src": [
+    1,
     0
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, nổi hạch, sụt cân, khối u, sưng, loét, phù.",
+   "text": "Mảng trắng hoặc đỏ trong miệng; vết loét ở miệng hay môi không lành.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể chảy máu, sưng nướu, nổi hạch, sụt cân.",
    "src": [
     0
    ]
@@ -23,7 +30,13 @@
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): nhiễm HPV, nghiện rượu, bị kích ứng miệng mạn tính, vệ sinh răng miệng kém.",
+   "text": "Phần lớn liên quan đến thuốc lá, uống nhiều rượu hoặc virus HPV; vừa hút thuốc vừa uống nhiều rượu thì nguy cơ càng cao.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Vệ sinh răng miệng kém, kích ứng miệng lâu ngày cũng liên quan.",
    "src": [
     0
    ]
@@ -32,24 +45,18 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: hoạt động thể chất, quản lý stress và tình trạng tâm thần, theo dõi sức khỏe, tháo răng giả khi bạn ngủ.",
+   "text": "Điều trị có thể là phẫu thuật, xạ trị hoặc cả hai; đôi khi hoá trị sau mổ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Vết loét, mảng trắng / đỏ trong miệng quá 2 tuần chưa hết → đi khám bác sĩ hoặc nha sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-nuou-rang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Oral Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/oralcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

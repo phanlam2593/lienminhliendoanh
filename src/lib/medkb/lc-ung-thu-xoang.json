@@ -7,15 +7,16 @@
  ],
  "about": [
   {
-   "text": "**Ung thư xoang** — nhóm bệnh: ung thư.",
+   "text": "Ung thư xoang là ung thư hiếm, bắt đầu ở khoang mũi hoặc các xoang; thuộc nhóm ung thư đầu cổ.",
    "src": [
-    0
+    2,
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy nước mắt, chảy máu mũi, chảy dịch, nghẹt mũi, sưng đau, nổi hạch, nhìn đôi, đau đầu, khối u, sưng.",
+   "text": "Có thể nghẹt mũi, chảy máu mũi, chảy dịch mũi, sưng đau mặt, nhìn đôi, đau đầu.",
    "src": [
     0
    ]
@@ -23,13 +24,14 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: formaldehyde, bụi từ vải dệt, da, bột từ xưởng bánh, quán ăn…, bụi niken và crom, khí mù tạt, nguyên tố phóng xạ Radium, keo, dung môi hữu cơ.",
+   "text": "Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ.",
    "src": [
+    1,
     0
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người hút thuốc lá, yếu tố môi trường, giới tính, tuổi tác, chủng tộc, phóng xạ.",
+   "text": "Tiếp xúc lâu dài với bụi gỗ, bụi da, bụi bột, formaldehyde, bụi niken – crom ở nơi làm việc cũng liên quan.",
    "src": [
     0
    ]
@@ -38,16 +40,16 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghẹt mũi một bên, chảy máu mũi hay sưng mặt kéo dài không đỡ → đi khám tai mũi họng.",
    "src": [
     0
    ]
@@ -60,7 +62,19 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-xoang-329.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Head and Neck Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/headandneckcancer.html",
+   "reviewed": "2026-11-26"
+  },
+  {
+   "title": "Nasal and sinus cancer",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/nasal-and-sinus-cancer/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

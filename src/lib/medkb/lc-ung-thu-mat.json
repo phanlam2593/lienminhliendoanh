@@ -7,15 +7,27 @@
  ],
  "about": [
   {
-   "text": "**Ung thư mắt** — nhóm bệnh: ung thư.",
+   "text": "Ung thư mắt ít gặp; có thể ở phần ngoài mắt như mí mắt, hoặc bắt đầu bên trong nhãn cầu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Ở người lớn, ung thư trong nhãn cầu hay gặp nhất là u hắc tố và u lympho; ở trẻ em là u nguyên bào võng mạc.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Ung thư ở nơi khác cũng có thể lan đến mắt.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: phân có máu, nhìn mờ, khối u.",
+   "text": "Có thể nhìn mờ, thấy khối u ở mắt.",
    "src": [
     0
    ]
@@ -23,7 +35,7 @@
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): chủng tộc, màu mắt, tuổi và giới tính, yếu tố di truyền, nốt ruồi, lịch sử gia đình.",
+   "text": "Yếu tố liên quan: tuổi, màu mắt, nốt ruồi, di truyền, tiền sử gia đình.",
    "src": [
     0
    ]
@@ -32,22 +44,16 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan.",
+   "text": "Điều trị tuỳ loại và mức độ: phẫu thuật, xạ trị, liệu pháp đông lạnh hoặc nhiệt, laser.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Mắt nhìn mờ dần, thấy đốm hay khối lạ ở mắt → đi khám mắt sớm.",
    "src": [
     0
    ]
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-mat-385.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Eye Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/eyecancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

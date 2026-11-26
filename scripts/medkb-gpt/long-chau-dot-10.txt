@@ -1,0 +1,1281 @@
+DANH SÁCH THẺ LONG CHÂU CẦN LÀM LẠI — 1065 bệnh, 107 đợt × 10.
+Anh làm từ ĐỢT 1 xuôi xuống; em (Claude) làm từ đợt cuối ngược lên. Mỗi lần dán prompt + 1 đợt (10 bệnh) vào ChatGPT.
+
+===== ĐỢT 1 =====
+- lc-barrett-thuc-quan | Barrett thực quản
+- lc-bien-dang-co-thien-nga | Biến dạng cổ thiên nga
+- lc-block-nhi-that | Block nhĩ thất
+- lc-bong-gan-co-chan | Bong gân cổ chân
+- lc-ban-chan-khoeo | Bàn chân khoèo
+- lc-bang-quang-tang-hoat | Bàng quang tăng hoạt
+- lc-beo-phi-do | Béo phì độ 3
+- lc-buou-ba-dau | Bướu bã đậu
+- lc-buou-giap-keo | Bướu giáp keo
+- lc-buou-giap-lan-toa | Bướu giáp lan tỏa
+
+===== ĐỢT 2 =====
+- lc-buou-giap-nhan | Bướu giáp nhân
+- lc-buou-giap-nhan-thuy-phai | Bướu giáp nhân thùy phải
+- lc-buou-giap-da-nhan | Bướu giáp đa nhân
+- lc-buou-giap-da-nhan-2-thuy | Bướu giáp đa nhân 2 thùy
+- lc-buou-hoat-dich-co-tay | Bướu hoạt dịch cổ tay
+- lc-buou-mau | Bướu máu
+- lc-buou-mach-mau | Bướu mạch máu
+- lc-buou-tim | Bướu tim
+- lc-bach-san | Bạch sản
+- lc-bach-tang | Bạch tạng
+
+===== ĐỢT 3 =====
+- lc-bai-nao-tre-em | Bại não trẻ em
+- lc-benh-beriberi | Bệnh Beriberi (còn gọi: Beriberi)
+- lc-benh-beryllium | Bệnh Beryllium (còn gọi: Beryllium)
+- lc-benh-buerger | Bệnh Buerger (còn gọi: Buerger)
+- lc-benh-bo-dien | Bệnh bò điên (còn gọi: bò điên)
+- lc-benh-cau-than-mang | Bệnh cầu thận màng (còn gọi: cầu thận màng)
+- lc-benh-cau-than-to-huyet-mien-dich | Bệnh cầu thận tơ huyết miễn dịch (còn gọi: cầu thận tơ huyết miễn dịch)
+- lc-benh-freiberg | Bệnh Freiberg (còn gọi: Freiberg)
+- lc-benh-gan-sung-huyet | Bệnh gan sung huyết (còn gọi: gan sung huyết)
+- lc-benh-giam-ap | Bệnh giảm áp (còn gọi: giảm áp)
+
+===== ĐỢT 4 =====
+- lc-benh-horton | Bệnh Horton (còn gọi: Horton)
+- lc-benh-huntington | Bệnh Huntington (còn gọi: Huntington)
+- lc-benh-hypophosphatasia-hpp-bam-sinh | Bệnh Hypophosphatasia (HPP) bẩm sinh (còn gọi: Hypophosphatasia (HPP) bẩm sinh, benh hypophosphatasia hpp bam sinh)
+- lc-benh-kawasaki-o-tre-em | Bệnh Kawasaki ở trẻ em (còn gọi: Kawasaki ở trẻ em)
+- lc-benh-khong-lo | Bệnh khổng lồ (còn gọi: khổng lồ)
+- lc-benh-khop-do-than-kinh | Bệnh khớp do thần kinh (còn gọi: khớp do thần kinh)
+- lc-benh-kienbock | Bệnh Kienbock (còn gọi: Kienbock)
+- lc-benh-legg-calve-perthes | Bệnh Legg-Calvé-Perthes (còn gọi: Legg-Calvé-Perthes)
+- lc-benh-lun-tuyen-yen | Bệnh lùn tuyến yên (còn gọi: lùn tuyến yên)
+- lc-benh-marchiafava-bignami | Bệnh Marchiafava-Bignami (còn gọi: Marchiafava-Bignami)
+
+===== ĐỢT 5 =====
+- lc-benh-mang-day-mong | Bệnh màng đáy mỏng (còn gọi: màng đáy mỏng)
+- lc-benh-mach-mau-tinh-bot | Bệnh mạch máu tinh bột (còn gọi: mạch máu tinh bột)
+- lc-benh-mat-ngu-o-nguoi-gia | Bệnh mất ngủ ở người già (còn gọi: mất ngủ ở người già)
+- lc-benh-nang-tuy-than | Bệnh nang tủy thận (còn gọi: nang tủy thận)
+- lc-benh-nhuoc-co-tong-quat | Bệnh nhược cơ tổng quát (còn gọi: nhược cơ tổng quát)
+- lc-benh-nao-gan | Bệnh não gan (còn gọi: não gan)
+- lc-benh-nao-wernicke | Bệnh não Wernicke (còn gọi: não Wernicke)
+- lc-benh-nuou-va-nha-chu | Bệnh nướu và nha chu (còn gọi: nướu và nha chu)
+- lc-benh-nen-xuong | Bệnh nến xương (còn gọi: nến xương)
+- lc-benh-osgood-schlatter | Bệnh Osgood-Schlatter (còn gọi: Osgood-Schlatter)
+
+===== ĐỢT 6 =====
+- lc-benh-pellagra | Bệnh Pellagra (còn gọi: Pellagra)
+- lc-benh-peyronie | Bệnh Peyronie (còn gọi: Peyronie)
+- lc-benh-phoi-ke | Bệnh phổi kẽ (còn gọi: phổi kẽ)
+- lc-benh-phoi-mo-bao-langerhans | Bệnh phổi mô bào Langerhans (còn gọi: phổi mô bào Langerhans)
+- lc-benh-scheuermann | Bệnh Scheuermann (còn gọi: Scheuermann)
+- lc-benh-still-o-nguoi-lon | Bệnh Still ở người lớn (còn gọi: Still ở người lớn)
+- lc-benh-tay-sachs | Bệnh Tay-Sachs (còn gọi: Tay-Sachs)
+- lc-benh-teo-da-he-thong | Bệnh teo đa hệ thống (còn gọi: teo đa hệ thống)
+- lc-benh-thoai-hoa-tinh-bot | Bệnh thoái hóa tinh bột (còn gọi: thoái hóa tinh bột)
+- lc-benh-than-kinh-quay | Bệnh thần kinh quay (còn gọi: thần kinh quay)
+
+===== ĐỢT 7 =====
+- lc-benh-than-kinh-dai-thao-duong | Bệnh thần kinh đái tháo đường (còn gọi: thần kinh đái tháo đường)
+- lc-benh-than-tac-nghen | Bệnh thận tắc nghẽn (còn gọi: thận tắc nghẽn)
+- lc-benh-than-dai-thao-duong | Bệnh thận đái tháo đường (còn gọi: thận đái tháo đường)
+- lc-benh-to-cac-vien-cuc | Bệnh to các viễn cực (còn gọi: to các viễn cực)
+- lc-benh-tich-protein-phe-nang | Bệnh tích protein phế nang (còn gọi: tích protein phế nang)
+- lc-benh-tang-truong-luc-co-than-kinh | Bệnh tăng trương lực cơ thần kinh (còn gọi: tăng trương lực cơ thần kinh)
+- lc-benh-tac-tinh-mach-vong-mac | Bệnh tắc tĩnh mạch võng mạc (còn gọi: tắc tĩnh mạch võng mạc)
+- lc-benh-viem-ruot-ibd | Bệnh viêm ruột ibd (còn gọi: viêm ruột ibd)
+- lc-benh-von-willebrand | Bệnh Von Willebrand (còn gọi: Von Willebrand)
+- lc-benh-vong-mac-tieu-duong | Bệnh võng mạc tiểu đường (còn gọi: võng mạc tiểu đường)
+
+===== ĐỢT 8 =====
+- lc-benh-vong-mac-tre-sinh-non | Bệnh võng mạc trẻ sinh non (còn gọi: võng mạc trẻ sinh non)
+- lc-benh-wilson | Bệnh Wilson (còn gọi: Wilson)
+- lc-benh-xuong-hoa-da | Bệnh xương hóa đá (còn gọi: xương hóa đá)
+- lc-benh-xuong-koehler | Bệnh xương Köhler (còn gọi: xương Köhler, benh xuong koehler)
+- lc-bong-mat | Bọng mắt
+- lc-bong-da | Bỏng da
+- lc-bong-ho-hap | Bỏng hô hấp
+- lc-bui-phoi | Bụi phổi
+- lc-bui-phoi-atbet-amiang | Bụi phổi atbet (amiăng) (còn gọi: bui phoi atbet amiang)
+- lc-bui-phoi-bong | Bụi phổi bông
+
+===== ĐỢT 9 =====
+- lc-bui-phoi-silic | Bụi phổi silic
+- lc-cao-huyet-ap-vo-can | Cao huyết áp vô căn
+- lc-cholesterol-mau-cao | Cholesterol máu cao
+- lc-chuyen-san-ruot | Chuyển sản ruột
+- lc-chuot-rut-co-cung | Chuột rút co cứng
+- lc-cham-moi | Chàm môi
+- lc-cham-dong-tien | Chàm đồng tiền
+- lc-chan-thuong-bung-kin | Chấn thương bụng kín
+- lc-chan-thuong-cot-song | Chấn thương cột sống
+- lc-chan-thuong-day-chang-dau-goi | Chấn thương dây chằng đầu gối
+
+===== ĐỢT 10 =====
+- lc-chan-thuong-gan-kheo | Chấn thương gân kheo
+- lc-chan-thuong-khi-quan | Chấn thương khí quản
+- lc-chan-thuong-nieu-dao | Chấn thương niệu đạo
+- lc-chan-thuong-so-nao | Chấn thương sọ não
+- lc-chan-thuong-thanh-quan | Chấn thương thanh quản
+- lc-chap-va-leo | Chắp và lẹo
+- lc-choc-mep | Chốc mép
+- lc-chung-dinh-lien-khop-so-som | Chứng dính liền khớp sọ sớm
+- lc-chung-kho-nuot | Chứng khó nuốt
+- lc-chung-mat-ngon-ngu | Chứng mất ngôn ngữ
+
+===== ĐỢT 11 =====
+- lc-chung-ngu-nhieu-nguyen-phat | Chứng ngủ nhiều nguyên phát
+- lc-chung-truot-dau-tren-xuong-dui-scfe | Chứng trượt đầu trên xương đùi (SCFE) (còn gọi: chung truot dau tren xuong dui scfe)
+- lc-chung-tao-dom-do-virus | Chứng tạo đờm do virus
+- lc-co-rut-dupuytren | Co rút Dupuytren
+- lc-co-that-da-day | Co thắt dạ dày, ruột (còn gọi: co that da day)
+- lc-co-that-thuc-quan | Co thắt thực quản
+- lc-co-that-tam-vi | Co thắt tâm vị
+- lc-cac-roi-loan-tieu-tien-dai-dam-tieu-dem-tieu-son | Các rối loạn tiểu tiện (đái dầm, tiểu đêm, tiểu són) (còn gọi: cac roi loan tieu tien dai dam tieu dem tieu son, tiểu đêm, đi tiểu đêm)
+- lc-cam-diec-bam-sinh | Câm điếc bẩm sinh
+- lc-co-tim-xop | Cơ tim xốp
+
+===== ĐỢT 12 =====
+- lc-con-hen-phe-quan | Cơn hen phế quản
+- lc-con-thieu-mau-nao-cuc-bo-thoang-qua | Cơn thiếu máu não cục bộ thoáng qua
+- lc-con-dau-quan-than | Cơn đau quặn thận
+- lc-con-dong-kinh-vang-y-thuc | Cơn động kinh vắng ý thức
+- lc-cuong-aldosteron-tien-phat | Cường Aldosteron tiên phát
+- lc-cuong-aldosterone | Cường Aldosterone
+- lc-cuong-can-giap | Cường cận giáp
+- lc-cuong-lach | Cường lách
+- lc-co-truong | Cổ trướng
+- lc-cung-da-khop-bam-sinh | Cứng đa khớp bẩm sinh
+
+===== ĐỢT 13 =====
+- lc-da-bong-nuoc-tu-mien-pemphigus | Da bọng nước tự miễn Pemphigus
+- lc-day-sung-nang-long | Dày sừng nang lông
+- lc-day-sung-anh-sang | Dày sừng ánh sáng
+- lc-dinh-thang-luoi | Dính thắng lưỡi
+- lc-duong-vat-cong | Dương vật cong
+- lc-day-thi | Dậy thì
+- lc-day-thi-som | Dậy thì sớm
+- lc-di-cam | Dị cảm
+- lc-di-dang-ban-cau-nao | Dị dạng bán cầu não
+- lc-di-tat-dandy-walker | Dị tật Dandy-Walker
+
+===== ĐỢT 14 =====
+- lc-di-tat-ong-than-kinh | Dị tật ống thần kinh
+- lc-di-vat-trong-tai | Dị vật trong tai
+- lc-di-vat-duong-tho | Dị vật đường thở
+- lc-di-ung-hai-san | Dị ứng hải sản
+- lc-gai-khop-goi | Gai khớp gối
+- lc-gai-den | Gai đen
+- lc-gan-nhiem-mo-do | Gan nhiễm mỡ độ 2 (còn gọi: gan nhiem mo do)
+- lc-gan-to | Gan to
+- lc-ghep-than | Ghép thận
+- lc-ghep-tim | Ghép tim
+
+===== ĐỢT 15 =====
+- lc-giac-mac-hinh-chop | Giác mạc hình chóp
+- lc-gian-co-tim | Giãn cơ tim
+- lc-gian-day-chang | Giãn dây chằng
+- lc-gian-tinh-mach-chi-duoi | Giãn tĩnh mạch chi dưới
+- lc-gian-tinh-mach-thuc-quan | Giãn tĩnh mạch thực quản
+- lc-gian-dong-tu | Giãn đồng tử
+- lc-gia-gut | Giả gút
+- lc-gia-phinh-mach | Giả phình mạch
+- lc-glocom-tan-mach | Glocom tân mạch
+- lc-glocom-goc-mo-nguyen-phat | Glôcôm góc mở nguyên phát
+
+===== ĐỢT 16 =====
+- lc-glocom-goc-dong-nguyen-phat | Glôcôm góc đóng nguyên phát
+- lc-gout-cap-tinh | Gout cấp tính
+- lc-gay-co-xuong-dui | Gãy cổ xương đùi​ (còn gọi: gay co xuong dui)
+- lc-gu-lung | Gù lưng
+- lc-henoch-schonlein | Henoch schonlein
+- lc-hon-me-gan | Hon me gan
+- lc-hoai-tu-vo-than | Hoại tử vỏ thận
+- lc-hoai-tu-ong-than-cap-atn | Hoại tử ống thận cấp (ATN) (còn gọi: hoai tu ong than cap atn)
+- lc-huyet-khoi-tinh-mach-sau-chi-duoi | Huyết khối tĩnh mạch sâu chi dưới
+- lc-huyet-ap-tam-thu-cao | Huyết áp tâm thu cao
+
+===== ĐỢT 17 =====
+- lc-huyet-ap-tam-truong-cao | Huyết áp tâm trương cao
+- lc-ha-canxi-mau | Hạ canxi máu
+- lc-ha-kali-mau | Hạ kali máu
+- lc-ha-magie-mau | Hạ magie máu
+- lc-ha-duong-huyet-tieu-duong | Hạ đường huyết tiểu đường
+- lc-hat-xo-day-thanh-quan | Hạt xơ dây thanh quản
+- lc-hac-vong-mac-trung-tam | Hắc võng mạc trung tâm
+- lc-hep-khe-khop-goi | Hẹp khe khớp gối
+- lc-hep-khe-khop-hang | Hẹp khe khớp háng
+- lc-hep-lo-lien-hop-dot-song-co | Hẹp lỗ liên hợp đốt sống cổ
+
+===== ĐỢT 18 =====
+- lc-hep-mon-vi | Hẹp môn vị
+- lc-hep-mon-vi-phi-dai | Hẹp môn vị phì đại
+- lc-hep-nieu-dao | Hẹp niệu đạo
+- lc-hep-dong-mach-chi-duoi | Hẹp động mạch chi dưới
+- lc-hep-dong-mach-canh | Hẹp động mạch cảnh
+- lc-hep-dong-mach-than | Hẹp động mạch thận
+- lc-hep-ong-tai-ben-ngoai | Hẹp ống tai bên ngoài
+- lc-hoi-chung-abercrombie | Hội chứng Abercrombie
+- lc-hoi-chung-bartter | Hội chứng Bartter
+- lc-hoi-chung-brugada | Hội chứng Brugada
+
+===== ĐỢT 19 =====
+- lc-hoi-chung-carcinoid | Hội chứng carcinoid
+- lc-hoi-chung-chilaiditi | Hội chứng Chilaiditi
+- lc-hoi-chung-churg-strauss | Hội chứng Churg-Strauss
+- lc-hoi-chung-chan-khong-nghi | Hội chứng chân không nghỉ
+- lc-hoi-chung-cushing | Hội chứng Cushing
+- lc-hoi-chung-co-nang-hau-mon | Hội chứng cơ nâng hậu môn
+- lc-hoi-chung-can-u | Hội chứng cận u
+- lc-hoi-chung-kallmann | Hội chứng Kallmann
+- lc-hoi-chung-klinefelter | Hội chứng Klinefelter
+- lc-hoi-chung-kep-hat-de | Hội chứng kẹp hạt dẻ
+
+===== ĐỢT 20 =====
+- lc-hoi-chung-lennox-gastaut | Hội chứng Lennox - Gastaut (còn gọi: hoi chung lennox gastaut)
+- lc-hoi-chung-liddle | Hội chứng Liddle
+- lc-hoi-chung-loet-truc-trang-don-doc | Hội chứng loét trực tràng đơn độc
+- lc-hoi-chung-loi-thoat-long-nguc | Hội chứng lối thoát lồng ngực
+- lc-hoi-chung-mallory-weiss | Hội chứng Mallory-Weiss
+- lc-hoi-chung-marfan | Hội chứng Marfan
+- lc-hoi-chung-mong-chet | Hội chứng mông chết
+- lc-hoi-chung-mat-meo | Hội chứng mắt mèo
+- lc-hoi-chung-nam-hoa | Hội chứng nam hóa
+- lc-hoi-chung-nguoi-soi | Hội chứng người sói
+
+===== ĐỢT 21 =====
+- lc-hoi-chung-qt-keo-dai | Hội chứng QT kéo dài
+- lc-hoi-chung-raynaud | Hội chứng Raynaud
+- lc-hoi-chung-rung-giat-co-lanh-tinh | Hội chứng rung giật cơ lành tính
+- lc-hoi-chung-roi-loan-cam-giac | Hội chứng rối loạn cảm giác
+- lc-hoi-chung-silver-russel | Hội chứng Silver - Russel (còn gọi: hoi chung silver russel)
+- lc-hoi-chung-sjogren | Hội chứng Sjogren
+- lc-hoi-chung-stevens-johnson | Hội chứng Stevens-Johnson
+- lc-hoi-chung-sturge-weber | Hội chứng Sturge-Weber
+- lc-hoi-chung-sudeck | Hội chứng Sudeck
+- lc-hoi-chung-suy-ho-hap-cap | Hội chứng suy hô hấp cấp
+
+===== ĐỢT 22 =====
+- lc-hoi-chung-synesthesia | Hội chứng Synesthesia
+- lc-hoi-chung-tan-mau-tang-ure-huyet-khong-dien-hinh | Hội chứng tan máu-tăng ure huyết không điển hình
+- lc-hoi-chung-than-kinh-can-ung | Hội chứng thần kinh cận ung
+- lc-hoi-chung-than-hu-bam-sinh | Hội chứng thận hư bẩm sinh
+- lc-hoi-chung-tieu-nao | Hội chứng tiểu não
+- lc-hoi-chung-trao-nguoc-da-day-thuc-quan | Hội chứng trào ngược dạ dày thực quản
+- lc-hoi-chung-turner | Hội chứng Turner
+- lc-hoi-chung-tang-tiet-adh-khong-thich-hop | Hội chứng tăng tiết ADH không thích hợp
+- lc-hoi-chung-tang-ap-luc-noi-so | Hội chứng tăng áp lực nội sọ
+- lc-hoi-chung-west | Hội chứng west
+
+===== ĐỢT 23 =====
+- lc-hoi-chung-duong-ham-co-tay | Hội chứng đường hầm cổ tay
+- lc-hoi-chung-duong-ham-xuong-quay | Hội chứng đường hầm xương quay
+- lc-hoi-chung-duong-ham-xuong-tru | Hội chứng đường hầm xương trụ
+- lc-ho-van-ba-la | Hở van ba lá
+- lc-jet-lag | Jet lag
+- lc-khe-nut-va-lo-ro-hau-mon-truc-trang | Khe nứt và lỗ rò hậu môn, trực tràng (còn gọi: khe nut va lo ro hau mon truc trang)
+- lc-kho-tho-hut-hoi | Khó thở, hụt hơi (còn gọi: kho tho hut hoi)
+- lc-lichen-nitidus | Lichen nitidus
+- lc-lichen-phang | Lichen phẳng
+- lc-lichen-xo-hoa | Lichen xơ hóa
+
+===== ĐỢT 24 =====
+- lc-liet-day-hoi-quy | Liệt dây hồi quy
+- lc-liet-day-thanh-quan | Liệt dây thanh quản
+- lc-liet-day-than-kinh-hong-khoeo-ngoai | Liệt dây thần kinh hông khoeo ngoài
+- lc-liet-day-than-kinh-khuu-giac | Liệt dây thần kinh khứu giác
+- lc-liet-day-than-kinh-so | Liệt dây thần kinh số 6
+- lc-liet-mat-ngoai-bien | Liệt mặt ngoại biên
+- lc-liet-tren-nhan-tien-trien | Liệt trên nhân tiến triển
+- lc-liet-tu-chi | Liệt tứ chi
+- lc-lou-gehrig | Lou Gehrig
+- lc-loang-xuong-o-nam | Loãng xương ở nam
+
+===== ĐỢT 25 =====
+- lc-loet-thuc-quan | Loét thực quản
+- lc-loet-tieu-hoa | Loét tiêu hóa
+- lc-loan-cam-hong | Loạn cảm họng
+- lc-loan-duong-bach-cau-di-sac | Loạn dưỡng bạch cầu dị sắc
+- lc-loan-duong-co | Loạn dưỡng cơ
+- lc-loan-duong-co-duchenne | Loạn dưỡng cơ Duchenne
+- lc-loan-duong-mong | Loạn dưỡng móng
+- lc-loan-duong-mo | Loạn dưỡng mỡ
+- lc-loan-duong-xuong | Loạn dưỡng xương
+- lc-loan-khuan-duong-ruot | Loạn khuẩn đường ruột
+
+===== ĐỢT 26 =====
+- lc-loan-san-hau-mon | Loạn sản hậu môn
+- lc-loan-san-phe-quan-phoi | Loạn sản phế quản phổi
+- lc-loan-san-soi-co | Loạn sản sợi cơ
+- lc-loan-san-vach-thi-giac | Loạn sản vách thị giác
+- lc-loan-truong-luc-co | Loạn trương lực cơ
+- lc-lupus-ban-do-dang-dia | Lupus ban đỏ dạng đĩa
+- lc-lanh-cam | Lãnh cảm
+- lc-lao-hoa-da | Lão hóa da
+- lc-long-quam | Lông quặm
+- lc-lom-nguc-bam-sinh | Lõm ngực bẩm sinh
+
+===== ĐỢT 27 =====
+- lc-lon-bang-quang | Lộn bàng quang
+- lc-moyamoya | Moyamoya
+- lc-mang-truoc-vong-mac | Màng trước võng mạc
+- lc-mon-rang | Mòn răng
+- lc-mu-mau | Mù màu
+- lc-mu-mat | Mù mắt
+- lc-mua-giat | Múa giật
+- lc-mat-ngu-sau-sinh | Mất ngủ sau sinh
+- lc-mat-tri-nho-tam-thoi | Mất trí nhớ tạm thời
+- lc-mong-thit | Mộng thịt
+
+===== ĐỢT 28 =====
+- lc-mun-coc-phang | Mụn cóc phẳng
+- lc-mun-coc-hat-com | Mụn cóc, hạt cơm (còn gọi: mun coc hat com)
+- lc-mun-lung | Mụn lưng
+- lc-mun-an | Mụn ẩn
+- lc-nang-nieu-quan | Nang niệu quản
+- lc-nang-tarlov | Nang Tarlov
+- lc-nang-don-than | Nang đơn thận
+- lc-nghe-kem-mot-ben-tai | Nghe kém một bên tai
+- lc-nghien-rang-khi-ngu | Nghiến răng khi ngủ
+- lc-ngoai-tam-thu-that | Ngoại tâm thu thất
+
+===== ĐỢT 29 =====
+- lc-ngon-chan-hinh-bua | Ngón chân hình búa
+- lc-ngon-tay-lo-xo | Ngón tay lò xo
+- lc-ngung-tho-khi-ngu-do-tac-nghen | Ngưng thở khi ngủ do tắc nghẽn
+- lc-ngo-doc-carbon-monoxide | Ngộ độc Carbon Monoxide
+- lc-ngo-doc-paracetamol | Ngộ độc Paracetamol
+- lc-nhi-p-tim-cha-m | Nhịp tim chậm (còn gọi: nhi p tim cha m)
+- lc-nhiem-h-pylori-hp | Nhiễm H.pylori (HP) (còn gọi: nhiem h pylori hp)
+- lc-nhiem-toan-ceton | Nhiễm toan ceton
+- lc-nhiem-trung-than-kinh | Nhiễm trùng thần kinh
+- lc-nhiem-trung-tiet-nieu | Nhiễm trùng tiết niệu
+
+===== ĐỢT 30 =====
+- lc-nhiem-trung-duong-ho-hap | Nhiễm trùng đường hô hấp
+- lc-nhiem-trung-duong-tiet-nieu-o-nu | Nhiễm trùng đường tiết niệu ở nữ
+- lc-nhiem-doc-giap | Nhiễm độc giáp
+- lc-nhun-nao | Nhũn não
+- lc-nhip-nhanh-nhi | Nhịp nhanh nhĩ
+- lc-nhip-nhanh-that | Nhịp nhanh thất
+- lc-nhoi-mau-co-tim-khong-st-chenh-len | Nhồi máu cơ tim không ST chênh lên
+- lc-nhoi-mau-co-tim-that-phai | Nhồi máu cơ tim thất phải
+- lc-nhoi-mau-co-tim-type | Nhồi máu cơ tim type 2 (còn gọi: nhoi mau co tim type)
+- lc-nhoi-mau-co-tim-o-nguoi-tre | Nhồi máu cơ tim ở người trẻ
+
+===== ĐỢT 31 =====
+- lc-nhuc-dau-chong-mat | Nhức đầu chóng mặt
+- lc-nam-noi-tiet | Nám nội tiết
+- lc-nao-chan-thuong-man-tinh | Não chấn thương mãn tính
+- lc-nao-ung-thuy | Não úng thủy
+- lc-nong-gan | Nóng gan
+- lc-nong-trong-nguoi | Nóng trong người
+- lc-nuoc-tieu-vang | Nước tiểu vàng
+- lc-nam-hong | Nấm họng
+- lc-nam-mat | Nấm mắt
+- lc-nut-got-chan | Nứt gót chân
+
+===== ĐỢT 32 =====
+- lc-paget-xuong | Paget xương
+- lc-papilloma-thanh-quan | Papilloma thanh quản
+- lc-parkinson-thu-phat | Parkinson thứ phát
+- lc-phat-ban-o-nguc | Phát ban ở ngực
+- lc-phinh-mach-mau-nao | Phình mạch máu não
+- lc-phinh-tach-dong-mach-chu | Phình tách động mạch chủ
+- lc-phinh-dai-trang-bam-sinh | Phình đại tràng bẩm sinh
+- lc-phinh-dong-mach-gan | Phình động mạch gan
+- lc-phinh-dong-mach-nao | Phình động mạch não
+- lc-phinh-dong-mach-tang | Phình động mạch tạng
+
+===== ĐỢT 33 =====
+- lc-phu-bach-huyet-canh-tay | Phù bạch huyết cánh tay
+- lc-polyp-da-day | Polyp dạ dày
+- lc-polyp-tui-mat | Polyp túi mật
+- lc-quang-ga | Quáng gà
+- lc-rach-sun-chem-khop-goi | Rách sụn chêm khớp gối
+- lc-rach-sun-vien-khop-vai | Rách sụn viền khớp vai
+- lc-ram-ma | Rám má
+- lc-ro-luan-nhi | Rò luân nhĩ
+- lc-ro-dong-tinh-mach | Rò động tĩnh mạch
+- lc-rang-moc-ket | Răng mọc kẹt
+
+===== ĐỢT 34 =====
+- lc-rang-thua | Răng thừa
+- lc-ran-xuong | Rạn xương
+- lc-roi-loan-chuyen-hoa-bam-sinh | Rối loạn chuyển hóa bẩm sinh
+- lc-roi-loan-chuc-nang-nao-sau-hoa-tri | Rối loạn chức năng não sau hóa trị
+- lc-roi-loan-day-than-kinh-tru | Rối loạn dây thần kinh trụ
+- lc-roi-loan-giong-noi | Rối loạn giọng nói
+- lc-roi-loan-ho-hap | Rối loạn hô hấp
+- lc-roi-loan-khop-thai-duong-ham | Rối loạn khớp thái dương hàm
+- lc-roi-loan-nhip-cham | Rối loạn nhịp chậm
+- lc-roi-loan-pho-viem-tuy-thi-than-kinh | Rối loạn phổ viêm tủy thị thần kinh
+
+===== ĐỢT 35 =====
+- lc-roi-loan-than-kinh-thuc-vat | Rối loạn thần kinh thực vật
+- lc-roi-loan-tieu-hoa | Rối loạn tiêu hóa
+- lc-roi-loan-tien-dinh-ngoai-bien | Rối loạn tiền đình ngoại biên
+- lc-roi-loan-tri-nho | Rối loạn trí nhớ
+- lc-roi-loan-tuan-hoan-nao | Rối loạn tuần hoàn não
+- lc-roi-loan-van-dong | Rối loạn vận động
+- lc-roi-loan-xuat-tinh | Rối loạn xuất tinh
+- lc-roi-loan-y-thuc | Rối loạn ý thức
+- lc-roi-loan-dong-mau | Rối loạn đông máu
+- lc-ro-nao | Rỗ não
+
+===== ĐỢT 36 =====
+- lc-rong-tuy-song | Rỗng tủy sống
+- lc-sa-bui-tri | Sa búi trĩ
+- lc-sa-da-day | Sa dạ dày
+- lc-sa-sut-tri-tue-do-mach-mau-nao | Sa sút trí tuệ do mạch máu não
+- lc-sa-truc-trang | Sa trực tràng
+- lc-sa-van-2-la | Sa van 2 lá
+- lc-sarcoid | Sarcoid
+- lc-sarcoidosis | Sarcoidosis
+- lc-suy-can-giap | Suy cận giáp
+- lc-suy-gan | Suy gan
+
+===== ĐỢT 37 =====
+- lc-suy-gan-cap | Suy gan cấp
+- lc-suy-gan-man | Suy gan mạn
+- lc-suy-giap-bam-sinh | Suy giáp bẩm sinh
+- lc-suy-gian-tinh-mach-sau-chi-duoi | Suy giãn tĩnh mạch sâu chi dưới
+- lc-suy-giam-chuc-nang-gan | Suy giảm chức năng gan
+- lc-suy-giam-nhan-thuc | Suy giảm nhận thức
+- lc-suy-giam-testosterone | Suy giảm Testosterone
+- lc-suy-giam-thinh-luc | Suy giảm thính lực
+- lc-suy-giam-thi-luc | Suy giảm thị lực
+- lc-suy-giam-tri-nho | Suy giảm trí nhớ
+
+===== ĐỢT 38 =====
+- lc-suy-ho-hap-cap | Suy hô hấp cấp
+- lc-suy-ho-hap-man | Suy hô hấp mạn
+- lc-suy-nhuoc-co-the | Suy nhược cơ thể
+- lc-suy-nhuoc-than-kinh | Suy nhược thần kinh
+- lc-suy-tim-giai-doan-cuoi | Suy tim giai đoạn cuối
+- lc-suy-tim-man-tinh | Suy tim mạn tính
+- lc-suy-tim-phai | Suy tim phải
+- lc-suy-tim-trai | Suy tim trái
+- lc-suy-tuyen-yen | Suy tuyến yên
+- lc-suy-tuy-xuong | Suy tủy xương
+
+===== ĐỢT 39 =====
+- lc-suy-da-tang | Suy đa tạng
+- lc-son-phan | Són phân
+- lc-sui-mao-ga-duong-vat | Sùi mào gà dương vật​ (còn gọi: sui mao ga duong vat)
+- lc-sam-da | Sạm da
+- lc-seo-ro | Sẹo rỗ
+- lc-soi-bang-quang | Sỏi bàng quang
+- lc-soi-bun-tui-mat | Sỏi bùn túi mật
+- lc-soi-gan | Sỏi gan
+- lc-soi-nieu-quan | Sỏi niệu quản
+- lc-soi-tiet-nieu | Sỏi tiết niệu
+
+===== ĐỢT 40 =====
+- lc-soi-tuyen-tien-liet | Sỏi tuyến tiền liệt
+- lc-soi-ong-mat-chu | Sỏi ống mật chủ
+- lc-sup-mi | Sụp mi
+- lc-sut-moi-va-ho-ham-ech | Sứt môi và hở hàm ếch
+- lc-teo-co-do-dai-thao-duong | Teo cơ do đái tháo đường
+- lc-teo-nao | Teo não
+- lc-teo-thuy-nao | Teo thùy não
+- lc-teo-thuc-quan | Teo thực quản
+- lc-teo-duong-mat-bam-sinh | Teo đường mật bấm sinh
+- lc-thien-dau-thong | Thiên đầu thống
+
+===== ĐỢT 41 =====
+- lc-thieu-1-phan-nao | Thiếu 1 phần não
+- lc-thieu-canxi | Thiếu canxi
+- lc-thieu-mau-beta-thalassaemia | Thiếu máu beta thalassaemia
+- lc-thieu-mau-co-tim | Thiếu máu cơ tim
+- lc-thieu-mau-cuc-bo-duong-mat | Thiếu máu cục bộ đường mật
+- lc-thieu-mau-cuc-bo-duong-ruot | Thiếu máu cục bộ đường ruột
+- lc-thieu-mau-do-thieu-folate | Thiếu máu do thiếu folate
+- lc-thieu-mau-do-thieu-men-g6pd | Thiếu máu do thiếu men G6PD
+- lc-thieu-mau-do-thieu-vitamin-b12 | Thiếu máu do thiếu vitamin B12
+- lc-thieu-mau-nhuoc-sac | Thiếu máu nhược sắc
+
+===== ĐỢT 42 =====
+- lc-thieu-mau-thieu-vitamin | Thiếu máu thiếu vitamin
+- lc-thieu-nang-tuan-hoan-nao | Thiểu năng tuần hoàn não
+- lc-thieu-san-tieu-nao | Thiểu sản tiểu não
+- lc-thoai-hoa-khop-co-tay | Thoái hoá khớp cổ tay
+- lc-thoai-hoa-chat-trang | Thoái hóa chất trắng
+- lc-thoai-hoa-cot-song-that-lung | Thoái hóa cột sống thắt lưng
+- lc-thoai-hoa-khop-co-chan | Thoái hóa khớp cổ chân
+- lc-thoai-hoa-khop-goi | Thoái hóa khớp gối
+- lc-thoai-hoa-khop-hang | Thoái hóa khớp háng
+- lc-thoai-hoa-khop-khuyu-tay | Thoái hóa khớp khuỷu tay
+
+===== ĐỢT 43 =====
+- lc-thoai-hoa-khop-ngon-tay | Thoái hóa khớp ngón tay
+- lc-thoai-hoa-khop-vai | Thoái hóa khớp vai
+- lc-thoai-hoa-tieu-nao | Thoái hóa tiểu não
+- lc-thoai-hoa-da-khop | Thoái hóa đa khớp
+- lc-thoai-hoa-dia-dem | Thoái hóa đĩa đệm
+- lc-thoai-hoa-dot-song-nguc | Thoái hóa đốt sống ngực
+- lc-thoat-vi-hoanh | Thoát vị hoành
+- lc-thoat-vi-khe-hoanh | Thoát vị khe hoành
+- lc-thoat-vi-nao | Thoát vị não
+- lc-thoat-vi-ron | Thoát vị rốn
+
+===== ĐỢT 44 =====
+- lc-thoat-vi-dui | Thoát vị đùi
+- lc-than-chung-dong-mach | Thân chung động mạch
+- lc-thong-san-nhi-that | Thông sàn nhĩ thất
+- lc-than-nhiem-mo | Thận nhiễm mỡ
+- lc-than-da-nang | Thận đa nang
+- lc-than-u-mu | Thận ứ mủ
+- lc-than-u-nuoc | Thận ứ nước
+- lc-that-ong-dan-tinh | Thắt ống dẫn tinh
+- lc-thung-da-day | Thủng dạ dày
+- lc-thung-mang-nhi | Thủng màng nhĩ
+
+===== ĐỢT 45 =====
+- lc-thung-dai-trang | Thủng đại tràng
+- lc-thua-estrogen | Thừa Estrogen
+- lc-tim-bam-sinh-khong-tim | Tim bẩm sinh không tím
+- lc-tim-bam-sinh-tim | Tim bẩm sinh tím
+- lc-tim-to | Tim to
+- lc-tieu-rat-tieu-kho | Tiểu rắt, tiểu khó (còn gọi: tieu rat tieu kho)
+- lc-tieu-duong-bi-ngua-da | Tiểu đường bị ngứa da
+- lc-tieu-duong-khong-phu-thuoc-insulin | Tiểu đường không phụ thuộc insulin
+- lc-tieu-duong-o-tre-em | Tiểu đường ở trẻ em
+- lc-toan-hoa-ong-than | Toan hóa ống thận
+
+===== ĐỢT 46 =====
+- lc-tran-dich-mang-tim | Tràn dịch màng tim
+- lc-trao-nguoc-bang-quang-nieu-quan-vur | Trào ngược bàng quang niệu quản (VUR) (còn gọi: trao nguoc bang quang nieu quan vur)
+- lc-trung-gio | Trúng gió
+- lc-truot-dot-song | Trượt đốt sống
+- lc-trat-khop-cung-don | Trật khớp cùng đòn
+- lc-trat-khop-goi | Trật khớp gối
+- lc-trat-khop-hong | Trật khớp hông
+- lc-tre-so-sinh-bi-tieu-chay | Trẻ sơ sinh bị tiêu chảy
+- lc-truy-tim | Trụy tim
+- lc-tai-cuc-som | Tái cực sớm
+
+===== ĐỢT 47 =====
+- lc-toc-bac | Tóc bạc
+- lc-tang-acid-uric-mau | Tăng acid uric máu
+- lc-tang-canxi-mau | Tăng canxi máu
+- lc-tang-kali-mau | Tăng kali máu
+- lc-tang-natri-mau | Tăng natri máu
+- lc-tang-tieu-cau | Tăng tiểu cầu
+- lc-tang-tieu-cau-tien-phat | Tăng tiểu cầu tiên phát
+- lc-tang-ap-phoi | Tăng áp phổi
+- lc-tang-ap-tinh-mach-cua | Tăng áp tĩnh mạch cửa
+- lc-tat-khong-co-ham | Tật không có hàm
+
+===== ĐỢT 48 =====
+- lc-tat-khong-nhan-cau | Tật không nhãn cầu
+- lc-tat-mat-nho | Tật mắt nhỏ
+- lc-tat-nut-dot-song | Tật nứt đốt sống
+- lc-tat-tai-nho | Tật tai nhỏ
+- lc-tac-mach-mau-nao | Tắc mạch máu não
+- lc-tac-mat | Tắc mật
+- lc-tac-ruot | Tắc ruột
+- lc-tac-ruot-cao | Tắc ruột cao
+- lc-tac-ruot-gia | Tắc ruột già
+- lc-tac-ruot-so-sinh | Tắc ruột sơ sinh
+
+===== ĐỢT 49 =====
+- lc-tac-dong-mach-phoi | Tắc động mạch phổi
+- lc-tac-dong-mach-vong-mac-trung-tam | Tắc động mạch võng mạc trung tâm
+- lc-to-dia | Tổ đỉa
+- lc-tut-loi | Tụt lợi
+- lc-u-day-than-kinh-morton | U dây thần kinh Morton
+- lc-u-hat-man-tinh | U hạt mạn tính
+- lc-u-hoc-mui | U hốc mũi
+- lc-u-men-xuong-ham | U men xương hàm
+- lc-u-mau-the-hang | U máu thể hang
+- lc-u-mem-lay | U mềm lây
+
+===== ĐỢT 50 =====
+- lc-u-mem-treo | U mềm treo
+- lc-u-nang-bieu-bi | U nang biểu bì
+- lc-u-nang-day-thanh | U nang dây thanh
+- lc-u-nang-giap-mong | U nang giáp móng
+- lc-u-nang-mang-nhen-nao | U nang màng nhện não
+- lc-u-nang-than | U nang thận
+- lc-u-nang-tuyen-tuy | U nang tuyến tụy
+- lc-u-nguyen-bao-xo-co-viem | U nguyên bào xơ cơ viêm
+- lc-u-nhay-xoang-tran | U nhầy xoang trán
+- lc-u-sui-the-nam | U sùi thể nấm
+
+===== ĐỢT 51 =====
+- lc-u-soi-than-kinh | U sợi thần kinh
+- lc-u-tuy-noi-tiet-insulinoma | U tụy nội tiết Insulinoma
+- lc-u-xo-tuyen-vu | U xơ tuyến vú
+- lc-u-xo-vom-mui-hong | U xơ vòm mũi họng
+- lc-u-xuong | U xương
+- lc-u-xuong-ham | U xương hàm
+- lc-u-xuong-sun | U xương sụn
+- lc-u-dai-trang | U đại tràng
+- lc-viem-amidan-hoc-mu | Viêm amidan hốc mủ
+- lc-viem-amidan-man-tinh | Viêm amidan mãn tính​ (còn gọi: viem amidan man tinh)
+
+===== ĐỢT 52 =====
+- lc-viem-amidan-xo-teo | Viêm amidan xơ teo
+- lc-viem-bao-hoat-dich-khop-vai | Viêm bao hoạt dịch khớp vai
+- lc-viem-bang-quang-cap | Viêm bàng quang cấp
+- lc-viem-bang-quang-man-tinh | Viêm bàng quang mạn tính
+- lc-viem-bo-mi-tren-mat | Viêm bờ mi trên mắt
+- lc-viem-chan-rang | Viêm chân răng
+- lc-viem-co-nhiem-khuan | Viêm cơ nhiễm khuẩn
+- lc-viem-cau-than-lupus | Viêm cầu thận Lupus
+- lc-viem-cau-than-sau-nhiem-trung-pign | Viêm cầu thận sau nhiễm trùng (PIGN) (còn gọi: viem cau than sau nhiem trung pign)
+- lc-viem-cau-than-tien-trien-nhanh-rpgn | Viêm cầu thận tiến triển nhanh (RPGN) (còn gọi: viem cau than tien trien nhanh rpgn)
+
+===== ĐỢT 53 =====
+- lc-viem-da-do-anh-nang | Viêm da do ánh nắng
+- lc-viem-da-di-ung | Viêm da dị ứng
+- lc-viem-da-mun-mu-truyen-nhiem | Viêm da mụn mủ truyền nhiễm
+- lc-viem-da-day-ruot | Viêm dạ dày ruột
+- lc-viem-da-day-ta-trang | Viêm dạ dày tá tràng
+- lc-viem-gan-bi-an | Viêm gan bí ẩn​ (còn gọi: viem gan bi an)
+- lc-viem-gan-cap | Viêm gan cấp
+- lc-viem-gan-g | Viêm gan G
+- lc-viem-gan-man | Viêm gan mạn
+- lc-viem-gan-thieu-mau-cuc-bo | Viêm gan thiếu máu cục bộ
+
+===== ĐỢT 54 =====
+- lc-viem-giac-mac-cham-nong | Viêm giác mạc chấm nông
+- lc-viem-gan-banh-che | Viêm gân bánh chè
+- lc-viem-gan-gap-ngon-cai | Viêm gân gấp ngón cái
+- lc-viem-gan-nhi-dau-vai | Viêm gân nhị đầu vai
+- lc-viem-gan-tu-dau-dui | Viêm gân tứ đầu đùi
+- lc-viem-hang-vi-da-day | Viêm hang vị dạ dày
+- lc-viem-hach-mac-treo | Viêm hạch mạc treo
+- lc-viem-hau-mon | Viêm hậu môn
+- lc-viem-hong-do-lien-cau | Viêm họng do liên cầu
+- lc-viem-hong-hat | Viêm họng hạt
+
+===== ĐỢT 55 =====
+- lc-viem-hong-hat-man-tinh | Viêm họng hạt mãn tính
+- lc-viem-hong-man-tinh | Viêm họng mạn tính
+- lc-viem-khop-ban-chan | Viêm khớp bàn chân
+- lc-viem-khop-chau | Viêm khớp cùng chậu (còn gọi: viem khop chau)
+- lc-viem-khop-cap | Viêm khớp cấp
+- lc-viem-khop-co | Viêm khớp cổ
+- lc-viem-khop-co-chan | Viêm khớp cổ chân
+- lc-viem-khop-co-tay | Viêm khớp cổ tay
+- lc-viem-khop-goi | Viêm khớp gối
+- lc-viem-khop-goi-o-tre-em | Viêm khớp gối ở trẻ em
+
+===== ĐỢT 56 =====
+- lc-viem-khop-hang | Viêm khớp háng
+- lc-viem-khop-hang-o-tre-em | Viêm khớp háng ở trẻ em
+- lc-viem-khop-khuyu-tay | Viêm khớp khuỷu tay
+- lc-viem-khop-khong-dac-hieu | Viêm khớp không đặc hiệu
+- lc-viem-khop-lien-cau | Viêm khớp liên cầu
+- lc-viem-khop-man-tinh | Viêm khớp mạn tính
+- lc-viem-khop-mat-ca-chan | Viêm khớp mắt cá chân
+- lc-viem-khop-ngon-chan | Viêm khớp ngón chân
+- lc-viem-khop-ngon-chan-cai | Viêm khớp ngón chân cái
+- lc-viem-khop-ngon-tay | Viêm khớp ngón tay
+
+===== ĐỢT 57 =====
+- lc-viem-khop-ngon-tay-cai | Viêm khớp ngón tay cái
+- lc-viem-khop-nhiem-khuan-sinh-mu | Viêm khớp nhiễm khuẩn sinh mủ
+- lc-viem-khop-phan-ung | Viêm khớp phản ứng
+- lc-viem-khop-tay | Viêm khớp tay
+- lc-viem-khop-thieu-nien | Viêm khớp thiếu niên
+- lc-viem-khop-thai-duong-ham | Viêm khớp thái dương hàm
+- lc-viem-khop-tu-mien | Viêm khớp tự miễn
+- lc-viem-khop-vai | Viêm khớp vai
+- lc-viem-khop-dot-song | Viêm khớp đốt sống
+- lc-viem-khop-uc-don | Viêm khớp ức đòn
+
+===== ĐỢT 58 =====
+- lc-viem-ket-mac-di-ung | Viêm kết mạc dị ứng
+- lc-viem-ket-mac-mat | Viêm kết mạc mắt
+- lc-viem-ket-mac-mat-o-tre-em | Viêm kết mạc mắt ở trẻ em
+- lc-viem-loet-niem-mac-mieng-luoi | Viêm loét niêm mạc miệng, lưỡi (còn gọi: viem loet niem mac mieng luoi)
+- lc-viem-loet-dai-truc-trang-chay-mau | Viêm loét đại trực tràng chảy máu
+- lc-viem-luoi | Viêm Lưỡi
+- lc-viem-luoi-ga | Viêm lưỡi gà
+- lc-viem-mang-nao-lympho-bao | Viêm màng não lympho bào
+- lc-viem-mang-nao-mo-cau-ac | Viêm màng não mô cầu AC
+- lc-viem-mang-nao-vo-khuan | Viêm màng não vô khuẩn
+
+===== ĐỢT 59 =====
+- lc-viem-me-dao-tai | Viêm mê đạo tai
+- lc-viem-mo-te-bao-quanh-hoc-mat | Viêm mô tế bào quanh hốc mắt
+- lc-viem-mui-cap-tinh | Viêm mũi cấp tính
+- lc-viem-mui-man-tinh | Viêm mũi mãn tính
+- lc-viem-mui-teo | Viêm mũi teo
+- lc-viem-mui-van-mach | Viêm mũi vận mạch
+- lc-viem-mach | Viêm mạch
+- lc-viem-mach-bach-huyet | Viêm mạch bạch huyết
+- lc-viem-mu-noi-nhan | Viêm mủ nội nhãn
+- lc-viem-niem-mac-truc-trang | Viêm niêm mạc trực tràng
+
+===== ĐỢT 60 =====
+- lc-viem-nao-cap-o-tre-em | Viêm não cấp ở trẻ em
+- lc-viem-nao-tu-mien | Viêm não tự miễn
+- lc-viem-noi-tam-mac | Viêm nội tâm mạc
+- lc-viem-noi-tam-mac-nhiem-khuan-ban-cap | Viêm nội tâm mạc nhiễm khuẩn bán cấp
+- lc-viem-phuc-mac-nhiem-khuan-tien-phat | Viêm phúc mạc nhiễm khuẩn tiên phát
+- lc-viem-phe-quan-co-that | Viêm phế quản co thắt
+- lc-viem-phe-quan-cap-tinh | Viêm phế quản cấp tính
+- lc-viem-phe-quan-do-rsv | Viêm phế quản do RSV
+- lc-viem-phe-quan-phoi | Viêm phế quản phổi
+- lc-viem-phoi-cong-dong | Viêm phổi cộng đồng​ (còn gọi: viem phoi cong dong)
+
+===== ĐỢT 61 =====
+- lc-viem-phoi-do-metapneumovirus | Viêm phổi do Metapneumovirus
+- lc-viem-phoi-do-mycoplasma-pneumonia-mp | Viêm phổi do Mycoplasma pneumonia (MP) (còn gọi: viem phoi do mycoplasma pneumonia mp)
+- lc-viem-phoi-do-nam | Viêm phổi do nấm
+- lc-viem-phoi-do-pneumocystis-jirovecii | Viêm phổi do Pneumocystis jirovecii
+- lc-viem-phoi-do-tu-cau | Viêm phổi do tụ cầu
+- lc-viem-phoi-do-virus | Viêm phổi do virus
+- lc-viem-phoi-ke-lympho-bao | Viêm phổi kẽ lympho bào
+- lc-viem-phoi-ke-troc-vay | Viêm phổi kẽ tróc vảy
+- lc-viem-phoi-ke | Viêm phổi kẽ​ (còn gọi: viem phoi ke)
+- lc-viem-phoi-man-tinh | Viêm phổi mãn tính
+
+===== ĐỢT 62 =====
+- lc-viem-phoi-tang-bach-cau-ai-toan | Viêm phổi tăng bạch cầu ái toan
+- lc-viem-phoi-o-tre-em | Viêm phổi ở trẻ em​ (còn gọi: viem phoi o tre em)
+- lc-viem-quanh-mong | Viêm quanh móng
+- lc-viem-quanh-rang | Viêm quanh răng
+- lc-viem-ruot-gia | Viêm ruột già
+- lc-viem-ruot-man-tinh | Viêm ruột mạn tính
+- lc-viem-ruot-thua-cap | Viêm ruột thừa cấp
+- lc-viem-sun-suon | Viêm sụn sườn
+- lc-viem-tai-giua-cap | Viêm tai giữa cấp
+- lc-viem-tai-giua-thung-mang-nhi | Viêm tai giữa thủng màng nhĩ
+
+===== ĐỢT 63 =====
+- lc-viem-tai-giua-u-dich | Viêm tai giữa ứ dịch
+- lc-viem-tai-giua-u-mu | Viêm tai giữa ứ mủ
+- lc-viem-tai-ngoai-ac-tinh | Viêm tai ngoài ác tính
+- lc-viem-tai-xuong-chum | Viêm tai xương chũm
+- lc-viem-thanh-quan-cap | Viêm thanh quản cấp
+- lc-viem-thanh-quan-man | Viêm thanh quản mạn
+- lc-viem-than-kinh-thi-giac | Viêm thần kinh thị giác
+- lc-viem-than-ke | Viêm thận kẽ
+- lc-viem-thi-than-kinh | Viêm thị thần kinh
+- lc-viem-thuc-quan | Viêm thực quản
+
+===== ĐỢT 64 =====
+- lc-viem-tieu-phe-quan-rsv | Viêm tiểu phế quản RSV
+- lc-viem-tuyen-giap-ban-cap | Viêm tuyến giáp bán cấp
+- lc-viem-tuyen-nuoc-bot | Viêm tuyến nước bọt
+- lc-viem-ta-trang | Viêm tá tràng
+- lc-viem-tui-thua-dai-trang | Viêm túi thừa đại tràng
+- lc-viem-tac-tuyen-le | Viêm tắc tuyến lệ
+- lc-viem-tac-tinh-mach | Viêm tắc tĩnh mạch
+- lc-viem-to-chuc-hoc-mat | Viêm tổ chức hốc mắt
+- lc-viem-tuy-cat-ngang | Viêm tủy cắt ngang
+- lc-viem-tuy-rang | Viêm tủy răng
+
+===== ĐỢT 65 =====
+- lc-viem-vong-mac | Viêm võng mạc
+- lc-viem-vong-mac-sac-to | Viêm võng mạc sắc tố
+- lc-viem-xoang-do-nam | Viêm xoang do nấm
+- lc-xoang-ham | Viêm xoang hàm (còn gọi: xoang ham)
+- lc-viem-xoang-man-tinh | Viêm xoang mạn tính
+- lc-viem-xoang-sang | Viêm xoang sàng
+- lc-viem-xoang-sang-sau | Viêm xoang sàng sau
+- lc-viem-xoang-tran | Viêm xoang trán
+- lc-viem-xung-huyet-nang-vi-da-day | Viêm xung huyết hang vị dạ dày (còn gọi: viem xung huyet nang vi da day)
+- lc-viem-xo-duong-mat | Viêm xơ đường mật
+
+===== ĐỢT 66 =====
+- lc-viem-xuong-ham | Viêm xương hàm
+- lc-viem-xuong-so | Viêm xương sọ
+- lc-viem-da-day-than-kinh | Viêm đa dây thần kinh
+- lc-viem-da-khop | Viêm đa khớp
+- lc-viem-da-khop-dang-thap | Viêm đa khớp dạng thấp
+- lc-viem-da-re-day-than-kinh | Viêm đa rễ dây thần kinh
+- lc-viem-da-vi-mach | Viêm đa vi mạch
+- lc-viem-da-xoang | Viêm đa xoang
+- lc-viem-diem-bam-gan | Viêm điểm bám gân
+- lc-viem-duong-ho-hap-duoi | Viêm đường hô hấp dưới
+
+===== ĐỢT 67 =====
+- lc-viem-duong-ho-hap-tren | Viêm đường hô hấp trên
+- lc-viem-duong-ho-hap-tren-o-tre-em | Viêm đường hô hấp trên ở trẻ em
+- lc-viem-duong-mat-nguyen-phat-pbc | Viêm đường mật nguyên phát (PBC) (còn gọi: viem duong mat nguyen phat pbc)
+- lc-viem-duong-nieu-dao-o-nam-gioi | Viêm đường niệu đạo ở nam giới
+- lc-viem-dai-trang-mang-gia | Viêm đại tràng màng giả
+- lc-viem-dai-trang-sigma | Viêm đại tràng sigma
+- lc-viem-dai-trang-thieu-mau-cuc-bo | Viêm đại tràng thiếu máu cục bộ
+- lc-viem-dau-xuong-got | Viêm đầu xương gót
+- lc-viem-dong-mach-chu | Viêm động mạch chủ
+- lc-viem-dong-mach-takayasu | Viêm động mạch takayasu
+
+===== ĐỢT 68 =====
+- lc-viem-dong-mach-thai-duong | Viêm động mạch thái dương
+- lc-viem-ong-than-cap | Viêm ống thận cấp
+- lc-viem-dau-rang | Viêm, đau răng (còn gọi: viem dau rang)
+- lc-vang-da-tan-huyet | Vàng da tán huyết
+- lc-vong-that-chi-bam-sinh | Vòng thắt chi bẩm sinh
+- lc-voi-hoa-sun-khop | Vôi hóa sụn khớp
+- lc-voi-hoa-tinh-hoan | Vôi hóa tinh hoàn
+- lc-vu-to-o-nam-gioi | Vú to ở nam giới
+- lc-van-duc-dich-kinh | Vẩn đục dịch kính
+- lc-veo-vach-ngan-mui | Vẹo vách ngăn mũi
+
+===== ĐỢT 69 =====
+- lc-veo-xuong-song-tu-phat | Vẹo xương sống tự phát
+- lc-vo-mam-chay | Vỡ mâm chày
+- lc-vo-mach-mau-nao | Vỡ mạch máu não
+- lc-vo-tui-mat | Vỡ túi mật
+- lc-vo-xuong-hoc-mat | Vỡ xương hốc mắt
+- lc-xoan-xuong-chay | Xoắn xương chày
+- lc-xoan-xuong-dui | Xoắn xương đùi
+- lc-xuat-huyet-duoi-ket-mac | Xuất huyết dưới kết mạc
+- lc-xuat-huyet-duoi-nhen | Xuất huyết dưới nhện
+- lc-xuat-huyet-nao-that | Xuất huyết não thất
+
+===== ĐỢT 70 =====
+- lc-xuat-huyet-phe-nang-lan-toa | Xuất huyết phế nang lan tỏa
+- lc-xuat-huyet-phe-nang-vo-can | Xuất huyết phế nang vô căn
+- lc-xuat-huyet-vong-mac | Xuất huyết võng mạc
+- lc-xuat-tinh-muon | Xuất tinh muộn
+- lc-xuat-tinh-nguoc-dong | Xuất tinh ngược dòng
+- lc-xo-cung-bi | Xơ cứng bì
+- lc-xo-cung-bi-toan-the | Xơ cứng bì toàn thể
+- lc-xo-cung-cu | Xơ cứng củ
+- lc-xo-cung-xuong | Xơ cứng xương
+- lc-xo-cung-dong-mach-khong-do-xo-vua | Xơ cứng động mạch không do xơ vữa
+
+===== ĐỢT 71 =====
+- lc-xo-gan-con-bu | Xơ gan còn bù
+- lc-xo-gan-co-truong | Xơ gan cổ trướng
+- lc-xo-gan-do-ruou | Xơ gan do rượu
+- lc-xo-gan-mat-bu | Xơ gan mất bù
+- lc-xo-nang | Xơ nang
+- lc-xuong-thuy-tinh | Xương thủy tinh
+- lc-xep-dot-song | Xẹp đốt sống
+- lc-xop-tuy-than | Xốp tủy thận
+- lc-xop-xo-tai | Xốp xơ tai
+- lc-a-sung | Á sừng
+
+===== ĐỢT 72 =====
+- lc-a-vay-nen | Á vảy nến
+- lc-ap-luc-noi-so | Áp lực nội sọ
+- lc-ap-xe-gan | Áp xe gan
+- lc-ap-xe-long-ban-tay | Áp xe lòng bàn tay
+- lc-ap-xe-than | Áp xe thận
+- lc-ap-xe-tuyen-tien-liet | Áp xe tuyến tiền liệt
+- lc-ap-xe-phoi | Áp-xe phổi
+- lc-ap-xe-vung-hau-mon-truc-trang | Áp-xe vùng hậu môn - trực tràng (còn gọi: ap xe vung hau mon truc trang)
+- lc-da-nieu | Đa niệu
+- lc-dau-co-tay-sau-sinh | Đau cổ tay sau sinh
+
+===== ĐỢT 73 =====
+- lc-dau-day-than-kinh-lien-suon | Đau dây thần kinh liên sườn
+- lc-dau-day-than-kinh-thiet-hau | Đau dây thần kinh thiệt hầu
+- lc-dau-da-day-khong-do-viem-loet | Đau dạ dày không do viêm loét
+- lc-dau-khop-khuyu-tay | Đau khớp khuỷu tay
+- lc-dau-mat-ca-chan | Đau mắt cá chân
+- lc-dau-nhuc-toan-than | Đau nhức toàn thân (còn gọi: đau nhức mình mẩy)
+- lc-dau-vung-that-lung | Đau vùng thắt lưng
+- lc-dau-dui-di-cam | Đau đùi dị cảm
+- lc-dau-dau-man-tinh | Đau đầu mạn tính
+- lc-dau-dau-van-mach | Đau đầu vận mạch
+
+===== ĐỢT 74 =====
+- lc-di-tieu-nhieu | Đi tiểu nhiều
+- lc-dai-huyet-sac-to-kich-phat-ve-dem | Đái huyết sắc tố kịch phát về đêm
+- lc-dai-mau | Đái máu
+- lc-dai-thao-nhat | Đái tháo nhạt
+- lc-dong-mau-noi-mach-rai-rac | Đông máu nội mạch rải rác
+- lc-dia-dem-mat-nuoc | Đĩa đệm mất nước
+- lc-dam-nieu | Đạm niệu
+- lc-doi-moi | Đồi mồi
+- lc-do-mo-hoi-trom | Đổ mồ hôi trộm (còn gọi: mồ hôi trộm, ra mồ hôi trộm, đổ mồ hôi ban đêm)
+- lc-dong-kinh-cuc-bo | Động kinh cục bộ
+
+===== ĐỢT 75 =====
+- lc-dong-kinh-thuy-thai-duong | Động kinh thùy thái dương
+- lc-dong-kinh-thuy-tran | Động kinh thùy trán
+- lc-dong-kinh-toan-the | Động kinh toàn thể
+- lc-dot-quy-thieu-mau-cuc-bo | Đột quỵ thiếu máu cục bộ
+- lc-duc-thuy-tinh-the-o-nguoi-gia | Đục thủy tinh thể ở người già
+- lc-dut-day-chang | Đứt dây chằng
+- lc-dut-day-chang-dau-goi | Đứt dây chằng đầu gối
+- lc-benh-angiostrongyliasis | Bệnh Angiostrongyliasis (còn gọi: Angiostrongyliasis)
+- lc-benh-baylisascariasis | Bệnh Baylisascariasis (còn gọi: Baylisascariasis)
+- lc-benh-brucella | Bệnh Brucella (còn gọi: Brucella)
+
+===== ĐỢT 76 =====
+- lc-benh-chagas | Bệnh Chagas (còn gọi: Chagas)
+- lc-benh-dirofilariasis | Bệnh Dirofilariasis (còn gọi: Dirofilariasis)
+- lc-benh-do-cryptosporidium | Bệnh do Cryptosporidium (còn gọi: do Cryptosporidium)
+- lc-benh-do-nhiem-leishmania | Bệnh do nhiễm leishmania (còn gọi: do nhiễm leishmania)
+- lc-benh-do-vi-rut-zika | Bệnh do vi-rút Zika (còn gọi: do vi-rút Zika)
+- lc-benh-hot-xoai | Bệnh hột xoài (còn gọi: hột xoài)
+- lc-benh-lao-ruot | Bệnh lao ruột (còn gọi: lao ruột)
+- lc-benh-meo-cao | Bệnh mèo cào (còn gọi: mèo cào)
+- lc-benh-rubeon | Bệnh rubeon (còn gọi: rubeon)
+- lc-benh-san-la-phoi | Bệnh sán lá phổi (còn gọi: sán lá phổi)
+
+===== ĐỢT 77 =====
+- lc-benh-than-do-hiv | Bệnh thận do HIV (còn gọi: thận do HIV)
+- lc-benh-virus-nipah | Bệnh virus Nipah (còn gọi: virus Nipah)
+- lc-benh-viem-mang-nao-do-haemophilus | Bệnh viêm màng não do Haemophilus (còn gọi: viêm màng não do Haemophilus)
+- lc-benh-au-trung-da-di-chuyen | Bệnh ấu trùng da di chuyển (còn gọi: ấu trùng da di chuyển)
+- lc-chikungunya | Chikungunya
+- lc-chan-madura | Chân madura
+- lc-cum-a-h3-n2 | Cúm A H3N2 (còn gọi: cum a h3 n2)
+- lc-cum-a-h9 | Cúm A/H9 (còn gọi: cum a h9)
+- lc-cum-a-h1pdm | Cúm AH1PDM (còn gọi: cum a h1pdm)
+- lc-cum-ga-h5n1 | Cúm gà (H5N1) (còn gọi: cum ga h5n1)
+
+===== ĐỢT 78 =====
+- lc-cum-h1n1 | Cúm H1N1
+- lc-cum-h3-n8 | Cúm H3N8 (còn gọi: cum h3 n8)
+- lc-dich-hach | Dịch hạch
+- lc-ebola | Ebola
+- lc-ghe-coc-do-nhiem-treponema-pertenue | Ghẻ cóc (do nhiễm Treponema pertenue) (còn gọi: ghe coc do nhiem treponema pertenue)
+- lc-giun-rong | Giun rồng
+- lc-giun-tim | Giun tim
+- lc-giun-tron | Giun tròn
+- lc-giun-xoan | Giun xoắn
+- lc-giun-dau-gai | Giun đầu gai
+
+===== ĐỢT 79 =====
+- lc-herpes-hau-mon | Herpes hậu môn
+- lc-ha-cam-mem | Hạ cam mềm
+- lc-lao-cot-song | Lao cột sống
+- lc-lao-da | Lao da
+- lc-lao-he-tiet-nieu-sinh-duc | Lao hệ tiết niệu-sinh dục
+- lc-lao-hong | Lao họng
+- lc-lao-khang-thuoc | Lao kháng thuốc
+- lc-lao-ke | Lao kê
+- lc-lao-vu | Lao vú
+- lc-lao-xuong | Lao xương
+
+===== ĐỢT 80 =====
+- lc-ly-amip | Lỵ amip
+- lc-ly-truc-khuan | Lỵ trực khuẩn
+- lc-ly-truc-trung-do-shigella-dysenteriae | Lỵ trực trùng do Shigella dysenteriae
+- lc-metapneumovirus | Metapneumovirus
+- lc-nhiem-arbovirus | Nhiễm Arbovirus
+- lc-nhiem-balantidium | Nhiễm Balantidium
+- lc-nhiem-candida | Nhiễm Candida
+- lc-nhiem-clostridium-botulinum | Nhiễm Clostridium botulinum
+- lc-nhiem-cryptococcus | Nhiễm Cryptococcus
+- lc-nhiem-cytomegalovirus | Nhiễm Cytomegalovirus
+
+===== ĐỢT 81 =====
+- lc-nhiem-echinococcus | Nhiễm Echinococcus
+- lc-nhiem-escherichia-coli | Nhiễm Escherichia coli
+- lc-nhiem-giun-chi | Nhiễm giun chỉ
+- lc-nhiem-giun-kim | Nhiễm giun kim
+- lc-nhiem-giun-luon | Nhiễm giun lươn
+- lc-nhiem-giun-moc | Nhiễm giun móc
+- lc-nhiem-giun-toc | Nhiễm giun tóc
+- lc-nhiem-giun-dua | Nhiễm giun đũa
+- lc-nhiem-herpes-simplex | Nhiễm Herpes simplex
+- lc-nhiem-herpes-zoster | Nhiễm Herpes zoster
+
+===== ĐỢT 82 =====
+- lc-nhiem-khuan-chlamydia | Nhiễm khuẩn Chlamydia
+- lc-nhiem-khuan-listeria | Nhiễm khuẩn Listeria
+- lc-nhiem-ky-sinh-trung | Nhiễm ký sinh trùng
+- lc-nhiem-leptospira | Nhiễm Leptospira
+- lc-nhiem-lau-cau | Nhiễm lậu cầu
+- lc-nhiem-nocardia | Nhiễm Nocardia
+- lc-nhiem-nam-candida-o-nam-gioi | Nhiễm nấm candida ở nam giới
+- lc-nhiem-nam-coccidioidomycosis | Nhiễm nấm Coccidioidomycosis
+- lc-nhiem-nam-histoplasma | Nhiễm nấm Histoplasma
+- lc-nhiem-shigella | Nhiễm Shigella
+
+===== ĐỢT 83 =====
+- lc-nhiem-san-la-gan | Nhiễm sán lá gan (còn gọi: sán lá gan, bệnh sán lá gan, nhiễm sán gan)
+- lc-nhiem-san-mang | Nhiễm sán máng
+- lc-nhiem-toxoplasmosis-bam-sinh | Nhiễm Toxoplasmosis bẩm sinh
+- lc-nhiem-trung-nam-aspergillus | Nhiễm trùng nấm Aspergillus
+- lc-nhiem-trung-vet-thuong | Nhiễm trùng vết thương
+- lc-nhiem-trung-duong-ho-hap-duoi | Nhiễm trùng đường hô hấp dưới
+- lc-nhiem-trung-duong-ruot | Nhiễm trùng đường ruột
+- lc-nhiem-vi-khuan-salmonella | Nhiễm vi khuẩn Salmonella
+- lc-nhiem-au-trung-san-lon | Nhiễm ấu trùng sán lợn
+- lc-nam-tai | Nấm tai
+
+===== ĐỢT 84 =====
+- lc-phong-te-thap | Phong tê thấp
+- lc-quai-bi-o-nu | Quai bị ở nữ
+- lc-sars-cov | Sars cov
+- lc-san-day | Sán dây
+- lc-san-day-bo | Sán dây bò
+- lc-san-day-ca | Sán dây cá
+- lc-san-day-lon | Sán dây lợn
+- lc-san-la-ruot | Sán lá ruột
+- lc-san-lon-gao | Sán lợn gạo
+- lc-san-nao | Sán não
+
+===== ĐỢT 85 =====
+- lc-sot-khong-ro-nguyen-nhan | Sốt không rõ nguyên nhân
+- lc-sot-xuat-huyet-do-virus-hanta | Sốt xuất huyết do virus Hanta
+- lc-sot-xuat-huyet-o-tre-em | Sốt xuất huyết ở trẻ em
+- lc-sot-xuat-huyet-o-tre-so-sinh | Sốt xuất huyết ở trẻ sơ sinh
+- lc-tieu-chay-do-khang-sinh | Tiêu chảy do kháng sinh
+- lc-tieu-chay-do-virus-rota | Tiêu chảy do virus Rota
+- lc-tang-bach-cau-don-nhan | Tăng bạch cầu đơn nhân
+- lc-u-nhu-sinh-duc | U nhú sinh dục
+- lc-viem-da-day-ruot-cap-tinh | Viêm dạ dày ruột cấp tính
+- lc-viem-da-day-ruot-do-vi-rut | Viêm dạ dày ruột do virus (còn gọi: viem da day ruot do vi rut)
+
+===== ĐỢT 86 =====
+- lc-viem-giac-mac-do-acanthamoeba | Viêm giác mạc do Acanthamoeba
+- lc-viem-hong-viem-mieng-viem-tim-do-virus-coxsackie | Viêm họng, viêm miệng, viêm tim do virus Coxsackie (còn gọi: viem hong viem mieng viem tim do virus coxsackie)
+- lc-viem-mang-nao-do-lien-cau | Viêm màng não do liên cầu
+- lc-viem-mang-nao-do-phe-cau | Viêm màng não do phế cầu
+- lc-viem-mang-nao-do-tang-bach-cau-ai-toan | Viêm màng não do tăng bạch cầu ái toan
+- lc-viem-mang-nao-do-vi-khuan | Viêm màng não do vi khuẩn
+- lc-viem-mang-nao-mo-cau | Viêm màng não mô cầu
+- lc-viem-mang-nao-mo-cau-bc | Viêm màng não mô cầu BC
+- lc-viem-nao-dang-u-hat-do-amip | Viêm não dạng u hạt do amip
+- lc-viem-nao-nhat-ban-b | Viêm não Nhật Bản B
+
+===== ĐỢT 87 =====
+- lc-viem-phoi-benh-vien | Viêm phổi bệnh viện
+- lc-viem-phoi-rsv | Viêm phổi RSV
+- lc-viem-ruot-do-giardia | Viêm ruột do Giardia
+- lc-ban-hep-bao-quy-dau | Bán hẹp bao quy đầu
+- lc-bang-huyet-sau-sinh | Băng huyết sau sinh
+- lc-buou-huyet-thanh | Bướu huyết thanh
+- lc-buou-soi-tuyen | Bướu sợi tuyến
+- lc-buou-soi-tuyen-birads | Bướu sợi tuyến Birads 4
+- lc-be-san-dich | Bế sản dịch
+- lc-benh-co-tuyen-tu-cung | Bệnh cơ tuyến tử cung (còn gọi: cơ tuyến tử cung)
+
+===== ĐỢT 88 =====
+- lc-chuyen-da-dinh-tre | Chuyển dạ đình trệ
+- lc-chit-hep-co-tu-cung | Chít hẹp cổ tử cung
+- lc-chua-trung | Chửa trứng
+- lc-con-go-chuyen-da-gia | Cơn gò chuyển dạ giả
+- lc-day-ron-bam-mang | Dây rốn bám màng
+- lc-dinh-buong-tu-cung | Dính buồng tử cung
+- lc-huyet-trang-do-vi-khuan | Huyết trắng do vi khuẩn
+- lc-hoi-chung-bung-qua-man | Hội chứng bụng quả mận
+- lc-hoi-chung-demons-meigs | Hội chứng Demons Meigs
+- lc-hoi-chung-hellp | Hội chứng HELLP
+
+===== ĐỢT 89 =====
+- lc-hoi-chung-hit-phan-su | Hội chứng hít phân su
+- lc-hoi-chung-swyer | Hội chứng Swyer
+- lc-hoi-chung-tien-man-kinh | Hội chứng tiền mãn kinh
+- lc-khong-co-tinh-trung | Không có tinh trùng
+- lc-khong-co-am-dao | Không có âm đạo
+- lc-loan-san-co-tu-cung | Loạn sản cổ tử cung
+- lc-lac-noi-mac-trong-co-tu-cung | Lạc nội mạc trong cơ tử cung
+- lc-lac-noi-mac-o-am-ho | Lạc nội mạc ở âm hộ
+- lc-lo-tieu-lech-thap | Lỗ tiểu lệch thấp
+- lc-man-duc-nam | Mãn dục nam
+
+===== ĐỢT 90 =====
+- lc-man-kinh-nu | Mãn kinh nữ
+- lc-mo-vu-day-dac | Mô vú dày đặc
+- lc-mat-can-bang-noi-tiet-to | Mất cân bằng nội tiết tố
+- lc-mun-com-sinh-duc | Mụn cơm sinh dục
+- lc-nang-co-nang-buong-trung | Nang cơ năng buồng trứng
+- lc-nang-naboth-co-tu-cung | Nang naboth cổ tử cung​ (còn gọi: nang naboth co tu cung)
+- lc-nang-vu | Nang vú
+- lc-nang-am-ho | Nang âm hộ
+- lc-nang-ong-tuyen-skene | Nang ống tuyến Skene
+- lc-nhau-bong-non | Nhau bong non
+
+===== ĐỢT 91 =====
+- lc-nhau-bam-thap | Nhau bám thấp
+- lc-nhau-cai-rang-luoc | Nhau cài răng lược
+- lc-nhau-tien-dao | Nhau tiền đạo
+- lc-nhiem-khuan-sau-sinh | Nhiễm khuẩn sau sinh
+- lc-nhiem-trung-oi | Nhiễm trùng ối
+- lc-nhiem-doc-thai-nghen | Nhiễm độc thai nghén
+- lc-nao-pha-thai | Nạo phá thai
+- lc-phi-dai-tuyen-vu | Phì đại tuyến vú
+- lc-polyp-buong-tu-cung | Polyp buồng tử cung
+- lc-polyp-long-tu-cung | Polyp lòng tử cung
+
+===== ĐỢT 92 =====
+- lc-polyp-tu-cung | Polyp tử cung
+- lc-rau-bam-mep | Rau bám mép
+- lc-rong-kinh-tien-man-kinh | Rong kinh tiền mãn kinh
+- lc-roi-loan-chuc-nang-tinh-duc | Rối loạn chức năng tình dục
+- lc-roi-loan-phong-noan | Rối loạn phóng noãn
+- lc-roi-loan-san-chau | Rối loạn sàn chậu
+- lc-sa-tinh-hoan | Sa tinh hoàn
+- lc-sa-tu-cung-khi-mang-thai | Sa tử cung khi mang thai
+- lc-sa-tu-cung-sau-sinh | Sa tử cung sau sinh
+- lc-suy-buong-trung | Suy buồng trứng
+
+===== ĐỢT 93 =====
+- lc-suy-buong-trung-som | Suy buồng trứng sớm
+- lc-suy-dinh-duong-bao-thai | Suy dinh dưỡng bào thai
+- lc-suy-thai | Suy thai
+- lc-teo-tinh-hoan | Teo tinh hoàn
+- lc-thai-chet-luu | Thai chết lưu
+- lc-thai-luu | Thai lưu
+- lc-tinh-hoan-lac-cho | Tinh hoàn lạc chỗ
+- lc-tinh-hoan-an | Tinh hoàn ẩn
+- lc-tinh-trung-loang | Tinh trùng loãng
+- lc-tran-dich-tinh-mac | Tràn dịch tinh mạc
+
+===== ĐỢT 94 =====
+- lc-trung-roi-sinh-duc-nu | Trùng roi sinh dục nữ
+- lc-tang-huyet-ap-trong-thai-ky | Tăng huyết áp trong thai kỳ
+- lc-tac-mach-oi | Tắc mạch ối
+- lc-tac-voi-trung | Tắc vòi trứng
+- lc-tac-ong-dan-tinh | Tắc ống dẫn tinh
+- lc-u-bi-buong-trung | U bì buồng trứng
+- lc-u-co-tron-tu-cung | U cơ trơn tử cung
+- lc-u-la-c-no-i-ma-c-tu-cung | U lạc nội mạc tử cung (còn gọi: u la c no i ma c tu cung)
+- lc-u-nang-tuyen-bartholin | U nang tuyến Bartholin
+- lc-viem-buong-trung | Viêm buồng trứng
+
+===== ĐỢT 95 =====
+- lc-viem-co-tu-cung | Viêm cổ tử cung
+- lc-viem-lo-tuyen-co-tu-cung | Viêm lộ tuyến cổ tử cung
+- lc-viem-noi-mac-tu-cung | Viêm nội mạc tử cung
+- lc-viem-phu-khoa | Viêm phụ khoa
+- lc-viem-tinh-hoan | Viêm tinh hoàn
+- lc-viem-tuyen-tien-liet-cap-tinh | Viêm tuyến tiền liệt cấp tính
+- lc-viem-tuyen-tien-liet-man-tinh | Viêm tuyến tiền liệt mạn tính
+- lc-viem-tui-tinh | Viêm túi tinh
+- lc-viem-am-dao-do-trichomoniasis | Viêm âm đạo do Trichomoniasis
+- lc-vo-sinh-nguyen-phat | Vô sinh nguyên phát
+
+===== ĐỢT 96 =====
+- lc-vo-tui-nguc | Vỡ túi ngực
+- lc-vo-tu-cung | Vỡ tử cung
+- lc-xoan-tinh-hoan | Xoắn tinh hoàn
+- lc-xuat-huyet-tu-cung-bat-thuong | Xuất huyết tử cung bất thường
+- lc-de-non | Đẻ non
+- lc-oi-vo-non | Ối vỡ non
+- lc-ong-phuc-tinh-mac | Ống phúc tinh mạc
+- lc-u-dich-voi-trung | Ứ dịch vòi trứng
+- lc-benh-madelung | Bệnh Madelung (còn gọi: Madelung)
+- lc-benh-pompe | Bệnh Pompe (còn gọi: Pompe)
+
+===== ĐỢT 97 =====
+- lc-cham-phat-trien-tam-than | Chậm phát triển tâm thần
+- lc-chung-so-khoang-rong | Chứng sợ khoảng rộng
+- lc-di-tinh-mong-tinh | Di tinh, mộng tinh (còn gọi: di tinh mong tinh)
+- lc-hoi-chung-adhd | Hội chứng ADHD
+- lc-hoi-chung-cotard | Hội chứng Cotard
+- lc-hoi-chung-mat-tri-nho-korsakoff | Hội chứng mất trí nhớ Korsakoff
+- lc-hoi-chung-them-an | Hội chứng thèm ăn
+- lc-mnemophobia | Mnemophobia
+- lc-pho-dam | Phô dâm
+- lc-roi-loan-cam-xuc-luong-cuc | Rối loạn cảm xúc lưỡng cực
+
+===== ĐỢT 98 =====
+- lc-roi-loan-dang-co-the | Rối loạn dạng cơ thể
+- lc-roi-loan-lo-au-benh-tat | Rối loạn lo âu bệnh tật
+- lc-roi-loan-nhan-cach-loai-phan-liet | Rối loạn nhân cách loại phân liệt
+- lc-roi-loan-nhan-cach-ne-tranh | Rối loạn nhân cách né tránh
+- lc-roi-loan-nhan-cach-phan-liet | Rối loạn nhân cách phân liệt
+- lc-roi-loan-nhan-cach-phu-thuoc | Rối loạn nhân cách phụ thuộc
+- lc-roi-loan-phat-trien-lan-toa | Rối loạn phát triển lan tỏa
+- lc-roi-loan-phan-ly | Rối loạn phân ly
+- lc-roi-loan-tram-cam-dai-dang | Rối loạn trầm cảm dai dẳng
+- lc-roi-loan-da-nhan-cach | Rối loạn đa nhân cách
+
+===== ĐỢT 99 =====
+- lc-thoai-hoa-than-kinh | Thoái hóa thần kinh
+- lc-thi-dam | Thị dâm
+- lc-au-dam | Ấu dâm
+- lc-benh-sacom-co-van | Bệnh Sacôm cơ vân (còn gọi: Sacôm cơ vân)
+- lc-hoi-chung-lynch | Hội chứng Lynch
+- lc-hoi-chung-roi-loan-sinh-tuy | Hội chứng rối loạn sinh tuỷ
+- lc-sarcoma-mach-mau | Sarcoma mạch máu
+- lc-u-bach-huyet | U bạch huyết
+- lc-u-mang-nao | U màng não
+- lc-u-mang-ong-noi-tuy | U màng ống nội tủy
+
+===== ĐỢT 100 =====
+- lc-u-mo-dem-duong-tieu-hoa-gists | U mô đệm đường tiêu hóa (GISTs) (còn gọi: u mo dem duong tieu hoa gists)
+- lc-u-nguyen-bao-than-kinh | U nguyên bào thần kinh
+- lc-u-nguyen-bao-than-kinh-dem | U nguyên bào thần kinh đệm
+- lc-u-nguyen-bao-than | U nguyên bào thận
+- lc-u-nguyen-bao-vong-mac | U nguyên bào võng mạc
+- lc-u-nguyen-tuy-bao | U nguyên tủy bào
+- lc-u-nhay-ruot-thua | U nhầy ruột thừa
+- lc-u-nao-nguyen-phat | U não nguyên phát
+- lc-u-nao-thu-phat | U não thứ phát
+- lc-u-phoi | U phổi
+
+===== ĐỢT 101 =====
+- lc-u-rang | U răng
+- lc-u-sao-bao | U sao bào
+- lc-u-than-kinh-noi-tiet | U thần kinh nội tiết
+- lc-u-trong-tim | U trong tim
+- lc-u-trong-ong-song | U trong ống sống
+- lc-u-trung-that | U trung thất
+- lc-u-tuyen-nuoc-bot-mang-tai | U tuyến nước bọt mang tai
+- lc-u-tuyen-tung | U tuyến tùng
+- lc-u-tuyen-yen | U tuyến yên
+- lc-u-tuyen-uc | U tuyến ức
+
+===== ĐỢT 102 =====
+- lc-u-tuy-thuong-than | U tuỷ thượng thận
+- lc-u-te-bao-hac-to | U tế bào hắc tố
+- lc-u-te-bao-khong-lo | U tế bào khổng lồ
+- lc-u-te-bao-quanh-mach | U tế bào quanh mạch
+- lc-u-te-bao-than-kinh-dem-it-nhanh | U tế bào thần kinh đệm ít nhánh
+- lc-u-tuy-song | U tủy sống
+- lc-u-xo-than-kinh | U xơ thần kinh
+- lc-ung-thu-dai-trang-giai-doan-dau | Ung thu dai trang giai doan dau
+- lc-ung-thu-amidan | Ung thư amidan
+- lc-ung-thu-amidan-khau-cai | Ung thư amidan khẩu cái
+
+===== ĐỢT 103 =====
+- lc-ung-thu-bieu-mo-te-bao-nhan | Ung thư biểu mô tế bào nhẫn
+- lc-ung-thu-bieu-mo-duong-nieu | Ung thư biểu mô đường niệu
+- lc-ung-thu-bieu-mo-ong-dan-sua-tai-cho | Ung thư biểu mô ống dẫn sữa tại chỗ
+- lc-ung-thu-buong-trung-giai-doan | Ung thư buồng trứng giai đoạn IV
+- lc-ung-thu-co-tu-cung-giai-doan-cuoi | Ung thư cổ tử cung giai đoạn cuối
+- lc-ung-thu-co-tu-cung-giai-doan | Ung thư cổ tử cung giai đoạn I (còn gọi: ung thu co tu cung giai doan)
+- lc-ung-thu-da-giai-doan-muon | Ung thư da giai đoạn muộn
+- lc-ung-thu-da-dau | Ung thư da đầu
+- lc-ung-thu-duong-vat | Ung thư dương vật
+- lc-ung-thu-da-day-giai-doan | Ung thư dạ dày giai đoạn 3
+
+===== ĐỢT 104 =====
+- lc-ung-thu-gan-di-can | Ung thư gan di căn
+- lc-ung-thu-gan-nguyen-phat | Ung thư gan nguyên phát
+- lc-ung-thu-ha-hong | Ung thư hạ họng
+- lc-ung-thu-hau-hong | Ung thư hầu họng
+- lc-ung-thu-hau-mon | Ung thư hậu môn
+- lc-ung-thu-la-lach | Ung thư lá lách
+- lc-ung-thu-manh-trang | Ung thư manh tràng
+- lc-ung-thu-mau-cap-tinh | Ung thư máu cấp tính
+- lc-ung-thu-mo-lien-ket | Ung thư mô liên kết
+- lc-ung-thu-mo-mo | Ung thư mô mỡ
+
+===== ĐỢT 105 =====
+- lc-ung-thu-mui | Ung thư mũi
+- lc-ung-thu-mat | Ung thư mắt
+- lc-ung-thu-nguyen-bao-vong-mac | Ung thư nguyên bào võng mạc
+- lc-ung-thu-nhau-thai | Ung thư nhau thai
+- lc-ung-thu-nuou-rang | Ung thư nướu răng
+- lc-ung-thu-phoi-khong-te-bao-nho-giai-doan | Ung thư phổi không tế bào nhỏ giai đoạn III
+- lc-ung-thu-ruot-ket | Ung thư ruột kết
+- lc-ung-thu-rang | Ung thư răng
+- lc-ung-thu-sun | Ung thư sụn
+- lc-ung-thu-tai | Ung thư tai
+
+===== ĐỢT 106 =====
+- lc-ung-thu-tim | Ung thư tim
+- lc-ung-thu-truc-trang-giai-doan | Ung thư trực tràng giai đoạn 4
+- lc-ung-thu-ta-trang | Ung thư tá tràng
+- lc-ung-thu-tu-cung-giai-doan | Ung thư tử cung giai đoạn 2 (còn gọi: ung thu tu cung giai doan)
+- lc-ung-thu-vom-hau | Ung thư vòm hầu
+- lc-ung-thu-vom-hong-giai-doan | Ung thư vòm họng giai đoạn III
+- lc-ung-thu-vom-hong-giai-doan-dau | Ung thư vòm họng giai đoạn đầu
+- lc-ung-thu-vu-giai-doan | Ung thư vú giai đoạn 4
+- lc-ung-thu-vu-the-tam-am | Ung thư vú thể tam âm
+- lc-ung-thu-vu-tai-phat | Ung thư vú tái phát
+
+===== ĐỢT 107 =====
+- lc-ung-thu-vu-da-o | Ung thư vú đa ổ
+- lc-ung-thu-xoang | Ung thư xoang
+- lc-ung-thu-xuong-ham | Ung thư xương hàm
+- lc-ung-thu-dai-trang-giai-doan | Ung thư đại tràng giai đoạn 1 (còn gọi: ung thu dai trang giai doan)
+- lc-da-u-mo-thua-duong-mat | Đa u mô thừa đường mật

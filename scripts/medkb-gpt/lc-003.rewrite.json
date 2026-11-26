@@ -1,0 +1,100 @@
+{
+  "_note": "26/11 — Vòng LC 2: MedlinePlus eyecancer, colorectalcancer, headandneckcancer, oralcancer (Claude đã mở kiểm).",
+  "lc-ung-thu-mat": {
+    "addSources": [{ "title": "Eye Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/eyecancer.html" }],
+    "about": [
+      ["Ung thư mắt ít gặp; có thể ở phần ngoài mắt như mí mắt, hoặc bắt đầu bên trong nhãn cầu.", ["+0"]],
+      ["Ở người lớn, ung thư trong nhãn cầu hay gặp nhất là u hắc tố và u lympho; ở trẻ em là u nguyên bào võng mạc.", ["+0"]],
+      ["Ung thư ở nơi khác cũng có thể lan đến mắt.", ["+0"]]
+    ],
+    "signs": [["Có thể nhìn mờ, thấy khối u ở mắt.", [0]]],
+    "causes": [["Yếu tố liên quan: tuổi, màu mắt, nốt ruồi, di truyền, tiền sử gia đình.", [0]]],
+    "care": [["Điều trị tuỳ loại và mức độ: phẫu thuật, xạ trị, liệu pháp đông lạnh hoặc nhiệt, laser.", ["+0"]]],
+    "doctor": [["Mắt nhìn mờ dần, thấy đốm hay khối lạ ở mắt → đi khám mắt sớm.", [0]]]
+  },
+  "lc-ung-thu-nguyen-bao-vong-mac": {
+    "addSources": [{ "title": "Eye Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/eyecancer.html" }],
+    "about": [
+      ["U nguyên bào võng mạc (retinoblastoma) là ung thư mắt hay gặp nhất ở trẻ em, bắt đầu từ tế bào võng mạc.", ["+0"]],
+      ["Bệnh chủ yếu gặp ở trẻ nhỏ.", ["+0"]]
+    ],
+    "signs": [["Có thể thấy khối u, mắt đỏ hoặc sưng.", [0]]],
+    "causes": [["Yếu tố di truyền có vai trò.", [0]]],
+    "care": [["Điều trị tuỳ mức độ: phẫu thuật, xạ trị, đông lạnh hoặc nhiệt, laser — do bác sĩ chuyên khoa quyết định.", ["+0"]]],
+    "doctor": [["Trẻ có dấu hiệu lạ ở mắt (khối u, mắt đỏ hoặc sưng kéo dài) → đưa bé đi khám mắt sớm.", [0]]]
+  },
+  "lc-ung-thu-ruot-ket": {
+    "addSources": [{ "title": "Colorectal Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/colorectalcancer.html" }],
+    "about": [["Ung thư ruột kết (đại tràng) là ung thư phát triển ở mô của đại tràng — đoạn đầu và dài nhất của ruột già.", ["+0"]]],
+    "signs": [
+      ["Có thể không có triệu chứng, nhất là lúc đầu.", ["+0"]],
+      ["Khi có: thay đổi thói quen đi ngoài, máu trong phân, sụt cân không rõ lý do.", ["+0"]]
+    ],
+    "causes": [
+      ["Càng lớn tuổi nguy cơ càng tăng.", ["+0"]],
+      ["Yếu tố khác: bản thân hoặc gia đình từng bị, một số hội chứng di truyền, hút thuốc, uống nhiều rượu, béo phì, viêm ruột lâu năm.", ["+0"]]
+    ],
+    "care": [
+      ["Tầm soát: đa số chuyên gia khuyên bắt đầu từ 45 tuổi đến ít nhất 75 tuổi, bằng xét nghiệm phân hoặc nội soi.", ["+0"]],
+      ["Điều trị tuỳ tuổi, sức khoẻ và mức độ: phẫu thuật, hoá trị, xạ trị, thuốc nhắm trúng đích.", ["+0"]],
+      ["Phòng ngừa: giữ cân nặng hợp lý, vận động, bỏ thuốc lá.", [0, "+0"]]
+    ],
+    "doctor": [["Đi ngoài ra máu, thay đổi thói quen đi ngoài kéo dài hoặc sụt cân không rõ lý do → đi khám.", ["+0"]]]
+  },
+  "lc-ung-thu-mui": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư mũi thuộc nhóm ung thư đầu cổ — các ung thư ở miệng, mũi và xoang, họng.", ["+0"]]],
+    "signs": [["Có thể nghẹt mũi kéo dài, chảy máu mũi, đau đầu, chảy nước mắt, ù tai.", [0]]],
+    "causes": [
+      ["Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ; dùng cả hai thì càng cao.", ["+0"]],
+      ["Nhiễm virus Epstein-Barr (EBV), HPV cũng liên quan.", ["+0", 0]]
+    ],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]]],
+    "doctor": [["Nghẹt mũi một bên, chảy máu mũi lặp lại hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.", [0, "+0"]]]
+  },
+  "lc-ung-thu-xoang": {
+    "addSources": [
+      { "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" },
+      { "title": "Nasal and sinus cancer", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/nasal-and-sinus-cancer/" }
+    ],
+    "about": [["Ung thư xoang là ung thư hiếm, bắt đầu ở khoang mũi hoặc các xoang; thuộc nhóm ung thư đầu cổ.", ["+1", "+0"]]],
+    "signs": [["Có thể nghẹt mũi, chảy máu mũi, chảy dịch mũi, sưng đau mặt, nhìn đôi, đau đầu.", [0]]],
+    "causes": [
+      ["Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ.", ["+0", 0]],
+      ["Tiếp xúc lâu dài với bụi gỗ, bụi da, bụi bột, formaldehyde, bụi niken – crom ở nơi làm việc cũng liên quan.", [0]]
+    ],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]]],
+    "doctor": [["Nghẹt mũi một bên, chảy máu mũi hay sưng mặt kéo dài không đỡ → đi khám tai mũi họng.", [0]]]
+  },
+  "lc-ung-thu-nuou-rang": {
+    "addSources": [{ "title": "Oral Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/oralcancer.html" }],
+    "about": [["Ung thư nướu răng là một dạng ung thư miệng, thường bắt đầu ở lớp tế bào phủ bề mặt trong miệng.", ["+0", 0]]],
+    "signs": [
+      ["Mảng trắng hoặc đỏ trong miệng; vết loét ở miệng hay môi không lành.", ["+0"]],
+      ["Có thể chảy máu, sưng nướu, nổi hạch, sụt cân.", [0]]
+    ],
+    "causes": [
+      ["Phần lớn liên quan đến thuốc lá, uống nhiều rượu hoặc virus HPV; vừa hút thuốc vừa uống nhiều rượu thì nguy cơ càng cao.", ["+0"]],
+      ["Vệ sinh răng miệng kém, kích ứng miệng lâu ngày cũng liên quan.", [0]]
+    ],
+    "care": [["Điều trị có thể là phẫu thuật, xạ trị hoặc cả hai; đôi khi hoá trị sau mổ.", ["+0"]]],
+    "doctor": [["Vết loét, mảng trắng / đỏ trong miệng quá 2 tuần chưa hết → đi khám bác sĩ hoặc nha sĩ.", ["+0"]]]
+  },
+  "lc-ung-thu-vom-hau": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư vòm hầu (vòm họng) là ung thư ở phần trên của họng, sau mũi; thuộc nhóm ung thư đầu cổ.", ["+0", 0]]],
+    "signs": [
+      ["Có thể nghẹt mũi, chảy máu mũi, nghe kém, ù tai, đau đầu, nhìn đôi.", [0]],
+      ["Có cục ở cổ, khó nuốt, khàn giọng.", ["+0", 0]]
+    ],
+    "causes": [
+      ["Nhiễm virus Epstein-Barr (EBV) liên quan đến ung thư phần trên họng.", ["+0", 0]],
+      ["Hút thuốc lá, uống nhiều rượu làm tăng nguy cơ; nam giới hay gặp hơn.", ["+0", 0]]
+    ],
+    "care": [
+      ["Điều trị gồm xạ trị, hoá trị, phẫu thuật, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]],
+      ["Phòng ngừa: không hút thuốc.", [0]]
+    ],
+    "doctor": [["Nghẹt mũi, chảy máu mũi, ù tai một bên hoặc có cục ở cổ kéo dài → đi khám tai mũi họng sớm.", [0, "+0"]]]
+  }
+}

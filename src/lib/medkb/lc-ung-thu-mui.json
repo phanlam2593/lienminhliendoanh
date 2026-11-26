@@ -7,15 +7,15 @@
  ],
  "about": [
   {
-   "text": "**Ung thư mũi** — nhóm bệnh: ung thư, đầu.",
+   "text": "Ung thư mũi thuộc nhóm ung thư đầu cổ — các ung thư ở miệng, mũi và xoang, họng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: giảm thính lực, chảy nước mắt, chảy máu mũi, có mùi hôi, nghẹt mũi, đau đầu, khó thở, khối u, ù tai, sưng.",
+   "text": "Có thể nghẹt mũi kéo dài, chảy máu mũi, đau đầu, chảy nước mắt, ù tai.",
    "src": [
     0
    ]
@@ -23,14 +23,15 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hút thuốc lá, nhiễm virus HPV, gen di truyền.",
+   "text": "Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ; dùng cả hai thì càng cao.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): EBV, radium.",
+   "text": "Nhiễm virus Epstein-Barr (EBV), HPV cũng liên quan.",
    "src": [
+    1,
     0
    ]
   }
@@ -38,18 +39,19 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghẹt mũi một bên, chảy máu mũi lặp lại hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.",
    "src": [
-    0
+    0,
+    1
    ]
   }
  ],
@@ -60,7 +62,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-mui.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Head and Neck Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/headandneckcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
