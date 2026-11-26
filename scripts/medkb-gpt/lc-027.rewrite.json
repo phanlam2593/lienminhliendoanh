@@ -1,0 +1,1218 @@
+{
+  "_note": "26/11 — Vòng LC 25 (đợt 53–57): NHS arthritis, septic-arthritis, impetigo, diarrhoea-and-vomiting, atopic-eczema, strep-a — Claude đã mở kiểm.",
+  "lc-viem-khop-cap": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-man-tinh": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-khong-dac-hieu": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-goi": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là khớp gối).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-co-tay": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là cổ tay).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-co-chan": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là cổ chân).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-mat-ca-chan": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là mắt cá chân).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-ban-chan": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là bàn chân).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-hang": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là khớp háng).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-khuyu-tay": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là khuỷu tay).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-ngon-tay": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là ngón tay).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-ngon-tay-cai": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là ngón tay cái).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-ngon-chan": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là ngón chân).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-ngon-chan-cai": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là ngón chân cái — gút hay gặp ở đây).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-tay": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là bàn tay).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-vai": {
+    "addSources": [
+      {
+        "title": "Arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp gây đau, sưng, cứng ở một hay nhiều khớp, làm khó cử động (ở đây là khớp vai).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hay gặp nhất là thoái hoá khớp (thường ở khớp chịu lực như gối, bàn chân, hay bắt đầu từ cuối tuổi 40), sau đó là viêm khớp dạng thấp, gút, viêm cột sống dính khớp, viêm khớp vảy nến.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể bùng phát nặng lên từng đợt kéo dài vài ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát: vật lý trị liệu, hoạt động trị liệu, thuốc, dụng cụ hỗ trợ đi lại, phẫu thuật khi nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vận động đều, ưu tiên môn nhẹ như bơi, đi bộ, yoga; ăn uống cân bằng, giữ cân nặng hợp lý; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, sưng, cứng khớp không hết sau vài ngày → đi khám, đừng tự chẩn đoán.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau và sưng dữ dội đột ngột ở một khớp, thuốc giảm đau không đỡ, da quanh khớp đỏ nóng, hoặc đau khớp kèm sốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-khop-nhiem-khuan-sinh-mu": {
+    "addSources": [
+      {
+        "title": "Septic arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/septic-arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm khớp nhiễm khuẩn sinh mủ là nhiễm trùng khớp nặng, cần điều trị càng sớm càng tốt; đa số khỏi hoàn toàn nếu được điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau dữ dội đột ngột ở một khớp, khó cử động hoặc đứng lên, da trên khớp nóng, sưng, đỏ; thường có sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn ở người viêm khớp dạng thấp, miễn dịch yếu, mới mổ khớp hoặc có khớp nhân tạo, tiểu đường, bệnh lậu, tiêm chích ma tuý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường nhập viện khoảng hai tuần: kháng sinh truyền tĩnh mạch, hút dịch khớp, rồi uống kháng sinh thêm vài tuần — phải uống hết; vật lý trị liệu tránh cứng khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau khớp dữ dội đột ngột, sưng, đổi màu da quanh khớp, khó cử động, hoặc đau khớp kèm sốt → khám gấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-mun-mu-truyen-nhiem": {
+    "addSources": [
+      {
+        "title": "Impetigo",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/impetigo/"
+      }
+    ],
+    "about": [
+      [
+        "Chốc lở (viêm da mụn mủ truyền nhiễm) là nhiễm trùng da rất dễ lây, thường nhẹ, hay gặp ở trẻ nhỏ; thường đỡ trong vài ngày điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Vết đỏ hoặc mụn nước vỡ ra để lại vảy màu vàng nâu; có thể ngứa, đau, lan sang chỗ khác; hay ở quanh mũi, miệng và tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua tiếp xúc da hoặc đồ dùng như khăn, chăn ga; hết lây sau 48 giờ điều trị, không điều trị có thể lây 7–21 ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bôi kem kháng khuẩn hoặc uống kháng sinh theo bác sĩ, dùng đủ liệu trình.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Giữ sạch vết xước, vết côn trùng cắn; rửa, lau khô chỗ bị, rửa tay thường xuyên; không gãi, không dùng chung khăn, giặt nước nóng; nghỉ học, nghỉ làm đến khi hết lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ dưới 12 tháng, người miễn dịch yếu, không đỡ hoặc nặng hơn khi điều trị, hay bị lại → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-day-ruot": {
+    "addSources": [
+      {
+        "title": "Diarrhoea and vomiting",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/diarrhoea-and-vomiting/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm dạ dày ruột gây tiêu chảy và nôn, thường do virus hoặc ngộ độc thực phẩm, tự hết sau vài ngày: tiêu chảy thường 5–7 ngày, nôn 1–2 ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ở nhà, uống nhiều nước (nhấp từng ngụm nếu buồn nôn); trẻ bú mẹ hoặc bú bình vẫn cho bú, bú ít mà nhiều cữ; tránh nước trái cây, nước có ga; không pha loãng sữa công thức.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không cho trẻ dưới 12 tuổi uống thuốc cầm tiêu chảy; dùng oresol theo hướng dẫn dược sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nghỉ học, nghỉ làm ít nhất 2 ngày sau lần nôn hay tiêu chảy cuối; rửa tay thường xuyên, giặt riêng đồ bẩn bằng nước nóng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Lo cho trẻ dưới 12 tháng, trẻ bỏ bú, không giữ được nước uống, tiêu chảy ra máu, tiêu chảy quá 7 ngày hay nôn quá 2 ngày, có dấu hiệu mất nước (nước tiểu sẫm, tiểu ít, ít tã ướt) → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu hoặc như bã cà phê, nôn dịch xanh, đau đầu hay đau bụng dữ dội đột ngột, lú lẫn, khó thở, môi da tái xanh → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-di-ung": {
+    "addSources": [
+      {
+        "title": "Atopic eczema",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/atopic-eczema/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm da dị ứng (chàm thể tạng) là bệnh da hay gặp gây ngứa; chưa chữa khỏi nhưng kiểm soát được; hay gặp nhất ở trẻ nhỏ và thường đỡ khi lớn. Không lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da ngứa, khô, nứt hoặc dày, hay ở khuỷu tay, gối, bàn tay; trẻ nhỏ hay ở mặt; có thể đỏ, sẫm màu, rộp hoặc chảy máu; bùng lên từng đợt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Yếu tố khởi phát: xà phòng, bột giặt, thú nuôi, một số loại vải, phấn hoa, mạt bụi, một số thức ăn, nóng, nhiễm trùng da, căng thẳng. Cha mẹ bị chàm hoặc bản thân có hen, viêm mũi dị ứng thì dễ bị hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bôi kem dưỡng ẩm đều đặn kể cả khi da đã đỡ; thuốc bôi corticoid theo bác sĩ; tránh gãi, tránh xà phòng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng hoặc điều trị không đỡ → đi khám; da rộp, đóng vảy, chảy dịch, có mủ, đau, sưng, nóng, nặng lên đột ngột, hoặc kèm sốt → khám gấp (có thể nhiễm trùng).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-hong-do-lien-cau": {
+    "addSources": [
+      {
+        "title": "Strep A",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/strep-a/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm họng do liên cầu là nhiễm vi khuẩn liên cầu nhóm A, hay gặp ở trẻ em; liên cầu A còn có thể gây sốt tinh hồng nhiệt, chốc lở, viêm mô tế bào.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau họng, sốt, sưng hạch, đau mỏi người; có thể kèm ban nhám như giấy ráp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây khi tiếp xúc gần người bệnh, qua ho, hắt hơi hoặc vết thương; có người mang vi khuẩn không triệu chứng vẫn lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số tự đỡ trong khoảng một tuần; nhiễm trùng nặng hơn cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Được kê kháng sinh thì nghỉ học, nghỉ làm 24 giờ sau khi bắt đầu uống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ nặng dần, ăn uống ít hẳn, tiểu ít, rất mệt hoặc quấy → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Trẻ khó thở, có lúc ngưng thở, da môi lưỡi tái xanh hay xám, mềm nhũn, li bì → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

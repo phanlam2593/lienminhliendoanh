@@ -7,55 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Viêm da mụn mủ truyền nhiễm** — nhóm bệnh: da - tóc - móng.",
+   "text": "Chốc lở (viêm da mụn mủ truyền nhiễm) là nhiễm trùng da rất dễ lây, thường nhẹ, hay gặp ở trẻ nhỏ; thường đỡ trong vài ngày điều trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng hạch, bọng nước, mụn nước, mệt mỏi, mụn mủ, ngứa, loét, vảy, sốt, phù.",
+   "text": "Vết đỏ hoặc mụn nước vỡ ra để lại vảy màu vàng nâu; có thể ngứa, đau, lan sang chỗ khác; hay ở quanh mũi, miệng và tay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: staphylococcus aureus, treptococcus pyogenes, S, vi khuẩn tụ cầu vàng.",
+   "text": "Lây qua tiếp xúc da hoặc đồ dùng như khăn, chăn ga; hết lây sau 48 giờ điều trị, không điều trị có thể lây 7–21 ngày.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi tác, tiếp xúc gần, thời tiết ấm áp, ẩm ướt, da nứt nẻ, viêm da dị ứng.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tăng lượng acid béo omega-3.",
+   "text": "Bôi kem kháng khuẩn hoặc uống kháng sinh theo bác sĩ, dùng đủ liệu trình.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Giữ sạch vết xước, vết côn trùng cắn; rửa, lau khô chỗ bị, rửa tay thường xuyên; không gãi, không dùng chung khăn, giặt nước nóng; nghỉ học, nghỉ làm đến khi hết lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ dưới 12 tháng, người miễn dịch yếu, không đỡ hoặc nặng hơn khi điều trị, hay bị lại → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-mun-mu-truyen-nhiem-166.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Impetigo",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/impetigo/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

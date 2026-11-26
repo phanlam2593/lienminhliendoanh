@@ -7,60 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Viêm họng do liên cầu** — nhóm bệnh: tai - mũi - họng, cổ.",
+   "text": "Viêm họng do liên cầu là nhiễm vi khuẩn liên cầu nhóm A, hay gặp ở trẻ em; liên cầu A còn có thể gây sốt tinh hồng nhiệt, chốc lở, viêm mô tế bào.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng hạch, đốm trắng, ho có đờm, đau họng, đau bụng, phát ban, buồn nôn, mảng đỏ, ho khan, sốt cao.",
+   "text": "Đau họng, sốt, sưng hạch, đau mỏi người; có thể kèm ban nhám như giấy ráp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người bị suy giảm hệ miễn dịch, người sống trong môi trường bị ô nhiễm, người có cơ địa dễ bị dị ứng, hệ miễn dịch suy giảm, suy giảm hệ miễn dịch, viêm nhiễm đường hô hấp.",
+   "text": "Lây khi tiếp xúc gần người bệnh, qua ho, hắt hơi hoặc vết thương; có người mang vi khuẩn không triệu chứng vẫn lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số tự đỡ trong khoảng một tuần; nhiễm trùng nặng hơn cần kháng sinh.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không hút thuốc lá , uống rượu, khi trời lạnh cần phải giữ ấm cơ thể, tránh tiếp xúc gần với những người bị bệnh.",
+   "text": "Được kê kháng sinh thì nghỉ học, nghỉ làm 24 giờ sau khi bắt đầu uống.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ nặng dần, ăn uống ít hẳn, tiểu ít, rất mệt hoặc quấy → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Trẻ khó thở, có lúc ngưng thở, da môi lưỡi tái xanh hay xám, mềm nhũn, li bì → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm họng do liên cầu – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-hong-do-lien-cau-470.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Strep A",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/strep-a/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

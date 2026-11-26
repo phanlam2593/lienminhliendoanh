@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Viêm da dị ứng** — nhóm bệnh: da - tóc - móng, dị ứng, da.",
+   "text": "Viêm da dị ứng (chàm thể tạng) là bệnh da hay gặp gây ngứa; chưa chữa khỏi nhưng kiểm soát được; hay gặp nhất ở trẻ nhỏ và thường đỡ khi lớn. Không lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi, bọng nước, nổi hạch, mụn nước, phát ban, sốt cao, ngứa, sưng, loét, vảy.",
+   "text": "Da ngứa, khô, nứt hoặc dày, hay ở khuỷu tay, gối, bàn tay; trẻ nhỏ hay ở mặt; có thể đỏ, sẫm màu, rộp hoặc chảy máu; bùng lên từng đợt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: viêm da cơ địa, yếu tố môi trường, yếu tố di truyền, viêm da tiếp xúc dị ứng, Ô nhiễm môi trường, yếu tố kim loại, yếu tố liên quan đến thuốc, băng dính, chất dẻo, cao su.",
+   "text": "Yếu tố khởi phát: xà phòng, bột giặt, thú nuôi, một số loại vải, phấn hoa, mạt bụi, một số thức ăn, nóng, nhiễm trùng da, căng thẳng. Cha mẹ bị chàm hoặc bản thân có hen, viêm mũi dị ứng thì dễ bị hơn.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): yếu tố di truyền.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bôi kem dưỡng ẩm đều đặn kể cả khi da đã đỡ; thuốc bôi corticoid theo bác sĩ; tránh gãi, tránh xà phòng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có triệu chứng hoặc điều trị không đỡ → đi khám; da rộp, đóng vảy, chảy dịch, có mủ, đau, sưng, nóng, nặng lên đột ngột, hoặc kèm sốt → khám gấp (có thể nhiễm trùng).",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-di-ung-1187.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Atopic eczema",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/atopic-eczema/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
