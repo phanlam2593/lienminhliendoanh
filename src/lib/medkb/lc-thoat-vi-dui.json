@@ -7,60 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Thoát vị đùi** — nhóm bệnh: tiêu hóa.",
+   "text": "Thoát vị đùi là khi một phần ruột hoặc mỡ đẩy qua khe nhỏ ở vùng chậu, tạo cục nhỏ ở đầu đùi, sát bẹn; chủ yếu ở phụ nữ trên 50 tuổi; cần điều trị ở bệnh viện.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: buồn nôn, táo bón, khối u, sưng, nôn, nám, phù.",
+   "text": "Cục cỡ quả nho ở bẹn, đau âm ỉ quanh cục lúc có lúc không, khó chịu khi đi lại.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: thừa cân.",
+   "text": "Rặn khi đi ngoài, mang vác nặng, thừa cân, ho, mang thai, sụt cân nhanh.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): người bị tăng cân, nữ giới, tiền sử gia đình bị thoát vị đùi, xơ nang, bị bệnh về phổi, ho mãn tính, hút thuốc lá, táo bón mãn tính.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường không tự hết và có thể bị nghẹt làm tắc máu nuôi, gây đau và nguy hiểm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Mổ sửa thoát vị, hồi phục khoảng 4–6 tuần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy cục ở bẹn hoặc đầu đùi → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau bụng rất dữ dội, buồn nôn, nôn, không xì hơi hay đi ngoài được, sốt, ớn lạnh, bỗng lú lẫn → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Thoát vị đùi – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thoat-vi-dui-610.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Femoral hernia repair",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/femoral-hernia-repair/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

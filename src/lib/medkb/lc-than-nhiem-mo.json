@@ -7,55 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Thận nhiễm mỡ** — nhóm bệnh: thận - tiết niệu, bụng.",
+   "text": "Thận nhiễm mỡ (hội chứng thận hư) là khi thận làm rò nhiều protein ra nước tiểu; thường phát hiện lần đầu ở trẻ 1–6 tuổi, hay gặp hơn ở người gốc châu Á.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: phù chân, sụt cân, mệt mỏi, chán ăn, tiểu ít, nám, phù.",
+   "text": "Phù, đầu tiên quanh mắt rồi cẳng chân và toàn thân; nước tiểu sủi bọt, có khi tiểu ít; dễ nhiễm trùng; dễ tạo cục máu đông.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hội chứng thận hư, nguyên phát, hội chứng thận hư thứ phát, xuất hiện protein trong nước tiểu, lối sống kém khoa học, tăng mỡ máu, giảm Albumin máu.",
+   "text": "Ở trẻ đa số là thể tổn thương tối thiểu, chưa rõ nguyên nhân; người lớn có thể do bệnh khác như viêm cầu thận, nhiễm trùng (HIV, viêm gan), lupus, tiểu đường.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì, đái tháo đường, huyết áp cao, tăng lipid máu, tuổi tác, di truyền.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Hay tái phát nhưng thường thưa dần theo tuổi, nhiều khi hết vào cuối tuổi teen; đa số trẻ đáp ứng tốt điều trị, không có nguy cơ suy thận.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ cân nặng ở mức phù hợp, không hút thuốc lá, không uống rượu bia.",
+   "text": "Điều trị chính là thuốc steroid theo bác sĩ; có thể thêm thuốc lợi tiểu, kháng sinh khi tái phát, ăn nhạt; trẻ nên tiêm phòng phế cầu, tránh vắc xin sống khi đang điều trị.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ phù mí mắt, phù chân, nước tiểu nhiều bọt → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/than-nhiem-mo.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Nephrotic syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/nephrotic-syndrome/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Thủng màng nhĩ** — nhóm bệnh: tai - mũi - họng.",
+   "text": "Thủng màng nhĩ là lỗ hoặc vết rách ở màng nhĩ, thường do viêm tai, chấn thương, tiếng ồn lớn hoặc thay đổi áp suất đột ngột như đi máy bay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: giảm thính lực, chóng mặt, chảy máu, nghe kém, đau rát, ù tai.",
+   "text": "Thường ở một tai: nghe kém, ù tai, đau tai, ngứa, chảy dịch hoặc mủ, chóng mặt, sốt.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,27 +35,28 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số tự lành trong khoảng 2 tháng và nghe trở lại bình thường; nếu không lành có thể mổ vá màng nhĩ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ tai khô ráo, không dùng tăm bông để ngoáy sâu vào tai, hạn chế xì mũi.",
+   "text": "Dùng thuốc giảm đau thông thường; khi gội đầu nhét bông có thoa vaselin ở ngoài tai; không bơi, không để ướt tai đến khi lành; không cho tăm bông hay thuốc nhỏ vào tai nếu bác sĩ không bảo; xì mũi nhẹ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Vài tuần không đỡ → đi khám; đột ngột nghe kém, nghe kém dần, hoặc nghe kém kèm đau tai, chảy dịch → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thung-mang-nhi-465.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Perforated eardrum",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/perforated-eardrum/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

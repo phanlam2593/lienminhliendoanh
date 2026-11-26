@@ -7,49 +7,61 @@
  ],
  "about": [
   {
-   "text": "**Tật nứt đốt sống** — nhóm bệnh: cơ - xương - khớp, bệnh trẻ em.",
+   "text": "Tật nứt đốt sống là khi cột sống và tuỷ sống của em bé không phát triển hoàn chỉnh trong thai kỳ; thường phát hiện khi mang thai hoặc ngay sau sinh.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể hở (ít gặp hơn, thường nặng hơn): tuỷ hoặc mô quanh tuỷ lộ ra qua khe hở; thể kín: khe nhỏ có da che, đa số không triệu chứng.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: buồn ngủ, nhức đầu, co giật, cáu gắt, co rút, yếu cơ, ngứa, sưng, nôn, nám.",
+   "text": "Thể hở: yếu hoặc liệt chân, khó kiểm soát tiểu tiện đại tiện, não úng thuỷ, giảm cảm giác ở chân, mông, cong vẹo cột sống.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể kín: đau lưng hoặc chân, tê, yếu chân, da lưng có cục, lõm hoặc mảng lông; có người không triệu chứng.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: dị tật ống thần kinh.",
+   "text": "Chưa rõ nguyên nhân; nguy cơ cao hơn khi mẹ thiếu axit folic hoặc vitamin B12 lúc mang thai, có người thân bị, hoặc dùng một số thuốc chống động kinh, thuốc tâm thần (như valproat) khi mang thai.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): đái tháo đường, béo phì, tăng thân nhiệt, thiếu acid folic.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thể hở: mổ đóng khe hở sau sinh (thường trong 48 giờ) hoặc trước tuần 26 của thai kỳ — không phục hồi được tổn thương thần kinh đã có; đặt ống dẫn lưu dịch não; vật lý trị liệu, dụng cụ hỗ trợ, điều trị tiểu tiện đại tiện lâu dài.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể kín thường không cần điều trị, đôi khi cần mổ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Phụ nữ định có thai hoặc đang dùng thuốc chống động kinh → hỏi bác sĩ về bổ sung axit folic và thuốc trước khi mang thai.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +72,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/tat-nut-dot-song.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Spina bifida",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/spina-bifida/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

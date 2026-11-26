@@ -1,0 +1,538 @@
+{
+  "_note": "27/11 — Vòng LC 27 (đợt 49–52): NHS mortons-neuroma, pompholyx; MedlinePlus 000503 (poststreptococcal GN) — Claude đã mở kiểm. Thêm: NHS spina-bifida, pulmonary-hypertension. Thêm: NHS congenital-heart-disease, pericarditis, spondylolisthesis.",
+  "lc-u-day-than-kinh-morton": {
+    "addSources": [
+      {
+        "title": "Morton's neuroma",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/mortons-neuroma/"
+      }
+    ],
+    "about": [
+      [
+        "U dây thần kinh Morton là mô quanh một dây thần kinh ở bàn chân dày lên do dây thần kinh bị kích thích hoặc tổn thương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau nhói, rát giữa ngón chân thứ 3 và thứ 4, như có hòn sỏi dưới bàn chân; có thể tê rần; nặng hơn khi đi lại, mang giày chật, giày cao gót.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Liên quan giày chật, mũi nhọn, gót cao; vận động mạnh như chạy; bàn chân bẹt, vòm cao, vẹo ngón cái.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, kê cao chân, có thể dùng thuốc giảm đau thông thường; mang giày rộng, êm, gót thấp, đế mềm; lót giày mềm; giảm cân nếu cần; giảm môn vận động mạnh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ có thể cho lót giày riêng, tiêm thuốc, hoặc mổ nếu nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau dữ dội, nặng dần, tái lại, ảnh hưởng sinh hoạt, tự chăm sóc 2 tuần không đỡ, tê yếu, hoặc đau sau chấn thương, mổ ở bàn chân → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-to-dia": {
+    "addSources": [
+      {
+        "title": "Pompholyx",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pompholyx/"
+      }
+    ],
+    "about": [
+      [
+        "Tổ đỉa (chàm tổ đỉa) là một dạng chàm ở bàn tay hoặc bàn chân, thường kéo dài nhưng điều trị giúp kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mụn nước ngứa lúc có lúc không, mỗi đợt 2–3 tuần; thường ngứa, rát trước; có thể chảy dịch; khi khỏi da khô, nứt, đau. Hay ở ngón tay, lòng bàn tay, ngón chân, lòng bàn chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; yếu tố khởi phát: hoá chất mạnh như xà phòng, nước rửa, bột giặt; nhạy cảm niken hoặc coban; tay hay bị ướt; căng thẳng; nóng, mồ hôi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Rửa tay bằng nước ấm với chất thay xà phòng làm mềm da; đeo găng lót cotton khi dùng hoá chất; mang tất cotton, giày da; tránh tác nhân nghi ngờ; không chọc vỡ mụn nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Dưỡng ẩm hằng ngày; thuốc bôi steroid từng đợt vài tuần theo bác sĩ; kháng sinh nếu nhiễm trùng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị tổ đỉa, hoặc mụn nước rất đau, có mủ vàng xanh hay đóng vảy vàng nâu (có thể nhiễm trùng) → đi khám, đừng tự chẩn đoán vì dễ nhầm với vảy nến, nấm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-cau-than-sau-nhiem-trung-pign": {
+    "addSources": [
+      {
+        "title": "Poststreptococcal glomerulonephritis (GN)",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/ency/article/000503.htm"
+      }
+    ],
+    "about": [
+      [
+        "Viêm cầu thận sau nhiễm trùng là bệnh thận xảy ra sau khi nhiễm một số chủng liên cầu; hay gặp nhất ở trẻ 6–10 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiểu ít, nước tiểu màu gỉ sắt hoặc có máu, phù mặt, mí mắt, bụng, tay chân; có thể đau, cứng hoặc sưng khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nhiễm liên cầu ở họng hoặc da (viêm họng, chốc lở); viêm thận có thể xuất hiện khoảng 1–2 tuần sau viêm họng không điều trị, hoặc 3–4 tuần sau nhiễm trùng da.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc chữa đặc hiệu, điều trị giảm triệu chứng: kháng sinh diệt liên cầu còn lại, thuốc hạ huyết áp, thuốc lợi tiểu giảm phù, ăn nhạt theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ phù mặt, nước tiểu đỏ hoặc sẫm, tiểu ít sau một đợt viêm họng hoặc chốc lở → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tat-nut-dot-song": {
+    "addSources": [
+      {
+        "title": "Spina bifida",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/spina-bifida/"
+      }
+    ],
+    "about": [
+      [
+        "Tật nứt đốt sống là khi cột sống và tuỷ sống của em bé không phát triển hoàn chỉnh trong thai kỳ; thường phát hiện khi mang thai hoặc ngay sau sinh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể hở (ít gặp hơn, thường nặng hơn): tuỷ hoặc mô quanh tuỷ lộ ra qua khe hở; thể kín: khe nhỏ có da che, đa số không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể hở: yếu hoặc liệt chân, khó kiểm soát tiểu tiện đại tiện, não úng thuỷ, giảm cảm giác ở chân, mông, cong vẹo cột sống.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể kín: đau lưng hoặc chân, tê, yếu chân, da lưng có cục, lõm hoặc mảng lông; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; nguy cơ cao hơn khi mẹ thiếu axit folic hoặc vitamin B12 lúc mang thai, có người thân bị, hoặc dùng một số thuốc chống động kinh, thuốc tâm thần (như valproat) khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thể hở: mổ đóng khe hở sau sinh (thường trong 48 giờ) hoặc trước tuần 26 của thai kỳ — không phục hồi được tổn thương thần kinh đã có; đặt ống dẫn lưu dịch não; vật lý trị liệu, dụng cụ hỗ trợ, điều trị tiểu tiện đại tiện lâu dài.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể kín thường không cần điều trị, đôi khi cần mổ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Phụ nữ định có thai hoặc đang dùng thuốc chống động kinh → hỏi bác sĩ về bổ sung axit folic và thuốc trước khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tang-ap-phoi": {
+    "addSources": [
+      {
+        "title": "Pulmonary hypertension",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pulmonary-hypertension/"
+      }
+    ],
+    "about": [
+      [
+        "Tăng áp phổi là huyết áp cao trong các động mạch đưa máu đến phổi; bệnh nặng vì có thể làm hỏng tim phải.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở, mệt, choáng hoặc chóng mặt, đau ngực, tim đập nhanh, phù chân, mắt cá, bàn chân hoặc bụng; thường nặng hơn khi gắng sức.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do bệnh ở các nhánh nhỏ động mạch phổi, bệnh tim trái, bệnh phổi hoặc thiếu oxy máu, hoặc cục máu đông làm hẹp, tắc động mạch phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi và thường nặng dần, nên điều trị sớm rất quan trọng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị nguyên nhân trước; có thể dùng thuốc chống đông, lợi tiểu, thuốc giãn mạch, thở oxy tại nhà nếu oxy máu thấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khó thở, mệt, phù chân không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực đột ngột không dịu, hoặc hồi hộp kèm đau ngực, khó thở, choáng → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tim-bam-sinh-khong-tim": {
+    "addSources": [
+      {
+        "title": "Congenital heart disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/congenital-heart-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Tim bẩm sinh là dị tật tim có từ khi sinh, như lỗ thông trong tim, có thể ảnh hưởng dòng máu trong cơ thể; có nhiều loại, cách điều trị tuỳ loại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ nhỏ: bú kém, chậm tăng cân và chậm lớn, phù bụng, tay, mắt cá, bàn chân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tuổi teen và người lớn: mệt, khó thở, hồi hộp, vã mồ hôi, da lạnh ẩm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Da và môi tái xanh hoặc xám (tím); hay có tiếng thổi ở tim; có người đến lớn mới có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hình thành khi tim phát triển trong bụng mẹ; đôi khi do gen từ bố mẹ, thường không rõ nguyên nhân; nguy cơ cao hơn khi mẹ béo phì, hút thuốc hoặc hít khói thuốc, tiểu đường thai kỳ, nhiễm rubella khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Một số chỉ cần theo dõi định kỳ (như một số lỗ thông nhỏ); số khác cần thuốc hoặc phẫu thuật (sau sinh hoặc khi lớn); hiếm khi phải ghép tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ con có các dấu hiệu trên → đưa đi khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột tím tái hoặc xám, khó thở, đau ngực, lú lẫn, rối loạn nhịp tim, trẻ mềm nhũn hoặc không đáp ứng → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tim-bam-sinh-tim": {
+    "addSources": [
+      {
+        "title": "Congenital heart disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/congenital-heart-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Tim bẩm sinh là dị tật tim có từ khi sinh, như lỗ thông trong tim, có thể ảnh hưởng dòng máu trong cơ thể; có nhiều loại, cách điều trị tuỳ loại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ nhỏ: bú kém, chậm tăng cân và chậm lớn, phù bụng, tay, mắt cá, bàn chân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tuổi teen và người lớn: mệt, khó thở, hồi hộp, vã mồ hôi, da lạnh ẩm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Da và môi tái xanh hoặc xám (tím); hay có tiếng thổi ở tim; có người đến lớn mới có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hình thành khi tim phát triển trong bụng mẹ; đôi khi do gen từ bố mẹ, thường không rõ nguyên nhân; nguy cơ cao hơn khi mẹ béo phì, hút thuốc hoặc hít khói thuốc, tiểu đường thai kỳ, nhiễm rubella khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Một số chỉ cần theo dõi định kỳ (như một số lỗ thông nhỏ); số khác cần thuốc hoặc phẫu thuật (sau sinh hoặc khi lớn); hiếm khi phải ghép tim.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ con có các dấu hiệu trên → đưa đi khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột tím tái hoặc xám, khó thở, đau ngực, lú lẫn, rối loạn nhịp tim, trẻ mềm nhũn hoặc không đáp ứng → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tran-dich-mang-tim": {
+    "addSources": [
+      {
+        "title": "Pericarditis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pericarditis/"
+      }
+    ],
+    "about": [
+      [
+        "Màng ngoài tim là túi chứa dịch bao quanh tim; khi túi này viêm (viêm màng ngoài tim), dịch hoặc máu có thể rò vào trong túi. Thường không nặng nhưng đôi khi gây biến chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau ngực nhói như dao đâm, có thể lan vai, tay, bụng; đau hơn khi hít sâu, nuốt, ho, nằm (nhất là nằm nghiêng trái); đỡ khi ngồi cúi ra trước; có thể sốt, ớn lạnh, ho, đau khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do nhiễm virus, hay xảy ra sau cảm lạnh, cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: thuốc giảm đau kháng viêm như ibuprofen, ngồi dậy hoặc cúi ra trước cho đỡ đau; bác sĩ có thể thêm thuốc khác hoặc kháng sinh nếu do vi khuẩn. Đa số đỡ trong vài tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau ngực nhói tăng khi thở, nuốt, ho hoặc nằm → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực đột ngột lan ra tay, lưng, cổ, hàm, nhất là kèm tức nặng ngực, khó thở, vã mồ hôi, buồn nôn hoặc kéo dài trên 15 phút → gọi cấp cứu (có thể là nhồi máu cơ tim).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-truot-dot-song": {
+    "addSources": [
+      {
+        "title": "Spondylolisthesis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/spondylolisthesis/"
+      }
+    ],
+    "about": [
+      [
+        "Trượt đốt sống là khi một đốt sống trượt ra trước khỏi vị trí, hay gặp nhất ở thắt lưng; khác với thoát vị đĩa đệm. Không phải lúc nào cũng có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau thắt lưng, nặng hơn khi đứng hoặc đi, đỡ khi ngồi hoặc cúi; đau lan xuống mông, đùi; căng cơ sau đùi; đau, tê, kiến bò dọc một chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Xương cột sống yếu đi theo tuổi, tiền sử gia đình, hoặc nứt xương nhỏ do vận động (hay gặp ở vận động viên trẻ, thể dục dụng cụ).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tránh động tác làm nặng thêm như cúi, nâng vật nặng; thuốc giảm đau kháng viêm; tiêm steroid; vật lý trị liệu tăng sức cơ lưng, bụng, chân; mổ khi các cách khác không hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau lưng, mông, đùi hoặc tê chân kéo dài trên 3–4 tuần, khó đi hay đứng thẳng, hoặc kèm sốt, đổ mồ hôi đêm, sụt cân không rõ lý do → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,60 +7,67 @@
  ],
  "about": [
   {
-   "text": "**Thoát vị rốn** — nhóm bệnh: tiêu hóa.",
+   "text": "Thoát vị rốn là khối phồng gần rốn do ruột hoặc mỡ đẩy qua chỗ yếu của cơ bụng; nhiều trẻ sinh ra đã có và thường tự hết trước khoảng 5 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau bụng, ngứa, sưng, nôn, phù, ho.",
+   "text": "Trẻ: cục mềm ở rốn. Người lớn: thường không đau, có thể khó chịu khi ho, rặn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: mang thai, béo phì, đa thai, chất lỏng trong khoang bụng, phẫu thuật bụng trước đây.",
+   "text": "Ở người lớn hay do béo phì, mang thai nhiều lần, tích dịch ổ bụng do bệnh như bệnh gan.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): trẻ sơ sinh, phụ nữ mang đa thai, người béo phì, bệnh nhân chạy thận nhân tạo, béo phì.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Trẻ hiếm khi cần điều trị trừ khi rất to hoặc không tự hết; người lớn thường cần mổ vì khó tự khỏi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ mình hoặc con bị thoát vị rốn, hoặc cục đau, cứng, to dần, không đẩy vào được → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau bụng dữ dội không dịu, buồn nôn, không ăn được, khối thoát vị sưng to và đổi màu da, không xì hơi hay đi ngoài được → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Thoát vị rốn – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thoat-vi-ron-581.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Umbilical hernia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/umbilical-hernia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

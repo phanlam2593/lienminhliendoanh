@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Thận đa nang** — nhóm bệnh: thận - tiết niệu.",
+   "text": "Thận đa nang là bệnh di truyền làm mọc nhiều nang ở thận; đa số đến tuổi 30–40 mới thấy vấn đề khi nang bắt đầu ảnh hưởng chức năng thận.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, chảy máu, nhức đầu, đau lưng, đầy bụng.",
+   "text": "Đau bụng, huyết áp cao, tiểu ra máu, nhiễm trùng đường tiết niệu trên, sỏi thận; chức năng thận có thể giảm dần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ADPKD, ), gen đột biến.",
+   "text": "Do lỗi gen PKD1 hoặc PKD2; con của người bệnh có 1 phần 2 khả năng thừa hưởng; có trường hợp là đột biến mới.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Lo ngại chính là suy thận; huyết áp cao có thể dẫn đến nhồi máu cơ tim, đột quỵ; mạch máu não yếu có thể gây phình mạch và chảy máu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giảm cân, bỏ hút thuốc lá, duy trì cân nặng hợp lý, nếu bạn hút thuốc, hãy bỏ thuốc lá, tập luyện đêu đặn, hạn chế sử dụng rượu bia.",
+   "text": "Chưa chữa khỏi; lối sống lành mạnh giúp bảo vệ thận; thuốc kiểm soát huyết áp, đau, nhiễm trùng; khi suy thận cần lọc máu hoặc ghép thận; có thuốc làm chậm mọc nang theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Gia đình có người bị thận đa nang, hoặc bị đau hông lưng, tiểu ra máu, huyết áp cao → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/than-da-nang-362.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Autosomal dominant polycystic kidney disease (ADPKD)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/autosomal-dominant-polycystic-kidney-disease-adpkd/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

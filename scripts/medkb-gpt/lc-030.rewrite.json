@@ -1,0 +1,1091 @@
+{
+  "_note": "27/11 — Vòng LC 28 (đợt 42–45): NHS osteoarthritis, hiatus-hernia, umbilical-hernia, femoral-hernia-repair, ADPKD, hydronephrosis — Claude đã mở kiểm. Thêm: NHS vitamin-b12-or-folate-deficiency-anaemia, perforated-eardrum, nephrotic-syndrome.",
+  "lc-thoai-hoa-khop-co-tay": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là cổ tay); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-co-chan": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là cổ chân); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-goi": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp gối); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-hang": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp háng); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-khuyu-tay": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khuỷu tay); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-ngon-tay": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là ngón tay); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-khop-vai": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp vai); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoai-hoa-da-khop": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở nhiều khớp); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoat-vi-khe-hoanh": {
+    "addSources": [
+      {
+        "title": "Hiatus hernia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hiatus-hernia/"
+      }
+    ],
+    "about": [
+      [
+        "Thoát vị khe hoành là khi một phần dạ dày bị đẩy lên lồng ngực; rất hay gặp ở người trên 50 tuổi và thường không cần điều trị nếu không gây khó chịu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng; hay gặp ợ nóng, trào ngược thức ăn hoặc dịch đắng, hôi miệng, đầy hơi, buồn nôn, nôn, nuốt khó hoặc đau.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; hay gặp ở người trên 50 tuổi, người mang thai, thừa cân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn bữa nhỏ, nhiều bữa; kê cao đầu giường 10–20 cm; giảm cân nếu thừa; tránh món gây triệu chứng, không ăn trong 3–4 giờ trước khi ngủ, tránh thắt lưng chật, không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thuốc trung hoà axit chỉ đỡ tạm, không dùng đều đặn lâu dài; bác sĩ có thể cho thuốc mạnh hơn; mổ khi các cách khác không hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng trên 3 tuần, nặng hoặc nặng dần, thuốc không đỡ → đi khám; sụt cân không rõ lý do, khó nuốt, nôn nhiều, nôn ra máu, đau bụng trên → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoat-vi-ron": {
+    "addSources": [
+      {
+        "title": "Umbilical hernia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/umbilical-hernia/"
+      }
+    ],
+    "about": [
+      [
+        "Thoát vị rốn là khối phồng gần rốn do ruột hoặc mỡ đẩy qua chỗ yếu của cơ bụng; nhiều trẻ sinh ra đã có và thường tự hết trước khoảng 5 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trẻ: cục mềm ở rốn. Người lớn: thường không đau, có thể khó chịu khi ho, rặn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ở người lớn hay do béo phì, mang thai nhiều lần, tích dịch ổ bụng do bệnh như bệnh gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Trẻ hiếm khi cần điều trị trừ khi rất to hoặc không tự hết; người lớn thường cần mổ vì khó tự khỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình hoặc con bị thoát vị rốn, hoặc cục đau, cứng, to dần, không đẩy vào được → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội không dịu, buồn nôn, không ăn được, khối thoát vị sưng to và đổi màu da, không xì hơi hay đi ngoài được → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thoat-vi-dui": {
+    "addSources": [
+      {
+        "title": "Femoral hernia repair",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/femoral-hernia-repair/"
+      }
+    ],
+    "about": [
+      [
+        "Thoát vị đùi là khi một phần ruột hoặc mỡ đẩy qua khe nhỏ ở vùng chậu, tạo cục nhỏ ở đầu đùi, sát bẹn; chủ yếu ở phụ nữ trên 50 tuổi; cần điều trị ở bệnh viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Cục cỡ quả nho ở bẹn, đau âm ỉ quanh cục lúc có lúc không, khó chịu khi đi lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Rặn khi đi ngoài, mang vác nặng, thừa cân, ho, mang thai, sụt cân nhanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường không tự hết và có thể bị nghẹt làm tắc máu nuôi, gây đau và nguy hiểm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Mổ sửa thoát vị, hồi phục khoảng 4–6 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy cục ở bẹn hoặc đầu đùi → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng rất dữ dội, buồn nôn, nôn, không xì hơi hay đi ngoài được, sốt, ớn lạnh, bỗng lú lẫn → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-than-da-nang": {
+    "addSources": [
+      {
+        "title": "Autosomal dominant polycystic kidney disease (ADPKD)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/autosomal-dominant-polycystic-kidney-disease-adpkd/"
+      }
+    ],
+    "about": [
+      [
+        "Thận đa nang là bệnh di truyền làm mọc nhiều nang ở thận; đa số đến tuổi 30–40 mới thấy vấn đề khi nang bắt đầu ảnh hưởng chức năng thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng, huyết áp cao, tiểu ra máu, nhiễm trùng đường tiết niệu trên, sỏi thận; chức năng thận có thể giảm dần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do lỗi gen PKD1 hoặc PKD2; con của người bệnh có 1 phần 2 khả năng thừa hưởng; có trường hợp là đột biến mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Lo ngại chính là suy thận; huyết áp cao có thể dẫn đến nhồi máu cơ tim, đột quỵ; mạch máu não yếu có thể gây phình mạch và chảy máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi; lối sống lành mạnh giúp bảo vệ thận; thuốc kiểm soát huyết áp, đau, nhiễm trùng; khi suy thận cần lọc máu hoặc ghép thận; có thuốc làm chậm mọc nang theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Gia đình có người bị thận đa nang, hoặc bị đau hông lưng, tiểu ra máu, huyết áp cao → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-than-u-nuoc": {
+    "addSources": [
+      {
+        "title": "Hydronephrosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hydronephrosis/"
+      }
+    ],
+    "about": [
+      [
+        "Thận ứ nước là khi một hoặc hai thận bị sưng do nước tiểu ứ lại, thường vì có chỗ tắc làm nước tiểu không thoát ra được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau thắt lưng, hông hoặc bụng; tiểu nhiều lần, tiểu khó, nước tiểu đục hoặc có máu; sốt, ớn lạnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Sỏi thận, mang thai, phì đại tiền liệt tuyến, nhiễm trùng tiểu, chấn thương hoặc phẫu thuật ở niệu quản, cục máu đông, khối u.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân và mức độ: thường dẫn lưu nước tiểu bằng ống thông trước, rồi điều trị nguyên nhân (thuốc nếu nhiễm trùng, mổ nếu tắc).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thận ứ nước trước sinh hay phát hiện khi siêu âm tuần 20, thường không triệu chứng và tự hết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thieu-mau-do-thieu-vitamin-b12": {
+    "addSources": [
+      {
+        "title": "Vitamin B12 or folate deficiency anaemia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/"
+      }
+    ],
+    "about": [
+      [
+        "Thiếu vitamin B12 hoặc folate (B9) làm cơ thể tạo hồng cầu to bất thường, hoạt động kém, mang ít oxy hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Rất mệt, thiếu năng lượng, tê bì kiến bò, lưỡi đỏ đau, loét miệng, yếu cơ, rối loạn thị lực, thay đổi tâm trạng; có thể giảm trí nhớ, phán đoán, lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thiếu máu ác tính (hệ miễn dịch tấn công tế bào dạ dày cần cho hấp thu B12) là nguyên nhân hay gặp; ít gặp hơn là ăn chay thuần không bổ sung B12 hoặc ăn kiêng khắt khe lâu dài; một số thuốc (chống co giật, thuốc giảm tiết axit dạ dày).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Cần chẩn đoán và điều trị sớm vì một số tổn thương, nhất là tổn thương thần kinh, có thể vĩnh viễn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "B12 thường tiêm trước rồi uống hoặc tiêm tiếp tuỳ nguyên nhân; thiếu folate dùng viên axit folic theo bác sĩ, thường khoảng 4 tháng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "B12 có trong thịt, cá, trứng, sữa và thực phẩm bổ sung; folate có trong rau xanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi thiếu B12 hoặc folate → đi khám, xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thieu-mau-do-thieu-folate": {
+    "addSources": [
+      {
+        "title": "Vitamin B12 or folate deficiency anaemia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/"
+      }
+    ],
+    "about": [
+      [
+        "Thiếu vitamin B12 hoặc folate (B9) làm cơ thể tạo hồng cầu to bất thường, hoạt động kém, mang ít oxy hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Rất mệt, thiếu năng lượng, tê bì kiến bò, lưỡi đỏ đau, loét miệng, yếu cơ, rối loạn thị lực, thay đổi tâm trạng; có thể giảm trí nhớ, phán đoán, lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thiếu máu ác tính (hệ miễn dịch tấn công tế bào dạ dày cần cho hấp thu B12) là nguyên nhân hay gặp; ít gặp hơn là ăn chay thuần không bổ sung B12 hoặc ăn kiêng khắt khe lâu dài; một số thuốc (chống co giật, thuốc giảm tiết axit dạ dày).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Cần chẩn đoán và điều trị sớm vì một số tổn thương, nhất là tổn thương thần kinh, có thể vĩnh viễn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "B12 thường tiêm trước rồi uống hoặc tiêm tiếp tuỳ nguyên nhân; thiếu folate dùng viên axit folic theo bác sĩ, thường khoảng 4 tháng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "B12 có trong thịt, cá, trứng, sữa và thực phẩm bổ sung; folate có trong rau xanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi thiếu B12 hoặc folate → đi khám, xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thieu-mau-thieu-vitamin": {
+    "addSources": [
+      {
+        "title": "Vitamin B12 or folate deficiency anaemia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/"
+      }
+    ],
+    "about": [
+      [
+        "Thiếu vitamin B12 hoặc folate (B9) làm cơ thể tạo hồng cầu to bất thường, hoạt động kém, mang ít oxy hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Rất mệt, thiếu năng lượng, tê bì kiến bò, lưỡi đỏ đau, loét miệng, yếu cơ, rối loạn thị lực, thay đổi tâm trạng; có thể giảm trí nhớ, phán đoán, lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thiếu máu ác tính (hệ miễn dịch tấn công tế bào dạ dày cần cho hấp thu B12) là nguyên nhân hay gặp; ít gặp hơn là ăn chay thuần không bổ sung B12 hoặc ăn kiêng khắt khe lâu dài; một số thuốc (chống co giật, thuốc giảm tiết axit dạ dày).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Cần chẩn đoán và điều trị sớm vì một số tổn thương, nhất là tổn thương thần kinh, có thể vĩnh viễn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "B12 thường tiêm trước rồi uống hoặc tiêm tiếp tuỳ nguyên nhân; thiếu folate dùng viên axit folic theo bác sĩ, thường khoảng 4 tháng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "B12 có trong thịt, cá, trứng, sữa và thực phẩm bổ sung; folate có trong rau xanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi thiếu B12 hoặc folate → đi khám, xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-thung-mang-nhi": {
+    "addSources": [
+      {
+        "title": "Perforated eardrum",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/perforated-eardrum/"
+      }
+    ],
+    "about": [
+      [
+        "Thủng màng nhĩ là lỗ hoặc vết rách ở màng nhĩ, thường do viêm tai, chấn thương, tiếng ồn lớn hoặc thay đổi áp suất đột ngột như đi máy bay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường ở một tai: nghe kém, ù tai, đau tai, ngứa, chảy dịch hoặc mủ, chóng mặt, sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số tự lành trong khoảng 2 tháng và nghe trở lại bình thường; nếu không lành có thể mổ vá màng nhĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng thuốc giảm đau thông thường; khi gội đầu nhét bông có thoa vaselin ở ngoài tai; không bơi, không để ướt tai đến khi lành; không cho tăm bông hay thuốc nhỏ vào tai nếu bác sĩ không bảo; xì mũi nhẹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Vài tuần không đỡ → đi khám; đột ngột nghe kém, nghe kém dần, hoặc nghe kém kèm đau tai, chảy dịch → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-than-nhiem-mo": {
+    "addSources": [
+      {
+        "title": "Nephrotic syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/nephrotic-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Thận nhiễm mỡ (hội chứng thận hư) là khi thận làm rò nhiều protein ra nước tiểu; thường phát hiện lần đầu ở trẻ 1–6 tuổi, hay gặp hơn ở người gốc châu Á.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Phù, đầu tiên quanh mắt rồi cẳng chân và toàn thân; nước tiểu sủi bọt, có khi tiểu ít; dễ nhiễm trùng; dễ tạo cục máu đông.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ở trẻ đa số là thể tổn thương tối thiểu, chưa rõ nguyên nhân; người lớn có thể do bệnh khác như viêm cầu thận, nhiễm trùng (HIV, viêm gan), lupus, tiểu đường.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Hay tái phát nhưng thường thưa dần theo tuổi, nhiều khi hết vào cuối tuổi teen; đa số trẻ đáp ứng tốt điều trị, không có nguy cơ suy thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị chính là thuốc steroid theo bác sĩ; có thể thêm thuốc lợi tiểu, kháng sinh khi tái phát, ăn nhạt; trẻ nên tiêm phòng phế cầu, tránh vắc xin sống khi đang điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ phù mí mắt, phù chân, nước tiểu nhiều bọt → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

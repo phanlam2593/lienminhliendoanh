@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Thận ứ nước** — nhóm bệnh: thận - tiết niệu.",
+   "text": "Thận ứ nước là khi một hoặc hai thận bị sưng do nước tiểu ứ lại, thường vì có chỗ tắc làm nước tiểu không thoát ra được.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu ra máu, tiểu nhiều, thiếu máu, mất nước, tiểu rắt, đau bụng, buồn nôn, mệt mỏi, tiểu ít, nôn.",
+   "text": "Đau thắt lưng, hông hoặc bụng; tiểu nhiều lần, tiểu khó, nước tiểu đục hoặc có máu; sốt, ớn lạnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: tìm hiểu thêm, viêm đường tiết niệu, bệnh lý ở hệ tiết niệu.",
+   "text": "Sỏi thận, mang thai, phì đại tiền liệt tuyến, nhiễm trùng tiểu, chấn thương hoặc phẫu thuật ở niệu quản, cục máu đông, khối u.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): giới tính.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ nguyên nhân và mức độ: thường dẫn lưu nước tiểu bằng ống thông trước, rồi điều trị nguyên nhân (thuốc nếu nhiễm trùng, mổ nếu tắc).",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thận ứ nước trước sinh hay phát hiện khi siêu âm tuần 20, thường không triệu chứng và tự hết.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/than-u-nuoc-365.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Hydronephrosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/hydronephrosis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

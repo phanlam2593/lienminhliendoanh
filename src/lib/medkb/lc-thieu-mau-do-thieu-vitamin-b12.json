@@ -7,49 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Thiếu máu do thiếu vitamin B12** — nhóm bệnh: máu.",
+   "text": "Thiếu vitamin B12 hoặc folate (B9) làm cơ thể tạo hồng cầu to bất thường, hoạt động kém, mang ít oxy hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, thiếu máu, đau ngực, xanh xao, ngứa ran, sụt cân, mệt mỏi, yếu cơ, phù.",
+   "text": "Rất mệt, thiếu năng lượng, tê bì kiến bò, lưỡi đỏ đau, loét miệng, yếu cơ, rối loạn thị lực, thay đổi tâm trạng; có thể giảm trí nhớ, phán đoán, lú lẫn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: viêm dạ dày, crohn, HIV/AIDS, ký sinh trùng, loạn khuẩn đường ruột.",
+   "text": "Thiếu máu ác tính (hệ miễn dịch tấn công tế bào dạ dày cần cho hấp thu B12) là nguyên nhân hay gặp; ít gặp hơn là ăn chay thuần không bổ sung B12 hoặc ăn kiêng khắt khe lâu dài; một số thuốc (chống co giật, thuốc giảm tiết axit dạ dày).",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi tác, vùng miền, suy dinh dưỡng, bệnh tuyến giáp, bạch biến.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Cần chẩn đoán và điều trị sớm vì một số tổn thương, nhất là tổn thương thần kinh, có thể vĩnh viễn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "B12 thường tiêm trước rồi uống hoặc tiêm tiếp tuỳ nguyên nhân; thiếu folate dùng viên axit folic theo bác sĩ, thường khoảng 4 tháng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "B12 có trong thịt, cá, trứng, sữa và thực phẩm bổ sung; folate có trong rau xanh.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi thiếu B12 hoặc folate → đi khám, xét nghiệm máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thieu-mau-do-thieu-vitamin-b12-271.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Vitamin B12 or folate deficiency anaemia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

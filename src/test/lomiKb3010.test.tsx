@@ -1620,8 +1620,9 @@ describe("05/11 — danh mục thuốc Long Châu", () => {
 // ── 05/11: thẻ bệnh ngắn từ mục "Tìm hiểu về bệnh" của Long Châu (lib/medkb/lc-*.json — sinh tự động) ──
 describe("05/11 — thẻ bệnh ngắn (Long Châu)", () => {
   it("bệnh trước đây chưa có thẻ → thẻ ngắn có nguồn, nhắc đọc bài đầy đủ, không kê thuốc", async () => {
-    const c = (await last(["thủng màng nhĩ là gì"])).content;
-    expect(c).toMatch(/Thủng màng nhĩ[\s\S]*tai - mũi - họng/);
+    // 27/11: thẻ "thủng màng nhĩ" đã được viết lại từ NHS → đổi sang thẻ còn ngắn
+    const c = (await last(["dị vật trong tai là gì"])).content;
+    expect(c).toMatch(/Dị vật trong tai[\s\S]*tai - mũi - họng/);
     expect(c).toMatch(/tóm tắt ngắn/);
     expect(c).not.toMatch(/\d+\s?mg/);
   });

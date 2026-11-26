@@ -7,43 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Tổ đỉa** — nhóm bệnh: da - tóc - móng, da.",
+   "text": "Tổ đỉa (chàm tổ đỉa) là một dạng chàm ở bàn tay hoặc bàn chân, thường kéo dài nhưng điều trị giúp kiểm soát.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy dịch, sưng hạch, mụn nước, đau rát, khô da, ngứa, sưng, vảy, mụn, ho.",
+   "text": "Mụn nước ngứa lúc có lúc không, mỗi đợt 2–3 tuần; thường ngứa, rát trước; có thể chảy dịch; khi khỏi da khô, nứt, đau. Hay ở ngón tay, lòng bàn tay, ngón chân, lòng bàn chân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh tiểu đường.",
+   "text": "Chưa rõ nguyên nhân; yếu tố khởi phát: hoá chất mạnh như xà phòng, nước rửa, bột giặt; nhạy cảm niken hoặc coban; tay hay bị ướt; căng thẳng; nóng, mồ hôi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay bằng nước ấm với chất thay xà phòng làm mềm da; đeo găng lót cotton khi dùng hoá chất; mang tất cotton, giày da; tránh tác nhân nghi ngờ; không chọc vỡ mụn nước.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Dưỡng ẩm hằng ngày; thuốc bôi steroid từng đợt vài tuần theo bác sĩ; kháng sinh nếu nhiễm trùng.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ mình bị tổ đỉa, hoặc mụn nước rất đau, có mủ vàng xanh hay đóng vảy vàng nâu (có thể nhiễm trùng) → đi khám, đừng tự chẩn đoán vì dễ nhầm với vảy nến, nấm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/to-dia-533.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Pompholyx",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/pompholyx/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

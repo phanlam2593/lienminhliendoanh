@@ -8,55 +8,43 @@
  ],
  "about": [
   {
-   "text": "**Viêm cầu thận sau nhiễm trùng (PIGN)** — nhóm bệnh: thận - tiết niệu, bụng.",
+   "text": "Viêm cầu thận sau nhiễm trùng là bệnh thận xảy ra sau khi nhiễm một số chủng liên cầu; hay gặp nhất ở trẻ 6–10 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu ít, sốt, phù.",
+   "text": "Tiểu ít, nước tiểu màu gỉ sắt hoặc có máu, phù mặt, mí mắt, bụng, tay chân; có thể đau, cứng hoặc sưng khớp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: HIV, cúm, sốt rét, nhiễm giun lươn, staphylococcus aureus, S epidermidis, S albus, streptococcus pneumoniae, S viridans, S pyogenes, mycobacterium leprae, M tuberculosis, treponema pallidum.",
+   "text": "Nhiễm liên cầu ở họng hoặc da (viêm họng, chốc lở); viêm thận có thể xuất hiện khoảng 1–2 tuần sau viêm họng không điều trị, hoặc 3–4 tuần sau nhiễm trùng da.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): đái tháo đường, tuổi tác, MRSA.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: hạn chế protein, hạn chế muối, hạn chế chất lỏng, bỏ khăn giấy đã sử dụng vào thùng rác.",
+   "text": "Không có thuốc chữa đặc hiệu, điều trị giảm triệu chứng: kháng sinh diệt liên cầu còn lại, thuốc hạ huyết áp, thuốc lợi tiểu giảm phù, ăn nhạt theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ phù mặt, nước tiểu đỏ hoặc sẫm, tiểu ít sau một đợt viêm họng hoặc chốc lở → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +55,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-cau-than-sau-nhiem-trung-pign.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Poststreptococcal glomerulonephritis (GN)",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000503.htm",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

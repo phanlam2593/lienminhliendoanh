@@ -7,55 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Thoái hóa khớp khuỷu tay** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khuỷu tay); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: cứng khớp, co rút, đau cổ, sưng, nám.",
+   "text": "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nguyên phát, sau chấn thương, thoái hoá khớp, chấn thương, lão hóa, công việc.",
+   "text": "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ mãn kinh, béo phì, sử dụng khớp khuỷu quá mức, tiền căn gia đình mắc bệnh lý khớp, chấn thương hoặc phẫu thuật khớp khuỷu, công việc khuân vác nặng.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: vận động nhẹ nhàng, nghỉ ngơi và đặt giới hạn, bảo vệ và hỗ trợ khớp, chăm sóc sức khỏe tổng thể, vitamin D, omega-3.",
+   "text": "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/thoai-hoa-khop-khuyu-tay.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Osteoarthritis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/osteoarthritis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
