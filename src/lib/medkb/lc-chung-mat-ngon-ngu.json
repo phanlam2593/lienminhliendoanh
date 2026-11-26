@@ -7,46 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Chứng mất ngôn ngữ** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Chứng mất ngôn ngữ làm khó giao tiếp: nói, hiểu, đọc, viết; chưa có cách chữa khỏi nhưng nhiều người khá lên khi điều trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, trầm cảm, đau đầu, ngất, ho.",
+   "text": "Khó tìm từ, nói câu ngắn hoặc không trọn, dùng nhầm hoặc tự đặt từ, khó hiểu lời nói, khó đọc viết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột quỵ, chấn thương sọ não, chấn thương đầu, U não, nhiễm trùng não, rối loạn thần kinh tiến triển.",
+   "text": "Hay gặp nhất do đột quỵ; ngoài ra chấn thương đầu nặng, u não, chảy máu hoặc nhiễm trùng não, bệnh tiến triển như sa sút trí tuệ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): độ tuổi, có đột biến gen di truyền, đái tháo đường.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Sau đột quỵ, chấn thương, u não đa số khá lên, nhất là vài tháng đầu; với bệnh tiến triển thì thường nặng dần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ mức cân nặng phù hợp, phòng ngừa té ngã, hạn chế ăn mặn, đừng bỏ qua nhiễm trùng, mang thiết bị an toàn, quản lý tình trạng sức khỏe của bạn.",
+   "text": "Điều trị chính là ngôn ngữ trị liệu (ghép từ, xếp từ, vần, cử chỉ, thiết bị hỗ trợ), có gia đình cùng tham gia.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột méo mặt, yếu hoặc tê tay, một bên người, khó nói, mất thị lực → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Chứng mất ngôn ngữ – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/chung-mat-ngon-ngu.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Aphasia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/aphasia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

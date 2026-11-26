@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Chứng dính liền khớp sọ sớm** — nhóm bệnh: cơ - xương - khớp, đầu.",
+   "text": "Dính liền khớp sọ sớm là bệnh hiếm, hộp sọ của bé phát triển không bình thường khiến đầu có hình dạng lạ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co giật, đau đầu, ngứa, phù.",
+   "text": "Đầu dài hẹp, trán nhọn hoặc hình tam giác, một bên đầu dẹt hoặc phồng; thóp đóng trước 1 tuổi; hiếm khi kèm khó khăn học tập, giảm thị lực, thính lực, khó thở, vấn đề răng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột biến gen.",
+   "text": "Thể phức tạp do bệnh di truyền nền.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh tuyến giáp ở mẹ, bệnh tuyến giáp.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Một số chỉ cần theo dõi; thường mổ tạo hình lại phần sọ dưới gây mê; đôi khi nội soi rồi đội mũ định hình; có thể cần kiểm tra thính lực, thị lực, ngôn ngữ trị liệu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo về hình dạng hoặc kích thước đầu của bé, hoặc bé có vấn đề nhìn, nghe, chậm nói, khó thở bằng miệng → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/chung-dinh-lien-khop-so-som.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Craniosynostosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/craniosynostosis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

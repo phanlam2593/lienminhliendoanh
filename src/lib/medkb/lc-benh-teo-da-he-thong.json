@@ -8,42 +8,43 @@
  ],
  "about": [
   {
-   "text": "**Bệnh teo đa hệ thống** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Teo đa hệ thống (MSA) là bệnh hiếm, tế bào thần kinh trong não bị mất dần, ảnh hưởng kiểm soát cơ và vận động; thường bắt đầu sau 50 tuổi; chưa chữa khỏi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu không tự chủ, rối loạn cương, mất trí nhớ, tiểu nhiều, chuột rút, chóng mặt, trầm cảm, đau vai, táo bón, khó thở.",
+   "text": "Rối loạn tiểu tiện, chóng mặt hoặc ngất khi đứng dậy, rối loạn cương, cử động chậm, vụng về, mất vững, nói ngọng, cứng cơ; có thể khó ngủ, thở ồn, khó nuốt, táo bón, cười khóc không kiểm soát.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [],
- "course": [],
+ "course": [
+  {
+   "text": "Không có cách chặn bệnh; có thể làm giảm tuổi thọ, đa số dần cần người giúp sinh hoạt; giai đoạn đầu dễ nhầm với Parkinson.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nằm kê đầu cao khi ngủ, tránh bị quá nóng.",
+   "text": "Đội chăm sóc giúp kiểm soát triệu chứng: thuốc cho giấc ngủ, chóng mặt; ngôn ngữ trị liệu cho nuốt và giao tiếp; vật lý trị liệu, hoạt động trị liệu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Hay chóng mặt khi đứng, rối loạn tiểu tiện kèm đi đứng chậm, mất vững → đi khám chuyên khoa thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +55,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-teo-da-he-thong.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Multiple system atrophy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/multiple-system-atrophy/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -1,0 +1,262 @@
+{
+  "_note": "27/11 — Vòng LC 38 (đợt 1–11 còn sót): NHS discoid-eczema, amyloidosis, multiple-system-atrophy, aphasia, craniosynostosis — Claude đã mở kiểm.",
+  "lc-cham-dong-tien": {
+    "addSources": [
+      {
+        "title": "Discoid eczema",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/discoid-eczema/"
+      }
+    ],
+    "about": [
+      [
+        "Chàm đồng tiền là bệnh da kéo dài gây mảng da ngứa, sưng, nứt hình tròn hoặc bầu dục; không điều trị có thể kéo dài nhiều tuần đến nhiều năm và hay tái lại chỗ cũ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bắt đầu là nốt nhỏ rồi liền thành mảng vài mm đến vài cm, màu hồng đỏ hoặc nâu sẫm; lúc đầu sưng, rộp, rỉ dịch, rất ngứa về đêm; sau khô, đóng vảy, bong; giữa mảng có thể lành trông giống hắc lào; thường không ở mặt, da đầu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ; có thể khi da rất khô yếu hàng rào bảo vệ trước chất kích ứng như xà phòng; yếu tố khởi phát: trầy xước nhỏ, côn trùng đốt, bỏng, một số thuốc; khí hậu khô lạnh làm nặng hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tránh hoá chất kích ứng trong xà phòng, bột giặt, sữa tắm; dưỡng ẩm đều đặn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ có thể cho thuốc bôi corticoid, thuốc kháng histamin giảm ngứa, kháng sinh nếu nhiễm trùng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị chàm đồng tiền → đi khám; rỉ dịch nhiều, vảy vàng, da nóng đau sưng, mệt (có thể nhiễm trùng) → khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-thoai-hoa-tinh-bot": {
+    "addSources": [
+      {
+        "title": "Amyloidosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/amyloidosis/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh thoái hoá tinh bột (amyloidosis) là nhóm bệnh hiếm, protein amyloid tích tụ trong cơ thể, có thể ảnh hưởng tim, thận, gan, thần kinh, tiêu hoá; chưa chữa khỏi nhưng có điều trị giúp đỡ triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mệt hoặc yếu, sụt cân không rõ lý do, khó thở, phù chân, bầm quanh mắt; tuỳ cơ quan: hồi hộp, đau ngực, rối loạn tiêu hoá, nước tiểu sủi bọt, tê bì tay chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Có nhiều loại: liên quan tuỷ xương (đôi khi kèm đa u tuỷ), do bệnh viêm kéo dài (viêm khớp dạng thấp, Crohn) hoặc nhiễm trùng như lao, do di truyền, do tuổi cao (thường nam trên 75), hoặc sau lọc máu lâu năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc giảm triệu chứng hoặc giảm tạo amyloid, điều trị bệnh nền, lọc máu hoặc ghép tạng khi tổn thương; một số loại cần hoá trị, ghép tế bào gốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mệt, sụt cân, phù, khó thở kéo dài không rõ lý do → đi khám vì nhiều bệnh có biểu hiện tương tự.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-teo-da-he-thong": {
+    "addSources": [
+      {
+        "title": "Multiple system atrophy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/multiple-system-atrophy/"
+      }
+    ],
+    "about": [
+      [
+        "Teo đa hệ thống (MSA) là bệnh hiếm, tế bào thần kinh trong não bị mất dần, ảnh hưởng kiểm soát cơ và vận động; thường bắt đầu sau 50 tuổi; chưa chữa khỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Rối loạn tiểu tiện, chóng mặt hoặc ngất khi đứng dậy, rối loạn cương, cử động chậm, vụng về, mất vững, nói ngọng, cứng cơ; có thể khó ngủ, thở ồn, khó nuốt, táo bón, cười khóc không kiểm soát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không có cách chặn bệnh; có thể làm giảm tuổi thọ, đa số dần cần người giúp sinh hoạt; giai đoạn đầu dễ nhầm với Parkinson.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đội chăm sóc giúp kiểm soát triệu chứng: thuốc cho giấc ngủ, chóng mặt; ngôn ngữ trị liệu cho nuốt và giao tiếp; vật lý trị liệu, hoạt động trị liệu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Hay chóng mặt khi đứng, rối loạn tiểu tiện kèm đi đứng chậm, mất vững → đi khám chuyên khoa thần kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chung-mat-ngon-ngu": {
+    "addSources": [
+      {
+        "title": "Aphasia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/aphasia/"
+      }
+    ],
+    "about": [
+      [
+        "Chứng mất ngôn ngữ làm khó giao tiếp: nói, hiểu, đọc, viết; chưa có cách chữa khỏi nhưng nhiều người khá lên khi điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó tìm từ, nói câu ngắn hoặc không trọn, dùng nhầm hoặc tự đặt từ, khó hiểu lời nói, khó đọc viết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất do đột quỵ; ngoài ra chấn thương đầu nặng, u não, chảy máu hoặc nhiễm trùng não, bệnh tiến triển như sa sút trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Sau đột quỵ, chấn thương, u não đa số khá lên, nhất là vài tháng đầu; với bệnh tiến triển thì thường nặng dần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị chính là ngôn ngữ trị liệu (ghép từ, xếp từ, vần, cử chỉ, thiết bị hỗ trợ), có gia đình cùng tham gia.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột méo mặt, yếu hoặc tê tay, một bên người, khó nói, mất thị lực → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chung-dinh-lien-khop-so-som": {
+    "addSources": [
+      {
+        "title": "Craniosynostosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/craniosynostosis/"
+      }
+    ],
+    "about": [
+      [
+        "Dính liền khớp sọ sớm là bệnh hiếm, hộp sọ của bé phát triển không bình thường khiến đầu có hình dạng lạ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đầu dài hẹp, trán nhọn hoặc hình tam giác, một bên đầu dẹt hoặc phồng; thóp đóng trước 1 tuổi; hiếm khi kèm khó khăn học tập, giảm thị lực, thính lực, khó thở, vấn đề răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thể phức tạp do bệnh di truyền nền.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Một số chỉ cần theo dõi; thường mổ tạo hình lại phần sọ dưới gây mê; đôi khi nội soi rồi đội mũ định hình; có thể cần kiểm tra thính lực, thị lực, ngôn ngữ trị liệu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Lo về hình dạng hoặc kích thước đầu của bé, hoặc bé có vấn đề nhìn, nghe, chậm nói, khó thở bằng miệng → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
