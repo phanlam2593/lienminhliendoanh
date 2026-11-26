@@ -7,30 +7,32 @@
  ],
  "about": [
   {
-   "text": "**Ung thư mô mỡ** — nhóm bệnh: ung thư, da - tóc - móng.",
+   "text": "Ung thư mô mỡ thuộc nhóm sarcoma mô mềm — ung thư ở các mô nâng đỡ như mỡ, cơ, gân, mạch máu.",
    "src": [
+    1,
     0
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: phân có máu, nôn ra máu, chuột rút, đau ngực, táo bón, khó thở, khối u, sưng.",
+   "text": "Có thể có cục hoặc chỗ sưng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khi lớn lên có thể chèn ép gây đau hoặc khó thở.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: gen đột biến.",
+   "text": "Nguy cơ cao hơn nếu từng xạ trị, tiếp xúc một số hoá chất, hoặc có bệnh di truyền.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): gia đình có người mắc bệnh, xạ trị.",
-   "src": [
+    1,
     0
    ]
   }
@@ -38,18 +40,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chẩn đoán bằng sinh thiết; điều trị gồm mổ, xạ trị, hoá trị hoặc phối hợp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có cục mềm lớn dần hoặc chỗ sưng không rõ lý do → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +62,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-mo-mo.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Soft Tissue Sarcoma",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/softtissuesarcoma.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

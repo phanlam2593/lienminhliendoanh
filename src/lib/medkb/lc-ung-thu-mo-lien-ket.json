@@ -7,43 +7,61 @@
  ],
  "about": [
   {
-   "text": "**Ung thư mô liên kết** — nhóm bệnh: ung thư, tứ chi, da.",
+   "text": "Ung thư mô liên kết (sarcoma mô mềm) là ung thư ở các mô nâng đỡ như cơ, gân, mỡ, mạch máu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Bệnh không hay gặp; có nhiều loại, gọi theo mô nơi nó bắt đầu.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, đau lưng, rụng tóc, buồn nôn, mệt mỏi, khối u, nôn, phù.",
+   "text": "Có thể có cục hoặc chỗ sưng ở mô mềm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khi lớn lên có thể chèn dây thần kinh, cơ quan, gây đau hoặc khó thở.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): tiếp xúc với hóa chất, bức xạ, phù bạch huyết, tình trạng di truyền, asen, u nguyên bào võng mạc.",
+   "text": "Chưa rõ nguyên nhân; nguy cơ cao hơn nếu từng tiếp xúc một số hoá chất, từng xạ trị, hoặc có bệnh di truyền.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chẩn đoán bằng sinh thiết.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Điều trị gồm mổ cắt khối u, xạ trị, hoá trị hoặc phối hợp.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có cục hoặc chỗ sưng lớn dần, không đau hay đau → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +72,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-mo-lien-ket.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Soft Tissue Sarcoma",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/softtissuesarcoma.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

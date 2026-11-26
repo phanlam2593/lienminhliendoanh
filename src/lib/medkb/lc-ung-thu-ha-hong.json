@@ -7,24 +7,32 @@
  ],
  "about": [
   {
-   "text": "**Ung thư hạ họng** — nhóm bệnh: ung thư.",
+   "text": "Ung thư hạ họng là ung thư ở phần dưới của họng; thuộc nhóm ung thư đầu cổ.",
    "src": [
+    1,
     0
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: khàn tiếng, nổi hạch, sụt cân, khó thở, ngất.",
+   "text": "Khàn giọng hoặc đổi giọng, khó nuốt, có cục ở cổ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Vết loét ở họng không lành, có thể đau.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh chủ yếu gặp ở nam giới, người nghiện thuốc lá mạn tính, người nghiện rượu mạn tính, vệ sinh răng miệng kém, nghiện thuốc lá, nghiện rượu.",
+   "text": "Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ, dùng cả hai thì càng cao; nam giới hay gặp hơn.",
    "src": [
+    1,
     0
    ]
   }
@@ -32,18 +40,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khàn giọng, khó nuốt hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +62,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-ha-hong-383.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Head and Neck Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/headandneckcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

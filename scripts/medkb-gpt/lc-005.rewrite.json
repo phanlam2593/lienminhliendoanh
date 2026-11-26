@@ -1,0 +1,117 @@
+{
+  "_note": "26/11 — Vòng LC 3 (đợt 103–104): MedlinePlus livercancer, analcancer, headandneckcancer, colorectalcancer, softtissuesarcoma, leukemia — Claude đã mở kiểm.",
+  "lc-ung-thu-gan-nguyen-phat": {
+    "addSources": [{ "title": "Liver Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/livercancer.html" }],
+    "about": [["Ung thư gan nguyên phát là ung thư bắt đầu ngay tại gan.", ["+0"]]],
+    "signs": [
+      ["Có thể có cục hoặc đau ở bụng bên phải, vàng da.", ["+0"]],
+      ["Có người không có triệu chứng cho đến khi bệnh đã nặng.", ["+0"]]
+    ],
+    "causes": [["Yếu tố nguy cơ: uống nhiều rượu, viêm gan B hoặc C, xơ gan, bệnh ứ sắt, béo phì kèm tiểu đường.", ["+0"]]],
+    "care": [
+      ["Điều trị gồm phẫu thuật, xạ trị, hoá trị hoặc ghép gan.", ["+0"]],
+      ["Phòng ngừa: tiêm vắc-xin viêm gan B, bớt rượu bia, điều trị viêm gan.", [0, "+0"]]
+    ],
+    "doctor": [["Đau hoặc có cục ở bụng phải, vàng da, sụt cân không rõ lý do → đi khám; người viêm gan B, C, xơ gan nên khám định kỳ.", ["+0", 0]]]
+  },
+  "lc-ung-thu-gan-di-can": {
+    "addSources": [{ "title": "Liver Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/livercancer.html" }],
+    "about": [["Ung thư gan di căn là ung thư từ nơi khác trong cơ thể lan đến gan (khác với ung thư bắt đầu tại gan).", ["+0"]]],
+    "signs": [["Có thể đau hoặc có cục ở bụng phải, vàng da, mệt, chán ăn, sụt cân.", ["+0", 0]]],
+    "care": [["Điều trị tuỳ ung thư gốc và mức độ lan — do bác sĩ ung bướu quyết định.", [0]]],
+    "doctor": [["Người đang hoặc từng điều trị ung thư mà có đau bụng phải, vàng da → báo bác sĩ điều trị sớm.", ["+0"]]]
+  },
+  "lc-ung-thu-hau-mon": {
+    "addSources": [{ "title": "Anal Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/analcancer.html" }],
+    "about": [["Ung thư hậu môn là ung thư hình thành ở các mô của hậu môn.", ["+0"]]],
+    "signs": [
+      ["Chảy máu hậu môn, có cục gần hậu môn.", ["+0"]],
+      ["Đau hoặc cảm giác nặng, ngứa hoặc tiết dịch ở hậu môn; thay đổi thói quen đi ngoài.", ["+0"]]
+    ],
+    "causes": [
+      ["Phần lớn liên quan đến nhiễm virus HPV.", ["+0"]],
+      ["Dễ mắc hơn nếu nhiễm HIV, suy giảm miễn dịch hoặc hút thuốc.", ["+0"]]
+    ],
+    "care": [["Điều trị gồm xạ trị, hoá trị và phẫu thuật, tuỳ mức độ bệnh và sức khoẻ.", ["+0"]]],
+    "doctor": [["Chảy máu hậu môn, có cục hoặc đau kéo dài → đi khám sớm.", ["+0"]]]
+  },
+  "lc-ung-thu-ha-hong": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư hạ họng là ung thư ở phần dưới của họng; thuộc nhóm ung thư đầu cổ.", ["+0", 0]]],
+    "signs": [
+      ["Khàn giọng hoặc đổi giọng, khó nuốt, có cục ở cổ.", ["+0"]],
+      ["Vết loét ở họng không lành, có thể đau.", ["+0"]]
+    ],
+    "causes": [["Hút thuốc lá hoặc uống nhiều rượu làm tăng nguy cơ, dùng cả hai thì càng cao; nam giới hay gặp hơn.", ["+0", 0]]],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]]],
+    "doctor": [["Khàn giọng, khó nuốt hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.", ["+0"]]]
+  },
+  "lc-ung-thu-hau-hong": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư hầu họng là ung thư ở phần giữa của họng (gồm amidan, đáy lưỡi); thuộc nhóm ung thư đầu cổ.", ["+0", 0]]],
+    "signs": [
+      ["Vết loét ở miệng hoặc họng không lành, có thể đau.", ["+0"]],
+      ["Khó nuốt, đổi giọng, có cục ở cổ.", ["+0"]]
+    ],
+    "causes": [
+      ["Virus HPV liên quan đến ung thư amidan và đáy lưỡi.", ["+0"]],
+      ["Hút thuốc lá, uống nhiều rượu làm tăng nguy cơ.", ["+0"]]
+    ],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]]],
+    "doctor": [["Đau họng, khó nuốt hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.", ["+0"]]]
+  },
+  "lc-ung-thu-manh-trang": {
+    "addSources": [{ "title": "Colorectal Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/colorectalcancer.html" }],
+    "about": [["Ung thư manh tràng là ung thư ở manh tràng — đoạn đầu tiên của đại tràng; thuộc nhóm ung thư đại trực tràng.", ["+0", 0]]],
+    "signs": [
+      ["Có thể không có triệu chứng, nhất là lúc đầu.", ["+0"]],
+      ["Khi có: thay đổi thói quen đi ngoài, máu trong phân, sụt cân không rõ lý do.", ["+0"]]
+    ],
+    "causes": [["Tuổi càng cao nguy cơ càng tăng; ngoài ra tiền sử bản thân / gia đình, hút thuốc, uống nhiều rượu, béo phì, viêm ruột lâu năm.", ["+0"]]],
+    "care": [
+      ["Tầm soát thường từ 45 đến ít nhất 75 tuổi, bằng xét nghiệm phân hoặc nội soi.", ["+0"]],
+      ["Điều trị tuỳ tuổi, sức khoẻ và mức độ: phẫu thuật, hoá trị, xạ trị, thuốc nhắm trúng đích.", ["+0"]]
+    ],
+    "doctor": [["Máu trong phân, đi ngoài thay đổi kéo dài, sụt cân không rõ lý do → đi khám.", ["+0"]]]
+  },
+  "lc-ung-thu-mo-lien-ket": {
+    "addSources": [{ "title": "Soft Tissue Sarcoma", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/softtissuesarcoma.html" }],
+    "about": [
+      ["Ung thư mô liên kết (sarcoma mô mềm) là ung thư ở các mô nâng đỡ như cơ, gân, mỡ, mạch máu.", ["+0"]],
+      ["Bệnh không hay gặp; có nhiều loại, gọi theo mô nơi nó bắt đầu.", ["+0"]]
+    ],
+    "signs": [
+      ["Có thể có cục hoặc chỗ sưng ở mô mềm.", ["+0"]],
+      ["Khi lớn lên có thể chèn dây thần kinh, cơ quan, gây đau hoặc khó thở.", ["+0"]]
+    ],
+    "causes": [["Chưa rõ nguyên nhân; nguy cơ cao hơn nếu từng tiếp xúc một số hoá chất, từng xạ trị, hoặc có bệnh di truyền.", ["+0"]]],
+    "care": [
+      ["Chẩn đoán bằng sinh thiết.", ["+0"]],
+      ["Điều trị gồm mổ cắt khối u, xạ trị, hoá trị hoặc phối hợp.", ["+0"]]
+    ],
+    "doctor": [["Có cục hoặc chỗ sưng lớn dần, không đau hay đau → đi khám.", ["+0"]]]
+  },
+  "lc-ung-thu-mo-mo": {
+    "addSources": [{ "title": "Soft Tissue Sarcoma", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/softtissuesarcoma.html" }],
+    "about": [["Ung thư mô mỡ thuộc nhóm sarcoma mô mềm — ung thư ở các mô nâng đỡ như mỡ, cơ, gân, mạch máu.", ["+0", 0]]],
+    "signs": [
+      ["Có thể có cục hoặc chỗ sưng.", ["+0"]],
+      ["Khi lớn lên có thể chèn ép gây đau hoặc khó thở.", ["+0"]]
+    ],
+    "causes": [["Nguy cơ cao hơn nếu từng xạ trị, tiếp xúc một số hoá chất, hoặc có bệnh di truyền.", ["+0", 0]]],
+    "care": [["Chẩn đoán bằng sinh thiết; điều trị gồm mổ, xạ trị, hoá trị hoặc phối hợp.", ["+0"]]],
+    "doctor": [["Có cục mềm lớn dần hoặc chỗ sưng không rõ lý do → đi khám.", ["+0"]]]
+  },
+  "lc-ung-thu-mau-cap-tinh": {
+    "addSources": [{ "title": "Leukemia", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/leukemia.html" }],
+    "about": [
+      ["Ung thư máu (bệnh bạch cầu) là ung thư của tế bào máu, bắt đầu ở mô tạo máu như tuỷ xương.", ["+0"]],
+      ["Dạng cấp tính tiến triển nhanh và thường nặng lên nhanh nếu không điều trị.", ["+0"]],
+      ["Hai dạng cấp chính: bạch cầu cấp dòng lympho (ALL) và dòng tuỷ (AML).", ["+0"]]
+    ],
+    "signs": [["Mệt, sốt hoặc đổ mồ hôi đêm, dễ bầm tím hoặc chảy máu, sụt cân hoặc chán ăn.", ["+0"]]],
+    "causes": [["Càng lớn tuổi nguy cơ càng tăng; nguyên nhân gây biến đổi gen chưa rõ.", ["+0"]]],
+    "care": [["Điều trị tuỳ loại: hoá trị, xạ trị, hoá trị kèm ghép tế bào gốc, thuốc nhắm trúng đích.", ["+0"]]],
+    "doctor": [["Mệt kéo dài, sốt không rõ lý do, dễ bầm tím chảy máu → đi khám, xét nghiệm máu.", ["+0"]]]
+  }
+}
