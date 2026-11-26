@@ -1,0 +1,129 @@
+{
+  "_note": "26/11 — Vòng LC 4 (đợt 101–103): MedlinePlus pituitarytumors, neurofibromatosis, thymuscancer, braintumors, headandneckcancer, salivaryglandcancer, bladdercancer; NHS phaeochromocytoma; Cleveland Clinic cardiac tumor — Claude đã mở kiểm.",
+  "lc-u-tuyen-yen": {
+    "addSources": [{ "title": "Pituitary Tumors", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/pituitarytumors.html" }],
+    "about": [
+      ["Tuyến yên là tuyến tiết hormone ảnh hưởng đến tăng trưởng và hoạt động của các tuyến khác.", ["+0"]],
+      ["U tuyến yên khá hay gặp, nhưng thường không gây vấn đề sức khoẻ, và thường chữa được.", ["+0"]]
+    ],
+    "signs": [
+      ["Đau đầu, giảm thị lực, buồn nôn và nôn.", ["+0"]],
+      ["U tiết quá nhiều hormone có thể gây thêm các rối loạn khác.", ["+0"]]
+    ],
+    "care": [["Thường mổ lấy u; ngoài ra có thuốc, xạ trị, hoá trị.", ["+0"]]],
+    "doctor": [["Đau đầu kéo dài kèm nhìn mờ, thu hẹp tầm nhìn → đi khám.", ["+0"]]]
+  },
+  "lc-u-xo-than-kinh": {
+    "addSources": [{ "title": "Neurofibromatosis", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/neurofibromatosis.html" }],
+    "about": [
+      ["U xơ thần kinh (bệnh neurofibromatosis) là rối loạn di truyền của hệ thần kinh, làm mọc u trên dây thần kinh.", ["+0"]],
+      ["U thường lành tính, đôi khi thành ung thư.", ["+0"]]
+    ],
+    "signs": [
+      ["Loại 1 (NF1): thay đổi trên da và biến dạng xương.", ["+0"]],
+      ["Loại 2 (NF2): nghe kém, ù tai, mất thăng bằng.", ["+0"]],
+      ["Schwannomatosis (hiếm nhất): đau dữ dội.", ["+0"]]
+    ],
+    "causes": [["Có thể di truyền từ cha mẹ, hoặc do đột biến gen mới; người bệnh có thể truyền cho con.", ["+0"]]],
+    "course": [["Chưa có cách chữa khỏi, nhưng điều trị giúp kiểm soát triệu chứng.", ["+0"]]],
+    "care": [["Tuỳ loại và mức độ: mổ lấy u, xạ trị, dùng thuốc.", ["+0"]]],
+    "doctor": [["Có u mọc dưới da, nghe kém, ù tai hoặc mất thăng bằng → đi khám; gia đình có người bệnh nên được tư vấn di truyền.", ["+0"]]]
+  },
+  "lc-u-tuy-thuong-than": {
+    "addSources": [{ "title": "Phaeochromocytoma", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/phaeochromocytoma/" }],
+    "about": [
+      ["U tuỷ thượng thận (phaeochromocytoma) là khối u hiếm ở tuyến thượng thận, nằm trên thận; chủ yếu gặp ở người lớn.", ["+0"]],
+      ["Phần lớn không lan sang nơi khác, nhưng khoảng 1/10 có lan.", ["+0"]]
+    ],
+    "signs": [
+      ["Thường thành từng cơn đột ngột, kéo dài vài phút đến một giờ.", ["+0"]],
+      ["Đau đầu, vã mồ hôi nhiều, tim đập mạnh, huyết áp cao, cảm giác lo âu; có người không có triệu chứng.", ["+0"]]
+    ],
+    "causes": [["Nhiều ca không rõ nguyên nhân; tới 1/3 do bệnh di truyền (như von Hippel-Lindau, u xơ thần kinh loại 1) — có thể được xét nghiệm gen.", ["+0"]]],
+    "care": [
+      ["Phần lớn cần mổ lấy u; trước mổ dùng thuốc kiểm soát huyết áp và nhịp tim.", ["+0"]],
+      ["Sau mổ cần tái khám định kỳ để phát hiện sớm nếu tái phát.", ["+0"]]
+    ],
+    "doctor": [
+      ["Hay có cơn đau đầu, vã mồ hôi, tim đập mạnh kèm huyết áp cao → đi khám.", ["+0"]],
+      ["Đã điều trị mà triệu chứng quay lại → báo bác sĩ ngay.", ["+0"]]
+    ]
+  },
+  "lc-u-tuyen-uc": {
+    "addSources": [{ "title": "Thymus Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/thymuscancer.html" }],
+    "about": [
+      ["Tuyến ức là cơ quan nhỏ ở phần trên ngực, giúp tạo bạch cầu chống nhiễm trùng.", ["+0"]],
+      ["Ung thư tuyến ức (u tuyến ức) hiếm gặp.", ["+0"]]
+    ],
+    "signs": [["Có người không có triệu chứng; có người ho dai dẳng, đau ngực hoặc khó thở.", ["+0"]]],
+    "causes": [["Dễ mắc hơn nếu có bệnh khác như nhược cơ, lupus hoặc viêm khớp dạng thấp.", ["+0"]]],
+    "care": [["Điều trị thường gặp nhất là mổ lấy u; ngoài ra xạ trị, hoá trị, liệu pháp hormone.", ["+0"]]],
+    "doctor": [["Ho kéo dài, đau ngực hoặc khó thở không rõ lý do → đi khám.", ["+0"]]]
+  },
+  "lc-u-trong-tim": {
+    "addSources": [{ "title": "Cardiac Tumor", "publisher": "Cleveland Clinic (Hoa Kỳ)", "url": "https://my.clevelandclinic.org/health/diseases/22914-cardiac-tumor" }],
+    "about": [
+      ["U trong tim là khối u mọc trong tim; có thể lành tính hoặc ác tính.", ["+0"]],
+      ["Khoảng 85% u tim nguyên phát là lành tính; có u lan từ nơi khác đến tim.", ["+0"]]
+    ],
+    "signs": [["Có người không có hoặc rất ít triệu chứng; triệu chứng tuỳ loại và vị trí u.", ["+0"]]],
+    "care": [["Siêu âm tim giúp phát hiện u; mổ cắt u là cách điều trị đầu tiên cho nhiều u lành.", ["+0"]]],
+    "doctor": [["Khó thở, hồi hộp, đau ngực hoặc ngất không rõ lý do → đi khám tim mạch.", ["+0", 0]]]
+  },
+  "lc-u-tuyen-nuoc-bot-mang-tai": {
+    "addSources": [{ "title": "Salivary Gland Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/salivaryglandcancer.html" }],
+    "about": [["U tuyến nước bọt mang tai là khối u ở tuyến nước bọt lớn nằm trước tai; ung thư tuyến nước bọt hiếm gặp.", ["+0", 0]]],
+    "signs": [
+      ["Có thể không có triệu chứng, hoặc thấy cục ở trước tai, má, góc hàm.", ["+0"]],
+      ["Tê, yếu hoặc đau ở mặt; khó há miệng.", ["+0"]]
+    ],
+    "care": [["Bác sĩ khám, chụp chiếu và sinh thiết; điều trị có thể gồm mổ, xạ trị, hoá trị.", ["+0"]]],
+    "doctor": [["Có cục trước tai hoặc ở má, nhất là kèm tê yếu mặt → đi khám sớm.", ["+0"]]]
+  },
+  "lc-ung-thu-amidan": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư amidan thuộc nhóm ung thư đầu cổ.", ["+0"]]],
+    "signs": [
+      ["Vết loét ở họng không lành, có thể đau.", ["+0"]],
+      ["Khó nuốt, đổi giọng, có cục ở cổ.", ["+0"]]
+    ],
+    "causes": [
+      ["Virus HPV liên quan đến ung thư amidan và đáy lưỡi.", ["+0"]],
+      ["Hút thuốc lá, uống nhiều rượu làm tăng nguy cơ.", ["+0"]]
+    ],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích; nhiều khi phải phối hợp.", ["+0"]]],
+    "doctor": [["Đau họng một bên, nuốt vướng hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.", ["+0"]]]
+  },
+  "lc-ung-thu-amidan-khau-cai": {
+    "addSources": [{ "title": "Head and Neck Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/headandneckcancer.html" }],
+    "about": [["Ung thư amidan khẩu cái là ung thư ở amidan hai bên họng; thuộc nhóm ung thư đầu cổ.", ["+0", 0]]],
+    "signs": [["Vết loét ở họng không lành, khó nuốt, đổi giọng, có cục ở cổ.", ["+0"]]],
+    "causes": [["Virus HPV liên quan đến ung thư amidan; hút thuốc lá, uống nhiều rượu làm tăng nguy cơ.", ["+0"]]],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị, miễn dịch hoặc nhắm trúng đích.", ["+0"]]],
+    "doctor": [["Đau họng, nuốt vướng hoặc có cục ở cổ kéo dài → đi khám tai mũi họng.", ["+0"]]]
+  },
+  "lc-ung-thu-bieu-mo-duong-nieu": {
+    "addSources": [{ "title": "Bladder Cancer", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/bladdercancer.html" }],
+    "about": [["Ung thư biểu mô đường niệu là ung thư ở lớp lót đường tiết niệu, hay gặp nhất là ở bàng quang.", ["+0", 0]]],
+    "signs": [["Tiểu ra máu, buồn tiểu nhiều lần, đau khi tiểu, đau thắt lưng.", ["+0"]]],
+    "causes": [
+      ["Hút thuốc và tiếp xúc một số hoá chất ở nơi làm việc là yếu tố nguy cơ.", ["+0"]],
+      ["Người lớn tuổi, nam giới, gia đình có người mắc thì nguy cơ cao hơn.", ["+0"]]
+    ],
+    "care": [["Điều trị gồm phẫu thuật, xạ trị, hoá trị và liệu pháp sinh học.", ["+0"]]],
+    "doctor": [["Tiểu ra máu, kể cả chỉ một lần → đi khám.", ["+0"]]]
+  },
+  "lc-u-sao-bao": {
+    "addSources": [{ "title": "Brain Tumors", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/braintumors.html" }],
+    "about": [
+      ["U sao bào là một loại u não — khối tế bào bất thường mọc trong mô não.", ["+0", 0]],
+      ["U não có thể lành tính hoặc ác tính (tế bào ung thư lớn nhanh).", ["+0"]]
+    ],
+    "signs": [
+      ["Đau đầu (hay vào buổi sáng), buồn nôn, nôn, co giật.", ["+0"]],
+      ["Thay đổi lời nói, thính lực, thị lực; khó giữ thăng bằng; giảm trí nhớ; đổi tính tình.", ["+0"]]
+    ],
+    "care": [["Điều trị gồm theo dõi, phẫu thuật, xạ trị, hoá trị, thuốc nhắm trúng đích; nhiều người phối hợp nhiều cách.", ["+0"]]],
+    "doctor": [["Đau đầu mới kèm nôn, yếu tay chân, nói khó hoặc co giật → đi khám ngay.", ["+0"]]]
+  }
+}

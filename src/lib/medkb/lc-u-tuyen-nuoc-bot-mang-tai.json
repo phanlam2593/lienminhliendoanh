@@ -7,17 +7,24 @@
  ],
  "about": [
   {
-   "text": "**U tuyến nước bọt mang tai** — nhóm bệnh: ung thư, tai - mũi - họng, đầu.",
+   "text": "U tuyến nước bọt mang tai là khối u ở tuyến nước bọt lớn nằm trước tai; ung thư tuyến nước bọt hiếm gặp.",
    "src": [
+    1,
     0
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi, chảy máu, nổi hạch, yếu cơ, khối u, u cục, loét.",
+   "text": "Có thể không có triệu chứng, hoặc thấy cục ở trước tai, má, góc hàm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tê, yếu hoặc đau ở mặt; khó há miệng.",
+   "src": [
+    1
    ]
   }
  ],
@@ -38,18 +45,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bác sĩ khám, chụp chiếu và sinh thiết; điều trị có thể gồm mổ, xạ trị, hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có cục trước tai hoặc ở má, nhất là kèm tê yếu mặt → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-tuyen-nuoc-bot-mang-tai.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Salivary Gland Cancer",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/salivaryglandcancer.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

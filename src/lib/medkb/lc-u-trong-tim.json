@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**U trong tim** — nhóm bệnh: tim mạch, ung thư.",
+   "text": "U trong tim là khối u mọc trong tim; có thể lành tính hoặc ác tính.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khoảng 85% u tim nguyên phát là lành tính; có u lan từ nơi khác đến tim.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, đổ mồ hôi, tức ngực, đau khớp, sụt cân, mệt mỏi, khó thở, chán ăn, ớn lạnh, tím tái.",
+   "text": "Có người không có hoặc rất ít triệu chứng; triệu chứng tuỳ loại và vị trí u.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -32,23 +38,18 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: từ bỏ thuốc lá, có lối sống lành mạnh.",
+   "text": "Siêu âm tim giúp phát hiện u; mổ cắt u là cách điều trị đầu tiên cho nhiều u lành.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó thở, hồi hộp, đau ngực hoặc ngất không rõ lý do → đi khám tim mạch.",
    "src": [
+    1,
     0
    ]
   }
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-trong-tim-374.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cardiac Tumor",
+   "publisher": "Cleveland Clinic (Hoa Kỳ)",
+   "url": "https://my.clevelandclinic.org/health/diseases/22914-cardiac-tumor",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,43 +7,68 @@
  ],
  "about": [
   {
-   "text": "**U xơ thần kinh** — nhóm bệnh: ung thư, thần kinh - tinh thần.",
+   "text": "U xơ thần kinh (bệnh neurofibromatosis) là rối loạn di truyền của hệ thần kinh, làm mọc u trên dây thần kinh.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "U thường lành tính, đôi khi thành ung thư.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co giật, đau đầu, khối u, sưng, vảy, nám, phù.",
+   "text": "Loại 1 (NF1): thay đổi trên da và biến dạng xương.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Loại 2 (NF2): nghe kém, ù tai, mất thăng bằng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Schwannomatosis (hiếm nhất): đau dữ dội.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: U xơ thần kinh loại 1, U xơ thần kinh loại 2, bệnh Schwannomatosis.",
+   "text": "Có thể di truyền từ cha mẹ, hoặc do đột biến gen mới; người bệnh có thể truyền cho con.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Chưa có cách chữa khỏi, nhưng điều trị giúp kiểm soát triệu chứng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ loại và mức độ: mổ lấy u, xạ trị, dùng thuốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có u mọc dưới da, nghe kém, ù tai hoặc mất thăng bằng → đi khám; gia đình có người bệnh nên được tư vấn di truyền.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +79,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-xo-than-kinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Neurofibromatosis",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/neurofibromatosis.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

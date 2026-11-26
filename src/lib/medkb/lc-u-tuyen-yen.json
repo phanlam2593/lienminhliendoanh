@@ -7,17 +7,29 @@
  ],
  "about": [
   {
-   "text": "**U tuyến yên** — nhóm bệnh: ung thư, đầu.",
+   "text": "Tuyến yên là tuyến tiết hormone ảnh hưởng đến tăng trưởng và hoạt động của các tuyến khác.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "U tuyến yên khá hay gặp, nhưng thường không gây vấn đề sức khoẻ, và thường chữa được.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn cương, xuất huyết, chảy máu, đau bụng, nhìn đôi, buồn nôn, táo bón, bầm tím, mệt mỏi, đau đầu.",
+   "text": "Đau đầu, giảm thị lực, buồn nôn và nôn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "U tiết quá nhiều hormone có thể gây thêm các rối loạn khác.",
+   "src": [
+    1
    ]
   }
  ],
@@ -32,18 +44,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường mổ lấy u; ngoài ra có thuốc, xạ trị, hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau đầu kéo dài kèm nhìn mờ, thu hẹp tầm nhìn → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/u-tuyen-yen.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Pituitary Tumors",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/pituitarytumors.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
