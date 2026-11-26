@@ -1,0 +1,845 @@
+{
+  "_note": "26/11 — Vòng LC 24 (đợt 57–60): NHS conjunctivitis, ulcerative-colitis, labyrinthitis, endocarditis, encephalitis, mouth-ulcers, meningitis, cellulitis — Claude đã mở kiểm.",
+  "lc-viem-ket-mac-mat": {
+    "addSources": [
+      {
+        "title": "Conjunctivitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/conjunctivitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm kết mạc (đau mắt đỏ) thường ở cả hai mắt, do nhiễm trùng hoặc dị ứng; thể dị ứng (như do dị ứng phấn hoa) không lây, thể có ghèn mủ thì lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mắt đỏ, rát hoặc cộm, ngứa, chảy nước mắt; có thể có ghèn mủ dính lông mi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng hai tuần không cần điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Lau ghèn nhẹ bằng bông với nước đun sôi để nguội, mỗi mắt một miếng bông mới; chườm khăn mát; không đeo kính áp tròng đến khi khỏi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay thường xuyên, giặt vỏ gối, khăn mặt bằng nước nóng, không dùng chung khăn gối, không dụi mắt. Kháng sinh chỉ có tác dụng với nhiễm khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 7 ngày, trẻ nhỏ mắt đỏ có ghèn, người đeo kính áp tròng có triệu chứng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau mắt, sợ ánh sáng, thay đổi thị lực, mắt rất đỏ, hoặc trẻ dưới 30 ngày tuổi mắt đỏ có ghèn → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-ket-mac-di-ung": {
+    "addSources": [
+      {
+        "title": "Conjunctivitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/conjunctivitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm kết mạc (đau mắt đỏ) thường ở cả hai mắt, do nhiễm trùng hoặc dị ứng; thể dị ứng (như do dị ứng phấn hoa) không lây, thể có ghèn mủ thì lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mắt đỏ, rát hoặc cộm, ngứa, chảy nước mắt; có thể có ghèn mủ dính lông mi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng hai tuần không cần điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Lau ghèn nhẹ bằng bông với nước đun sôi để nguội, mỗi mắt một miếng bông mới; chườm khăn mát; không đeo kính áp tròng đến khi khỏi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay thường xuyên, giặt vỏ gối, khăn mặt bằng nước nóng, không dùng chung khăn gối, không dụi mắt. Kháng sinh chỉ có tác dụng với nhiễm khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 7 ngày, trẻ nhỏ mắt đỏ có ghèn, người đeo kính áp tròng có triệu chứng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau mắt, sợ ánh sáng, thay đổi thị lực, mắt rất đỏ, hoặc trẻ dưới 30 ngày tuổi mắt đỏ có ghèn → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-ket-mac-mat-o-tre-em": {
+    "addSources": [
+      {
+        "title": "Conjunctivitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/conjunctivitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm kết mạc (đau mắt đỏ) thường ở cả hai mắt, do nhiễm trùng hoặc dị ứng; thể dị ứng (như do dị ứng phấn hoa) không lây, thể có ghèn mủ thì lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mắt đỏ, rát hoặc cộm, ngứa, chảy nước mắt; có thể có ghèn mủ dính lông mi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng hai tuần không cần điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Lau ghèn nhẹ bằng bông với nước đun sôi để nguội, mỗi mắt một miếng bông mới; chườm khăn mát; không đeo kính áp tròng đến khi khỏi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay thường xuyên, giặt vỏ gối, khăn mặt bằng nước nóng, không dùng chung khăn gối, không dụi mắt. Kháng sinh chỉ có tác dụng với nhiễm khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 7 ngày, trẻ nhỏ mắt đỏ có ghèn, người đeo kính áp tròng có triệu chứng → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau mắt, sợ ánh sáng, thay đổi thị lực, mắt rất đỏ, hoặc trẻ dưới 30 ngày tuổi mắt đỏ có ghèn → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-loet-dai-truc-trang-chay-mau": {
+    "addSources": [
+      {
+        "title": "Ulcerative colitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/ulcerative-colitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm loét đại trực tràng chảy máu là bệnh kéo dài, các đoạn ruột già và trực tràng bị viêm; điều trị giúp giảm triệu chứng và bớt đợt bùng phát.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy (có thể lẫn máu, nhầy, mủ), đau bụng dưới bên trái, mót đi ngoài gấp hoặc nhiều lần, chảy máu hậu môn, chướng bụng; có người táo bón, mệt, chán ăn, sụt cân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân, được cho là tự miễn; nguy cơ cao hơn khi có người thân bị.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đợt bùng phát có thể do căng thẳng, nhiễm trùng, đổi thuốc, thuốc kháng viêm như ibuprofen, aspirin, một số thức ăn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc giảm viêm theo bác sĩ chuyên khoa tiêu hoá; có thể mổ khi bệnh ảnh hưởng nhiều, không đáp ứng thuốc hoặc cấp cứu nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình có triệu chứng → đi khám; tiêu chảy rất nặng hoặc ra máu, sốt, tim đập nhanh, không đi ngoài hay xì hơi được → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội, chảy máu hậu môn không ngừng, ra cục máu đông lớn, nôn ra máu → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-me-dao-tai": {
+    "addSources": [
+      {
+        "title": "Labyrinthitis and vestibular neuritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/labyrinthitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm mê đạo tai là nhiễm trùng tai trong ảnh hưởng thăng bằng, thường tự khỏi trong vài tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Chóng mặt hoặc cảm giác quay cuồng, đứng đi không vững, buồn nôn, nôn; nghe kém, ù tai; có thể bắt đầu đột ngột.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do virus như cảm lạnh, cúm; kháng sinh thường không có tác dụng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Triệu chứng hay đỡ sau vài ngày; thăng bằng thường hồi phục trong 2–6 tuần, có người lâu hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nằm yên trong phòng tối, yên tĩnh khi chóng mặt nhiều; nôn thì nhấp nước từng ngụm; ngủ đủ; tập đi lại sớm khi có thể, nhìn vào một điểm cố định.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không lái xe, đạp xe, dùng máy móc khi còn chóng mặt; tránh rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ hoặc nặng hơn sau vài ngày → đi khám; đột ngột nghe kém một bên tai → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-noi-tam-mac": {
+    "addSources": [
+      {
+        "title": "Endocarditis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/endocarditis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm nội tâm mạc là nhiễm trùng lớp lót bên trong tim; hiếm nhưng có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt, ớn lạnh, đau đầu, mệt, đau khớp hoặc cơ, đổ mồ hôi đêm, khó thở, chán ăn, sụt cân; có thể có đốm ở da, móng, cục đau ở đầu ngón; xuất hiện trong vài ngày hoặc từ từ trong nhiều tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn hoặc nấm vào máu qua miệng hoặc da rồi đến tim; hay gặp hơn ở nam và người trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao: bệnh van tim, van nhân tạo, máy tạo nhịp, một số bệnh tim bẩm sinh, từng bị viêm nội tâm mạc, tiêm chích ma tuý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Kháng sinh hoặc thuốc kháng nấm khoảng 4–6 tuần, thường bắt đầu truyền tĩnh mạch ở bệnh viện; khoảng một nửa cần mổ sửa hoặc thay van.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Người nguy cơ cao: chăm sóc răng lợi, khám răng định kỳ (hỏi bác sĩ trước khi làm thủ thuật răng), rửa và băng vết trầy, hỏi bác sĩ trước khi xỏ khuyên, xăm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên, nhất là người có bệnh van tim → đi khám ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Méo miệng, yếu hoặc tê tay, khó nói, mất thị lực (có thể là đột quỵ do biến chứng) → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-noi-tam-mac-nhiem-khuan-ban-cap": {
+    "addSources": [
+      {
+        "title": "Endocarditis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/endocarditis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm nội tâm mạc là nhiễm trùng lớp lót bên trong tim; hiếm nhưng có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt, ớn lạnh, đau đầu, mệt, đau khớp hoặc cơ, đổ mồ hôi đêm, khó thở, chán ăn, sụt cân; có thể có đốm ở da, móng, cục đau ở đầu ngón; xuất hiện trong vài ngày hoặc từ từ trong nhiều tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn hoặc nấm vào máu qua miệng hoặc da rồi đến tim; hay gặp hơn ở nam và người trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nguy cơ cao: bệnh van tim, van nhân tạo, máy tạo nhịp, một số bệnh tim bẩm sinh, từng bị viêm nội tâm mạc, tiêm chích ma tuý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Kháng sinh hoặc thuốc kháng nấm khoảng 4–6 tuần, thường bắt đầu truyền tĩnh mạch ở bệnh viện; khoảng một nửa cần mổ sửa hoặc thay van.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Người nguy cơ cao: chăm sóc răng lợi, khám răng định kỳ (hỏi bác sĩ trước khi làm thủ thuật răng), rửa và băng vết trầy, hỏi bác sĩ trước khi xỏ khuyên, xăm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên, nhất là người có bệnh van tim → đi khám ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Méo miệng, yếu hoặc tê tay, khó nói, mất thị lực (có thể là đột quỵ do biến chứng) → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-nao-cap-o-tre-em": {
+    "addSources": [
+      {
+        "title": "Encephalitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/encephalitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm não là tình trạng não bị viêm, ít gặp nhưng nặng, có thể đe doạ tính mạng và cần điều trị gấp trong bệnh viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ban đầu giống cúm: sốt, đau đầu; sau vài giờ đến vài tuần có thể lú lẫn, co giật, thay đổi tính cách, khó nói, yếu người, mất ý thức.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ nguyên nhân; hay do virus; hệ miễn dịch cũng có thể tấn công nhầm não (viêm não tự miễn); một số do muỗi, ve, động vật cắn như viêm não Nhật Bản, dại. Không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có người hồi phục hoàn toàn nhưng lâu; có người để lại giảm trí nhớ, co giật, thay đổi hành vi, mệt mỏi kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện tuỳ nguyên nhân: thuốc kháng virus, kháng sinh, kháng nấm, steroid, thuốc điều hoà miễn dịch, chống co giật, hỗ trợ thở; điều trị càng sớm càng tốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt, đau đầu kèm lú lẫn, co giật, thay đổi tính cách, yếu người hoặc lơ mơ → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-nao-tu-mien": {
+    "addSources": [
+      {
+        "title": "Encephalitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/encephalitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm não là tình trạng não bị viêm, ít gặp nhưng nặng, có thể đe doạ tính mạng và cần điều trị gấp trong bệnh viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ban đầu giống cúm: sốt, đau đầu; sau vài giờ đến vài tuần có thể lú lẫn, co giật, thay đổi tính cách, khó nói, yếu người, mất ý thức.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ nguyên nhân; hay do virus; hệ miễn dịch cũng có thể tấn công nhầm não (viêm não tự miễn); một số do muỗi, ve, động vật cắn như viêm não Nhật Bản, dại. Không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có người hồi phục hoàn toàn nhưng lâu; có người để lại giảm trí nhớ, co giật, thay đổi hành vi, mệt mỏi kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện tuỳ nguyên nhân: thuốc kháng virus, kháng sinh, kháng nấm, steroid, thuốc điều hoà miễn dịch, chống co giật, hỗ trợ thở; điều trị càng sớm càng tốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt, đau đầu kèm lú lẫn, co giật, thay đổi tính cách, yếu người hoặc lơ mơ → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-loet-niem-mac-mieng-luoi": {
+    "addSources": [
+      {
+        "title": "Mouth ulcers",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/mouth-ulcers/"
+      }
+    ],
+    "about": [
+      [
+        "Loét miệng thường tự lành trong 1–2 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Loét đơn lẻ hay do cắn vào má, răng sắc, răng giả hoặc trám cọ xát, bỏng do đồ nóng, nhạy cảm thức ăn, kem đánh răng mạnh, căng thẳng, mệt mỏi; ngoài ra thay đổi nội tiết, thiếu sắt, kẽm, axit folic, vitamin B, vitamin D, một số thuốc.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhiều vết loét cùng lúc có thể do tay chân miệng, bệnh Crohn, bệnh celiac, miễn dịch yếu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng bàn chải mềm, uống đồ mát bằng ống hút, ăn đồ mềm; tránh đồ cay, mặn, chua, giòn, đồ uống quá nóng; súc miệng nước muối ấm rồi nhổ ra; dược sĩ có thể tư vấn nước súc miệng, gel giảm đau.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Vết loét quá 3 tuần, khác những lần trước (to hơn, sát họng), chảy máu, đau và đỏ hơn, hoặc kèm loét chỗ khác, sưng đau khớp → đi khám; loét lâu không lành đôi khi là dấu hiệu ung thư miệng.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mo-te-bao-quanh-hoc-mat": {
+    "addSources": [
+      {
+        "title": "Cellulitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cellulitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm mô tế bào là nhiễm khuẩn lớp sâu của da; khi xảy ra quanh mắt (viêm tổ chức hốc mắt) thì rất nguy hiểm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da đau, nóng, sưng, thường đỏ; có thể phồng rộp; mệt như cúm, sưng hạch; lòng trắng mắt có thể đỏ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn vào lớp da sâu qua vết trầy, vết côn trùng cắn, da khô nứt (có khi rất nhỏ); không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh theo bác sĩ, uống hết liệu trình; ca nặng phải nằm viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sưng đỏ đau quanh mắt → khám gấp ngay; kèm sốt rất cao, tim đập nhanh, thở nhanh, chóng mặt, lú lẫn, da lạnh tái → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mang-nao-mo-cau-ac": {
+    "addSources": [
+      {
+        "title": "Meningitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/meningitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm màng não là nhiễm trùng lớp màng bao quanh não và tuỷ sống; có thể rất nặng, đe doạ tính mạng nếu không điều trị kịp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Xuất hiện đột ngột: sốt kèm tay chân lạnh, cứng cổ, đau khớp hoặc cơ, đau đầu dữ dội tăng dần, sợ ánh sáng, lú lẫn, lơ mơ, khó đánh thức, phát ban không mất khi ấn ly lên.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ nhỏ: bỏ bú, khóc thét, thóp phồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do vi khuẩn lây khi tiếp xúc gần như hôn, dùng chung ly; người mang mầm bệnh mà không ốm cũng có thể lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Viêm màng não do vi khuẩn phải điều trị trong bệnh viện, thường ít nhất một tuần, bằng kháng sinh và dịch truyền.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể để lại di chứng: mất thính lực, thị lực, co giật, rối loạn vận động, trí nhớ; có thể tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vắc xin là một trong những cách phòng hiệu quả nhất (vắc xin não mô cầu, phế cầu…).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nghi viêm màng não → gọi cấp cứu hoặc đến cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mang-nao-vo-khuan": {
+    "addSources": [
+      {
+        "title": "Meningitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/meningitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm màng não là nhiễm trùng lớp màng bao quanh não và tuỷ sống; viêm màng não do virus thường nhẹ hơn do vi khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Xuất hiện đột ngột: sốt kèm tay chân lạnh, cứng cổ, đau khớp hoặc cơ, đau đầu dữ dội tăng dần, sợ ánh sáng, lú lẫn, lơ mơ, phát ban không mất khi ấn ly lên.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ nhỏ: bỏ bú, khóc thét, thóp phồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Viêm màng não do virus thường tự đỡ trong 7–10 ngày, hay chăm sóc tại nhà với nghỉ ngơi và thuốc giảm đau; hiếm khi để lại di chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vắc xin phòng các nguyên nhân chính của viêm màng não do vi khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nghi viêm màng não (chưa phân biệt được virus hay vi khuẩn) → gọi cấp cứu hoặc đến cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-mang-nao-lympho-bao": {
+    "addSources": [
+      {
+        "title": "Meningitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/meningitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm màng não là nhiễm trùng lớp màng bao quanh não và tuỷ sống; viêm màng não do virus thường nhẹ hơn do vi khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Xuất hiện đột ngột: sốt kèm tay chân lạnh, cứng cổ, đau khớp hoặc cơ, đau đầu dữ dội tăng dần, sợ ánh sáng, lú lẫn, lơ mơ, phát ban không mất khi ấn ly lên.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở trẻ nhỏ: bỏ bú, khóc thét, thóp phồng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Viêm màng não do virus thường tự đỡ trong 7–10 ngày, hay chăm sóc tại nhà với nghỉ ngơi và thuốc giảm đau; hiếm khi để lại di chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vắc xin phòng các nguyên nhân chính của viêm màng não do vi khuẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nghi viêm màng não (chưa phân biệt được virus hay vi khuẩn) → gọi cấp cứu hoặc đến cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

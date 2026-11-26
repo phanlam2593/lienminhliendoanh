@@ -7,40 +7,53 @@
  ],
  "about": [
   {
-   "text": "**Viêm màng não mô cầu AC** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Viêm màng não là nhiễm trùng lớp màng bao quanh não và tuỷ sống; có thể rất nặng, đe doạ tính mạng nếu không điều trị kịp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sợ ánh sáng, xuất huyết, phát ban, buồn nôn, co giật, đau đầu, đau cổ, ngứa, nôn, nám.",
+   "text": "Xuất hiện đột ngột: sốt kèm tay chân lạnh, cứng cổ, đau khớp hoặc cơ, đau đầu dữ dội tăng dần, sợ ánh sáng, lú lẫn, lơ mơ, khó đánh thức, phát ban không mất khi ấn ly lên.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Ở trẻ nhỏ: bỏ bú, khóc thét, thóp phồng.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): HIV/AIDS, eculizumab.",
+   "text": "Do vi khuẩn lây khi tiếp xúc gần như hôn, dùng chung ly; người mang mầm bệnh mà không ốm cũng có thể lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
- "care": [
+ "course": [
   {
-   "text": "Sinh hoạt / phòng ngừa: vắc xin Menactra, vắc xin MenQuadfi.",
+   "text": "Viêm màng não do vi khuẩn phải điều trị trong bệnh viện, thường ít nhất một tuần, bằng kháng sinh và dịch truyền.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Có thể để lại di chứng: mất thính lực, thị lực, co giật, rối loạn vận động, trí nhớ; có thể tử vong.",
    "src": [
-    0
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Vắc xin là một trong những cách phòng hiệu quả nhất (vắc xin não mô cầu, phế cầu…).",
+   "src": [
+    1
    ]
   }
  ],
@@ -53,14 +66,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Nghi viêm màng não → gọi cấp cứu hoặc đến cấp cứu ngay, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm màng não mô cầu AC – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-mang-nao-mo-cau-ac.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Meningitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/meningitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

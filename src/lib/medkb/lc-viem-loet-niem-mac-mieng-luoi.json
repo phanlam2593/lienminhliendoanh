@@ -8,9 +8,9 @@
  ],
  "about": [
   {
-   "text": "**Viêm loét niêm mạc miệng, lưỡi** — nhóm bệnh: răng - hàm - mặt, đầu.",
+   "text": "Loét miệng thường tự lành trong 1–2 tuần.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -24,33 +24,33 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: căng thẳng, thiếu hụt vitamin và khoáng chất, thiếu ngủ, nhiễm virus, vi khuẩn hoặc nấm.",
+   "text": "Loét đơn lẻ hay do cắn vào má, răng sắc, răng giả hoặc trám cọ xát, bỏng do đồ nóng, nhạy cảm thức ăn, kem đánh răng mạnh, căng thẳng, mệt mỏi; ngoài ra thay đổi nội tiết, thiếu sắt, kẽm, axit folic, vitamin B, vitamin D, một số thuốc.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): dùng bàn chải có lông cứng, natri lauryl sulfat.",
+   "text": "Nhiều vết loét cùng lúc có thể do tay chân miệng, bệnh Crohn, bệnh celiac, miễn dịch yếu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Dùng bàn chải mềm, uống đồ mát bằng ống hút, ăn đồ mềm; tránh đồ cay, mặn, chua, giòn, đồ uống quá nóng; súc miệng nước muối ấm rồi nhổ ra; dược sĩ có thể tư vấn nước súc miệng, gel giảm đau.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Vết loét quá 3 tuần, khác những lần trước (to hơn, sát họng), chảy máu, đau và đỏ hơn, hoặc kèm loét chỗ khác, sưng đau khớp → đi khám; loét lâu không lành đôi khi là dấu hiệu ung thư miệng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-loet-niem-mac-mieng-luoi-346.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Mouth ulcers",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/mouth-ulcers/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

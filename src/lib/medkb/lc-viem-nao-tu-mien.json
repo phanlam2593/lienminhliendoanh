@@ -7,40 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Viêm não tự miễn** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Viêm não là tình trạng não bị viêm, ít gặp nhưng nặng, có thể đe doạ tính mạng và cần điều trị gấp trong bệnh viện.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: hoang tưởng, co giật, ảo giác, khối u, hôn mê, lo âu, nám, phù.",
+   "text": "Ban đầu giống cúm: sốt, đau đầu; sau vài giờ đến vài tuần có thể lú lẫn, co giật, thay đổi tính cách, khó nói, yếu người, mất ý thức.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: herpes simplex, ung thư.",
+   "text": "Thường không rõ nguyên nhân; hay do virus; hệ miễn dịch cũng có thể tấn công nhầm não (viêm não tự miễn); một số do muỗi, ve, động vật cắn như viêm não Nhật Bản, dại. Không lây từ người sang người.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): giới tính, tuổi tác, tiền căn gia đình, chủng tộc.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có người hồi phục hoàn toàn nhưng lâu; có người để lại giảm trí nhớ, co giật, thay đổi hành vi, mệt mỏi kéo dài.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị ở bệnh viện tuỳ nguyên nhân: thuốc kháng virus, kháng sinh, kháng nấm, steroid, thuốc điều hoà miễn dịch, chống co giật, hỗ trợ thở; điều trị càng sớm càng tốt.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -53,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt, đau đầu kèm lú lẫn, co giật, thay đổi tính cách, yếu người hoặc lơ mơ → gọi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm não tự miễn – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-nao-tu-mien.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Encephalitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/encephalitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

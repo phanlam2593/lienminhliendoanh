@@ -7,55 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Viêm mê đạo tai** — nhóm bệnh: tai - mũi - họng, đầu.",
+   "text": "Viêm mê đạo tai là nhiễm trùng tai trong ảnh hưởng thăng bằng, thường tự khỏi trong vài tuần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, buồn nôn, nhìn mờ, ù tai, nôn, phù, ho.",
+   "text": "Chóng mặt hoặc cảm giác quay cuồng, đứng đi không vững, buồn nôn, nôn; nghe kém, ù tai; có thể bắt đầu đột ngột.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: viêm mê đạo tai do virus, HIV/ Giang mai, rubella, nhiễm cytomegalovirus, viêm màng não, giang mai.",
+   "text": "Thường do virus như cảm lạnh, cúm; kháng sinh thường không có tác dụng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): dị ứng, stress, nhiễm virus gần đây, cholesteatoma, tiền sử phẫu thuật tai, viêm tai giữa.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Triệu chứng hay đỡ sau vài ngày; thăng bằng thường hồi phục trong 2–6 tuần, có người lâu hơn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: đắp khăn ấm lên tai, tránh xa caffeine, rượu, muối và thuốc lá.",
+   "text": "Nằm yên trong phòng tối, yên tĩnh khi chóng mặt nhiều; nôn thì nhấp nước từng ngụm; ngủ đủ; tập đi lại sớm khi có thể, nhìn vào một điểm cố định.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không lái xe, đạp xe, dùng máy móc khi còn chóng mặt; tránh rượu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Không đỡ hoặc nặng hơn sau vài ngày → đi khám; đột ngột nghe kém một bên tai → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-me-dao-tai.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Labyrinthitis and vestibular neuritis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/labyrinthitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
