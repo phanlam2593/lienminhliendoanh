@@ -13,7 +13,7 @@
  ],
  "about": [
   {
-   "text": "Mayo Clinic: hơi hồi hộp trước kỳ thi là bình thường và có thể giúp tập trung. Lo âu thi cử thì khác: lo lắng và nghi ngờ bản thân ảnh hưởng kết quả thi.",
+   "text": "Hơi hồi hộp trước kỳ thi là bình thường và có thể giúp tập trung. Lo âu thi cử thì khác: lo lắng và nghi ngờ bản thân ảnh hưởng kết quả thi.",
    "src": [
     2
    ]
@@ -27,7 +27,7 @@
  ],
  "signs": [
   {
-   "text": "NHS: lo nhiều, căng thẳng, đau đầu, đau bụng; ngủ kém, cáu gắt; ăn ít hoặc nhiều hơn thường lệ.",
+   "text": "Lo nhiều, căng thẳng, đau đầu, đau bụng; ngủ kém, cáu gắt; ăn ít hoặc nhiều hơn thường lệ.",
    "src": [
     0
    ]
@@ -100,7 +100,7 @@
  "diet": null,
  "doctor": [
   {
-   "text": "NHS: cần giúp đỡ nếu lo âu hoặc tâm trạng thấp nặng, kéo dài và ảnh hưởng sinh hoạt hằng ngày; bác sĩ gia đình là nơi liên hệ đầu tiên.",
+   "text": "Cần giúp đỡ nếu lo âu hoặc tâm trạng thấp nặng, kéo dài và ảnh hưởng sinh hoạt hằng ngày; bác sĩ gia đình là nơi liên hệ đầu tiên.",
    "src": [
     0
    ]

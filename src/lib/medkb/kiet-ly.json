@@ -92,7 +92,7 @@
           "gỏi"
         ],
         "verdict": "avoid",
-        "note": "NHS: ở nơi không có nước sạch, không ăn rau quả sống trừ khi tự rửa và chuẩn bị bằng nước đóng chai hoặc đun sôi.",
+        "note": "ở nơi không có nước sạch, không ăn rau quả sống trừ khi tự rửa và chuẩn bị bằng nước đóng chai hoặc đun sôi.",
         "src": [
           0
         ]
@@ -105,7 +105,7 @@
           "nước đá"
         ],
         "verdict": "avoid",
-        "note": "NHS: ở nơi không có nước sạch, không ăn kem và không dùng đá trong đồ uống.",
+        "note": "ở nơi không có nước sạch, không ăn kem và không dùng đá trong đồ uống.",
         "src": [
           0
         ]
@@ -118,7 +118,7 @@
           "dung dịch bù nước"
         ],
         "verdict": "good",
-        "note": "NHS: uống nhiều nước, chủ yếu là nước lọc; có thể dùng gói bù nước pha với nước.",
+        "note": "uống nhiều nước, chủ yếu là nước lọc; có thể dùng gói bù nước pha với nước.",
         "src": [
           0
         ]

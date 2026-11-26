@@ -85,7 +85,7 @@
           "bia"
         ],
         "verdict": "avoid",
-        "note": "NHS: để phòng cục máu đông khi đi đường dài, không uống rượu.",
+        "note": "để phòng cục máu đông khi đi đường dài, không uống rượu.",
         "src": [
           0
         ]
@@ -99,7 +99,7 @@
           "nước tăng lực"
         ],
         "verdict": "limit",
-        "note": "NHS: khi đi đường dài, không uống quá nhiều cà phê hay đồ uống chứa caffeine.",
+        "note": "khi đi đường dài, không uống quá nhiều cà phê hay đồ uống chứa caffeine.",
         "src": [
           0
         ]
@@ -111,7 +111,7 @@
           "uống nước"
         ],
         "verdict": "good",
-        "note": "NHS: uống nước đều đặn khi đi đường dài để phòng cục máu đông.",
+        "note": "uống nước đều đặn khi đi đường dài để phòng cục máu đông.",
         "src": [
           0
         ]

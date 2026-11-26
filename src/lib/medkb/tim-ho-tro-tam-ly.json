@@ -19,7 +19,7 @@
  "disambiguation": "“Bác sĩ tâm lý” ở đây Lomi hiểu là người làm chuyên môn sức khoẻ tâm thần nói chung (bác sĩ tâm thần, nhà tâm lý…).",
  "about": [
   {
-   "text": "MedlinePlus: nếu nghĩ mình có thể đang có vấn đề sức khoẻ tâm thần, hãy tìm trợ giúp — liệu pháp trò chuyện (tâm lý trị liệu) và/hoặc thuốc có thể điều trị các rối loạn tâm thần.",
+   "text": "Nếu nghĩ mình có thể đang có vấn đề sức khoẻ tâm thần, hãy tìm trợ giúp — liệu pháp trò chuyện (tâm lý trị liệu) và/hoặc thuốc có thể điều trị các rối loạn tâm thần.",
    "src": [
     0
    ]
@@ -71,13 +71,13 @@
  "diet": null,
  "doctor": [
   {
-   "text": "MedlinePlus: nếu bạn nhận ra ở mình các dấu hiệu cảnh báo sớm (ăn ngủ thay đổi, thu mình, mất sức, thấy vô vọng, khó làm việc hằng ngày…) thì nên tìm trợ giúp chuyên môn.",
+   "text": "Nếu bạn nhận ra ở mình các dấu hiệu cảnh báo sớm (ăn ngủ thay đổi, thu mình, mất sức, thấy vô vọng, khó làm việc hằng ngày…) thì nên tìm trợ giúp chuyên môn.",
    "src": [
     0
    ]
   },
   {
-   "text": "NHS: cần trợ giúp gấp cho sức khoẻ tâm thần thì xin khám khẩn — sức khoẻ tâm thần khẩn cấp cần được coi trọng như bệnh thể chất.",
+   "text": "Cần trợ giúp gấp cho sức khoẻ tâm thần thì xin khám khẩn — sức khoẻ tâm thần khẩn cấp cần được coi trọng như bệnh thể chất.",
    "src": [
     1
    ]
@@ -85,7 +85,7 @@
  ],
  "emergency": [
   {
-   "text": "NHS: gọi cấp cứu hoặc tới khoa cấp cứu ngay khi tính mạng có nguy cơ (như tự gây thương tích nặng hoặc dùng quá liều), hoặc khi bạn thấy không thể giữ an toàn cho mình hay người khác.",
+   "text": "Gọi cấp cứu hoặc tới khoa cấp cứu ngay khi tính mạng có nguy cơ (như tự gây thương tích nặng hoặc dùng quá liều), hoặc khi bạn thấy không thể giữ an toàn cho mình hay người khác.",
    "src": [
     1
    ]

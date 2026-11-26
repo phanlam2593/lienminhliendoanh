@@ -18,13 +18,13 @@
       ]
     },
     {
-      "text": "MedlinePlus: phần lớn xảy ra rất sớm, thường là trước khi người phụ nữ biết mình có thai.",
+      "text": "Phần lớn xảy ra rất sớm, thường là trước khi người phụ nữ biết mình có thai.",
       "src": [
         1
       ]
     },
     {
-      "text": "NHS: nếu nghĩ mình đang sảy thai, hãy tìm sự trợ giúp y tế.",
+      "text": "Nếu nghĩ mình đang sảy thai, hãy tìm sự trợ giúp y tế.",
       "src": [
         0
       ]
@@ -61,7 +61,7 @@
   ],
   "causes": [
     {
-      "text": "Nguyên nhân thường không rõ, hay liên quan đến vấn đề trong sự phát triển của thai; MedlinePlus: thường liên quan bất thường di truyền, như thừa hoặc thiếu nhiễm sắc thể.",
+      "text": "Nguyên nhân thường không rõ, hay liên quan đến vấn đề trong sự phát triển của thai; thường liên quan bất thường di truyền, như thừa hoặc thiếu nhiễm sắc thể.",
       "src": [
         0,
         1
@@ -80,7 +80,7 @@
       ]
     },
     {
-      "text": "MedlinePlus nêu thêm: bất thường cổ tử cung, bệnh mạn tính, tiểu đường không kiểm soát, suy dinh dưỡng nặng, dùng chất gây nghiện.",
+      "text": "Thêm: bất thường cổ tử cung, bệnh mạn tính, tiểu đường không kiểm soát, suy dinh dưỡng nặng, dùng chất gây nghiện.",
       "src": [
         1
       ]
@@ -88,7 +88,7 @@
   ],
   "course": [
     {
-      "text": "NHS: sảy thai đã bắt đầu thì không thể ngăn lại.",
+      "text": "Sảy thai đã bắt đầu thì không thể ngăn lại.",
       "src": [
         0
       ]
@@ -127,7 +127,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: sảy thai rất sớm có thể không cần điều trị; nếu còn sót mô và không nhiễm trùng, bác sĩ có thể cho chờ tự ra, hoặc dùng thuốc/thủ thuật (nạo, hút).",
+      "text": "Sảy thai rất sớm có thể không cần điều trị; nếu còn sót mô và không nhiễm trùng, bác sĩ có thể cho chờ tự ra, hoặc dùng thuốc/thủ thuật (nạo, hút).",
       "src": [
         1
       ]
@@ -156,19 +156,19 @@
   "diet": null,
   "doctor": [
     {
-      "text": "NHS: nếu đang mang thai và ra ít máu hoặc chấm máu mà không đau hoặc chỉ đau bụng nhẹ, hoặc ra khí hư lạ/rỉ dịch, hãy liên hệ khoa sản; không liên lạc được thì gọi đường dây y tế (111 ở Anh).",
+      "text": "Nếu đang mang thai và ra ít máu hoặc chấm máu mà không đau hoặc chỉ đau bụng nhẹ, hoặc ra khí hư lạ/rỉ dịch, hãy liên hệ khoa sản; không liên lạc được thì gọi đường dây y tế (111 ở Anh).",
       "src": [
         0
       ]
     },
     {
-      "text": "MedlinePlus khuyên liên hệ nhân viên y tế ngay khi bị ra máu bất kỳ.",
+      "text": "Nên liên hệ nhân viên y tế ngay khi bị ra máu bất kỳ.",
       "src": [
         1
       ]
     },
     {
-      "text": "NHS: nếu đã sảy thai từ 3 lần trở lên (sảy thai tái diễn), hãy đi khám để làm xét nghiệm và được hỗ trợ.",
+      "text": "Nếu đã sảy thai từ 3 lần trở lên (sảy thai tái diễn), hãy đi khám để làm xét nghiệm và được hỗ trợ.",
       "src": [
         0
       ]
@@ -176,7 +176,7 @@
   ],
   "emergency": [
     {
-      "text": "NHS: đang mang thai, ra máu âm đạo kèm một trong các dấu hiệu sau thì gọi cấp cứu (999 ở Anh): đau bụng dữ dội không làm được việc hằng ngày, đau vai, buồn nôn/choáng/ngất, hoặc ra máu nhiều thấm băng rất nhanh.",
+      "text": "Đang mang thai, ra máu âm đạo kèm một trong các dấu hiệu sau thì gọi cấp cứu (999 ở Anh): đau bụng dữ dội không làm được việc hằng ngày, đau vai, buồn nôn/choáng/ngất, hoặc ra máu nhiều thấm băng rất nhanh.",
       "src": [
         0
       ]

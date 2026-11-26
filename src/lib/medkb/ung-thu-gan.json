@@ -100,7 +100,7 @@
       ]
     },
     {
-      "text": "NHS: nhiều ung thư gan còn liên quan đến lối sống.",
+      "text": "Nhiều ung thư gan còn liên quan đến lối sống.",
       "src": [
         2
       ]
@@ -198,7 +198,8 @@
     {
       "title": "Liver cancer",
       "publisher": "NHS (Anh)",
-      "url": "https://www.nhs.uk/conditions/liver-cancer/","updated":"2023-07-06"
+      "url": "https://www.nhs.uk/conditions/liver-cancer/",
+      "updated": "2023-07-06"
     },
     {
       "title": "Liver cancer - Symptoms",

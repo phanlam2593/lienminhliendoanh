@@ -99,7 +99,7 @@
       ]
     },
     {
-      "text": "NHS: ai cũng có thể bị ung thư và không phải lúc nào cũng rõ nguyên nhân. Yếu tố nguy cơ gồm tuổi cao, tiền sử gia đình, hút thuốc, thừa cân, nắng, uống nhiều rượu bia.",
+      "text": "Ai cũng có thể bị ung thư và không phải lúc nào cũng rõ nguyên nhân. Yếu tố nguy cơ gồm tuổi cao, tiền sử gia đình, hút thuốc, thừa cân, nắng, uống nhiều rượu bia.",
       "src": [
         1
       ]
@@ -153,7 +153,7 @@
       ]
     },
     {
-      "text": "NHS khuyên ăn uống cân bằng và hạn chế rượu bia.",
+      "text": "Nên ăn uống cân bằng và hạn chế rượu bia.",
       "src": [
         1
       ]
@@ -162,7 +162,7 @@
   "diet": {
     "avoid": [
       {
-        "text": "NHS khuyên hạn chế uống rượu bia.",
+        "text": "Nên hạn chế uống rượu bia.",
         "src": [
           1
         ]
@@ -188,7 +188,7 @@
     ],
     "ok": [
       {
-        "text": "NHS khuyên ăn uống cân bằng (trang không nêu cụ thể món nào).",
+        "text": "Nên ăn uống cân bằng (trang không nêu cụ thể món nào).",
         "src": [
           1
         ]

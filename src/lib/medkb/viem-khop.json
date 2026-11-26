@@ -90,7 +90,7 @@
   "diet": {
     "avoid": [
       {
-        "text": "NHS: tránh uống quá nhiều rượu bia.",
+        "text": "Tránh uống quá nhiều rượu bia.",
         "src": [
           0
         ]
@@ -98,7 +98,7 @@
     ],
     "ok": [
       {
-        "text": "NHS: ăn uống cân bằng, lành mạnh và giữ cân nặng hợp lý.",
+        "text": "Ăn uống cân bằng, lành mạnh và giữ cân nặng hợp lý.",
         "src": [
           0
         ]
@@ -112,7 +112,7 @@
           "bia"
         ],
         "verdict": "limit",
-        "note": "NHS khuyên người bị viêm khớp tránh uống quá nhiều rượu bia.",
+        "note": "nên người bị viêm khớp tránh uống quá nhiều rượu bia.",
         "src": [
           0
         ]

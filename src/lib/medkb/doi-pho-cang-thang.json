@@ -25,13 +25,13 @@
    ]
   },
   {
-   "text": "CDC: ai cũng có lúc căng thẳng, đó là một phần bình thường của cuộc sống.",
+   "text": "Ai cũng có lúc căng thẳng, đó là một phần bình thường của cuộc sống.",
    "src": [
     2
    ]
   },
   {
-   "text": "NIMH: stress thường nguôi khi tình huống được giải quyết, còn lo âu có thể kéo dài.",
+   "text": "Stress thường nguôi khi tình huống được giải quyết, còn lo âu có thể kéo dài.",
    "src": [
     3
    ]
@@ -124,13 +124,13 @@
    ]
   },
   {
-   "text": "CDC: nghỉ xem tin tức và mạng xã hội nếu chúng khiến bạn khó chịu.",
+   "text": "Nghỉ xem tin tức và mạng xã hội nếu chúng khiến bạn khó chịu.",
    "src": [
     2
    ]
   },
   {
-   "text": "NIMH: xác định điều gây stress và cách hợp với mình (có thể phải thử), ghi nhật ký, thách thức suy nghĩ tiêu cực, nhờ cậy bạn bè gia đình giúp đối phó tích cực.",
+   "text": "Xác định điều gây stress và cách hợp với mình (có thể phải thử), ghi nhật ký, thách thức suy nghĩ tiêu cực, nhờ cậy bạn bè gia đình giúp đối phó tích cực.",
    "src": [
     3
    ]
@@ -145,13 +145,13 @@
    ]
   },
   {
-   "text": "NHS: đi khám nếu triệu chứng khiến bạn lo hoặc stress nặng; đau ngực hay huyết áp cao do stress nên nguôi khi hết stress.",
+   "text": "Đi khám nếu triệu chứng khiến bạn lo hoặc stress nặng; đau ngực hay huyết áp cao do stress nên nguôi khi hết stress.",
    "src": [
     0
    ]
   },
   {
-   "text": "NIMH: tìm chuyên gia nếu bạn khó đối phó hoặc triệu chứng căng thẳng, lo âu không hết.",
+   "text": "Tìm chuyên gia nếu bạn khó đối phó hoặc triệu chứng căng thẳng, lo âu không hết.",
    "src": [
     3
    ]
@@ -159,7 +159,7 @@
  ],
  "emergency": [
   {
-   "text": "NHS: nếu không thể chờ gặp bác sĩ và thấy không thể chống đỡ hoặc giữ an toàn cho bản thân, hãy tìm hỗ trợ khẩn cấp ngay.",
+   "text": "Nếu không thể chờ gặp bác sĩ và thấy không thể chống đỡ hoặc giữ an toàn cho bản thân, hãy tìm hỗ trợ khẩn cấp ngay.",
    "src": [
     0
    ]
@@ -169,7 +169,8 @@
   {
    "title": "Dealing with stress",
    "publisher": "NHS (Anh) - Every Mind Matters",
-   "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/stress/","updated":"2026-09-29"
+   "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/stress/",
+   "updated": "2026-09-29"
   },
   {
    "title": "Stress relievers: Tips to tame stress",

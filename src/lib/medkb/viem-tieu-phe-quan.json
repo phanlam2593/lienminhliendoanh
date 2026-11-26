@@ -170,7 +170,7 @@
           "cho bú"
         ],
         "verdict": "good",
-        "note": "MedlinePlus: với trẻ dưới 12 tháng, sữa mẹ hoặc sữa công thức là phù hợp; NHS khuyên cho bú ít một nhưng nhiều lần hơn.",
+        "note": "với trẻ dưới 12 tháng, sữa mẹ hoặc sữa công thức là phù hợp; NHS khuyên cho bú ít một nhưng nhiều lần hơn.",
         "src": [
           0,
           1
@@ -183,7 +183,7 @@
           "nước uống"
         ],
         "verdict": "good",
-        "note": "NHS khuyên cho trẻ lớn hơn uống nước để đủ nước.",
+        "note": "nên cho trẻ lớn hơn uống nước để đủ nước.",
         "src": [
           0
         ]
@@ -194,7 +194,7 @@
           "nước trái cây pha loãng"
         ],
         "verdict": "ok",
-        "note": "NHS nêu có thể cho trẻ lớn hơn uống nước ép pha loãng.",
+        "note": "có thể cho trẻ lớn hơn uống nước ép pha loãng.",
         "src": [
           0
         ]
@@ -206,7 +206,7 @@
           "Pedialyte"
         ],
         "verdict": "ok",
-        "note": "MedlinePlus: đồ uống điện giải (như Pedialyte) cũng dùng được cho trẻ nhỏ.",
+        "note": "đồ uống điện giải (như Pedialyte) cũng dùng được cho trẻ nhỏ.",
         "src": [
           1
         ]

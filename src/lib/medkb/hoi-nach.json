@@ -73,7 +73,7 @@
           "đồ ăn cay"
         ],
         "verdict": "limit",
-        "note": "NHS: người bị mùi cơ thể đừng ăn quá nhiều đồ có mùi mạnh hoặc đồ cay.",
+        "note": "người bị mùi cơ thể đừng ăn quá nhiều đồ có mùi mạnh hoặc đồ cay.",
         "src": [
           0
         ]
@@ -85,7 +85,7 @@
           "bia"
         ],
         "verdict": "limit",
-        "note": "NHS: người bị mùi cơ thể đừng uống quá nhiều rượu bia.",
+        "note": "người bị mùi cơ thể đừng uống quá nhiều rượu bia.",
         "src": [
           0
         ]

@@ -37,19 +37,19 @@
       ]
     },
     {
-      "text": "NHS: đau đầu dữ dội không đỡ với thuốc giảm đau thông thường, rối loạn thị giác, đau dưới sườn, phù mặt/tay/chân đột ngột, cảm thấy rất không khỏe, ợ nóng dai dẳng, nôn.",
+      "text": "Đau đầu dữ dội không đỡ với thuốc giảm đau thông thường, rối loạn thị giác, đau dưới sườn, phù mặt/tay/chân đột ngột, cảm thấy rất không khỏe, ợ nóng dai dẳng, nôn.",
       "src": [
         0
       ]
     },
     {
-      "text": "MedlinePlus: protein trong nước tiểu, phù mặt và tay, đau đầu không hết, vấn đề về thị lực, đau vùng bụng trên bên phải, khó thở.",
+      "text": "Protein trong nước tiểu, phù mặt và tay, đau đầu không hết, vấn đề về thị lực, đau vùng bụng trên bên phải, khó thở.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: tăng huyết áp thường không có triệu chứng, và hay được phát hiện khi đo huyết áp ở mỗi lần khám thai.",
+      "text": "Tăng huyết áp thường không có triệu chứng, và hay được phát hiện khi đo huyết áp ở mỗi lần khám thai.",
       "src": [
         1
       ]
@@ -57,7 +57,7 @@
   ],
   "causes": [
     {
-      "text": "NHS: chưa biết nguyên nhân.",
+      "text": "Chưa biết nguyên nhân.",
       "src": [
         0
       ]
@@ -86,13 +86,13 @@
   ],
   "course": [
     {
-      "text": "NHS: không có thuốc chữa khỏi, điều trị nhằm kiểm soát triệu chứng; triệu chứng thường đỡ sau khi sinh.",
+      "text": "Không có thuốc chữa khỏi, điều trị nhằm kiểm soát triệu chứng; triệu chứng thường đỡ sau khi sinh.",
       "src": [
         0
       ]
     },
     {
-      "text": "NHS: phần lớn ca không nặng; với em bé có thể gây chậm phát triển và sinh non.",
+      "text": "Phần lớn ca không nặng; với em bé có thể gây chậm phát triển và sinh non.",
       "src": [
         0
       ]
@@ -104,7 +104,7 @@
       ]
     },
     {
-      "text": "MedlinePlus nêu thêm biến chứng: bong nhau thai, thai chậm phát triển, sinh non/nhẹ cân, tổn thương thận, gan, não; mẹ có nguy cơ bệnh tim cao hơn.",
+      "text": "Thêm biến chứng: bong nhau thai, thai chậm phát triển, sinh non/nhẹ cân, tổn thương thận, gan, não; mẹ có nguy cơ bệnh tim cao hơn.",
       "src": [
         1
       ]
@@ -130,7 +130,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: theo dõi tại nhà gồm đo huyết áp và đếm số lần bé đạp mỗi ngày; có thể cần khám thai thường xuyên hơn.",
+      "text": "Theo dõi tại nhà gồm đo huyết áp và đếm số lần bé đạp mỗi ngày; có thể cần khám thai thường xuyên hơn.",
       "src": [
         1
       ]
@@ -142,13 +142,13 @@
       ]
     },
     {
-      "text": "MedlinePlus: nếu thuộc nhóm có nguy cơ và bác sĩ khuyến nghị, có thể dùng aspirin trong tam cá nguyệt thứ hai.",
+      "text": "Nếu thuộc nhóm có nguy cơ và bác sĩ khuyến nghị, có thể dùng aspirin trong tam cá nguyệt thứ hai.",
       "src": [
         1
       ]
     },
     {
-      "text": "NHS: cân nặng hợp lý, ăn cân bằng và vận động cũng có thể giúp giảm nguy cơ.",
+      "text": "Cân nặng hợp lý, ăn cân bằng và vận động cũng có thể giúp giảm nguy cơ.",
       "src": [
         0
       ]
@@ -165,7 +165,7 @@
   ],
   "emergency": [
     {
-      "text": "NHS: đang mang thai hoặc mới sinh vài tuần mà có triệu chứng tiền sản giật thì cần trợ giúp y tế khẩn. Gọi khoa sản nơi theo dõi nếu có số; mới sinh hoặc không gọi được thì gọi 111 (Anh).",
+      "text": "Đang mang thai hoặc mới sinh vài tuần mà có triệu chứng tiền sản giật thì cần trợ giúp y tế khẩn. Gọi khoa sản nơi theo dõi nếu có số; mới sinh hoặc không gọi được thì gọi 111 (Anh).",
       "src": [
         0
       ]

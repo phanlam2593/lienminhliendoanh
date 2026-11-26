@@ -23,13 +23,13 @@
       ]
     },
     {
-      "text": "MedlinePlus: bệnh gan nhiễm mỡ (nay gọi là bệnh gan thoái hoá mỡ — steatotic liver disease) là khi gan tích tụ quá nhiều mỡ; có hai loại chính: MASLD (không do uống nhiều rượu) và bệnh gan do rượu.",
+      "text": "Bệnh gan nhiễm mỡ (nay gọi là bệnh gan thoái hoá mỡ — steatotic liver disease) là khi gan tích tụ quá nhiều mỡ; có hai loại chính: MASLD (không do uống nhiều rượu) và bệnh gan do rượu.",
       "src": [
         3
       ]
     },
     {
-      "text": "NIDDK: NASH là dạng có thêm viêm và tổn thương gan ngoài mỡ trong gan.",
+      "text": "NASH là dạng có thêm viêm và tổn thương gan ngoài mỡ trong gan.",
       "src": [
         1
       ]
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: khi có triệu chứng có thể là mệt mỏi hoặc khó chịu ở bụng trên bên phải.",
+      "text": "Khi có triệu chứng có thể là mệt mỏi hoặc khó chịu ở bụng trên bên phải.",
       "src": [
         3
       ]
@@ -59,19 +59,19 @@
   ],
   "causes": [
     {
-      "text": "NHS nêu các yếu tố làm dễ mắc hơn: thừa cân (nhất là mỡ quanh bụng và eo), ăn uống không lành mạnh hoặc ít vận động, tiểu đường type 2, hội chứng buồng trứng đa nang, huyết áp cao hoặc mỡ máu cao, trên 50 tuổi.",
+      "text": "Các yếu tố làm dễ mắc hơn: thừa cân (nhất là mỡ quanh bụng và eo), ăn uống không lành mạnh hoặc ít vận động, tiểu đường type 2, hội chứng buồng trứng đa nang, huyết áp cao hoặc mỡ máu cao, trên 50 tuổi.",
       "src": [
         0
       ]
     },
     {
-      "text": "NIDDK: béo phì, hội chứng chuyển hoá và tiểu đường type 2 làm dễ mắc hơn.",
+      "text": "Béo phì, hội chứng chuyển hoá và tiểu đường type 2 làm dễ mắc hơn.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: nguyên nhân của MASLD chưa rõ; gặp nhiều hơn ở người tiền tiểu đường, mỡ máu cao, người lớn tuổi. Một số thuốc (như corticosteroid), giảm cân quá nhanh, viêm gan C cũng làm tăng nguy cơ.",
+      "text": "Nguyên nhân của MASLD chưa rõ; gặp nhiều hơn ở người tiền tiểu đường, mỡ máu cao, người lớn tuổi. Một số thuốc (như corticosteroid), giảm cân quá nhanh, viêm gan C cũng làm tăng nguy cơ.",
       "src": [
         3
       ]
@@ -103,7 +103,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: biến chứng có thể gồm xơ gan, ung thư gan, suy gan (có thể cần ghép gan) và dễ nhiễm trùng hơn.",
+      "text": "Biến chứng có thể gồm xơ gan, ung thư gan, suy gan (có thể cần ghép gan) và dễ nhiễm trùng hơn.",
       "src": [
         3
       ]
@@ -123,7 +123,7 @@
       ]
     },
     {
-      "text": "NIDDK: bác sĩ khuyên giảm cân vì có thể giảm mỡ gan, viêm và xơ hoá; hiện chưa có thuốc nào được phê duyệt để điều trị NAFLD / NASH.",
+      "text": "Bác sĩ khuyên giảm cân vì có thể giảm mỡ gan, viêm và xơ hoá; hiện chưa có thuốc nào được phê duyệt để điều trị NAFLD / NASH.",
       "src": [
         1
       ]
@@ -150,19 +150,19 @@
   "diet": {
     "avoid": [
       {
-        "text": "NIDDK: hạn chế chất béo nói chung (vì nhiều calo), chất béo bão hoà và chất béo trans, đường ăn (sucrose), khẩu phần quá lớn và rượu bia (rượu có thể làm gan tổn thương thêm).",
+        "text": "Hạn chế chất béo nói chung (vì nhiều calo), chất béo bão hoà và chất béo trans, đường ăn (sucrose), khẩu phần quá lớn và rượu bia (rượu có thể làm gan tổn thương thêm).",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK: nên tránh thực phẩm, đồ uống chứa nhiều đường đơn, nhất là fructose, có trong nước ngọt, nước uống thể thao, trà ngọt và nước ép.",
+        "text": "Nên tránh thực phẩm, đồ uống chứa nhiều đường đơn, nhất là fructose, có trong nước ngọt, nước uống thể thao, trà ngọt và nước ép.",
         "src": [
           2
         ]
       },
       {
-        "text": "MedlinePlus: ăn uống lành mạnh, hạn chế muối và đường.",
+        "text": "Ăn uống lành mạnh, hạn chế muối và đường.",
         "src": [
           3
         ]
@@ -170,19 +170,19 @@
     ],
     "ok": [
       {
-        "text": "NIDDK: nên ăn nhiều hơn phần lớn trái cây, rau và ngũ cốc nguyên hạt (những thực phẩm có chỉ số đường huyết thấp, làm đường huyết tăng ít hơn).",
+        "text": "Nên ăn nhiều hơn phần lớn trái cây, rau và ngũ cốc nguyên hạt (những thực phẩm có chỉ số đường huyết thấp, làm đường huyết tăng ít hơn).",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK: thay chất béo bão hoà và trans bằng chất béo không bão hoà, nhất là omega-3.",
+        "text": "Thay chất béo bão hoà và trans bằng chất béo không bão hoà, nhất là omega-3.",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK: nếu thừa cân hoặc béo phì, nên giảm cân từ từ.",
+        "text": "Nếu thừa cân hoặc béo phì, nên giảm cân từ từ.",
         "src": [
           2
         ]
@@ -205,7 +205,7 @@
           "nước ép"
         ],
         "verdict": "avoid",
-        "note": "NIDDK: nên tránh hoặc bớt nước ngọt, nước uống thể thao, trà ngọt và nước ép vì chứa nhiều fructose.",
+        "note": "nên tránh hoặc bớt nước ngọt, nước uống thể thao, trà ngọt và nước ép vì chứa nhiều fructose.",
         "src": [
           2
         ]
@@ -217,7 +217,7 @@
           "đường ăn"
         ],
         "verdict": "limit",
-        "note": "NIDDK: hạn chế đường ăn (sucrose), nguồn fructose chính; MedlinePlus: hạn chế đường.",
+        "note": "hạn chế đường ăn (sucrose), nguồn fructose chính; hạn chế đường.",
         "src": [
           2,
           3
@@ -227,7 +227,7 @@
         "name": "chất béo bão hoà và chất béo trans",
         "aliases": [],
         "verdict": "limit",
-        "note": "NIDDK khuyên hạn chế chất béo bão hoà và chất béo trans, thay bằng chất béo không bão hoà (nhất là omega-3).",
+        "note": "nên hạn chế chất béo bão hoà và chất béo trans, thay bằng chất béo không bão hoà (nhất là omega-3).",
         "src": [
           2
         ]
@@ -239,7 +239,7 @@
           "omega 3"
         ],
         "verdict": "good",
-        "note": "NIDDK khuyên ăn nhiều chất béo không bão hoà, đặc biệt omega-3, thay cho chất béo bão hoà và trans.",
+        "note": "nên ăn nhiều chất béo không bão hoà, đặc biệt omega-3, thay cho chất béo bão hoà và trans.",
         "src": [
           2
         ]
@@ -255,7 +255,7 @@
           "ngũ cốc nguyên hạt"
         ],
         "verdict": "good",
-        "note": "NIDDK khuyên ăn nhiều hơn phần lớn trái cây, rau và ngũ cốc nguyên hạt; MedlinePlus cũng khuyên nhiều trái cây, rau, ngũ cốc nguyên hạt.",
+        "note": "nên ăn nhiều hơn phần lớn trái cây, rau và ngũ cốc nguyên hạt; MedlinePlus cũng khuyên nhiều trái cây, rau, ngũ cốc nguyên hạt.",
         "src": [
           2,
           3
@@ -268,7 +268,7 @@
           "bia"
         ],
         "verdict": "limit",
-        "note": "NIDDK: hạn chế rượu vì có thể làm gan tổn thương thêm; NHS: giữ rượu bia trong giới hạn khuyến nghị. Với bệnh gan do rượu, MedlinePlus nói ngưng rượu là bước quan trọng nhất.",
+        "note": "hạn chế rượu vì có thể làm gan tổn thương thêm; giữ rượu bia trong giới hạn khuyến nghị. Với bệnh gan do rượu, MedlinePlus nói ngưng rượu là bước quan trọng nhất.",
         "src": [
           0,
           2,
@@ -285,7 +285,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: kết quả xét nghiệm gan bất thường thường là lý do cần được đánh giá thêm, vì bệnh hay không có triệu chứng.",
+      "text": "Kết quả xét nghiệm gan bất thường thường là lý do cần được đánh giá thêm, vì bệnh hay không có triệu chứng.",
       "src": [
         3
       ]

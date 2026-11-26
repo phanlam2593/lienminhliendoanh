@@ -87,7 +87,7 @@
    ]
   },
   {
-   "text": "MedlinePlus nêu các yếu tố có thể góp phần: di truyền, sinh học và hoá học của não, môi trường, căng thẳng lớn.",
+   "text": "Các yếu tố có thể góp phần: di truyền, sinh học và hoá học của não, môi trường, căng thẳng lớn.",
    "src": [
     1
    ]
@@ -205,7 +205,7 @@
      "cafe"
     ],
     "verdict": "limit",
-    "note": "NHS khuyên tránh caffeine; MedlinePlus nêu giảm caffeine.",
+    "note": "nên tránh caffeine; MedlinePlus nêu giảm caffeine.",
     "src": [
      0,
      1
@@ -218,7 +218,7 @@
      "đồ ăn ngọt"
     ],
     "verdict": "avoid",
-    "note": "NHS khuyên tránh đồ ăn và thức uống nhiều đường.",
+    "note": "nên tránh đồ ăn và thức uống nhiều đường.",
     "src": [
      0
     ]

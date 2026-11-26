@@ -49,14 +49,14 @@
       ]
     },
     {
-      "text": "Tiết dịch núm vú (có thể màu trắng hoặc lẫn máu theo NHS; MedlinePlus: có thể có mủ).",
+      "text": "Tiết dịch núm vú (có thể màu trắng hoặc lẫn máu theo NHS; có thể có mủ).",
       "src": [
         0,
         2
       ]
     },
     {
-      "text": "MedlinePlus nêu thêm: ngứa, buồn nôn/nôn, hạch nách cùng bên sưng đau.",
+      "text": "Thêm: ngứa, buồn nôn/nôn, hạch nách cùng bên sưng đau.",
       "src": [
         2
       ]
@@ -71,13 +71,13 @@
       ]
     },
     {
-      "text": "NHS: bé ngậm bắt vú không đúng, bỏ cữ hoặc cho bú thưa, cho bú một bên nhiều hơn bên kia, hoặc chấn thương ống/tuyến sữa.",
+      "text": "Bé ngậm bắt vú không đúng, bỏ cữ hoặc cho bú thưa, cho bú một bên nhiều hơn bên kia, hoặc chấn thương ống/tuyến sữa.",
       "src": [
         0
       ]
     },
     {
-      "text": "Mayo Clinic: vi khuẩn từ da hoặc miệng bé có thể vào ống sữa qua núm vú nứt rồi phát triển trong sữa không được hút hết.",
+      "text": "Vi khuẩn từ da hoặc miệng bé có thể vào ống sữa qua núm vú nứt rồi phát triển trong sữa không được hút hết.",
       "src": [
         1
       ]
@@ -97,19 +97,19 @@
   ],
   "course": [
     {
-      "text": "NHS: viêm vú giai đoạn sớm điều trị nhanh và dễ.",
+      "text": "Viêm vú giai đoạn sớm điều trị nhanh và dễ.",
       "src": [
         0
       ]
     },
     {
-      "text": "Mayo Clinic: nếu không điều trị, hoặc do tắc ống sữa, có thể thành áp xe (túi mủ trong vú), thường cần dẫn lưu bằng phẫu thuật.",
+      "text": "Nếu không điều trị, hoặc do tắc ống sữa, có thể thành áp xe (túi mủ trong vú), thường cần dẫn lưu bằng phẫu thuật.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: kháng sinh rất hiệu quả; viêm vú không liên quan đến cho bú đôi khi có thể do một dạng ung thư vú hiếm gặp.",
+      "text": "Kháng sinh rất hiệu quả; viêm vú không liên quan đến cho bú đôi khi có thể do một dạng ung thư vú hiếm gặp.",
       "src": [
         2
       ]
@@ -117,7 +117,7 @@
   ],
   "care": [
     {
-      "text": "NHS: cứ tiếp tục cho con bú dù đau, vì ngừng bú làm tắc nặng hơn. Bú không gây hại cho bé, dù sữa có thể hơi mặn.",
+      "text": "Cứ tiếp tục cho con bú dù đau, vì ngừng bú làm tắc nặng hơn. Bú không gây hại cho bé, dù sữa có thể hơi mặn.",
       "src": [
         0
       ]
@@ -135,13 +135,13 @@
       ]
     },
     {
-      "text": "MedlinePlus: chườm ẩm nóng lên vú 15–20 phút mỗi lần, dùng thuốc giảm đau nếu cần; khi đang dùng kháng sinh, tiếp tục cho bú hoặc hút sữa để bớt sưng.",
+      "text": "Chườm ẩm nóng lên vú 15–20 phút mỗi lần, dùng thuốc giảm đau nếu cần; khi đang dùng kháng sinh, tiếp tục cho bú hoặc hút sữa để bớt sưng.",
       "src": [
         2
       ]
     },
     {
-      "text": "NHS khuyên tránh: quần áo/áo ngực chật, aspirin, dầu, kem, ấn mạnh lên vú; không vắt quá nhiều sữa so với nhu cầu của bé và không ngừng bú đột ngột.",
+      "text": "Nên tránh: quần áo/áo ngực chật, aspirin, dầu, kem, ấn mạnh lên vú; không vắt quá nhiều sữa so với nhu cầu của bé và không ngừng bú đột ngột.",
       "src": [
         0
       ]
@@ -157,19 +157,19 @@
   "diet": null,
   "doctor": [
     {
-      "text": "NHS: nếu sau 12–24 giờ chăm sóc tại nhà mà triệu chứng không đỡ, hãy đi khám bác sĩ.",
+      "text": "Nếu sau 12–24 giờ chăm sóc tại nhà mà triệu chứng không đỡ, hãy đi khám bác sĩ.",
       "src": [
         0
       ]
     },
     {
-      "text": "Mayo Clinic: nên liên hệ nhân viên y tế ngay khi có triệu chứng viêm vú để giảm nguy cơ biến chứng.",
+      "text": "Nên liên hệ nhân viên y tế ngay khi có triệu chứng viêm vú để giảm nguy cơ biến chứng.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: liên hệ nhân viên y tế khi vú đỏ, đau, sưng hoặc nóng, khi đang cho con bú mà sốt cao, hoặc khi hạch nách sưng đau.",
+      "text": "Liên hệ nhân viên y tế khi vú đỏ, đau, sưng hoặc nóng, khi đang cho con bú mà sốt cao, hoặc khi hạch nách sưng đau.",
       "src": [
         2
       ]

@@ -173,8 +173,8 @@ def main():
         card["verifiedAt"] = today
         report.append(f"OK {cid}: {', '.join(changed) or '(không đổi)'}")
         if not dry:
-            pretty = raw.lstrip().startswith("{\n")
-            open(fp, "w", encoding="utf-8").write(json.dumps(card, ensure_ascii=False, indent=2 if pretty else None) + ("\n" if raw.endswith("\n") else ""))
+            ind = re.match(r"\{\n( +)", raw); pretty = len(ind.group(1)) if ind else None
+            open(fp, "w", encoding="utf-8").write(json.dumps(card, ensure_ascii=False, indent=pretty) + ("\n" if raw.endswith("\n") else ""))
     print("\n".join(report))
 
 

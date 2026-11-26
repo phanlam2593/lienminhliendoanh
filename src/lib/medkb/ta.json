@@ -88,7 +88,7 @@
           "ốc"
         ],
         "verdict": "avoid",
-        "note": "NHS: ở vùng có tả, tránh hải sản (nhất là hải sản có vỏ đã ở trong nước bẩn).",
+        "note": "ở vùng có tả, tránh hải sản (nhất là hải sản có vỏ đã ở trong nước bẩn).",
         "src": [
           0
         ]
@@ -101,7 +101,7 @@
           "gỏi"
         ],
         "verdict": "avoid",
-        "note": "NHS: ở vùng có tả, tránh rau quả chưa nấu chín, kể cả salad, trừ khi tự rửa bằng nước đóng chai hoặc đun sôi.",
+        "note": "ở vùng có tả, tránh rau quả chưa nấu chín, kể cả salad, trừ khi tự rửa bằng nước đóng chai hoặc đun sôi.",
         "src": [
           0
         ]
@@ -113,7 +113,7 @@
           "đá"
         ],
         "verdict": "avoid",
-        "note": "NHS: ở vùng có tả, không dùng đá trong đồ uống.",
+        "note": "ở vùng có tả, không dùng đá trong đồ uống.",
         "src": [
           0
         ]
@@ -125,7 +125,7 @@
           "nước bù điện giải"
         ],
         "verdict": "good",
-        "note": "NHS: uống nhiều nước kể cả dung dịch bù nước để thay muối, đường, khoáng chất mất đi.",
+        "note": "uống nhiều nước kể cả dung dịch bù nước để thay muối, đường, khoáng chất mất đi.",
         "src": [
           0
         ]

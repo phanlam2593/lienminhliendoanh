@@ -49,7 +49,7 @@
       ]
     },
     {
-      "text": "CDC: chỉ có xét nghiệm mới xác nhận được bệnh.",
+      "text": "Chỉ có xét nghiệm mới xác nhận được bệnh.",
       "src": [
         2
       ]
@@ -70,7 +70,7 @@
       ]
     },
     {
-      "text": "CDC nêu thêm: gia đình có người bị tiểu đường type 2, hội chứng buồng trứng đa nang (PCOS), thừa cân, từng sinh con nặng trên 9 pound.",
+      "text": "Thêm: gia đình có người bị tiểu đường type 2, hội chứng buồng trứng đa nang (PCOS), thừa cân, từng sinh con nặng trên 9 pound.",
       "src": [
         2
       ]
@@ -78,7 +78,7 @@
   ],
   "course": [
     {
-      "text": "Bệnh thường hết sau sinh, nhưng cần xét nghiệm đường huyết sau sinh. NHS: xét nghiệm máu kiểm tra tiểu đường từ 6 đến 13 tuần sau sinh; nếu bình thường thì lặp lại mỗi năm.",
+      "text": "Bệnh thường hết sau sinh, nhưng cần xét nghiệm đường huyết sau sinh. xét nghiệm máu kiểm tra tiểu đường từ 6 đến 13 tuần sau sinh; nếu bình thường thì lặp lại mỗi năm.",
       "src": [
         0
       ]
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "text": "NIDDK: con của người từng bị cũng dễ béo phì hoặc tiểu đường type 2 hơn.",
+      "text": "Con của người từng bị cũng dễ béo phì hoặc tiểu đường type 2 hơn.",
       "src": [
         1
       ]
@@ -127,13 +127,13 @@
       ]
     },
     {
-      "text": "NHS: được theo dõi sát hơn trong thai kỳ và lúc sinh; khuyến nghị sinh trước 41 tuần, nếu chưa chuyển dạ có thể được khởi phát hoặc mổ lấy thai. Có thể sinh sớm hơn nếu lo ngại về sức khỏe mẹ hoặc bé.",
+      "text": "Được theo dõi sát hơn trong thai kỳ và lúc sinh; khuyến nghị sinh trước 41 tuần, nếu chưa chuyển dạ có thể được khởi phát hoặc mổ lấy thai. Có thể sinh sớm hơn nếu lo ngại về sức khỏe mẹ hoặc bé.",
       "src": [
         0
       ]
     },
     {
-      "text": "CDC: nên hỏi bác sĩ cách giảm nguy cơ bị tiểu đường type 2 về sau và bao lâu nên kiểm tra đường huyết một lần.",
+      "text": "Nên hỏi bác sĩ cách giảm nguy cơ bị tiểu đường type 2 về sau và bao lâu nên kiểm tra đường huyết một lần.",
       "src": [
         2
       ]
@@ -142,7 +142,7 @@
   "diet": {
     "avoid": [
       {
-        "text": "CDC: không cố giảm cân trong thai kỳ; hãy hỏi bác sĩ mức tăng cân phù hợp.",
+        "text": "Không cố giảm cân trong thai kỳ; hãy hỏi bác sĩ mức tăng cân phù hợp.",
         "src": [
           2
         ]
@@ -150,13 +150,13 @@
     ],
     "ok": [
       {
-        "text": "NHS: đổi chế độ ăn và vận động nhiều hơn (nếu có thể) có thể giúp hạ đường huyết.",
+        "text": "Đổi chế độ ăn và vận động nhiều hơn (nếu có thể) có thể giúp hạ đường huyết.",
         "src": [
           0
         ]
       },
       {
-        "text": "NIDDK: thực hiện một kế hoạch ăn uống lành mạnh; CDC: ăn thực phẩm lành mạnh với lượng và thời điểm phù hợp.",
+        "text": "Thực hiện một kế hoạch ăn uống lành mạnh; ăn thực phẩm lành mạnh với lượng và thời điểm phù hợp.",
         "src": [
           1,
           2
@@ -167,7 +167,7 @@
   },
   "doctor": [
     {
-      "text": "NHS: nếu có triệu chứng đường huyết cao sau sinh, hãy đi khám bác sĩ, đừng đợi đến lần xét nghiệm kế tiếp.",
+      "text": "Nếu có triệu chứng đường huyết cao sau sinh, hãy đi khám bác sĩ, đừng đợi đến lần xét nghiệm kế tiếp.",
       "src": [
         0
       ]

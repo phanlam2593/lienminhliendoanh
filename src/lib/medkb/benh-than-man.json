@@ -26,13 +26,13 @@
       ]
     },
     {
-      "text": "NIDDK: CKD nghĩa là thận bị tổn thương hoặc có vấn đề về cấu trúc nên không lọc máu được như bình thường. Suy thận là khi thận mất phần lớn khả năng hoạt động.",
+      "text": "CKD nghĩa là thận bị tổn thương hoặc có vấn đề về cấu trúc nên không lọc máu được như bình thường. Suy thận là khi thận mất phần lớn khả năng hoạt động.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: tổn thương diễn ra chậm qua nhiều năm khiến chất thải tích tụ trong cơ thể; chỉ xét nghiệm máu và nước tiểu mới xác nhận được bệnh.",
+      "text": "Tổn thương diễn ra chậm qua nhiều năm khiến chất thải tích tụ trong cơ thể; chỉ xét nghiệm máu và nước tiểu mới xác nhận được bệnh.",
       "src": [
         3
       ]
@@ -52,7 +52,7 @@
       ]
     },
     {
-      "text": "MedlinePlus: nhiều người không có triệu chứng cho đến khi bệnh thận đã rất nặng.",
+      "text": "Nhiều người không có triệu chứng cho đến khi bệnh thận đã rất nặng.",
       "src": [
         3
       ]
@@ -107,19 +107,19 @@
       ]
     },
     {
-      "text": "NIDDK: kiểm soát huyết áp là bước quan trọng nhất. Khi thận suy, có thể thay thế chức năng thận bằng lọc máu hoặc ghép thận; hãy cùng đội ngũ chăm sóc và gia đình chọn cách phù hợp.",
+      "text": "Kiểm soát huyết áp là bước quan trọng nhất. Khi thận suy, có thể thay thế chức năng thận bằng lọc máu hoặc ghép thận; hãy cùng đội ngũ chăm sóc và gia đình chọn cách phù hợp.",
       "src": [
         1
       ]
     },
     {
-      "text": "MedlinePlus: kiểm soát huyết áp, đường huyết nếu bị tiểu đường, hạn chế rượu, giữ cân nặng hợp lý, vận động đều, không hút thuốc.",
+      "text": "Kiểm soát huyết áp, đường huyết nếu bị tiểu đường, hạn chế rượu, giữ cân nặng hợp lý, vận động đều, không hút thuốc.",
       "src": [
         3
       ]
     },
     {
-      "text": "NIDDK: người có nguy cơ (tiểu đường, huyết áp cao, bệnh tim, tiền sử gia đình suy thận) nên đi xét nghiệm; phát hiện sớm giúp điều trị sớm.",
+      "text": "Người có nguy cơ (tiểu đường, huyết áp cao, bệnh tim, tiền sử gia đình suy thận) nên đi xét nghiệm; phát hiện sớm giúp điều trị sớm.",
       "src": [
         1
       ]
@@ -128,19 +128,19 @@
   "diet": {
     "avoid": [
       {
-        "text": "NIDDK (natri): hạn chế thực phẩm nhiều natri — đồ hộp và một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn, muối ăn, một số gia vị, tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki.",
+        "text": "Về natri: hạn chế thực phẩm nhiều natri — đồ hộp và một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn, muối ăn, một số gia vị, tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki.",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK (kali): đội ngũ chăm sóc có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali; dùng thảo mộc, gia vị thay muối thay thế (có thể nhiều kali) và hạn chế thực phẩm có kali clorua.",
+        "text": "Về kali: đội ngũ chăm sóc có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali; dùng thảo mộc, gia vị thay muối thay thế (có thể nhiều kali) và hạn chế thực phẩm có kali clorua.",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK (phospho): phospho có sẵn trong thịt, sữa và đậu; nên hạn chế đồ chế biến có thêm phospho như thịt nguội, đồ uống có hương vị, và ăn khẩu phần nhỏ hơn món giàu phospho.",
+        "text": "Về phospho: phospho có sẵn trong thịt, sữa và đậu; nên hạn chế đồ chế biến có thêm phospho như thịt nguội, đồ uống có hương vị, và ăn khẩu phần nhỏ hơn món giàu phospho.",
         "src": [
           2
         ]
@@ -154,26 +154,26 @@
     ],
     "ok": [
       {
-        "text": "NIDDK: chọn thực phẩm đồ uống lành mạnh giúp thận giữ cân bằng muối và khoáng chất, giúp bạn thấy khoẻ hơn và có thể ngăn hoặc làm chậm một số vấn đề do CKD. Hãy hỏi bác sĩ hoặc chuyên viên dinh dưỡng.",
+        "text": "Chọn thực phẩm đồ uống lành mạnh giúp thận giữ cân bằng muối và khoáng chất, giúp bạn thấy khoẻ hơn và có thể ngăn hoặc làm chậm một số vấn đề do CKD. Hãy hỏi bác sĩ hoặc chuyên viên dinh dưỡng.",
         "src": [
           1,
           2
         ]
       },
       {
-        "text": "NIDDK: chọn thịt chưa chế biến, trái cây và rau tươi, đông lạnh hoặc đóng hộp không thêm muối hay sốt; rửa kỹ đồ hộp để giảm natri; nêm bằng thảo mộc, gia vị hoặc nước chanh; đọc nhãn thực phẩm.",
+        "text": "Chọn thịt chưa chế biến, trái cây và rau tươi, đông lạnh hoặc đóng hộp không thêm muối hay sốt; rửa kỹ đồ hộp để giảm natri; nêm bằng thảo mộc, gia vị hoặc nước chanh; đọc nhãn thực phẩm.",
         "src": [
           2
         ]
       },
       {
-        "text": "NIDDK (protein): lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc vì nhu cầu mỗi người khác nhau và thay đổi theo thời gian; có thể chọn đạm thực vật và thịt nạc ít phospho. Người lọc máu có thể cần nhiều đạm hơn.",
+        "text": "Về protein: lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc vì nhu cầu mỗi người khác nhau và thay đổi theo thời gian; có thể chọn đạm thực vật và thịt nạc ít phospho. Người lọc máu có thể cần nhiều đạm hơn.",
         "src": [
           2
         ]
       },
       {
-        "text": "MedlinePlus: chọn thực phẩm ít natri (muối) và các món tốt cho tim như trái cây, rau, ngũ cốc nguyên hạt, sữa ít béo.",
+        "text": "Chọn thực phẩm ít natri (muối) và các món tốt cho tim như trái cây, rau, ngũ cốc nguyên hạt, sữa ít béo.",
         "src": [
           3
         ]
@@ -229,7 +229,7 @@
           "bánh quy giòn"
         ],
         "verdict": "limit",
-        "note": "NIDDK nêu đồ hộp, một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn là thực phẩm nhiều natri cần hạn chế; thịt nguội cũng có thể chứa phospho thêm vào.",
+        "note": "đồ hộp, một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn là thực phẩm nhiều natri cần hạn chế; thịt nguội cũng có thể chứa phospho thêm vào.",
         "src": [
           2
         ]
@@ -245,7 +245,7 @@
           "sốt thịt nướng"
         ],
         "verdict": "limit",
-        "note": "NIDDK nêu tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki là gia vị nhiều natri.",
+        "note": "tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki là gia vị nhiều natri.",
         "src": [
           2
         ]
@@ -257,7 +257,7 @@
           "muối ít natri"
         ],
         "verdict": "avoid",
-        "note": "NIDDK khuyên tránh muối thay thế và hạn chế thực phẩm có kali clorua trong thành phần.",
+        "note": "nên tránh muối thay thế và hạn chế thực phẩm có kali clorua trong thành phần.",
         "src": [
           2
         ]
@@ -274,7 +274,7 @@
           "sữa chua"
         ],
         "verdict": "limit",
-        "note": "NIDDK: thịt và sữa là nguồn phospho tự nhiên; đội ngũ chăm sóc có thể khuyên hạn chế thịt và sữa. Cơ thể hấp thu phospho từ thịt, gia cầm nhiều hơn từ đậu, hạt. Lượng cụ thể do đội ngũ chăm sóc đặt.",
+        "note": "thịt và sữa là nguồn phospho tự nhiên; đội ngũ chăm sóc có thể khuyên hạn chế thịt và sữa. Cơ thể hấp thu phospho từ thịt, gia cầm nhiều hơn từ đậu, hạt. Lượng cụ thể do đội ngũ chăm sóc đặt.",
         "src": [
           2
         ]
@@ -286,7 +286,7 @@
           "nước uống có hương vị"
         ],
         "verdict": "limit",
-        "note": "NIDDK nêu đồ uống có hương vị là thực phẩm chế biến có thể có phospho thêm vào; hãy đọc thành phần ghi “phosphorus”, “PHOS” (như phosphoric acid, disodium phosphate).",
+        "note": "đồ uống có hương vị là thực phẩm chế biến có thể có phospho thêm vào; hãy đọc thành phần ghi “phosphorus”, “PHOS” (như phosphoric acid, disodium phosphate).",
         "src": [
           2
         ]
@@ -300,7 +300,7 @@
           "rau củ"
         ],
         "verdict": "good",
-        "note": "NIDDK: trái cây, rau ít phospho nên có thể chọn khẩu phần lớn hơn. Riêng kali, hãy theo hướng dẫn của đội ngũ chăm sóc vì họ có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali.",
+        "note": "trái cây, rau ít phospho nên có thể chọn khẩu phần lớn hơn. Riêng kali, hãy theo hướng dẫn của đội ngũ chăm sóc vì họ có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali.",
         "src": [
           2
         ]
@@ -313,7 +313,7 @@
           "hạt"
         ],
         "verdict": "ok",
-        "note": "NIDDK khuyên chọn đạm thực vật và thịt nạc ít phospho; đậu và hạt giàu phospho nhưng cơ thể hấp thu ít hơn so với thịt. Lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc.",
+        "note": "nên chọn đạm thực vật và thịt nạc ít phospho; đậu và hạt giàu phospho nhưng cơ thể hấp thu ít hơn so với thịt. Lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc.",
         "src": [
           2
         ]
@@ -413,7 +413,7 @@
       ]
     },
     {
-      "text": "NIDDK: nên xét nghiệm kiểm tra thận nếu bạn bị tiểu đường, huyết áp cao, bệnh tim hoặc có người thân bị suy thận.",
+      "text": "Nên xét nghiệm kiểm tra thận nếu bạn bị tiểu đường, huyết áp cao, bệnh tim hoặc có người thân bị suy thận.",
       "src": [
         1
       ]

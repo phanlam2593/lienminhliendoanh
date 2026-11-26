@@ -20,7 +20,7 @@
  "disambiguation": "Thẻ này chỉ nói về **ăn uống khi mang thai** (theo NHS). Câu hỏi khác về thai kỳ thì bạn hỏi bác sĩ Sản nha.",
  "about": [
   {
-   "text": "NHS liệt kê những món nên tránh hoặc cần cẩn thận khi mang thai, vì một số món có thể làm bạn ốm (như nhiễm khuẩn listeria) hoặc hại em bé.",
+   "text": "Những món nên tránh hoặc cần cẩn thận khi mang thai, vì một số món có thể làm bạn ốm (như nhiễm khuẩn listeria) hoặc hại em bé.",
    "src": [
     0
    ]
@@ -119,7 +119,7 @@
      "nhậu"
     ],
     "verdict": "avoid",
-    "note": "NHS: rượu bia có thể gây hại lâu dài cho em bé.",
+    "note": "rượu bia có thể gây hại lâu dài cho em bé.",
     "src": [
      0
     ]
@@ -139,7 +139,7 @@
      "pa-tê"
     ],
     "verdict": "avoid",
-    "note": "NHS: gan và sản phẩm từ gan (như pa tê gan) có nhiều vitamin A, có thể hại em bé.",
+    "note": "gan và sản phẩm từ gan (như pa tê gan) có nhiều vitamin A, có thể hại em bé.",
     "src": [
      0
     ]
@@ -156,7 +156,7 @@
      "thịt nướng tái"
     ],
     "verdict": "avoid",
-    "note": "NHS: thịt sống hoặc chưa chín kỹ có nguy cơ nhỏ nhiễm toxoplasma, có thể gây sảy thai — nấu chín kỹ.",
+    "note": "thịt sống hoặc chưa chín kỹ có nguy cơ nhỏ nhiễm toxoplasma, có thể gây sảy thai — nấu chín kỹ.",
     "src": [
      0
     ]
@@ -174,7 +174,7 @@
      "sushi cá sống"
     ],
     "verdict": "avoid",
-    "note": "NHS: tránh cá và hải sản sống (kể cả sushi cá sống, dù đã cấp đông) vì nguy cơ listeria và ngộ độc thực phẩm. Sushi làm từ cá/hải sản đã nấu chín thì được.",
+    "note": "tránh cá và hải sản sống (kể cả sushi cá sống, dù đã cấp đông) vì nguy cơ listeria và ngộ độc thực phẩm. Sushi làm từ cá/hải sản đã nấu chín thì được.",
     "src": [
      0
     ]
@@ -188,7 +188,7 @@
      "cá marlin"
     ],
     "verdict": "avoid",
-    "note": "NHS: tránh cá kiếm, cá mập và cá cờ (marlin) khi mang thai.",
+    "note": "tránh cá kiếm, cá mập và cá cờ (marlin) khi mang thai.",
     "src": [
      0
     ]
@@ -202,7 +202,7 @@
      "sữa dê chưa tiệt trùng"
     ],
     "verdict": "avoid",
-    "note": "NHS: sữa, kem, sữa chua, bơ chưa tiệt trùng có nguy cơ listeria — có thể gây sảy thai, thai chết lưu hoặc em bé ốm nặng.",
+    "note": "sữa, kem, sữa chua, bơ chưa tiệt trùng có nguy cơ listeria — có thể gây sảy thai, thai chết lưu hoặc em bé ốm nặng.",
     "src": [
      0
     ]
@@ -216,7 +216,7 @@
      "trứng chưa chín"
     ],
     "verdict": "avoid",
-    "note": "NHS: chỉ trứng gà có tem an toàn của Anh mới được ăn sống/lòng đào; các loại trứng khác phải nấu chín kỹ vì nguy cơ salmonella.",
+    "note": "chỉ trứng gà có tem an toàn của Anh mới được ăn sống/lòng đào; các loại trứng khác phải nấu chín kỹ vì nguy cơ salmonella.",
     "src": [
      0
     ]
@@ -234,7 +234,7 @@
      "trứng ốp la chín"
     ],
     "verdict": "ok",
-    "note": "NHS: trứng nấu chín kỹ ăn được; trứng vịt, ngỗng, cút phải nấu chín kỹ.",
+    "note": "trứng nấu chín kỹ ăn được; trứng vịt, ngỗng, cút phải nấu chín kỹ.",
     "src": [
      0
     ]
@@ -259,7 +259,7 @@
      "chocolate"
     ],
     "verdict": "limit",
-    "note": "NHS: giới hạn caffeine 200 miligam mỗi ngày (một cốc cà phê hoà tan khoảng 100, một cốc trà khoảng 75, một lon cola khoảng 40) — nhiều hơn liên quan nguy cơ sảy thai, thai chết lưu cao hơn.",
+    "note": "giới hạn caffeine 200 miligam mỗi ngày (một cốc cà phê hoà tan khoảng 100, một cốc trà khoảng 75, một lon cola khoảng 40) — nhiều hơn liên quan nguy cơ sảy thai, thai chết lưu cao hơn.",
     "src": [
      0
     ]
@@ -271,7 +271,7 @@
      "cá ngừ tươi"
     ],
     "verdict": "limit",
-    "note": "NHS: không quá 4 hộp hoặc 2 miếng cá ngừ tươi mỗi tuần vì chất ô nhiễm như thuỷ ngân.",
+    "note": "không quá 4 hộp hoặc 2 miếng cá ngừ tươi mỗi tuần vì chất ô nhiễm như thuỷ ngân.",
     "src": [
      0
     ]
@@ -286,7 +286,7 @@
      "cá béo"
     ],
     "verdict": "limit",
-    "note": "NHS: cá béo (cá hồi, cá thu, cá mòi, cá trích) không quá 2 phần mỗi tuần vì chất ô nhiễm.",
+    "note": "cá béo (cá hồi, cá thu, cá mòi, cá trích) không quá 2 phần mỗi tuần vì chất ô nhiễm.",
     "src": [
      0
     ]
@@ -307,7 +307,7 @@
      "cua hấp"
     ],
     "verdict": "ok",
-    "note": "NHS: tôm, cua, tôm hùm, mực, vẹm, sò điệp, nghêu đã nấu chín đều ăn được.",
+    "note": "tôm, cua, tôm hùm, mực, vẹm, sò điệp, nghêu đã nấu chín đều ăn được.",
     "src": [
      0
     ]
@@ -328,7 +328,7 @@
      "thịt hộp"
     ],
     "verdict": "ok",
-    "note": "NHS: thịt gà, heo, bò, cừu, vịt nấu chín kỹ (kể cả thịt băm, xúc xích) và thịt hộp ăn được.",
+    "note": "thịt gà, heo, bò, cừu, vịt nấu chín kỹ (kể cả thịt băm, xúc xích) và thịt hộp ăn được.",
     "src": [
      0
     ]
@@ -345,7 +345,7 @@
      "rau sống"
     ],
     "verdict": "ok",
-    "note": "NHS: hầu hết rau và trái cây đều ăn được — rửa thật kỹ trước khi ăn vì đất có thể mang vi khuẩn.",
+    "note": "hầu hết rau và trái cây đều ăn được — rửa thật kỹ trước khi ăn vì đất có thể mang vi khuẩn.",
     "src": [
      0
     ]
@@ -357,7 +357,7 @@
      "nấm enoki"
     ],
     "verdict": "ok",
-    "note": "NHS: nấm kim châm phải nấu chín kỹ.",
+    "note": "nấm kim châm phải nấu chín kỹ.",
     "src": [
      0
     ]
@@ -376,7 +376,7 @@
      "sữa bò"
     ],
     "verdict": "ok",
-    "note": "NHS: sữa, sữa chua, kem, bơ đã tiệt trùng (bò, cừu, dê) và phô mai cứng ăn được; phô mai mềm có mốc trắng hoặc phô mai xanh mềm thì phải nấu chín kỹ.",
+    "note": "sữa, sữa chua, kem, bơ đã tiệt trùng (bò, cừu, dê) và phô mai cứng ăn được; phô mai mềm có mốc trắng hoặc phô mai xanh mềm thì phải nấu chín kỹ.",
     "src": [
      0
     ]
@@ -392,7 +392,7 @@
      "phô mai mốc"
     ],
     "verdict": "limit",
-    "note": "NHS: phô mai mềm có lớp mốc trắng (brie, camembert) và phô mai xanh mềm chỉ ăn khi nấu chín kỹ vì nguy cơ listeria.",
+    "note": "phô mai mềm có lớp mốc trắng (brie, camembert) và phô mai xanh mềm chỉ ăn khi nấu chín kỹ vì nguy cơ listeria.",
     "src": [
      0
     ]
@@ -409,7 +409,7 @@
      "óc chó"
     ],
     "verdict": "ok",
-    "note": "NHS: ăn được, trừ khi bạn bị dị ứng hoặc bác sĩ, nữ hộ sinh dặn tránh.",
+    "note": "ăn được, trừ khi bạn bị dị ứng hoặc bác sĩ, nữ hộ sinh dặn tránh.",
     "src": [
      0
     ]
@@ -423,7 +423,7 @@
      "trà gừng"
     ],
     "verdict": "limit",
-    "note": "NHS: trà thảo mộc như bạc hà, hoa cúc không quá 4 cốc mỗi ngày vì chưa có nhiều nghiên cứu khi mang thai.",
+    "note": "trà thảo mộc như bạc hà, hoa cúc không quá 4 cốc mỗi ngày vì chưa có nhiều nghiên cứu khi mang thai.",
     "src": [
      0
     ]
@@ -436,7 +436,7 @@
      "rễ cam thảo"
     ],
     "verdict": "avoid",
-    "note": "NHS: tránh trà thảo mộc có rễ cam thảo vì có thể ảnh hưởng sự phát triển của em bé.",
+    "note": "tránh trà thảo mộc có rễ cam thảo vì có thể ảnh hưởng sự phát triển của em bé.",
     "src": [
      0
     ]

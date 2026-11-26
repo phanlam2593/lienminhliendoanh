@@ -70,7 +70,7 @@
           "bia"
         ],
         "verdict": "limit",
-        "note": "NHS: nếu đang dùng thuốc trị viêm khớp vảy nến, nên giảm rượu bia vì rượu có thể ảnh hưởng tới thuốc.",
+        "note": "nếu đang dùng thuốc trị viêm khớp vảy nến, nên giảm rượu bia vì rượu có thể ảnh hưởng tới thuốc.",
         "src": [
           0
         ]
@@ -83,7 +83,7 @@
           "thảo dược"
         ],
         "verdict": "avoid",
-        "note": "NHS: tránh thuốc thảo dược vì có thể tương tác với thuốc đang dùng.",
+        "note": "tránh thuốc thảo dược vì có thể tương tác với thuốc đang dùng.",
         "src": [
           0
         ]

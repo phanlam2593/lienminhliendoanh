@@ -3,7 +3,7 @@
 Dùng: python3 scripts/medkb-rewrite.py scripts/medkb-gpt/dot-NNN.rewrite.json
 File: { "<id>": { "<mục>": [["câu", [src…]], …], "addSources": [{publisher,url,title}], "diet.avoid"/"diet.ok": [...],
         "foodNotes": {"<tên nhóm>": "ghi chú mới"} } } — src có thể là số (nguồn cũ) hoặc "+0" (nguồn mới thứ 0 trong addSources)."""
-import json, sys, os, datetime
+import re, json, sys, os, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 spec = json.load(open(sys.argv[1], encoding="utf-8"))
 today = datetime.date.today().isoformat()
@@ -30,6 +30,6 @@ for cid, ch in spec.items():
             if f["name"] == name:
                 f["note"] = note
     card["verifiedAt"] = today
-    pretty = raw.lstrip().startswith("{\n")
-    open(fp, "w", encoding="utf-8").write(json.dumps(card, ensure_ascii=False, indent=2 if pretty else None) + ("\n" if raw.endswith("\n") else ""))
+    ind = re.match(r"\{\n( +)", raw); pretty = len(ind.group(1)) if ind else None
+    open(fp, "w", encoding="utf-8").write(json.dumps(card, ensure_ascii=False, indent=pretty) + ("\n" if raw.endswith("\n") else ""))
     print("OK", cid)
