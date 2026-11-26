@@ -8,43 +8,49 @@
  ],
  "about": [
   {
-   "text": "**Bệnh khổng lồ** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Bệnh khổng lồ là khi trẻ có quá nhiều hormone tăng trưởng lúc xương còn đang dài ra, làm trẻ cao quá mức; ở người lớn tình trạng này gọi là bệnh to đầu chi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: rối loạn kinh nguyệt, đau khớp, trầm cảm, đau đầu, yếu cơ, đau cổ, khối u, ho.",
+   "text": "Tay chân to ra và sưng, kèm đau đầu, đau khớp, rối loạn thị lực.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: phức hợp Carney, hội chứng McCune-Albright, đa u tuyến nội tiết, bệnh u xơ thần kinh, U tuyến yên.",
+   "text": "Hơn 9/10 trường hợp do một khối u ở tuyến yên tiết quá nhiều hormone tăng trưởng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chẩn đoán bằng xét nghiệm máu (IGF-I, nghiệm pháp dung nạp đường) và chụp MRI tuyến yên.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Điều trị gồm mổ (thường qua đường mũi), thuốc và xạ trị.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ cao vượt hẳn bạn cùng tuổi, tay chân to bất thường → đưa đi khám nội tiết.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -55,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-khong-lo.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Acromegaly",
+   "publisher": "NIDDK (NIH, Hoa Kỳ)",
+   "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/acromegaly",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

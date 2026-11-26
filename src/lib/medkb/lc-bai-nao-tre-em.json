@@ -7,49 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Bại não trẻ em** — nhóm bệnh: thần kinh - tinh thần, bệnh trẻ em, đầu.",
+   "text": "Bại não là nhóm bệnh suốt đời ảnh hưởng đến vận động và phối hợp, do một vấn đề ở não.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nám, run, động kinh, viêm xương khớp.",
+   "text": "Chậm đạt các mốc phát triển như chưa biết ngồi, biết đi đúng tuổi.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Người trông quá cứng hoặc quá mềm; đi kiễng chân.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Dấu hiệu thường thấy từ sớm, mức độ rất khác nhau giữa các trẻ.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột quỵ, nhiễm trùng não.",
+   "text": "Não phát triển không bình thường trong bụng mẹ (ví dụ do nhiễm trùng khi mang thai), não thiếu oxy tạm thời khi sinh khó, hoặc tổn thương não sau sinh như viêm màng não, chấn thương đầu nặng, chảy máu não.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): sinh non.",
+   "text": "Nhiều trường hợp không rõ nguyên nhân chính xác.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tổn thương não ban đầu không nặng thêm theo thời gian, nhưng cơ thể chịu áp lực lâu ngày có thể gây đau khớp khi lớn tuổi.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Hiện chưa chữa khỏi, nhưng điều trị giúp trẻ vận động và tự lập tốt nhất có thể.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Gồm vật lý trị liệu (tập luyện, kéo giãn), trị liệu ngôn ngữ, hoạt động trị liệu, thuốc giảm co cứng cơ, và đôi khi phẫu thuật.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bé chậm biết ngồi, biết đi, người quá cứng hoặc quá mềm → đưa đi khám để được đánh giá sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +85,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/bai-nao-tre-em-6.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cerebral palsy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cerebral-palsy/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

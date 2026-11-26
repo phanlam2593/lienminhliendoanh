@@ -8,55 +8,62 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Beriberi** — nhóm bệnh: nội tiết - chuyển hóa, tứ chi.",
+   "text": "Beriberi là bệnh do cơ thể thiếu vitamin B1 (thiamine).",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mất trí nhớ, nhìn đôi, buồn nôn, ảo giác, mệt mỏi, khó thở, nói khó, lú lẫn, ngứa, sưng.",
+   "text": "Thể ướt (ảnh hưởng tim, tuần hoàn): khó thở, phù cẳng chân, tim đập nhanh.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể khô (ảnh hưởng thần kinh): tê rần, đau, khó đi lại, lú lẫn.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: phù nề, tiêu chảy kéo dài, bệnh Beriberi do yếu tố gen.",
+   "text": "Ngày nay nguyên nhân chính là uống nhiều rượu, vì rượu làm ăn uống kém và cản trở hấp thu, dự trữ vitamin B1.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người hoạt động vận động mạnh, người mắc bệnh cường giáp, người có hệ tiêu hóa không tốt, người hay bị căng thẳng và lo lắng, bệnh cường giáp, vấn đề hệ tiêu hóa.",
+   "text": "Lọc máu, dùng thuốc lợi tiểu liều cao cũng làm tăng nguy cơ; trẻ bú mẹ thiếu B1 hoặc sữa công thức thiếu B1 cũng có thể mắc.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không chữa có thể tử vong, nhưng điều trị thì triệu chứng thường đỡ nhanh; tổn thương tim thường hồi phục, tổn thương thần kinh hồi phục nếu phát hiện sớm.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ cân nặng ổn định, hạn chế tiêu thụ rượu.",
+   "text": "Bổ sung vitamin B1 bằng đường tiêm hoặc uống theo chỉ định bác sĩ, có thể kèm vitamin khác và xét nghiệm máu theo dõi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên, hoặc thấy người nhà ăn uống thiếu chất, mất cân đối → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +74,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-beriberi.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Beriberi",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000339.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

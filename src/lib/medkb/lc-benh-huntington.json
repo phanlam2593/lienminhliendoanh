@@ -8,49 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Huntington** — nhóm bệnh: thần kinh - tinh thần.",
+   "text": "Bệnh Huntington là bệnh di truyền ảnh hưởng đến vận động, suy nghĩ và tâm trạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: trầm cảm, co giật, sụt cân, mất ngủ, mệt mỏi, co rút, nám.",
+   "text": "Sớm có những cử động giật nhỏ không kiểm soát được, kèm thay đổi trí nhớ, suy nghĩ và tâm trạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột biến gen.",
+   "text": "Nếu cha hoặc mẹ mang gen bệnh, con có 1 phần 2 (50%) khả năng mang gen và mắc bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
- "care": [
+ "course": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tạo một môi trường yên tĩnh, đơn giản.",
+   "text": "Triệu chứng thường bắt đầu ở tuổi 30–50, nhưng có thể ở bất kỳ tuổi nào.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bệnh nặng dần và ảnh hưởng tuổi thọ, dù nhiều người sống thêm nhiều năm sau khi có triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Hiện chưa chữa khỏi; một nhóm nhân viên y tế sẽ cùng lập kế hoạch kiểm soát triệu chứng.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Gia đình có người bệnh có thể đi xét nghiệm gen (thường từ 18 tuổi), không bắt buộc; nên được tư vấn trước.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-huntington-7.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Huntington's disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/huntingtons-disease/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

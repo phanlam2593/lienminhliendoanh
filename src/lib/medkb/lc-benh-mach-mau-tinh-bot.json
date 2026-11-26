@@ -8,17 +8,29 @@
  ],
  "about": [
   {
-   "text": "**Bệnh mạch máu tinh bột** — nhóm bệnh: tim mạch.",
+   "text": "Bệnh mạch máu tinh bột não là khi protein amyloid đóng lên thành động mạch trong não, có thể gây chảy máu não và sa sút trí tuệ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thường gặp ở người trên 55 tuổi; đôi khi có tính gia đình.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, tiêu chảy, đau ngực, phù chân, nuốt đau, rụng tóc, ngứa ran, sụt cân, táo bón, bầm tím.",
+   "text": "Chảy máu lớn giống đột quỵ: đau đầu đột ngột, lơ mơ, lú lẫn, đổi thị lực hoặc lời nói, yếu người, co giật, nôn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chảy máu nhỏ: từng đợt lú lẫn, đau đầu hoặc yếu, tê lúc có lúc không, co giật, trí nhớ giảm dần.",
+   "src": [
+    1
    ]
   }
  ],
@@ -39,29 +51,42 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chưa có điều trị đặc hiệu; tập trung kiểm soát yếu tố nguy cơ như huyết áp cao, giảm triệu chứng và phục hồi chức năng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Hay lú lẫn từng đợt, trí nhớ giảm dần → đi khám chuyên khoa thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột mất vận động, cảm giác, thị lực hoặc lời nói → gọi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bệnh mạch máu tinh bột – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-mach-mau-tinh-bot.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cerebral amyloid angiopathy",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000719.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

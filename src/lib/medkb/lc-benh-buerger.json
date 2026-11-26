@@ -8,55 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Buerger** — nhóm bệnh: tim mạch, tứ chi.",
+   "text": "Bệnh Buerger là bệnh hiếm của động mạch và tĩnh mạch ở tay chân, làm tắc mạch và giảm máu nuôi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, nóng rát, ngứa ran, loét.",
+   "text": "Tê rần ngón tay ngón chân, da đổi màu, đau bàn chân khi đi bộ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hút thuốc lá.",
+   "text": "Người bệnh hầu như luôn hút thuốc lá hoặc dùng thuốc lá dạng khác (thuốc lá nhai, xì gà).",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): phổ biến hơn ở nam giới.",
+   "text": "Hay gặp hơn ở nam giới và người dưới 45 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Máu nuôi kém có thể gây vết loét đau không lành, rồi hoại tử; hoại tử thường phải mổ cắt bỏ ngón tay, ngón chân bị ảnh hưởng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ngừng hút thuốc lá.",
+   "text": "Bỏ hoàn toàn mọi loại thuốc lá là cách duy nhất để chặn bệnh tiến triển.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi có các dấu hiệu trên, nhất là người hút thuốc → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-buerger.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Buerger disease",
+   "publisher": "Mayo Clinic (Hoa Kỳ)",
+   "url": "https://www.mayoclinic.org/diseases-conditions/buergers-disease/symptoms-causes/syc-20350658",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

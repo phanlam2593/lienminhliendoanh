@@ -8,17 +8,23 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Legg-Calvé-Perthes** — nhóm bệnh: cơ - xương - khớp, xem theo bộ phận cơ thể, nhóm bệnh.",
+   "text": "Bệnh Legg-Calvé-Perthes là khi chỏm xương đùi ở khớp háng không được nuôi đủ máu, xương bị chết rồi xẹp, biến dạng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chủ yếu gặp ở bé trai khoảng 4–11 tuổi.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau họng, sụt cân, sốt.",
+   "text": "Dấu hiệu đầu tiên thường là đi khập khiễng, hay không đau; ngoài ra cứng khớp háng, đau gối, đau đùi hoặc bẹn.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -36,27 +42,28 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Trẻ trên 6 tuổi dễ bị biến dạng khớp háng và viêm khớp về sau hơn, kể cả khi đã điều trị.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không hút thuốc lá chủ động hay thụ động, tránh vận động nặng và liên tục khớp háng, giữ cân nặng hợp lý.",
+   "text": "Mục tiêu là giữ chỏm xương đùi nằm trong ổ khớp: nghỉ ngơi, giảm vận động, vật lý trị liệu, thuốc kháng viêm, bó bột hoặc nẹp, nạng; mổ khi các cách này không hiệu quả.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ đi khập khiễng, đau háng, đau gối → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +74,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-legg-calve-perthes.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Legg-Calve-Perthes disease",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001264.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

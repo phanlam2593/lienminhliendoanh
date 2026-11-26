@@ -8,17 +8,29 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Kawasaki ở trẻ em** — nhóm bệnh: tim mạch, bệnh trẻ em.",
+   "text": "Kawasaki là bệnh viêm toàn thân, chủ yếu gặp ở trẻ dưới 5 tuổi, bé trai nhiều hơn bé gái.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chưa rõ nguyên nhân gây bệnh.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: bong tróc da, sưng hạch, tiêu chảy, sưng khớp, chảy máu, buồn ngủ, đau bụng, phát ban, đau khớp, sốt cao.",
+   "text": "Sốt từ 5 ngày trở lên, kèm các dấu hiệu khác:",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đỏ hai mắt; thay đổi ở môi và miệng; phát ban; sưng đỏ bàn tay, bàn chân; nổi hạch cổ.",
+   "src": [
+    1
    ]
   }
  ],
@@ -36,27 +48,28 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Bệnh có thể gây tổn thương tim và mạch máu, kể cả động mạch vành.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bổ sung đầy đủ dinh dưỡng cho trẻ.",
+   "text": "Điều trị chuẩn ở bệnh viện là truyền globulin miễn dịch (IVIG) kèm aspirin theo chỉ định bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ sốt kéo dài kèm mắt đỏ, môi đỏ, phát ban, sưng tay chân → đưa đi khám ngay.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +80,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-kawasaki-o-tre-em.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Clinical Overview of Kawasaki Disease",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/kawasaki/hcp/clinical-overview/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

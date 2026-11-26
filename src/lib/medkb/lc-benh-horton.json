@@ -8,17 +8,29 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Horton** — nhóm bệnh: thần kinh - tinh thần.",
+   "text": "Bệnh Horton (viêm động mạch thái dương, viêm động mạch tế bào khổng lồ) là tình trạng các động mạch, nhất là ở hai bên thái dương, bị viêm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, cứng khớp, đau họng, nhìn đôi, ho khan, đau đầu, yếu cơ, ngứa, ho.",
+   "text": "Đau đầu dữ dội, thường xuyên; đau hoặc ấn đau ở thái dương, da đầu; đau hàm khi ăn hoặc nói.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Rối loạn thị lực như nhìn đôi hoặc mất thị lực một hay hai mắt.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể kèm triệu chứng giống cúm, sụt cân, mệt mỏi, buồn bã.",
+   "src": [
+    1
    ]
   }
  ],
@@ -36,38 +48,58 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị kịp có thể gây đột quỵ và mù.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: ngưng hút thuốc lá, kiểm tra mật độ xương định kỳ, bổ sung vitamin D và canxi.",
+   "text": "Thường điều trị bằng thuốc steroid (prednisolone), bắt đầu ngay cả trước khi có chẩn đoán chắc chắn vì nguy cơ mất thị lực.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không tự ngưng steroid đột ngột khi bác sĩ chưa cho phép.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi bị bệnh này → đi khám gấp trong ngày.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột nhìn mờ, nhìn đôi hoặc mất thị lực kèm đau đầu, đau thái dương → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bệnh Horton – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-horton.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Temporal arteritis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/temporal-arteritis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

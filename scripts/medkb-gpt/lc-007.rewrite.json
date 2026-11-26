@@ -1,0 +1,253 @@
+{
+  "_note": "26/11 — Vòng LC 5 (ChatGPT đợt 3–5 của Kir, Claude đã mở trang kiểm): NHS cerebral-palsy, temporal-arteritis, huntingtons-disease, myasthenia-gravis, gum-disease; MedlinePlus 000339, 001176, 000719, 000302, 000771, 001264, 001258, genetics/hypophosphatasia; Mayo Buerger; CDC vCJD, Kawasaki, Yellow Book lặn; NIDDK acromegaly. Bỏ qua (nguồn chưa mở được/không tin cậy): beryllium, cầu thận màng, cầu thận tơ huyết, Freiberg, gan sung huyết, khớp do thần kinh, Kienbock, Marchiafava-Bignami, màng đáy mỏng, mất ngủ người già, nang tủy thận, nến xương.",
+  "lc-bai-nao-tre-em": {
+    "addSources": [{ "title": "Cerebral palsy", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/" }],
+    "about": [["Bại não là nhóm bệnh suốt đời ảnh hưởng đến vận động và phối hợp, do một vấn đề ở não.", ["+0"]]],
+    "signs": [
+      ["Chậm đạt các mốc phát triển như chưa biết ngồi, biết đi đúng tuổi.", ["+0"]],
+      ["Người trông quá cứng hoặc quá mềm; đi kiễng chân.", ["+0"]],
+      ["Dấu hiệu thường thấy từ sớm, mức độ rất khác nhau giữa các trẻ.", ["+0"]]
+    ],
+    "causes": [
+      ["Não phát triển không bình thường trong bụng mẹ (ví dụ do nhiễm trùng khi mang thai), não thiếu oxy tạm thời khi sinh khó, hoặc tổn thương não sau sinh như viêm màng não, chấn thương đầu nặng, chảy máu não.", ["+0"]],
+      ["Nhiều trường hợp không rõ nguyên nhân chính xác.", ["+0"]]
+    ],
+    "course": [["Tổn thương não ban đầu không nặng thêm theo thời gian, nhưng cơ thể chịu áp lực lâu ngày có thể gây đau khớp khi lớn tuổi.", ["+0"]]],
+    "care": [
+      ["Hiện chưa chữa khỏi, nhưng điều trị giúp trẻ vận động và tự lập tốt nhất có thể.", ["+0"]],
+      ["Gồm vật lý trị liệu (tập luyện, kéo giãn), trị liệu ngôn ngữ, hoạt động trị liệu, thuốc giảm co cứng cơ, và đôi khi phẫu thuật.", ["+0"]]
+    ],
+    "doctor": [["Bé chậm biết ngồi, biết đi, người quá cứng hoặc quá mềm → đưa đi khám để được đánh giá sớm.", ["+0"]]]
+  },
+  "lc-benh-beriberi": {
+    "addSources": [{ "title": "Beriberi", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000339.htm" }],
+    "about": [["Beriberi là bệnh do cơ thể thiếu vitamin B1 (thiamine).", ["+0"]]],
+    "signs": [
+      ["Thể ướt (ảnh hưởng tim, tuần hoàn): khó thở, phù cẳng chân, tim đập nhanh.", ["+0"]],
+      ["Thể khô (ảnh hưởng thần kinh): tê rần, đau, khó đi lại, lú lẫn.", ["+0"]]
+    ],
+    "causes": [
+      ["Ngày nay nguyên nhân chính là uống nhiều rượu, vì rượu làm ăn uống kém và cản trở hấp thu, dự trữ vitamin B1.", ["+0"]],
+      ["Lọc máu, dùng thuốc lợi tiểu liều cao cũng làm tăng nguy cơ; trẻ bú mẹ thiếu B1 hoặc sữa công thức thiếu B1 cũng có thể mắc.", ["+0"]]
+    ],
+    "course": [["Không chữa có thể tử vong, nhưng điều trị thì triệu chứng thường đỡ nhanh; tổn thương tim thường hồi phục, tổn thương thần kinh hồi phục nếu phát hiện sớm.", ["+0"]]],
+    "care": [["Bổ sung vitamin B1 bằng đường tiêm hoặc uống theo chỉ định bác sĩ, có thể kèm vitamin khác và xét nghiệm máu theo dõi.", ["+0"]]],
+    "doctor": [["Có các dấu hiệu trên, hoặc thấy người nhà ăn uống thiếu chất, mất cân đối → đi khám.", ["+0"]]]
+  },
+  "lc-benh-buerger": {
+    "addSources": [{ "title": "Buerger disease", "publisher": "Mayo Clinic (Hoa Kỳ)", "url": "https://www.mayoclinic.org/diseases-conditions/buergers-disease/symptoms-causes/syc-20350658" }],
+    "about": [["Bệnh Buerger là bệnh hiếm của động mạch và tĩnh mạch ở tay chân, làm tắc mạch và giảm máu nuôi.", ["+0"]]],
+    "signs": [["Tê rần ngón tay ngón chân, da đổi màu, đau bàn chân khi đi bộ.", ["+0"]]],
+    "causes": [
+      ["Người bệnh hầu như luôn hút thuốc lá hoặc dùng thuốc lá dạng khác (thuốc lá nhai, xì gà).", ["+0"]],
+      ["Hay gặp hơn ở nam giới và người dưới 45 tuổi.", ["+0"]]
+    ],
+    "course": [["Máu nuôi kém có thể gây vết loét đau không lành, rồi hoại tử; hoại tử thường phải mổ cắt bỏ ngón tay, ngón chân bị ảnh hưởng.", ["+0"]]],
+    "care": [["Bỏ hoàn toàn mọi loại thuốc lá là cách duy nhất để chặn bệnh tiến triển.", ["+0"]]],
+    "doctor": [["Nghi có các dấu hiệu trên, nhất là người hút thuốc → đi khám.", ["+0"]]]
+  },
+  "lc-benh-bo-dien": {
+    "addSources": [{ "title": "About Variant Creutzfeldt-Jakob Disease", "publisher": "CDC (Hoa Kỳ)", "url": "https://www.cdc.gov/variant-creutzfeldt-jakob/about/index.html" }],
+    "about": [
+      ["Biến thể bệnh Creutzfeldt-Jakob (vCJD) ở người là bệnh não hiếm và gây tử vong, liên quan đến bệnh bò điên (BSE) ở bò.", ["+0"]],
+      ["Cả hai đều do prion — protein gập sai, vón lại trong mô não.", ["+0"]]
+    ],
+    "signs": [["Sớm là triệu chứng tâm thần rõ (trầm cảm, lo âu, thu mình); về sau thường sa sút trí tuệ.", ["+0"]]],
+    "causes": [["Người mắc do ăn thịt bò bị bệnh bò điên.", ["+0"]]],
+    "course": [
+      ["Luôn gây tử vong, thường trong khoảng 14 tháng kể từ khi có triệu chứng.", ["+0"]],
+      ["Rất hiếm kể từ đầu những năm 2000; cả thế giới mới ghi nhận khoảng 233 ca.", ["+0"]]
+    ],
+    "care": [["Chưa có cách chữa; chăm sóc tập trung giúp người bệnh dễ chịu.", ["+0"]]],
+    "doctor": [["Có thay đổi tâm thần, trí nhớ kéo dài không rõ lý do → đi khám chuyên khoa thần kinh.", ["+0"]]]
+  },
+  "lc-benh-giam-ap": {
+    "addSources": [{ "title": "Scuba Diving: Decompression Illness & Other Dive-Related Injuries", "publisher": "CDC Yellow Book (Hoa Kỳ)", "url": "https://www.cdc.gov/yellow-book/hcp/environmental-hazards-risks/scuba-diving-decompression-illness-and-other-dive-related-injuries.html" }],
+    "about": [["Bệnh giảm áp xảy ra khi khí hoà tan vào mô cơ thể lúc lặn thoát ra thành bọt khí.", ["+0"]]],
+    "signs": [["Đau nhức khớp, mệt bất thường, tê rần, yếu hoặc liệt, chóng mặt, ngứa, da nổi vân, rối loạn tiểu tiện đại tiện, mất phối hợp.", ["+0"]]],
+    "causes": [["Nguy cơ tăng theo độ sâu, thời gian lặn và tốc độ ngoi lên; lặn nhiều lần hoặc nhiều ngày, gắng sức, mất nước, lên cao (đi máy bay) quá sớm sau lặn cũng làm tăng nguy cơ.", ["+0"]]],
+    "care": [
+      ["Sơ cứu: cho thở oxy nồng độ cao càng sớm càng tốt.", ["+0"]],
+      ["Điều trị chính là tái nén và thở oxy trong buồng cao áp.", ["+0"]],
+      ["Sau lặn nên chờ ít nhất 12 giờ (một lần lặn không cần dừng giảm áp) đến 18 giờ (lặn nhiều lần, nhiều ngày) trước khi đi máy bay; chờ vẫn chỉ giảm chứ không hết hẳn nguy cơ.", ["+0"]]
+    ],
+    "doctor": [["Có triệu chứng bất thường ngay sau khi lặn → đi khám ngay, và nên được đánh giá trước khi đi máy bay.", ["+0"]]],
+    "emergency": [["Mất ý thức sau khi ngoi lên, yếu liệt, khó thở → gọi cấp cứu, cho thở oxy trong lúc chờ.", ["+0"]]]
+  },
+  "lc-benh-horton": {
+    "addSources": [{ "title": "Temporal arteritis", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/temporal-arteritis/" }],
+    "about": [["Bệnh Horton (viêm động mạch thái dương, viêm động mạch tế bào khổng lồ) là tình trạng các động mạch, nhất là ở hai bên thái dương, bị viêm.", ["+0"]]],
+    "signs": [
+      ["Đau đầu dữ dội, thường xuyên; đau hoặc ấn đau ở thái dương, da đầu; đau hàm khi ăn hoặc nói.", ["+0"]],
+      ["Rối loạn thị lực như nhìn đôi hoặc mất thị lực một hay hai mắt.", ["+0"]],
+      ["Có thể kèm triệu chứng giống cúm, sụt cân, mệt mỏi, buồn bã.", ["+0"]]
+    ],
+    "course": [["Không điều trị kịp có thể gây đột quỵ và mù.", ["+0"]]],
+    "care": [
+      ["Thường điều trị bằng thuốc steroid (prednisolone), bắt đầu ngay cả trước khi có chẩn đoán chắc chắn vì nguy cơ mất thị lực.", ["+0"]],
+      ["Không tự ngưng steroid đột ngột khi bác sĩ chưa cho phép.", ["+0"]]
+    ],
+    "doctor": [["Nghi bị bệnh này → đi khám gấp trong ngày.", ["+0"]]],
+    "emergency": [["Đột ngột nhìn mờ, nhìn đôi hoặc mất thị lực kèm đau đầu, đau thái dương → đi cấp cứu ngay.", ["+0"]]]
+  },
+  "lc-benh-huntington": {
+    "addSources": [{ "title": "Huntington's disease", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/huntingtons-disease/" }],
+    "about": [["Bệnh Huntington là bệnh di truyền ảnh hưởng đến vận động, suy nghĩ và tâm trạng.", ["+0"]]],
+    "signs": [["Sớm có những cử động giật nhỏ không kiểm soát được, kèm thay đổi trí nhớ, suy nghĩ và tâm trạng.", ["+0"]]],
+    "causes": [["Nếu cha hoặc mẹ mang gen bệnh, con có 1 phần 2 (50%) khả năng mang gen và mắc bệnh.", ["+0"]]],
+    "course": [
+      ["Triệu chứng thường bắt đầu ở tuổi 30–50, nhưng có thể ở bất kỳ tuổi nào.", ["+0"]],
+      ["Bệnh nặng dần và ảnh hưởng tuổi thọ, dù nhiều người sống thêm nhiều năm sau khi có triệu chứng.", ["+0"]]
+    ],
+    "care": [["Hiện chưa chữa khỏi; một nhóm nhân viên y tế sẽ cùng lập kế hoạch kiểm soát triệu chứng.", ["+0"]]],
+    "doctor": [["Gia đình có người bệnh có thể đi xét nghiệm gen (thường từ 18 tuổi), không bắt buộc; nên được tư vấn trước.", ["+0"]]]
+  },
+  "lc-benh-hypophosphatasia-hpp-bam-sinh": {
+    "addSources": [{ "title": "Hypophosphatasia", "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/genetics/condition/hypophosphatasia/" }],
+    "about": [["Hypophosphatasia (HPP) là bệnh di truyền ảnh hưởng đến sự phát triển của xương và răng, do quá trình lắng khoáng chất vào xương, răng bị rối loạn.", ["+0"]]],
+    "signs": [
+      ["Xương yếu và mềm, gây các vấn đề xương giống còi xương.", ["+0"]],
+      ["Rụng răng sữa sớm là một trong những dấu hiệu đầu tiên ở trẻ.", ["+0"]],
+      ["Thể nặng ở trẻ nhỏ có thể kèm khó thở.", ["+0"]]
+    ],
+    "causes": [["Do đột biến gen ALPL, gen tạo men phosphatase kiềm cần cho quá trình lắng khoáng.", ["+0"]]],
+    "course": [
+      ["Thể nặng nhất thường xảy ra trước sinh và ở trẻ sơ sinh; thể ở trẻ lớn và người lớn thường nhẹ hơn; thể nhẹ nhất chỉ ảnh hưởng răng.", ["+0"]],
+      ["Thể nặng gặp khoảng 1 trên 100.000 trẻ sơ sinh; thể nhẹ có lẽ phổ biến hơn.", ["+0"]]
+    ],
+    "doctor": [["Trẻ rụng răng sữa sớm, xương yếu, dễ biến dạng → đưa đi khám.", ["+0"]]]
+  },
+  "lc-benh-kawasaki-o-tre-em": {
+    "addSources": [{ "title": "Clinical Overview of Kawasaki Disease", "publisher": "CDC (Hoa Kỳ)", "url": "https://www.cdc.gov/kawasaki/hcp/clinical-overview/index.html" }],
+    "about": [
+      ["Kawasaki là bệnh viêm toàn thân, chủ yếu gặp ở trẻ dưới 5 tuổi, bé trai nhiều hơn bé gái.", ["+0"]],
+      ["Chưa rõ nguyên nhân gây bệnh.", ["+0"]]
+    ],
+    "signs": [
+      ["Sốt từ 5 ngày trở lên, kèm các dấu hiệu khác:", ["+0"]],
+      ["Đỏ hai mắt; thay đổi ở môi và miệng; phát ban; sưng đỏ bàn tay, bàn chân; nổi hạch cổ.", ["+0"]]
+    ],
+    "course": [["Bệnh có thể gây tổn thương tim và mạch máu, kể cả động mạch vành.", ["+0"]]],
+    "care": [["Điều trị chuẩn ở bệnh viện là truyền globulin miễn dịch (IVIG) kèm aspirin theo chỉ định bác sĩ.", ["+0"]]],
+    "doctor": [["Trẻ sốt kéo dài kèm mắt đỏ, môi đỏ, phát ban, sưng tay chân → đưa đi khám ngay.", ["+0"]]]
+  },
+  "lc-benh-khong-lo": {
+    "addSources": [{ "title": "Acromegaly", "publisher": "NIDDK (NIH, Hoa Kỳ)", "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/acromegaly" }],
+    "about": [["Bệnh khổng lồ là khi trẻ có quá nhiều hormone tăng trưởng lúc xương còn đang dài ra, làm trẻ cao quá mức; ở người lớn tình trạng này gọi là bệnh to đầu chi.", ["+0"]]],
+    "signs": [["Tay chân to ra và sưng, kèm đau đầu, đau khớp, rối loạn thị lực.", ["+0"]]],
+    "causes": [["Hơn 9/10 trường hợp do một khối u ở tuyến yên tiết quá nhiều hormone tăng trưởng.", ["+0"]]],
+    "care": [
+      ["Chẩn đoán bằng xét nghiệm máu (IGF-I, nghiệm pháp dung nạp đường) và chụp MRI tuyến yên.", ["+0"]],
+      ["Điều trị gồm mổ (thường qua đường mũi), thuốc và xạ trị.", ["+0"]]
+    ],
+    "doctor": [["Trẻ cao vượt hẳn bạn cùng tuổi, tay chân to bất thường → đưa đi khám nội tiết.", ["+0"]]]
+  },
+  "lc-benh-legg-calve-perthes": {
+    "addSources": [{ "title": "Legg-Calve-Perthes disease", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001264.htm" }],
+    "about": [
+      ["Bệnh Legg-Calvé-Perthes là khi chỏm xương đùi ở khớp háng không được nuôi đủ máu, xương bị chết rồi xẹp, biến dạng.", ["+0"]],
+      ["Chủ yếu gặp ở bé trai khoảng 4–11 tuổi.", ["+0"]]
+    ],
+    "signs": [["Dấu hiệu đầu tiên thường là đi khập khiễng, hay không đau; ngoài ra cứng khớp háng, đau gối, đau đùi hoặc bẹn.", ["+0"]]],
+    "course": [["Trẻ trên 6 tuổi dễ bị biến dạng khớp háng và viêm khớp về sau hơn, kể cả khi đã điều trị.", ["+0"]]],
+    "care": [["Mục tiêu là giữ chỏm xương đùi nằm trong ổ khớp: nghỉ ngơi, giảm vận động, vật lý trị liệu, thuốc kháng viêm, bó bột hoặc nẹp, nạng; mổ khi các cách này không hiệu quả.", ["+0"]]],
+    "doctor": [["Trẻ đi khập khiễng, đau háng, đau gối → đưa đi khám.", ["+0"]]]
+  },
+  "lc-benh-lun-tuyen-yen": {
+    "addSources": [{ "title": "Growth hormone deficiency - children", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001176.htm" }],
+    "about": [["Lùn tuyến yên (thiếu hormone tăng trưởng) là khi tuyến yên không tiết đủ hormone tăng trưởng.", ["+0"]]],
+    "signs": [
+      ["Chậm lớn, có thể thấy từ nhỏ hoặc đến 2–3 tuổi mới rõ; thấp hơn hẳn bạn cùng tuổi, cùng giới.", ["+0"]],
+      ["Tỷ lệ cơ thể bình thường (có thể trông mũm mĩm), mặt trông trẻ hơn tuổi, trí tuệ thường bình thường; dậy thì muộn hoặc không dậy thì.", ["+0"]]
+    ],
+    "causes": [["Có thể bẩm sinh, do bệnh khác hoặc sau chấn thương não nặng; trẻ có dị tật mặt, sọ như sứt môi, hở hàm ếch có thể thiếu hormone này. Phần lớn không rõ nguyên nhân.", ["+0"]]],
+    "course": [["Điều trị càng sớm càng dễ đạt chiều cao gần bình thường khi trưởng thành, nhưng không hiệu quả với mọi trẻ.", ["+0"]]],
+    "care": [
+      ["Chẩn đoán bằng đo chiều cao, chụp X-quang bàn tay xem tuổi xương, xét nghiệm máu và nghiệm pháp kích thích.", ["+0"]],
+      ["Điều trị bằng tiêm hormone tăng trưởng hằng ngày tại nhà, kéo dài nhiều năm, tái khám đều để chỉnh liều.", ["+0"]]
+    ],
+    "doctor": [["Trẻ thấp bất thường so với tuổi → đưa đi khám; theo dõi biểu đồ tăng trưởng mỗi lần khám định kỳ.", ["+0"]]]
+  },
+  "lc-benh-mach-mau-tinh-bot": {
+    "addSources": [{ "title": "Cerebral amyloid angiopathy", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000719.htm" }],
+    "about": [
+      ["Bệnh mạch máu tinh bột não là khi protein amyloid đóng lên thành động mạch trong não, có thể gây chảy máu não và sa sút trí tuệ.", ["+0"]],
+      ["Thường gặp ở người trên 55 tuổi; đôi khi có tính gia đình.", ["+0"]]
+    ],
+    "signs": [
+      ["Chảy máu lớn giống đột quỵ: đau đầu đột ngột, lơ mơ, lú lẫn, đổi thị lực hoặc lời nói, yếu người, co giật, nôn.", ["+0"]],
+      ["Chảy máu nhỏ: từng đợt lú lẫn, đau đầu hoặc yếu, tê lúc có lúc không, co giật, trí nhớ giảm dần.", ["+0"]]
+    ],
+    "care": [["Chưa có điều trị đặc hiệu; tập trung kiểm soát yếu tố nguy cơ như huyết áp cao, giảm triệu chứng và phục hồi chức năng.", ["+0"]]],
+    "doctor": [["Hay lú lẫn từng đợt, trí nhớ giảm dần → đi khám chuyên khoa thần kinh.", ["+0"]]],
+    "emergency": [["Đột ngột mất vận động, cảm giác, thị lực hoặc lời nói → gọi cấp cứu ngay.", ["+0"]]]
+  },
+  "lc-benh-nhuoc-co-tong-quat": {
+    "addSources": [{ "title": "Myasthenia gravis", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/myasthenia-gravis/" }],
+    "about": [["Nhược cơ là bệnh hiếm, kéo dài, gây yếu cơ — chủ yếu cơ mắt, mặt, nhai, nuốt, nói, nhưng có thể ảnh hưởng hầu hết cơ thể.", ["+0"]]],
+    "signs": [["Sụp mí, nhìn đôi, khó nhai, khó nuốt; yếu hơn khi mệt, thường về chiều, đỡ sau khi nghỉ.", ["+0"]]],
+    "causes": [["Là bệnh tự miễn: hệ miễn dịch làm rối liên lạc giữa thần kinh và cơ; có liên quan đến tuyến ức.", ["+0"]]],
+    "care": [["Tránh yếu tố khởi phát như mệt mỏi, căng thẳng; dùng thuốc tăng sức cơ; có thể mổ cắt tuyến ức.", ["+0"]]],
+    "doctor": [["Sụp mí, nhìn đôi, khó nuốt, yếu cơ tăng dần trong ngày → đi khám.", ["+0"]]],
+    "emergency": [["Triệu chứng nặng lên đột ngột, khó thở hoặc khó nuốt nhiều → đến bệnh viện ngay.", ["+0"]]]
+  },
+  "lc-benh-nao-gan": {
+    "addSources": [{ "title": "Hepatic encephalopathy", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000302.htm" }],
+    "about": [["Bệnh não gan là khi gan không lọc được chất độc (như amoniac) khỏi máu, làm não hoạt động kém đi; có thể xảy ra đột ngột hoặc từ từ.", ["+0"]]],
+    "signs": [
+      ["Sớm: lú lẫn nhẹ, hay quên, kém tập trung, thay đổi giấc ngủ.", ["+0"]],
+      ["Nặng: nói líu, mất định hướng, run hoặc cử động bất thường ở tay, có thể mê man, hôn mê.", ["+0"]]
+    ],
+    "causes": [
+      ["Thường do xơ gan (do viêm gan, rượu, gan nhiễm mỡ).", ["+0"]],
+      ["Yếu tố khởi phát: xuất huyết tiêu hoá, nhiễm trùng, mất nước, táo bón, thuốc giảm đau gây nghiện hoặc thuốc an thần.", ["+0"]]
+    ],
+    "care": [
+      ["Xử lý nguyên nhân (chảy máu, nhiễm trùng, rối loạn điện giải); dùng lactulose hoặc kháng sinh giảm amoniac theo chỉ định bác sĩ.", ["+0"]],
+      ["Tránh thuốc an thần và thuốc chuyển hoá qua gan nếu bác sĩ chưa cho.", ["+0"]]
+    ],
+    "doctor": [["Người bệnh gan có thay đổi tinh thần, lú lẫn, ngủ khác thường → đi khám sớm.", ["+0"]]],
+    "emergency": [["Bệnh có thể nặng nhanh: lơ mơ, mất định hướng, khó đánh thức → đi cấp cứu ngay.", ["+0"]]]
+  },
+  "lc-benh-nao-wernicke": {
+    "addSources": [{ "title": "Wernicke-Korsakoff syndrome", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000771.htm" }],
+    "about": [["Bệnh não Wernicke là rối loạn não do thiếu vitamin B1 (thiamine).", ["+0"]]],
+    "signs": [
+      ["Lú lẫn, giảm hoạt động tinh thần, có thể tiến tới hôn mê.", ["+0"]],
+      ["Mất phối hợp vận động (đi loạng choạng); cử động mắt bất thường, nhìn đôi, sụp mí.", ["+0"]]
+    ],
+    "causes": [["Thiếu B1 hay gặp ở người nghiện rượu; cũng gặp khi kém hấp thu do bệnh mạn tính hoặc sau mổ giảm cân.", ["+0"]]],
+    "course": [["Không điều trị sẽ nặng dần và có thể đe doạ tính mạng; điều trị giúp kiểm soát triệu chứng, làm chậm hoặc chặn bệnh.", ["+0"]]],
+    "care": [["Tiêm vitamin B1 càng sớm càng tốt; bỏ rượu để tránh tổn thương não và thần kinh thêm.", ["+0"]]],
+    "emergency": [["Người hay uống rượu hoặc suy kiệt bỗng lú lẫn, đi loạng choạng, nhìn đôi → đi cấp cứu ngay.", ["+0"]]]
+  },
+  "lc-benh-nuou-va-nha-chu": {
+    "addSources": [{ "title": "Gum disease", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/gum-disease/" }],
+    "about": [["Bệnh nướu là khi nướu đỏ, sưng, đau và chảy máu; rất hay gặp.", ["+0"]]],
+    "signs": [
+      ["Chảy máu nướu khi đánh răng, dùng chỉ nha khoa hoặc ăn đồ cứng.", ["+0"]],
+      ["Hôi miệng, vị khó chịu trong miệng; tụt nướu; răng lung lay hoặc rụng.", ["+0"]]
+    ],
+    "causes": [["Do mảng bám tích tụ trên răng không được làm sạch.", ["+0"]]],
+    "care": [
+      ["Đánh răng bằng kem có fluor ít nhất hai lần mỗi ngày; làm sạch kẽ răng hằng ngày bằng chỉ hoặc bàn chải kẽ.", ["+0"]],
+      ["Không súc nước súc miệng ngay sau khi đánh răng; không hút thuốc; khám răng, lấy cao răng định kỳ.", ["+0"]]
+    ],
+    "doctor": [
+      ["Nướu chảy máu, đau, sưng hoặc hôi miệng → đặt lịch nha sĩ.", ["+0"]],
+      ["Nướu rất đau, sưng nhiều, răng lung lay hoặc rụng, có vết loét, mảng đỏ hay cục u trong miệng → khám nha gấp.", ["+0"]]
+    ]
+  },
+  "lc-benh-osgood-schlatter": {
+    "addSources": [{ "title": "Osgood-Schlatter disease", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001258.htm" }],
+    "about": [
+      ["Bệnh Osgood-Schlatter là sưng đau ở chỗ u xương phía trên xương ống chân, ngay dưới gối.", ["+0"]],
+      ["Hay gặp ở tuổi dậy thì chơi thể thao (bóng đá, bóng rổ, bóng chuyền, thể dục dụng cụ), nam nhiều hơn nữ.", ["+0"]]
+    ],
+    "signs": [["Đau, ấn đau ở chỗ u xương dưới gối, một hoặc hai chân; đau hơn khi chạy, nhảy, leo cầu thang.", ["+0"]]],
+    "causes": [["Được cho là do chấn thương nhỏ lặp lại ở gối vì vận động nhiều khi xương chưa phát triển xong.", ["+0"]]],
+    "course": [["Đa số tự đỡ trong vài tuần đến vài tháng, và thường hết khi trẻ ngừng lớn.", ["+0"]]],
+    "care": [["Cho gối nghỉ, giảm vận động khi đau; chườm đá chỗ đau và sau khi tập; có thể dùng thuốc giảm đau không kê đơn. Hiếm khi cần nẹp, bó bột hay mổ.", ["+0"]]],
+    "doctor": [["Trẻ đau gối, đau chân hoặc đau không đỡ khi đã nghỉ, chườm → đưa đi khám.", ["+0"]]]
+  }
+}

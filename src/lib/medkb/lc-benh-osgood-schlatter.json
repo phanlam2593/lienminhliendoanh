@@ -8,55 +8,56 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Osgood-Schlatter** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Bệnh Osgood-Schlatter là sưng đau ở chỗ u xương phía trên xương ống chân, ngay dưới gối.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Hay gặp ở tuổi dậy thì chơi thể thao (bóng đá, bóng rổ, bóng chuyền, thể dục dụng cụ), nam nhiều hơn nữ.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau đầu, đau cổ, sưng, nám.",
+   "text": "Đau, ấn đau ở chỗ u xương dưới gối, một hoặc hai chân; đau hơn khi chạy, nhảy, leo cầu thang.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: gãy xương.",
+   "text": "Được cho là do chấn thương nhỏ lặp lại ở gối vì vận động nhiều khi xương chưa phát triển xong.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): có cơ tứ đầu đùi săn chắc, giới tính nam, độ tuổi, xương tăng trưởng đột ngột.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số tự đỡ trong vài tuần đến vài tháng, và thường hết khi trẻ ngừng lớn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi, tập luyện có trọng điểm, tăng cường độ mềm dẻo, dinh dưỡng cân bằng, cung cấp đủ năng lượng, protein.",
+   "text": "Cho gối nghỉ, giảm vận động khi đau; chườm đá chỗ đau và sau khi tập; có thể dùng thuốc giảm đau không kê đơn. Hiếm khi cần nẹp, bó bột hay mổ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ đau gối, đau chân hoặc đau không đỡ khi đã nghỉ, chườm → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -67,7 +68,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-osgood-schlatter.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Osgood-Schlatter disease",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/001258.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

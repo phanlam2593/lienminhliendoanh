@@ -8,40 +8,47 @@
  ],
  "about": [
   {
-   "text": "**Bệnh não Wernicke** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Bệnh não Wernicke là rối loạn não do thiếu vitamin B1 (thiamine).",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: lú lẫn, hôn mê, ngứa, ho.",
+   "text": "Lú lẫn, giảm hoạt động tinh thần, có thể tiến tới hôn mê.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Mất phối hợp vận động (đi loạng choạng); cử động mắt bất thường, nhìn đôi, sụp mí.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): nghiện rượu mãn tính, nhiễm trùng cấp, thiếu vitamin, nghiện rượu, hội chứng Korsakoff.",
+   "text": "Thiếu B1 hay gặp ở người nghiện rượu; cũng gặp khi kém hấp thu do bệnh mạn tính hoặc sau mổ giảm cân.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị sẽ nặng dần và có thể đe doạ tính mạng; điều trị giúp kiểm soát triệu chứng, làm chậm hoặc chặn bệnh.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: hạn chế cồn, tái khám định kỳ, bổ sung vitamin B1, ăn đa dạng và cân bằng.",
+   "text": "Tiêm vitamin B1 càng sớm càng tốt; bỏ rượu để tránh tổn thương não và thần kinh thêm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,14 +61,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Người hay uống rượu hoặc suy kiệt bỗng lú lẫn, đi loạng choạng, nhìn đôi → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Bệnh não Wernicke – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-nao-wernicke.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Wernicke-Korsakoff syndrome",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/ency/article/000771.htm",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

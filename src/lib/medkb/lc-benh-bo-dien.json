@@ -8,49 +8,62 @@
  ],
  "about": [
   {
-   "text": "**Bệnh bò điên** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Biến thể bệnh Creutzfeldt-Jakob (vCJD) ở người là bệnh não hiếm và gây tử vong, liên quan đến bệnh bò điên (BSE) ở bò.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Cả hai đều do prion — protein gập sai, vón lại trong mô não.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: trầm cảm, co giật, mất ngủ, hôn mê.",
+   "text": "Sớm là triệu chứng tâm thần rõ (trầm cảm, lo âu, thu mình); về sau thường sa sút trí tuệ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: thoái hóa thần kinh.",
+   "text": "Người mắc do ăn thịt bò bị bệnh bò điên.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
- "care": [
+ "course": [
   {
-   "text": "Sinh hoạt / phòng ngừa: lệnh cấm thịt được thu hồi bằng máy móc.",
+   "text": "Luôn gây tử vong, thường trong khoảng 14 tháng kể từ khi có triệu chứng.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rất hiếm kể từ đầu những năm 2000; cả thế giới mới ghi nhận khoảng 233 ca.",
    "src": [
-    0
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Chưa có cách chữa; chăm sóc tập trung giúp người bệnh dễ chịu.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có thay đổi tâm thần, trí nhớ kéo dài không rõ lý do → đi khám chuyên khoa thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +74,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-bo-dien.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Variant Creutzfeldt-Jakob Disease",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/variant-creutzfeldt-jakob/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
