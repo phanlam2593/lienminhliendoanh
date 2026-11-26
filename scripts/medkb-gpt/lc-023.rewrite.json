@@ -1,0 +1,708 @@
+{
+  "_note": "26/11 — Vòng LC 21 (đợt 68–71): MedlinePlus cirrhosis, scleroderma, genetics OI, TSC; NHS cystic-fibrosis, subarachnoid-haemorrhage, temporal-arteritis — Claude đã mở kiểm.",
+  "lc-xo-gan-con-bu": {
+    "addSources": [
+      {
+        "title": "Cirrhosis",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/cirrhosis.html"
+      }
+    ],
+    "signs": [
+      [
+        "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "about": [
+      [
+        "Xơ gan là gan bị sẹo hoá sau tổn thương hoặc bệnh lâu ngày; mô sẹo không làm được việc của gan như tạo protein, chống nhiễm trùng, lọc máu, hỗ trợ tiêu hoá.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-gan-mat-bu": {
+    "addSources": [
+      {
+        "title": "Cirrhosis",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/cirrhosis.html"
+      }
+    ],
+    "signs": [
+      [
+        "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "about": [
+      [
+        "Xơ gan là gan bị sẹo hoá sau tổn thương hoặc bệnh lâu ngày; khi sẹo nhiều, gan không còn làm đủ việc và xuất hiện biến chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-gan-co-truong": {
+    "addSources": [
+      {
+        "title": "Cirrhosis",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/cirrhosis.html"
+      }
+    ],
+    "signs": [
+      [
+        "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "about": [
+      [
+        "Xơ gan là gan bị sẹo hoá sau tổn thương hoặc bệnh lâu ngày; một biến chứng là bụng sưng to do tích dịch (cổ trướng).",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-gan-do-ruou": {
+    "addSources": [
+      {
+        "title": "Cirrhosis",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/cirrhosis.html"
+      }
+    ],
+    "signs": [
+      [
+        "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "about": [
+      [
+        "Xơ gan do rượu là gan bị sẹo hoá do uống rượu lâu ngày — một trong những nguyên nhân hay gặp nhất của xơ gan.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-nang": {
+    "addSources": [
+      {
+        "title": "Cystic fibrosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cystic-fibrosis/"
+      }
+    ],
+    "about": [
+      [
+        "Xơ nang là bệnh di truyền hiếm gây vấn đề hô hấp và tiêu hoá, do chất nhầy đặc, dính tích tụ ở phổi và ống tiêu hoá.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ho dai dẳng có đờm, thở khò khè, hay viêm xoang, viêm phổi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Táo bón, đau bụng, phân mỡ khó xả trôi; trẻ chậm lớn, người lớn sụt cân; mồ hôi rất mặn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Trẻ mắc khi nhận gen lỗi từ cả bố và mẹ; nhận một gen thì là người mang gen, thường không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Chưa chữa khỏi và có thể làm giảm tuổi thọ, nhưng nhờ thuốc mới nhiều người sống quá tuổi trung niên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc điều biến CFTR, thuốc giãn đường thở, kháng sinh, vật lý trị liệu hô hấp, hỗ trợ dinh dưỡng; một số người cần ghép phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ ho kéo dài có đờm, hay viêm phổi, chậm lớn, phân mỡ → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xuong-thuy-tinh": {
+    "addSources": [
+      {
+        "title": "Osteogenesis imperfecta",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/osteogenesis-imperfecta/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh xương thuỷ tinh (tạo xương bất toàn) là nhóm bệnh di truyền làm xương dễ gãy, thường chỉ sau va chạm nhẹ hoặc không rõ lý do; khoảng 1 trên 10.000–20.000 người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Gãy xương nhiều lần; thể nhẹ hay có lòng trắng mắt màu xanh hoặc xám; khoảng nửa số người thể nhẹ nhất bị nghe kém khi trưởng thành.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể nặng: thấp, cong vẹo cột sống, co rút khớp, khó thở, bất thường răng, hạn chế vận động.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Khoảng 90% do đột biến gen COL1A1 hoặc COL1A2 (tạo collagen type I); thường di truyền trội, nhiều ca nặng là đột biến mới không có tiền sử gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có nhiều type; type I nhẹ nhất, type II nặng nhất (trẻ có thể mất sớm sau sinh).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ gãy xương nhiều lần không rõ lý do, lòng trắng mắt xanh → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-cung-cu": {
+    "addSources": [
+      {
+        "title": "Tuberous sclerosis complex",
+        "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/genetics/condition/tuberous-sclerosis-complex/"
+      }
+    ],
+    "about": [
+      [
+        "Xơ cứng củ là bệnh di truyền làm mọc nhiều u lành tính ở não, thận, tim, da, mắt; khoảng 1 trên 6.000–10.000 người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hay co giật; có thể kèm khó khăn về hành vi, giao tiếp, khuyết tật trí tuệ, ADHD hoặc tự kỷ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Hầu như ai cũng có bất thường da: mảng da nhạt màu, mảng da dày gồ, u quanh móng, u mạch xơ ở mặt (thường từ nhỏ).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do biến thể gen TSC1 hoặc TSC2; di truyền trội — khoảng 1/3 do thừa hưởng từ bố hoặc mẹ, còn lại là đột biến mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "U ở thận có thể nặng, đôi khi đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ co giật kèm các mảng da bất thường → đưa đi khám chuyên khoa.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-cung-bi": {
+    "addSources": [
+      {
+        "title": "Scleroderma",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/scleroderma.html"
+      }
+    ],
+    "about": [
+      [
+        "Xơ cứng bì là bệnh tự miễn; thể khu trú chủ yếu ở da và mô dưới da, thể hệ thống nặng hơn, có thể tổn thương mạch máu và tim, phổi, thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể khu trú: mảng da chắc, cứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể hệ thống: da ngón tay dày, mệt, ngón tay đổi màu khi lạnh (Raynaud), đau khớp, khó nuốt; đa số giảm chức năng phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; có thể do gen, yếu tố môi trường, thay đổi miễn dịch, nội tiết; hay gặp ở nữ, thường 30–50 tuổi; không di truyền trực tiếp nhưng có người thân bị thì nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát triệu chứng, hạn chế tổn thương: thuốc, vật lý trị liệu, chăm sóc răng định kỳ; thường do bác sĩ cơ xương khớp theo dõi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Da dày cứng dần, ngón tay tím tái khi lạnh, khó nuốt hoặc khó thở → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xo-cung-bi-toan-the": {
+    "addSources": [
+      {
+        "title": "Scleroderma",
+        "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+        "url": "https://medlineplus.gov/scleroderma.html"
+      }
+    ],
+    "about": [
+      [
+        "Xơ cứng bì là bệnh tự miễn; thể khu trú chủ yếu ở da và mô dưới da, thể hệ thống nặng hơn, có thể tổn thương mạch máu và tim, phổi, thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể khu trú: mảng da chắc, cứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể hệ thống: da ngón tay dày, mệt, ngón tay đổi màu khi lạnh (Raynaud), đau khớp, khó nuốt; đa số giảm chức năng phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; có thể do gen, yếu tố môi trường, thay đổi miễn dịch, nội tiết; hay gặp ở nữ, thường 30–50 tuổi; không di truyền trực tiếp nhưng có người thân bị thì nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng điều trị giúp kiểm soát triệu chứng, hạn chế tổn thương: thuốc, vật lý trị liệu, chăm sóc răng định kỳ; thường do bác sĩ cơ xương khớp theo dõi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Da dày cứng dần, ngón tay tím tái khi lạnh, khó nuốt hoặc khó thở → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xuat-huyet-duoi-nhen": {
+    "addSources": [
+      {
+        "title": "Subarachnoid haemorrhage",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/subarachnoid-haemorrhage/"
+      }
+    ],
+    "about": [
+      [
+        "Xuất huyết dưới nhện là một dạng đột quỵ hiếm gây chảy máu trong não, là cấp cứu đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau đầu đột ngột dữ dội như sét đánh, không dịu đi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau hoặc cứng cổ, buồn nôn, nôn, sợ ánh sáng, co giật, ngất, lơ mơ, lú lẫn, méo miệng, nói ngọng, yếu một bên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là vỡ phình mạch máu não; cũng có thể do chấn thương đầu nặng hoặc dị dạng mạch máu não; tiền sử gia đình có thể làm tăng nguy cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Hồi phục khác nhau, có thể mất vài tháng đến vài năm; nhiều người khá lên, có người khỏi hẳn, nhưng có thể để lại co giật, giảm trí nhớ, trầm cảm, mệt mỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Phẫu thuật cầm máu (kẹp hoặc nút phình mạch) và thuốc kiểm soát đau, huyết áp, co giật; phục hồi chức năng sau đó.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau đầu đột ngột dữ dội, méo miệng, yếu hoặc tê tay chân, khó nói, nhìn mờ → gọi cấp cứu ngay, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-dong-mach-thai-duong": {
+    "addSources": [
+      {
+        "title": "Temporal arteritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/temporal-arteritis/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Horton (viêm động mạch thái dương, viêm động mạch tế bào khổng lồ) là tình trạng các động mạch, nhất là ở hai bên thái dương, bị viêm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau đầu dữ dội, thường xuyên; đau hoặc ấn đau ở thái dương, da đầu; đau hàm khi ăn hoặc nói.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rối loạn thị lực như nhìn đôi hoặc mất thị lực một hay hai mắt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể kèm triệu chứng giống cúm, sụt cân, mệt mỏi, buồn bã.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị kịp có thể gây đột quỵ và mù.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường điều trị bằng thuốc steroid (prednisolone), bắt đầu ngay cả trước khi có chẩn đoán chắc chắn vì nguy cơ mất thị lực.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không tự ngưng steroid đột ngột khi bác sĩ chưa cho phép.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị bệnh này → đi khám gấp trong ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột nhìn mờ, nhìn đôi hoặc mất thị lực kèm đau đầu, đau thái dương → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

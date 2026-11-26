@@ -7,66 +7,80 @@
  ],
  "about": [
   {
-   "text": "**Xơ gan còn bù** — nhóm bệnh: tiêu hóa, bụng.",
+   "text": "Xơ gan là gan bị sẹo hoá sau tổn thương hoặc bệnh lâu ngày; mô sẹo không làm được việc của gan như tạo protein, chống nhiễm trùng, lọc máu, hỗ trợ tiêu hoá.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau hạ sườn phải, xuất huyết, vàng mắt, buồn nôn, sụt cân, bầm tím, mệt mỏi, chán ăn, vàng da, ngứa.",
+   "text": "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh gan do rượu, viêm gan siêu vi mạn tính, gan nhiễm mỡ không do rượu, viêm đường mật nguyên phát, truyền máu không an toàn, hội chứng buồng trứng đa nang, bệnh xơ nang, viêm gan tự miễn.",
+   "text": "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý nhiễm trùng, xuất huyết tiêu hóa, viêm gan do rượu, tiền sử xăm mình, xỏ khuyên, chưa tiêm ngừa viêm gan B.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tái khám định kỳ theo lịch, ngừng uống rượu bia, hút thuốc lá, ăn uống lành mạnh, thực phẩm sạch, tăng cường bổ sung protein, ăn chín, uống sôi, không uống rượu bia.",
+   "text": "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Xơ gan còn bù – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xo-gan-con-bu.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cirrhosis",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/cirrhosis.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

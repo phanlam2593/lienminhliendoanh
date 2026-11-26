@@ -7,55 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Xơ nang** — nhóm bệnh: hô hấp.",
+   "text": "Xơ nang là bệnh di truyền hiếm gây vấn đề hô hấp và tiêu hoá, do chất nhầy đặc, dính tích tụ ở phổi và ống tiêu hoá.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, thở khò khè, ho ra máu, đổ mồ hôi, mất nước, đau bụng, buồn nôn, tăng cân, táo bón, co rút.",
+   "text": "Ho dai dẳng có đờm, thở khò khè, hay viêm xoang, viêm phổi.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Táo bón, đau bụng, phân mỡ khó xả trôi; trẻ chậm lớn, người lớn sụt cân; mồ hôi rất mặn.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: gen lặn.",
+   "text": "Trẻ mắc khi nhận gen lỗi từ cả bố và mẹ; nhận một gen thì là người mang gen, thường không triệu chứng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): di truyền, dân số da trắng.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Chưa chữa khỏi và có thể làm giảm tuổi thọ, nhưng nhờ thuốc mới nhiều người sống quá tuổi trung niên.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không hút thuốc, bổ sung dinh dưỡng đầy đủ, tập thể dục mỗi ngày.",
+   "text": "Thuốc điều biến CFTR, thuốc giãn đường thở, kháng sinh, vật lý trị liệu hô hấp, hỗ trợ dinh dưỡng; một số người cần ghép phổi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ ho kéo dài có đờm, hay viêm phổi, chậm lớn, phân mỡ → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xo-nang-304.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cystic fibrosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cystic-fibrosis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

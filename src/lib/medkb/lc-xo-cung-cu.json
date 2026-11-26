@@ -7,35 +7,42 @@
  ],
  "about": [
   {
-   "text": "**Xơ cứng củ** — nhóm bệnh: thần kinh - tinh thần, da, bệnh trẻ em.",
+   "text": "Xơ cứng củ là bệnh di truyền làm mọc nhiều u lành tính ở não, thận, tim, da, mắt; khoảng 1 trên 6.000–10.000 người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co giật, khó thở, khối u, sưng, nám, mụn, ho.",
+   "text": "Hay co giật; có thể kèm khó khăn về hành vi, giao tiếp, khuyết tật trí tuệ, ADHD hoặc tự kỷ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Hầu như ai cũng có bất thường da: mảng da nhạt màu, mảng da dày gồ, u quanh móng, u mạch xơ ở mặt (thường từ nhỏ).",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột biến gen.",
+   "text": "Do biến thể gen TSC1 hoặc TSC2; di truyền trội — khoảng 1/3 do thừa hưởng từ bố hoặc mẹ, còn lại là đột biến mới.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tia xạ.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "U ở thận có thể nặng, đôi khi đe doạ tính mạng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Sinh hoạt / phòng ngừa: không hút thuốc lá.",
@@ -53,9 +60,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ co giật kèm các mảng da bất thường → đưa đi khám chuyên khoa.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xo-cung-cu.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Tuberous sclerosis complex",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/tuberous-sclerosis-complex/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

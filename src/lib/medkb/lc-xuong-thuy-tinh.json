@@ -7,35 +7,42 @@
  ],
  "about": [
   {
-   "text": "**Xương thủy tinh** — nhóm bệnh: cơ - xương - khớp.",
+   "text": "Bệnh xương thuỷ tinh (tạo xương bất toàn) là nhóm bệnh di truyền làm xương dễ gãy, thường chỉ sau va chạm nhẹ hoặc không rõ lý do; khoảng 1 trên 10.000–20.000 người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: bầm tím, khó thở, yếu cơ.",
+   "text": "Gãy xương nhiều lần; thể nhẹ hay có lòng trắng mắt màu xanh hoặc xám; khoảng nửa số người thể nhẹ nhất bị nghe kém khi trưởng thành.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể nặng: thấp, cong vẹo cột sống, co rút khớp, khó thở, bất thường răng, hạn chế vận động.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: giải đáp thắc mắc, đột biến gen.",
+   "text": "Khoảng 90% do đột biến gen COL1A1 hoặc COL1A2 (tạo collagen type I); thường di truyền trội, nhiều ca nặng là đột biến mới không có tiền sử gia đình.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): thân hình nhỏ hoặc ốm, mãn kinh sớm hoặc vô kinh, thiếu hoạt động thể chất, bệnh di truyền, vitamin D.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có nhiều type; type I nhẹ nhất, type II nặng nhất (trẻ có thể mất sớm sau sinh).",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Sinh hoạt / phòng ngừa: đạt và duy trì chỉ số khối cơ thể, hạn chế uống rượu và caffein, bỏ thuốc lá và tránh khói thuốc, bệnh nhân cần lạc quan.",
@@ -53,9 +60,9 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ gãy xương nhiều lần không rõ lý do, lòng trắng mắt xanh → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xuong-thuy-tinh-260.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Osteogenesis imperfecta",
+   "publisher": "MedlinePlus Genetics (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/genetics/condition/osteogenesis-imperfecta/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

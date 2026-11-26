@@ -7,49 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Xơ cứng bì toàn thể** — nhóm bệnh: dị ứng, da.",
+   "text": "Xơ cứng bì là bệnh tự miễn; thể khu trú chủ yếu ở da và mô dưới da, thể hệ thống nặng hơn, có thể tổn thương mạch máu và tim, phổi, thận.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, nuốt khó, rụng tóc, đau khớp, trầm cảm, đau rát, tím tái, ngứa, loét, nôn.",
+   "text": "Thể khu trú: mảng da chắc, cứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể hệ thống: da ngón tay dày, mệt, ngón tay đổi màu khi lạnh (Raynaud), đau khớp, khó nuốt; đa số giảm chức năng phổi.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, giới tính, chủng tộc, di truyền, yếu tố môi trường, cytomegalovirus.",
+   "text": "Chưa rõ nguyên nhân; có thể do gen, yếu tố môi trường, thay đổi miễn dịch, nội tiết; hay gặp ở nữ, thường 30–50 tuổi; không di truyền trực tiếp nhưng có người thân bị thì nguy cơ cao hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân có hiện tượng Raynaud, theo dõi huyết áp chặt chẽ tại nhà, giữ ấm cơ thể, kiểm soát cân nặng, hoạt động thể chất đều đặn.",
+   "text": "Chưa chữa khỏi nhưng điều trị giúp kiểm soát triệu chứng, hạn chế tổn thương: thuốc, vật lý trị liệu, chăm sóc răng định kỳ; thường do bác sĩ cơ xương khớp theo dõi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Da dày cứng dần, ngón tay tím tái khi lạnh, khó nuốt hoặc khó thở → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xo-cung-bi-toan-the.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Scleroderma",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/scleroderma.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

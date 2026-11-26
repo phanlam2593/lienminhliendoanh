@@ -7,66 +7,80 @@
  ],
  "about": [
   {
-   "text": "**Xơ gan do rượu** — nhóm bệnh: tiêu hóa, nội tiết - chuyển hóa, bụng.",
+   "text": "Xơ gan do rượu là gan bị sẹo hoá do uống rượu lâu ngày — một trong những nguyên nhân hay gặp nhất của xơ gan.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, xuất huyết, nôn ra máu, tiêu chảy, phân đen, vàng mắt, đau bụng, buồn nôn, tăng cân, chán ăn.",
+   "text": "Dễ bầm, chảy máu, chảy máu cam; bụng hoặc chân sưng phù; vàng da, ngứa nhiều; nhạy với thuốc hơn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tĩnh mạch thực quản, dạ dày giãn có thể vỡ chảy máu đột ngột; có thể suy thận, sỏi mật; một số ít bị ung thư gan.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: lạm dụng rượu.",
+   "text": "Hay gặp nhất là uống rượu lâu ngày và viêm gan.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): thiếu enzyme phân hủy rượu, viêm gan siêu vi C.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Mô sẹo không hồi phục được, nhưng điều trị nguyên nhân giúp bệnh không nặng thêm; sẹo quá nhiều có thể cần ghép gan.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ tinh thần lạc quan, yêu đời, bổ sung protein ngăn ngừa bệnh não gan.",
+   "text": "Chẩn đoán bằng xét nghiệm máu, chẩn đoán hình ảnh hoặc sinh thiết; điều trị nguyên nhân như bỏ rượu, chữa viêm gan theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bụng to dần, phù chân, vàng da, dễ chảy máu, bầm tím → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Nôn ra máu, đi ngoài phân đen hoặc lú lẫn ở người xơ gan → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Xơ gan do rượu – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xo-gan-do-ruou.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cirrhosis",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/cirrhosis.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

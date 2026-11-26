@@ -7,46 +7,47 @@
  ],
  "about": [
   {
-   "text": "**Xuất huyết dưới nhện** — nhóm bệnh: thần kinh - tinh thần, tim mạch, đầu.",
+   "text": "Xuất huyết dưới nhện là một dạng đột quỵ hiếm gây chảy máu trong não, là cấp cứu đe doạ tính mạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, nhức đầu, co giật, đau đầu, lú lẫn, nôn, sốt, ho.",
+   "text": "Đau đầu đột ngột dữ dội như sét đánh, không dịu đi.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đau hoặc cứng cổ, buồn nôn, nôn, sợ ánh sáng, co giật, ngất, lơ mơ, lú lẫn, méo miệng, nói ngọng, yếu một bên.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: rối loạn chảy máu, chấn thương nặng ở đầu.",
+   "text": "Hay gặp nhất là vỡ phình mạch máu não; cũng có thể do chấn thương đầu nặng hoặc dị dạng mạch máu não; tiền sử gia đình có thể làm tăng nguy cơ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá, huyết áp cao, sử dụng quá mức đồ uống có cồn.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Hồi phục khác nhau, có thể mất vài tháng đến vài năm; nhiều người khá lên, có người khỏi hẳn, nhưng có thể để lại co giật, giảm trí nhớ, trầm cảm, mệt mỏi.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan, duy trì cân nặng hợp lý, hạn chế tình trạng căng thẳng.",
+   "text": "Phẫu thuật cầm máu (kẹp hoặc nút phình mạch) và thuốc kiểm soát đau, huyết áp, co giật; phục hồi chức năng sau đó.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +60,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau đầu đột ngột dữ dội, méo miệng, yếu hoặc tê tay chân, khó nói, nhìn mờ → gọi cấp cứu ngay, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Xuất huyết dưới nhện – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/xuat-huyet-duoi-nhen-1038.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Subarachnoid haemorrhage",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/subarachnoid-haemorrhage/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
