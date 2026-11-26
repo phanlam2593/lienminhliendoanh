@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Liệt trên nhân tiến triển** — nhóm bệnh: thần kinh - tinh thần, bệnh người già, đầu.",
+   "text": "Liệt trên nhân tiến triển (PSP) là bệnh thần kinh hiếm, do protein tau tích tụ bất thường làm hỏng tế bào não; đa số khởi phát sau 60 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: cứng khớp, hay quên, trầm cảm, mờ mắt, phù.",
+   "text": "Thường nặng dần: mất thăng bằng, khó đi lại, cứng cơ, khó điều khiển cử động mắt, nói chậm hoặc không rõ, khó nuốt, suy nghĩ chậm, giảm trí nhớ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -29,21 +29,28 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Chưa có cách chữa hay chặn bệnh, nhưng chăm sóc tốt giúp người bệnh tự lập hơn; nên sớm bàn với đội điều trị về mong muốn chăm sóc sau này.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Đội chăm sóc đa chuyên khoa: thuốc giảm cứng cơ, vật lý trị liệu, ngôn ngữ trị liệu, hoạt động trị liệu, kính đặc biệt cho mắt, ống ăn nếu nuốt không an toàn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Người lớn tuổi hay té ngã, khó điều khiển mắt, nói nuốt khó dần → đi khám chuyên khoa thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/liet-tren-nhan-tien-trien.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Progressive supranuclear palsy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/progressive-supranuclear-palsy/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

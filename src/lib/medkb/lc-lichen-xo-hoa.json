@@ -7,49 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Lichen xơ hóa** — nhóm bệnh: da - tóc - móng, da.",
+   "text": "Lichen xơ hoá là bệnh da gây mảng trắng ngứa, chủ yếu ở vùng sinh dục; chưa chữa khỏi nhưng điều trị giúp giảm triệu chứng. Hay gặp nhất ở phụ nữ trên 50 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau khi quan hệ, tiểu nhiều, mảng trắng, xuất huyết, chảy máu, đau rát, táo bón, bầm tím, ngứa, sưng.",
+   "text": "Mảng trắng, ngứa, nhẵn hoặc nhăn, mỏng dễ chảy máu hay đau khi cọ xát; hay ở quanh âm hộ, hậu môn, bao quy đầu, đầu dương vật; quan hệ có thể đau khi da co rút.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng.",
+   "text": "Chưa rõ nguyên nhân, có thể do hệ miễn dịch làm tổn thương da; không phải nhiễm trùng, không lây, không do vệ sinh kém; cọ xát, tổn thương da có thể làm nặng thêm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý về da liễu, mãn kinh.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Lâu ngày da có thể sẹo, co rút gây khó chịu khi tiểu, đi ngoài, quan hệ; tăng nhẹ nguy cơ ung thư vùng âm hộ, dương vật, hậu môn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thuốc mỡ steroid mạnh theo đơn bác sĩ thường giúp, dùng đều vài tháng rồi giảm dần.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Rửa bằng chất làm mềm thay xà phòng, thấm khô, bôi kem bảo vệ như vaselin, mặc đồ lót cotton rộng; tránh gãi, sản phẩm có hương, đồ bó, hút thuốc.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có mảng trắng ngứa ở vùng sinh dục, điều trị không đỡ, đau khi tiểu hoặc quan hệ, hay có cục, da dày, vết loét lâu lành → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/lichen-xo-hoa.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Lichen sclerosus",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/lichen-sclerosus/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Liệt mặt ngoại biên** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Liệt mặt ngoại biên (liệt Bell) là yếu hoặc mất cử động tạm thời, thường ở một bên mặt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy nước mắt, đau đầu, co rút.",
+   "text": "Yếu hoặc không cử động được một bên mặt, xuất hiện trong vài ngày; sụp mí hoặc xệ khoé miệng, chảy dãi, khô miệng, mất vị giác, mắt khô hoặc chảy nước.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,32 +35,58 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số đỡ trong 6 tháng, có người lâu hơn; một số còn yếu mặt vĩnh viễn; thường chỉ bị một lần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị hiệu quả nhất khi bắt đầu trong 72 giờ: thuốc steroid, đôi khi kèm kháng virus theo bác sĩ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nhỏ thuốc và bôi mỡ mắt để mắt bên liệt không bị khô; dán băng giữ mắt nhắm khi ngủ.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dấu hiệu liệt mặt → đi khám ngay trong 72 giờ; sau 3 tuần không đỡ → tái khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Méo mặt một bên kèm không nhấc được hai tay hoặc khó nói (có thể đột quỵ) → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Liệt mặt ngoại biên – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/liet-mat-ngoai-bien-16.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Bell's palsy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/bells-palsy/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

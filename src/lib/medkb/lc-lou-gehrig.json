@@ -7,49 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Lou Gehrig** — nhóm bệnh: thần kinh - tinh thần, bệnh thường gặp.",
+   "text": "Bệnh Lou Gehrig (xơ cứng teo cơ một bên, ALS) là dạng hay gặp nhất của bệnh tế bào thần kinh vận động — bệnh nặng dần làm yếu cơ trong nhiều tháng, nhiều năm; chưa chữa khỏi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mất trí nhớ, chuột rút, co giật, khó thở, nói khó, yếu cơ, nám, phù, ho.",
+   "text": "Sớm: tay cứng hoặc yếu, chân yếu, giật cơ hoặc chuột rút.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Về sau: ảnh hưởng thở, nuốt, nói, tăng tiết nước bọt, thay đổi tâm trạng, khó đi lại.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: đột biến gen.",
+   "text": "Tế bào thần kinh vận động ở não và tuỷ sống ngừng hoạt động bình thường; chưa rõ lý do, có thể liên quan gen; khoảng 1/10 người có tiền sử gia đình. Thường xuất hiện sau 50 tuổi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): người làm việc trong quân đội, di truyền học, tuổi, hút thuốc, tiếp xúc với độc tố môi trường, chấn thương.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tiến triển rất khác nhau giữa mỗi người và thường làm giảm tuổi thọ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thuốc giảm triệu chứng như chuột rút, chảy dãi, khó thở; có thuốc làm chậm ALS theo bác sĩ; chăm sóc đa chuyên khoa: vật lý trị liệu, hoạt động trị liệu, ngôn ngữ trị liệu, dinh dưỡng, dụng cụ hỗ trợ, liệu pháp tâm lý.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Yếu tay chân tăng dần, giật cơ, nói hoặc nuốt khó dần → đi khám chuyên khoa thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/lou-gehrig.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Motor neurone disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/motor-neurone-disease/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

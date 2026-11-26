@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Loạn trương lực cơ** — nhóm bệnh: thần kinh - tinh thần.",
+   "text": "Loạn trương lực cơ là tình trạng cơ co không tự chủ, đôi khi đau; thường kéo dài nhưng điều trị giúp giảm triệu chứng. Có thể ở một vùng hoặc toàn thân, bắt đầu ở bất kỳ tuổi nào.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chuột rút, trầm cảm, mệt mỏi, lo âu.",
+   "text": "Chuột rút, co thắt cơ, tư thế vặn xoắn bất thường (như vẹo cổ, bàn chân quặp vào), run, chớp mắt quá nhiều; nặng hơn khi mệt, căng thẳng, uống rượu, cà phê, hoặc khi làm việc lặp lại như viết.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: loạn trương lực cơ nguyên phát, loạn trương lực cơ thứ phát, đột biến nhiễm sắc thể, xuất huyết não, ung thư phổi, do di truyền, bị đột biến nhiễm sắc thể, do thoái hóa thần kinh.",
+   "text": "Thường không rõ nguyên nhân; liên quan vùng não điều khiển vận động; có thể di truyền, do một số thuốc (một số thuốc chống loạn thần, chống nôn), hoặc đi kèm Parkinson, đột quỵ, bại não.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bị tổn thương não hay dây thần kinh, nhiễm virus, nhiễm khuẩn và nấm, sử dụng thuốc an thần, bị đột quỵ, bị ngộ độc chì, đột quỵ.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tiêm botulinum vào cơ bị (lặp lại khoảng mỗi 3 tháng), thuốc giãn cơ, kích thích não sâu khi các cách khác không hiệu quả; vật lý trị liệu, hoạt động trị liệu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ mình bị loạn trương lực cơ → đi khám để được chuyển bác sĩ thần kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/loan-truong-luc-co-20.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Dystonia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/dystonia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

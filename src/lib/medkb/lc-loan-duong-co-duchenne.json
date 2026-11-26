@@ -7,43 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Loạn dưỡng cơ Duchenne** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Loạn dưỡng cơ là bệnh di truyền hiếm gây yếu cơ, thường nặng dần theo thời gian; chưa có cách chữa khỏi. Có nhiều loại; hay gặp nhất là loạn dưỡng cơ Duchenne, xuất hiện từ nhỏ, chủ yếu ở bé trai, tiến triển nhanh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mệt mỏi, khó thở, yếu cơ, sưng, vảy, phù, ho.",
+   "text": "Yếu cơ tăng dần theo tuổi, khó đi lại hoặc nâng đồ, dễ ngã, đau cơ, cứng khớp; trẻ nhỏ có thể mềm người, biết bò, biết đi muộn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh di truyền.",
+   "text": "Do gen bị thay đổi; có thể di truyền từ bố mẹ hoặc là đột biến mới; người nhà có người bị có thể xét nghiệm gen.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tiên lượng tuỳ loại và mức độ; bệnh có thể ảnh hưởng tuổi thọ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Không chữa khỏi nhưng kiểm soát triệu chứng và có thể làm chậm bệnh: vật lý trị liệu, thuốc (như steroid cho Duchenne), hỗ trợ tim và hô hấp, phẫu thuật vẹo cột sống, dụng cụ hỗ trợ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ chậm biết đi, hay ngã, yếu cơ tăng dần → đưa đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/loan-duong-co-duchenne.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Muscular dystrophy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/muscular-dystrophy/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Lichen phẳng** — nhóm bệnh: da - tóc - móng, da.",
+   "text": "Lichen phẳng là ban ngứa không do nhiễm trùng, không lây, có thể ở nhiều nơi trên cơ thể kể cả trong miệng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mảng trắng, loét miệng, đau mông, phát ban, rụng tóc, ngứa, sưng, loét.",
+   "text": "Da: cụm mảng nhô cao, bóng, màu đỏ tím ở tay, chân, thân, đôi khi có vằn trắng mảnh; thường ngứa.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Miệng: mảng trắng ở lợi, lưỡi, má trong; nóng rát nhất là khi ăn uống.",
+   "src": [
+    1
    ]
   }
  ],
@@ -35,27 +41,34 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Ở da thường tự hết trong khoảng 9–18 tháng; ở miệng có thể kéo dài vài năm; khỏi rồi thường không tái lại.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tắm bằng nước ấm, đắp khăn ẩm, mát, sử dụng loại kem hoặc thuốc mỡ hydrocortisone.",
+   "text": "Kem, thuốc mỡ bác sĩ kê giúp giảm ban và ngứa; nặng có thể dùng thuốc uống hoặc chiếu đèn; nước súc miệng hoặc xịt cho tổn thương miệng.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa nhẹ nhàng, không gãi; tránh đồ mặn, cay, chua nếu kích ứng miệng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ mình bị lichen phẳng → đi khám vì dễ nhầm với vảy nến, chàm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +79,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/lichen-phang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Lichen planus",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/lichen-planus/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

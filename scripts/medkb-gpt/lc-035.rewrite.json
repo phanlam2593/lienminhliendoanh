@@ -1,0 +1,716 @@
+{
+  "_note": "27/11 — Vòng LC 33 (đợt 23–25): NHS carpal-tunnel-syndrome, anal-fissure, lichen-planus, bells-palsy, motor-neurone-disease, muscular-dystrophy — Claude đã mở kiểm. Thêm: NHS jet-lag, lichen-sclerosus, dystonia, progressive-supranuclear-palsy, osteoporosis, shortness-of-breath.",
+  "lc-hoi-chung-duong-ham-co-tay": {
+    "addSources": [
+      {
+        "title": "Carpal tunnel syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/carpal-tunnel-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Hội chứng đường hầm cổ tay là khi dây thần kinh giữa ở cổ tay bị chèn ép do ống cổ tay sưng lên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, nhức ở ngón tay, bàn tay hoặc cánh tay; tê, kiến bò; yếu ngón cái hoặc khó cầm nắm; thường lúc có lúc không và nặng hơn về đêm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi thừa cân, mang thai, gập cổ tay hoặc nắm chặt lặp lại (dùng dụng cụ rung), viêm khớp, tiểu đường, có người nhà bị, từng chấn thương cổ tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đeo nẹp cổ tay ban đêm giữ cổ tay thẳng (có thể mất đến 6 tuần mới đỡ); giảm động tác gập cổ tay hay nắm chặt; thuốc giảm đau chỉ đỡ tạm; đôi khi tự đỡ sau vài tháng, nhất là khi liên quan mang thai.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu nẹp không đỡ có thể tiêm steroid vào cổ tay; nặng dần thì mổ, thường chữa khỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng nặng dần, không hết, hoặc tự chăm sóc không hiệu quả → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-khe-nut-va-lo-ro-hau-mon-truc-trang": {
+    "addSources": [
+      {
+        "title": "Anal fissure",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/anal-fissure/"
+      }
+    ],
+    "about": [
+      [
+        "Nứt kẽ hậu môn là vết rách nhỏ ở hậu môn, hay gặp ở tuổi 15–40 và trẻ nhỏ; thường tự lành.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau nhói dữ dội khi đi ngoài, đau rát sau đó kéo dài vài giờ, máu đỏ tươi trong bồn cầu hoặc trên giấy vệ sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ; nguy cơ cao hơn khi táo bón, tiêu chảy nhiều, mang thai hoặc sinh thường, bệnh viêm ruột, một số bệnh lây qua đường tình dục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng thuốc giảm đau thông thường; uống nhiều nước, ăn nhiều chất xơ cho phân mềm; ngâm nước ấm sau khi đi ngoài; giữ vùng hậu môn sạch khô; không nhịn đi ngoài.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không lành hoặc nặng hơn: thuốc nhuận tràng, thuốc bôi giúp lành theo bác sĩ; tái phát nhiều có thể làm thủ thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng nặng dần, hoặc tự chăm sóc 7 ngày không đỡ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-lichen-phang": {
+    "addSources": [
+      {
+        "title": "Lichen planus",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/lichen-planus/"
+      }
+    ],
+    "about": [
+      [
+        "Lichen phẳng là ban ngứa không do nhiễm trùng, không lây, có thể ở nhiều nơi trên cơ thể kể cả trong miệng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da: cụm mảng nhô cao, bóng, màu đỏ tím ở tay, chân, thân, đôi khi có vằn trắng mảnh; thường ngứa.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Miệng: mảng trắng ở lợi, lưỡi, má trong; nóng rát nhất là khi ăn uống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Ở da thường tự hết trong khoảng 9–18 tháng; ở miệng có thể kéo dài vài năm; khỏi rồi thường không tái lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Kem, thuốc mỡ bác sĩ kê giúp giảm ban và ngứa; nặng có thể dùng thuốc uống hoặc chiếu đèn; nước súc miệng hoặc xịt cho tổn thương miệng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa nhẹ nhàng, không gãi; tránh đồ mặn, cay, chua nếu kích ứng miệng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị lichen phẳng → đi khám vì dễ nhầm với vảy nến, chàm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-liet-mat-ngoai-bien": {
+    "addSources": [
+      {
+        "title": "Bell's palsy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/bells-palsy/"
+      }
+    ],
+    "about": [
+      [
+        "Liệt mặt ngoại biên (liệt Bell) là yếu hoặc mất cử động tạm thời, thường ở một bên mặt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Yếu hoặc không cử động được một bên mặt, xuất hiện trong vài ngày; sụp mí hoặc xệ khoé miệng, chảy dãi, khô miệng, mất vị giác, mắt khô hoặc chảy nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số đỡ trong 6 tháng, có người lâu hơn; một số còn yếu mặt vĩnh viễn; thường chỉ bị một lần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị hiệu quả nhất khi bắt đầu trong 72 giờ: thuốc steroid, đôi khi kèm kháng virus theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhỏ thuốc và bôi mỡ mắt để mắt bên liệt không bị khô; dán băng giữ mắt nhắm khi ngủ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu liệt mặt → đi khám ngay trong 72 giờ; sau 3 tuần không đỡ → tái khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Méo mặt một bên kèm không nhấc được hai tay hoặc khó nói (có thể đột quỵ) → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-lou-gehrig": {
+    "addSources": [
+      {
+        "title": "Motor neurone disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/motor-neurone-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Lou Gehrig (xơ cứng teo cơ một bên, ALS) là dạng hay gặp nhất của bệnh tế bào thần kinh vận động — bệnh nặng dần làm yếu cơ trong nhiều tháng, nhiều năm; chưa chữa khỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sớm: tay cứng hoặc yếu, chân yếu, giật cơ hoặc chuột rút.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Về sau: ảnh hưởng thở, nuốt, nói, tăng tiết nước bọt, thay đổi tâm trạng, khó đi lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tế bào thần kinh vận động ở não và tuỷ sống ngừng hoạt động bình thường; chưa rõ lý do, có thể liên quan gen; khoảng 1/10 người có tiền sử gia đình. Thường xuất hiện sau 50 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tiến triển rất khác nhau giữa mỗi người và thường làm giảm tuổi thọ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc giảm triệu chứng như chuột rút, chảy dãi, khó thở; có thuốc làm chậm ALS theo bác sĩ; chăm sóc đa chuyên khoa: vật lý trị liệu, hoạt động trị liệu, ngôn ngữ trị liệu, dinh dưỡng, dụng cụ hỗ trợ, liệu pháp tâm lý.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Yếu tay chân tăng dần, giật cơ, nói hoặc nuốt khó dần → đi khám chuyên khoa thần kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-loan-duong-co": {
+    "addSources": [
+      {
+        "title": "Muscular dystrophy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/muscular-dystrophy/"
+      }
+    ],
+    "about": [
+      [
+        "Loạn dưỡng cơ là bệnh di truyền hiếm gây yếu cơ, thường nặng dần theo thời gian; chưa có cách chữa khỏi. Có nhiều loại; hay gặp nhất là loạn dưỡng cơ Duchenne, xuất hiện từ nhỏ, chủ yếu ở bé trai, tiến triển nhanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Yếu cơ tăng dần theo tuổi, khó đi lại hoặc nâng đồ, dễ ngã, đau cơ, cứng khớp; trẻ nhỏ có thể mềm người, biết bò, biết đi muộn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do gen bị thay đổi; có thể di truyền từ bố mẹ hoặc là đột biến mới; người nhà có người bị có thể xét nghiệm gen.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tiên lượng tuỳ loại và mức độ; bệnh có thể ảnh hưởng tuổi thọ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi nhưng kiểm soát triệu chứng và có thể làm chậm bệnh: vật lý trị liệu, thuốc (như steroid cho Duchenne), hỗ trợ tim và hô hấp, phẫu thuật vẹo cột sống, dụng cụ hỗ trợ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ chậm biết đi, hay ngã, yếu cơ tăng dần → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-loan-duong-co-duchenne": {
+    "addSources": [
+      {
+        "title": "Muscular dystrophy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/muscular-dystrophy/"
+      }
+    ],
+    "about": [
+      [
+        "Loạn dưỡng cơ là bệnh di truyền hiếm gây yếu cơ, thường nặng dần theo thời gian; chưa có cách chữa khỏi. Có nhiều loại; hay gặp nhất là loạn dưỡng cơ Duchenne, xuất hiện từ nhỏ, chủ yếu ở bé trai, tiến triển nhanh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Yếu cơ tăng dần theo tuổi, khó đi lại hoặc nâng đồ, dễ ngã, đau cơ, cứng khớp; trẻ nhỏ có thể mềm người, biết bò, biết đi muộn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do gen bị thay đổi; có thể di truyền từ bố mẹ hoặc là đột biến mới; người nhà có người bị có thể xét nghiệm gen.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tiên lượng tuỳ loại và mức độ; bệnh có thể ảnh hưởng tuổi thọ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi nhưng kiểm soát triệu chứng và có thể làm chậm bệnh: vật lý trị liệu, thuốc (như steroid cho Duchenne), hỗ trợ tim và hô hấp, phẫu thuật vẹo cột sống, dụng cụ hỗ trợ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ chậm biết đi, hay ngã, yếu cơ tăng dần → đưa đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-jet-lag": {
+    "addSources": [
+      {
+        "title": "Jet lag",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/jet-lag/"
+      }
+    ],
+    "about": [
+      [
+        "Jet lag (lệch múi giờ) thường đỡ sau vài ngày khi cơ thể quen múi giờ mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó ngủ buổi tối và khó dậy buổi sáng, mệt, khó tỉnh táo ban ngày, ngủ kém, giảm tập trung và trí nhớ; có thể khó tiêu, buồn nôn, táo bón, thay đổi ăn uống, hơi lo âu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Trước chuyến bay: nghỉ ngơi đủ, dời giờ ngủ, giờ dậy dần theo múi giờ nơi đến.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trên máy bay: uống nhiều nước, đi lại trong khoang, ngủ nếu nơi đến đang là đêm, hạn chế cà phê và rượu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi đến nơi: chỉnh giờ ngủ theo giờ mới ngay, đặt báo thức tránh ngủ quá, ra ngoài trời ban ngày, tránh ngủ ngày. Chuyến đi ngắn 2–3 ngày có thể giữ giờ ăn ngủ cũ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-lichen-xo-hoa": {
+    "addSources": [
+      {
+        "title": "Lichen sclerosus",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/lichen-sclerosus/"
+      }
+    ],
+    "about": [
+      [
+        "Lichen xơ hoá là bệnh da gây mảng trắng ngứa, chủ yếu ở vùng sinh dục; chưa chữa khỏi nhưng điều trị giúp giảm triệu chứng. Hay gặp nhất ở phụ nữ trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mảng trắng, ngứa, nhẵn hoặc nhăn, mỏng dễ chảy máu hay đau khi cọ xát; hay ở quanh âm hộ, hậu môn, bao quy đầu, đầu dương vật; quan hệ có thể đau khi da co rút.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân, có thể do hệ miễn dịch làm tổn thương da; không phải nhiễm trùng, không lây, không do vệ sinh kém; cọ xát, tổn thương da có thể làm nặng thêm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Lâu ngày da có thể sẹo, co rút gây khó chịu khi tiểu, đi ngoài, quan hệ; tăng nhẹ nguy cơ ung thư vùng âm hộ, dương vật, hậu môn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc mỡ steroid mạnh theo đơn bác sĩ thường giúp, dùng đều vài tháng rồi giảm dần.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa bằng chất làm mềm thay xà phòng, thấm khô, bôi kem bảo vệ như vaselin, mặc đồ lót cotton rộng; tránh gãi, sản phẩm có hương, đồ bó, hút thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có mảng trắng ngứa ở vùng sinh dục, điều trị không đỡ, đau khi tiểu hoặc quan hệ, hay có cục, da dày, vết loét lâu lành → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-loan-truong-luc-co": {
+    "addSources": [
+      {
+        "title": "Dystonia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/dystonia/"
+      }
+    ],
+    "about": [
+      [
+        "Loạn trương lực cơ là tình trạng cơ co không tự chủ, đôi khi đau; thường kéo dài nhưng điều trị giúp giảm triệu chứng. Có thể ở một vùng hoặc toàn thân, bắt đầu ở bất kỳ tuổi nào.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Chuột rút, co thắt cơ, tư thế vặn xoắn bất thường (như vẹo cổ, bàn chân quặp vào), run, chớp mắt quá nhiều; nặng hơn khi mệt, căng thẳng, uống rượu, cà phê, hoặc khi làm việc lặp lại như viết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ nguyên nhân; liên quan vùng não điều khiển vận động; có thể di truyền, do một số thuốc (một số thuốc chống loạn thần, chống nôn), hoặc đi kèm Parkinson, đột quỵ, bại não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tiêm botulinum vào cơ bị (lặp lại khoảng mỗi 3 tháng), thuốc giãn cơ, kích thích não sâu khi các cách khác không hiệu quả; vật lý trị liệu, hoạt động trị liệu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị loạn trương lực cơ → đi khám để được chuyển bác sĩ thần kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-liet-tren-nhan-tien-trien": {
+    "addSources": [
+      {
+        "title": "Progressive supranuclear palsy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/progressive-supranuclear-palsy/"
+      }
+    ],
+    "about": [
+      [
+        "Liệt trên nhân tiến triển (PSP) là bệnh thần kinh hiếm, do protein tau tích tụ bất thường làm hỏng tế bào não; đa số khởi phát sau 60 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường nặng dần: mất thăng bằng, khó đi lại, cứng cơ, khó điều khiển cử động mắt, nói chậm hoặc không rõ, khó nuốt, suy nghĩ chậm, giảm trí nhớ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Chưa có cách chữa hay chặn bệnh, nhưng chăm sóc tốt giúp người bệnh tự lập hơn; nên sớm bàn với đội điều trị về mong muốn chăm sóc sau này.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đội chăm sóc đa chuyên khoa: thuốc giảm cứng cơ, vật lý trị liệu, ngôn ngữ trị liệu, hoạt động trị liệu, kính đặc biệt cho mắt, ống ăn nếu nuốt không an toàn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Người lớn tuổi hay té ngã, khó điều khiển mắt, nói nuốt khó dần → đi khám chuyên khoa thần kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-loang-xuong-o-nam": {
+    "addSources": [
+      {
+        "title": "Osteoporosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoporosis/"
+      }
+    ],
+    "about": [
+      [
+        "Loãng xương là tình trạng xương yếu đi, ai cũng có thể bị, kể cả nam giới; hay gặp nhất ở người lớn tuổi và phụ nữ sau mãn kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng; dấu hiệu đầu tiên hay là gãy xương sau ngã nhẹ hoặc va chạm nhỏ; có thể đau lưng, cong lưng, gù, thấp đi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tuổi cao, bố hoặc mẹ bị loãng xương, thiếu canxi hoặc vitamin D, thiếu cân, hút thuốc, uống nhiều rượu, ít vận động, tiểu đường, viêm khớp dạng thấp, dùng thuốc steroid.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn thực phẩm giàu canxi, đủ vitamin D; vận động đều với bài chịu lực, tăng cơ, thăng bằng; phòng té ngã, cẩn thận khi nâng đồ; không hút thuốc, không uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đo mật độ xương để chẩn đoán; có thuốc làm chậm mất xương hoặc kích thích tạo xương theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Gãy xương sau va chạm nhẹ, đau lưng kéo dài, thấp đi hoặc có nhiều yếu tố nguy cơ → đi khám, đo mật độ xương.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-kho-tho-hut-hoi": {
+    "addSources": [
+      {
+        "title": "Shortness of breath",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/shortness-of-breath/"
+      }
+    ],
+    "about": [
+      [
+        "Khó thở, hụt hơi có nhiều nguyên nhân; đừng tự chẩn đoán mà nên đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp: hen suyễn, nhiễm trùng ngực, thừa cân, hút thuốc, cơn hoảng loạn; cũng có thể là dấu hiệu bệnh nặng hơn như COPD, xơ phổi, suy tim, ung thư phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khó thở nặng hơn khi sinh hoạt bình thường hoặc khi nằm, khó thở kèm phù mắt cá, ho từ 3 tuần trở lên → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nặng (thở hổn hển, nghẹn, không nói hết câu), tức nặng ngực, đau lan ra tay, lưng, cổ, hàm, môi da tái xanh hoặc xám, bỗng lú lẫn; trẻ thở rên, rút lõm dưới sườn, mềm nhũn → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

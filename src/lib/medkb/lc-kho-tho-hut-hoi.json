@@ -8,9 +8,9 @@
  ],
  "about": [
   {
-   "text": "**Khó thở, hụt hơi** — nhóm bệnh: hô hấp, ngực.",
+   "text": "Khó thở, hụt hơi có nhiều nguyên nhân; đừng tự chẩn đoán mà nên đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -24,15 +24,9 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: thiếu máu do thiếu sắt, cơn hen phế quản cấp tính, dị vật đường thở, chấn thương ngực, tiếp xúc với carbon monoxide, tăng áp động mạch phổi, hạ huyết áp, thuyên tắc phổi.",
+   "text": "Hay gặp: hen suyễn, nhiễm trùng ngực, thừa cân, hút thuốc, cơn hoảng loạn; cũng có thể là dấu hiệu bệnh nặng hơn như COPD, xơ phổi, suy tim, ung thư phổi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,20 +48,33 @@
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó thở nặng hơn khi sinh hoạt bình thường hoặc khi nằm, khó thở kèm phù mắt cá, ho từ 3 tuần trở lên → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở nặng (thở hổn hển, nghẹn, không nói hết câu), tức nặng ngực, đau lan ra tay, lưng, cổ, hàm, môi da tái xanh hoặc xám, bỗng lú lẫn; trẻ thở rên, rút lõm dưới sườn, mềm nhũn → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Khó thở, hụt hơi – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/kho-tho-hut-hoi.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Shortness of breath",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/shortness-of-breath/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
