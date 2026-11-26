@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm độc giáp** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Nhiễm độc giáp (cường giáp) là khi tuyến giáp ở cổ tiết quá nhiều hormone; gặp nhiều hơn khoảng 10 lần ở nữ, thường 20–40 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy nước mắt, tiêu chảy, buồn nôn, sụt cân, sốt cao, đỏ mắt, sưng, nôn.",
+   "text": "Lo âu, cáu gắt, tâm trạng thất thường, khó ngủ, mệt, sợ nóng, bướu cổ, tim đập nhanh hoặc không đều, run tay, sụt cân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: basedow, suy giáp, bệnh Graves, U tuyến giáp, U quái đơn bì, viêm tuyến giáp.",
+   "text": "Khoảng 4/5 trường hợp do bệnh Basedow (Graves) — bệnh tự miễn; ngoài ra nhân tuyến giáp tiết nhiều hormone, một số thuốc.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): người mắc bệnh tự miễn, người bị viêm tuyến giáp, phụ nữ vừa sinh con, giới tính, vừa mới sinh con, bệnh tự miễn.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Kiểm soát kém có thể gây bệnh mắt, biến chứng thai kỳ, và cơn bão giáp — đợt bùng phát đột ngột đe doạ tính mạng.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường hiệu quả: thuốc giảm tiết hormone, điều trị bằng iốt phóng xạ, hoặc mổ cắt một phần hay toàn bộ tuyến giáp, do bác sĩ nội tiết chọn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có các dấu hiệu trên → đi khám, xét nghiệm máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-doc-giap-1133.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Overactive thyroid (hyperthyroidism)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/overactive-thyroid-hyperthyroidism/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

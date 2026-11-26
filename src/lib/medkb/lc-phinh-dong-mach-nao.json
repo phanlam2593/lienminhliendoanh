@@ -7,40 +7,46 @@
  ],
  "about": [
   {
-   "text": "**Phình động mạch não** — nhóm bệnh: tim mạch, đầu.",
+   "text": "Phình mạch máu não là chỗ phồng ở một mạch máu trong não; hiếm khi vỡ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, chảy máu, nhìn đôi, buồn nôn, cứng gáy, co giật, đau đầu, nôn.",
+   "text": "Đa số nhỏ, không triệu chứng, hay phát hiện tình cờ; túi phình to có thể gây đau đầu, thay đổi thị lực, chóng mặt, tê hoặc yếu mặt, khó tập trung, nói, nhớ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Khi vỡ gây xuất huyết dưới nhện, dấu hiệu chính là đau đầu dữ dội đột ngột.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: tăng huyết áp.",
+   "text": "Không phải lúc nào cũng rõ; yếu tố nguy cơ: hút thuốc, huyết áp cao, có người thân bị, tổn thương mạch máu, dùng cocaine, một số bệnh di truyền như thận đa nang.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tăng huyết áp, xơ vữa động mạch.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Túi phình nhỏ không triệu chứng thường chỉ theo dõi bằng chụp định kỳ; có nguy cơ vỡ hoặc đã vỡ thì cần can thiệp (kẹp hoặc nút mạch).",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Bỏ thuốc lá, kiểm soát huyết áp, hạn chế rượu, tránh chất cấm.",
+   "src": [
+    1
    ]
   }
  ],
@@ -53,14 +59,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột đau đầu dữ dội không dứt, yếu mặt hoặc tay, khó nói, nhìn mờ hay mất thị lực → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Phình động mạch não – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/phinh-dong-mach-nao-306.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Brain aneurysm",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/brain-aneurysm/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

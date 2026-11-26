@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Phình đại tràng bẩm sinh** — nhóm bệnh: tiêu hóa.",
+   "text": "Phình đại tràng bẩm sinh (bệnh Hirschsprung) là bệnh hiếm, phân bị kẹt trong ruột vì đoạn ruột cuối thiếu các dây thần kinh giúp ruột co bóp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, tiêu chảy, táo bón, ngất, nôn, nám.",
+   "text": "Dấu hiệu sớm rõ nhất: trẻ sơ sinh không đi phân su trong 48 giờ đầu; bụng chướng, nôn dịch xanh hoặc vàng xanh; ở trẻ lớn triệu chứng có thể xuất hiện muộn hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -29,12 +29,19 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số trẻ đi ngoài bình thường sau mổ; một số còn táo bón hoặc khó kiểm soát đi ngoài đến tuổi teen.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Mọi trẻ bị bệnh đều cần mổ, thường cắt bỏ đoạn ruột bệnh rồi nối phần ruột lành; một số cần làm hậu môn nhân tạo tạm thời.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -47,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Trẻ sơ sinh chưa đi phân su sau 48 giờ, bụng chướng, nôn dịch xanh → đưa đi khám ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Phình đại tràng bẩm sinh – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/phinh-dai-trang-bam-sinh-201.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Hirschsprung's disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/hirschsprungs-disease/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

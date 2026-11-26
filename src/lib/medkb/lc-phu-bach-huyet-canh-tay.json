@@ -7,55 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Phù bạch huyết cánh tay** — nhóm bệnh: tim mạch, tứ chi.",
+   "text": "Phù bạch huyết là bệnh kéo dài làm mô sưng, hay ở tay hoặc chân, khi hệ bạch huyết (giúp chống nhiễm trùng, dẫn lưu dịch) hoạt động kém; nên điều trị sớm vì có thể nặng dần.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: nóng rát, ngứa, sưng, loét, sốt, phù.",
+   "text": "Sưng toàn bộ hoặc một phần tay chân, quần áo thấy chật, sưng lúc có lúc không, thường nặng hơn về chiều; cảm giác nặng, nhức; da thay đổi; hay bị nhiễm trùng da.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ký sinh trùng, phù bạch huyết nguyên phát, phù bạch huyết thứ phát.",
+   "text": "Thể thứ phát hay gặp hơn, do hệ bạch huyết bị tổn thương: điều trị ung thư, nhiễm trùng, chấn thương, viêm, ít vận động; thể nguyên phát do gen.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): viêm khớp dạng thấp, suy thận, béo phì.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: duy trì cân nặng hợp lý, tránh tiếp xúc quá nóng vùng bị sưng phù, đảm bảo vệ sinh cá nhân, tránh gây tổn thương cho da, kiểm soát bệnh lý.",
+   "text": "Không chữa khỏi nhưng kiểm soát được: băng hoặc áo ép, vận động đều, xoa bóp dẫn lưu chuyên biệt, chăm sóc da sạch và dưỡng ẩm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Vùng phù đỏ, nóng, đau hoặc sưng tăng, kèm sốt (có thể viêm mô tế bào) → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/phu-bach-huyet-canh-tay.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Lymphoedema",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/lymphoedema/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

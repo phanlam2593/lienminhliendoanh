@@ -1,0 +1,637 @@
+{
+  "_note": "27/11 — Vòng LC 31 (đợt 31–33): NHS brain-aneurysm, pagets-disease-bone, hydrocephalus, lymphoedema, wisdom-tooth-removal — Claude đã mở kiểm. Thêm: NHS overactive-thyroid, heart-attack, hirschsprungs-disease.",
+  "lc-phinh-mach-mau-nao": {
+    "addSources": [
+      {
+        "title": "Brain aneurysm",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/brain-aneurysm/"
+      }
+    ],
+    "about": [
+      [
+        "Phình mạch máu não là chỗ phồng ở một mạch máu trong não; hiếm khi vỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số nhỏ, không triệu chứng, hay phát hiện tình cờ; túi phình to có thể gây đau đầu, thay đổi thị lực, chóng mặt, tê hoặc yếu mặt, khó tập trung, nói, nhớ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi vỡ gây xuất huyết dưới nhện, dấu hiệu chính là đau đầu dữ dội đột ngột.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Không phải lúc nào cũng rõ; yếu tố nguy cơ: hút thuốc, huyết áp cao, có người thân bị, tổn thương mạch máu, dùng cocaine, một số bệnh di truyền như thận đa nang.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Túi phình nhỏ không triệu chứng thường chỉ theo dõi bằng chụp định kỳ; có nguy cơ vỡ hoặc đã vỡ thì cần can thiệp (kẹp hoặc nút mạch).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bỏ thuốc lá, kiểm soát huyết áp, hạn chế rượu, tránh chất cấm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau đầu dữ dội không dứt, yếu mặt hoặc tay, khó nói, nhìn mờ hay mất thị lực → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-phinh-dong-mach-nao": {
+    "addSources": [
+      {
+        "title": "Brain aneurysm",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/brain-aneurysm/"
+      }
+    ],
+    "about": [
+      [
+        "Phình mạch máu não là chỗ phồng ở một mạch máu trong não; hiếm khi vỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số nhỏ, không triệu chứng, hay phát hiện tình cờ; túi phình to có thể gây đau đầu, thay đổi thị lực, chóng mặt, tê hoặc yếu mặt, khó tập trung, nói, nhớ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi vỡ gây xuất huyết dưới nhện, dấu hiệu chính là đau đầu dữ dội đột ngột.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Không phải lúc nào cũng rõ; yếu tố nguy cơ: hút thuốc, huyết áp cao, có người thân bị, tổn thương mạch máu, dùng cocaine, một số bệnh di truyền như thận đa nang.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Túi phình nhỏ không triệu chứng thường chỉ theo dõi bằng chụp định kỳ; có nguy cơ vỡ hoặc đã vỡ thì cần can thiệp (kẹp hoặc nút mạch).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bỏ thuốc lá, kiểm soát huyết áp, hạn chế rượu, tránh chất cấm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột đau đầu dữ dội không dứt, yếu mặt hoặc tay, khó nói, nhìn mờ hay mất thị lực → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-paget-xuong": {
+    "addSources": [
+      {
+        "title": "Paget's disease of bone",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pagets-disease-bone/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh Paget xương làm rối loạn chu trình làm mới xương, khiến xương yếu và đôi khi biến dạng; chủ yếu ở người lớn tuổi, hiếm dưới 50 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có thể ở một hay nhiều xương, hay ở xương chậu, cột sống, hộp sọ: đau xương hoặc khớp, vùng bị ấm lên, xương thay đổi hình dạng; đôi khi đau nhói, tê, mất thăng bằng; nhiều người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tế bào huỷ xương làm việc nhanh bất thường, xương mới tạo ra to hơn nhưng yếu hơn; chưa rõ yếu tố khởi phát, có thể liên quan gen; có người thân bị thì nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi nhưng kiểm soát được: thuốc làm chậm chu trình xương và giảm đau theo bác sĩ, vật lý trị liệu, dụng cụ hỗ trợ, phẫu thuật khi gãy xương hoặc biến dạng; ăn đủ canxi và vitamin D.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau xương kéo dài, xương biến dạng dần → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nao-ung-thuy": {
+    "addSources": [
+      {
+        "title": "Hydrocephalus",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hydrocephalus/"
+      }
+    ],
+    "about": [
+      [
+        "Não úng thuỷ là dịch tích tụ trong não, gây áp lực có thể làm tổn thương não; không điều trị có thể tử vong.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể bẩm sinh, mắc phải sau sinh (thường sau chấn thương hoặc bệnh), hoặc thể áp lực bình thường (chủ yếu ở người trên 60 tuổi).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau đầu, nôn, nhìn mờ, đi lại khó khăn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường đặt ống dẫn lưu (shunt) để thoát dịch thừa; đôi khi phẫu thuật nội soi mở thông sàn não thất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-phu-bach-huyet-canh-tay": {
+    "addSources": [
+      {
+        "title": "Lymphoedema",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/lymphoedema/"
+      }
+    ],
+    "about": [
+      [
+        "Phù bạch huyết là bệnh kéo dài làm mô sưng, hay ở tay hoặc chân, khi hệ bạch huyết (giúp chống nhiễm trùng, dẫn lưu dịch) hoạt động kém; nên điều trị sớm vì có thể nặng dần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sưng toàn bộ hoặc một phần tay chân, quần áo thấy chật, sưng lúc có lúc không, thường nặng hơn về chiều; cảm giác nặng, nhức; da thay đổi; hay bị nhiễm trùng da.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thể thứ phát hay gặp hơn, do hệ bạch huyết bị tổn thương: điều trị ung thư, nhiễm trùng, chấn thương, viêm, ít vận động; thể nguyên phát do gen.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không chữa khỏi nhưng kiểm soát được: băng hoặc áo ép, vận động đều, xoa bóp dẫn lưu chuyên biệt, chăm sóc da sạch và dưỡng ẩm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Vùng phù đỏ, nóng, đau hoặc sưng tăng, kèm sốt (có thể viêm mô tế bào) → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-rang-moc-ket": {
+    "addSources": [
+      {
+        "title": "Wisdom tooth removal",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/wisdom-tooth-removal/"
+      }
+    ],
+    "about": [
+      [
+        "Răng mọc kẹt (thường là răng khôn) là khi răng bị răng khác chặn hoặc bị lợi che một phần, không đủ chỗ mọc hẳn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có thể gây đau, sưng, viêm lợi trùm, giắt thức ăn, sâu răng, bệnh nướu, nang, áp xe răng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường cân nhắc nhổ khi răng không đủ chỗ mọc hẳn; nếu không gây vấn đề thì để lại và theo dõi khi khám răng định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Chảy máu không cầm, đau và sưng nặng dần mà thuốc giảm đau không đỡ, hoặc đau kèm vị hôi trong miệng, sốt, mệt → khám nha gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-doc-giap": {
+    "addSources": [
+      {
+        "title": "Overactive thyroid (hyperthyroidism)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/overactive-thyroid-hyperthyroidism/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm độc giáp (cường giáp) là khi tuyến giáp ở cổ tiết quá nhiều hormone; gặp nhiều hơn khoảng 10 lần ở nữ, thường 20–40 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Lo âu, cáu gắt, tâm trạng thất thường, khó ngủ, mệt, sợ nóng, bướu cổ, tim đập nhanh hoặc không đều, run tay, sụt cân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Khoảng 4/5 trường hợp do bệnh Basedow (Graves) — bệnh tự miễn; ngoài ra nhân tuyến giáp tiết nhiều hormone, một số thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Kiểm soát kém có thể gây bệnh mắt, biến chứng thai kỳ, và cơn bão giáp — đợt bùng phát đột ngột đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường hiệu quả: thuốc giảm tiết hormone, điều trị bằng iốt phóng xạ, hoặc mổ cắt một phần hay toàn bộ tuyến giáp, do bác sĩ nội tiết chọn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có các dấu hiệu trên → đi khám, xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhoi-mau-co-tim-khong-st-chenh-len": {
+    "addSources": [
+      {
+        "title": "Heart attack",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-attack/"
+      }
+    ],
+    "about": [
+      [
+        "Nhồi máu cơ tim thường do cục máu đông làm máu không đến đủ tim; là tình trạng đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau ngực bóp nghẹt hoặc đè nặng, có thể lan ra tay, cổ, hàm; khó thở, buồn nôn, nôn, cảm giác như khó tiêu, vã mồ hôi, da tái xanh hoặc xám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi hút thuốc, huyết áp cao, mỡ máu cao, có người thân từng bị, tiểu đường, thừa cân béo phì.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện: thuốc làm tan cục máu đông, nong mạch đặt stent hoặc mổ bắc cầu; sau đó dùng thuốc lâu dài và phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: bỏ thuốc lá, kiểm soát mỡ máu và huyết áp, ăn uống cân bằng ít muối và mỡ bão hoà, giữ cân nặng, vận động đều, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực bóp nghẹt, đau lan ra tay, cổ, hàm, khó thở nặng, môi da tái xanh hoặc xám, ngất → gọi cấp cứu ngay, đừng tự lái xe; trong lúc chờ ngồi nghỉ, tựa lưng, co gối.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhoi-mau-co-tim-that-phai": {
+    "addSources": [
+      {
+        "title": "Heart attack",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-attack/"
+      }
+    ],
+    "about": [
+      [
+        "Nhồi máu cơ tim thường do cục máu đông làm máu không đến đủ tim; là tình trạng đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau ngực bóp nghẹt hoặc đè nặng, có thể lan ra tay, cổ, hàm; khó thở, buồn nôn, nôn, cảm giác như khó tiêu, vã mồ hôi, da tái xanh hoặc xám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi hút thuốc, huyết áp cao, mỡ máu cao, có người thân từng bị, tiểu đường, thừa cân béo phì.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện: thuốc làm tan cục máu đông, nong mạch đặt stent hoặc mổ bắc cầu; sau đó dùng thuốc lâu dài và phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: bỏ thuốc lá, kiểm soát mỡ máu và huyết áp, ăn uống cân bằng ít muối và mỡ bão hoà, giữ cân nặng, vận động đều, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực bóp nghẹt, đau lan ra tay, cổ, hàm, khó thở nặng, môi da tái xanh hoặc xám, ngất → gọi cấp cứu ngay, đừng tự lái xe; trong lúc chờ ngồi nghỉ, tựa lưng, co gối.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhoi-mau-co-tim-type": {
+    "addSources": [
+      {
+        "title": "Heart attack",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-attack/"
+      }
+    ],
+    "about": [
+      [
+        "Nhồi máu cơ tim thường do cục máu đông làm máu không đến đủ tim; là tình trạng đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau ngực bóp nghẹt hoặc đè nặng, có thể lan ra tay, cổ, hàm; khó thở, buồn nôn, nôn, cảm giác như khó tiêu, vã mồ hôi, da tái xanh hoặc xám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi hút thuốc, huyết áp cao, mỡ máu cao, có người thân từng bị, tiểu đường, thừa cân béo phì.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện: thuốc làm tan cục máu đông, nong mạch đặt stent hoặc mổ bắc cầu; sau đó dùng thuốc lâu dài và phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: bỏ thuốc lá, kiểm soát mỡ máu và huyết áp, ăn uống cân bằng ít muối và mỡ bão hoà, giữ cân nặng, vận động đều, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực bóp nghẹt, đau lan ra tay, cổ, hàm, khó thở nặng, môi da tái xanh hoặc xám, ngất → gọi cấp cứu ngay, đừng tự lái xe; trong lúc chờ ngồi nghỉ, tựa lưng, co gối.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhoi-mau-co-tim-o-nguoi-tre": {
+    "addSources": [
+      {
+        "title": "Heart attack",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/heart-attack/"
+      }
+    ],
+    "about": [
+      [
+        "Nhồi máu cơ tim thường do cục máu đông làm máu không đến đủ tim; là tình trạng đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau ngực bóp nghẹt hoặc đè nặng, có thể lan ra tay, cổ, hàm; khó thở, buồn nôn, nôn, cảm giác như khó tiêu, vã mồ hôi, da tái xanh hoặc xám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi hút thuốc, huyết áp cao, mỡ máu cao, có người thân từng bị, tiểu đường, thừa cân béo phì.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị ở bệnh viện: thuốc làm tan cục máu đông, nong mạch đặt stent hoặc mổ bắc cầu; sau đó dùng thuốc lâu dài và phục hồi chức năng tim.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: bỏ thuốc lá, kiểm soát mỡ máu và huyết áp, ăn uống cân bằng ít muối và mỡ bão hoà, giữ cân nặng, vận động đều, bớt rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực bóp nghẹt, đau lan ra tay, cổ, hàm, khó thở nặng, môi da tái xanh hoặc xám, ngất → gọi cấp cứu ngay, đừng tự lái xe; trong lúc chờ ngồi nghỉ, tựa lưng, co gối.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-phinh-dai-trang-bam-sinh": {
+    "addSources": [
+      {
+        "title": "Hirschsprung's disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/hirschsprungs-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Phình đại tràng bẩm sinh (bệnh Hirschsprung) là bệnh hiếm, phân bị kẹt trong ruột vì đoạn ruột cuối thiếu các dây thần kinh giúp ruột co bóp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Dấu hiệu sớm rõ nhất: trẻ sơ sinh không đi phân su trong 48 giờ đầu; bụng chướng, nôn dịch xanh hoặc vàng xanh; ở trẻ lớn triệu chứng có thể xuất hiện muộn hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Mọi trẻ bị bệnh đều cần mổ, thường cắt bỏ đoạn ruột bệnh rồi nối phần ruột lành; một số cần làm hậu môn nhân tạo tạm thời.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số trẻ đi ngoài bình thường sau mổ; một số còn táo bón hoặc khó kiểm soát đi ngoài đến tuổi teen.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Trẻ sơ sinh chưa đi phân su sau 48 giờ, bụng chướng, nôn dịch xanh → đưa đi khám ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

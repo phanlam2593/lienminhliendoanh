@@ -7,43 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Paget xương** — nhóm bệnh: cơ - xương - khớp, đầu, cổ.",
+   "text": "Bệnh Paget xương làm rối loạn chu trình làm mới xương, khiến xương yếu và đôi khi biến dạng; chủ yếu ở người lớn tuổi, hiếm dưới 50 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu, đau họng, nhức đầu, ngứa ran.",
+   "text": "Có thể ở một hay nhiều xương, hay ở xương chậu, cột sống, hộp sọ: đau xương hoặc khớp, vùng bị ấm lên, xương thay đổi hình dạng; đôi khi đau nhói, tê, mất thăng bằng; nhiều người không triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: di truyền.",
+   "text": "Tế bào huỷ xương làm việc nhanh bất thường, xương mới tạo ra to hơn nhưng yếu hơn; chưa rõ yếu tố khởi phát, có thể liên quan gen; có người thân bị thì nguy cơ cao hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chưa chữa khỏi nhưng kiểm soát được: thuốc làm chậm chu trình xương và giảm đau theo bác sĩ, vật lý trị liệu, dụng cụ hỗ trợ, phẫu thuật khi gãy xương hoặc biến dạng; ăn đủ canxi và vitamin D.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau xương kéo dài, xương biến dạng dần → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/paget-xuong-86.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Paget's disease of bone",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/pagets-disease-bone/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

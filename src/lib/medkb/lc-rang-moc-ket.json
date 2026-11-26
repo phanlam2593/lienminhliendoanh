@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Răng mọc kẹt** — nhóm bệnh: răng - hàm - mặt.",
+   "text": "Răng mọc kẹt (thường là răng khôn) là khi răng bị răng khác chặn hoặc bị lợi che một phần, không đủ chỗ mọc hẳn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy dịch, hôi miệng, sưng.",
+   "text": "Có thể gây đau, sưng, viêm lợi trùm, giắt thức ăn, sâu răng, bệnh nướu, nang, áp xe răng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -38,18 +38,18 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường cân nhắc nhổ khi răng không đủ chỗ mọc hẳn; nếu không gây vấn đề thì để lại và theo dõi khi khám răng định kỳ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Chảy máu không cầm, đau và sưng nặng dần mà thuốc giảm đau không đỡ, hoặc đau kèm vị hôi trong miệng, sốt, mệt → khám nha gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/rang-moc-ket-339.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Wisdom tooth removal",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/wisdom-tooth-removal/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
