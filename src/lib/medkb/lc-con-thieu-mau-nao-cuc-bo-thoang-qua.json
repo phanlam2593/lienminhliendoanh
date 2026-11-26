@@ -7,66 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Cơn thiếu máu não cục bộ thoáng qua** — nhóm bệnh: tim mạch, thần kinh - tinh thần, đầu.",
+   "text": "Cơn thiếu máu não thoáng qua (TIA, đột quỵ nhỏ) là khi máu lên một phần não bị gián đoạn tạm thời; kéo dài vài phút đến vài giờ và hết hẳn trong 24 giờ, không để lại tổn thương.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chóng mặt, thiếu máu, đau đầu, lú lẫn, phù.",
+   "text": "Nhớ FAST: mặt méo một bên hoặc không cười được; yếu hoặc tê một tay, không nhấc được hai tay; nói ngọng, không nói được hoặc không hiểu lời; khi có dấu hiệu thì gọi cấp cứu ngay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: xơ vữa.",
+   "text": "Là dấu hiệu cảnh báo đột quỵ có thể sắp xảy ra; nguy cơ: hút thuốc, huyết áp cao, béo phì, mỡ máu cao, uống nhiều rượu, rung nhĩ, tiểu đường, trên 55 tuổi.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá, tăng huyết áp, béo phì, tăng cholesterol, xơ vữa động mạch, bệnh tim.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nếu bạn hút thuốc lá, hãy bỏ thuốc, nếu bạn uống rượu, hãy hạn chế uống, duy trì cân nặng khỏe mạnh, ăn uống cân bằng lành mạnh, hạn chế uống rượu, không hút thuốc lá.",
+   "text": "Điều trị nguyên nhân bằng thay đổi lối sống và thuốc theo bác sĩ; đôi khi mổ thông động mạch cảnh.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Giữ cân nặng, ăn uống cân bằng, vận động đều, hạn chế rượu, không hút thuốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Từng có dấu hiệu như trên nhưng đã hết mà chưa đi khám → đi khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Có dấu hiệu FAST → gọi cấp cứu ngay, kể cả khi triệu chứng đã hết trong lúc chờ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Cơn thiếu máu não cục bộ thoáng qua – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/con-thieu-mau-nao-cuc-bo-thoang-qua.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Transient ischaemic attack (TIA)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/transient-ischaemic-attack-tia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

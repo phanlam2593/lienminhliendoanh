@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Cơn hen phế quản** — nhóm bệnh: hô hấp, ngực.",
+   "text": "Cơn hen là khi triệu chứng hen nặng lên, rất khó thở, có thể đe doạ tính mạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thở khò khè, tức ngực, khó thở, ho.",
+   "text": "Khò khè, ho, khó thở, tức ngực.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -38,9 +38,15 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ngồi thẳng, giữ bình tĩnh; dùng thuốc xịt cắt cơn theo kế hoạch xử trí hen bác sĩ đã dặn.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Sau cơn hen nên đi khám lại trong 2 ngày, kể cả khi đã thấy đỡ.",
+   "src": [
+    1
    ]
   }
  ],
@@ -53,14 +59,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đang lên cơn hen mà triệu chứng nặng hơn, dùng thuốc cắt cơn tối đa vẫn không đỡ, hoặc không có thuốc → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Cơn hen phế quản – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/con-hen-phe-quan-111.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Asthma attack",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/asthma/asthma-attack/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

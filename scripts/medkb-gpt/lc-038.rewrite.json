@@ -1,0 +1,545 @@
+{
+  "_note": "27/11 — Vòng LC 36 (đợt 12–14): NHS TIA, asthma-attack, keratosis-pilaris, actinic-keratoses, tongue-tie, peyronies; dùng lại thẻ động kinh, sỏi, xơ gan, nứt đốt sống, thoái hoá khớp đã kiểm — Claude đã mở kiểm.",
+  "lc-con-thieu-mau-nao-cuc-bo-thoang-qua": {
+    "addSources": [
+      {
+        "title": "Transient ischaemic attack (TIA)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/transient-ischaemic-attack-tia/"
+      }
+    ],
+    "about": [
+      [
+        "Cơn thiếu máu não thoáng qua (TIA, đột quỵ nhỏ) là khi máu lên một phần não bị gián đoạn tạm thời; kéo dài vài phút đến vài giờ và hết hẳn trong 24 giờ, không để lại tổn thương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhớ FAST: mặt méo một bên hoặc không cười được; yếu hoặc tê một tay, không nhấc được hai tay; nói ngọng, không nói được hoặc không hiểu lời; khi có dấu hiệu thì gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Là dấu hiệu cảnh báo đột quỵ có thể sắp xảy ra; nguy cơ: hút thuốc, huyết áp cao, béo phì, mỡ máu cao, uống nhiều rượu, rung nhĩ, tiểu đường, trên 55 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị nguyên nhân bằng thay đổi lối sống và thuốc theo bác sĩ; đôi khi mổ thông động mạch cảnh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Giữ cân nặng, ăn uống cân bằng, vận động đều, hạn chế rượu, không hút thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từng có dấu hiệu như trên nhưng đã hết mà chưa đi khám → đi khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Có dấu hiệu FAST → gọi cấp cứu ngay, kể cả khi triệu chứng đã hết trong lúc chờ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-con-hen-phe-quan": {
+    "addSources": [
+      {
+        "title": "Asthma attack",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/asthma/asthma-attack/"
+      }
+    ],
+    "about": [
+      [
+        "Cơn hen là khi triệu chứng hen nặng lên, rất khó thở, có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khò khè, ho, khó thở, tức ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ngồi thẳng, giữ bình tĩnh; dùng thuốc xịt cắt cơn theo kế hoạch xử trí hen bác sĩ đã dặn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Sau cơn hen nên đi khám lại trong 2 ngày, kể cả khi đã thấy đỡ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đang lên cơn hen mà triệu chứng nặng hơn, dùng thuốc cắt cơn tối đa vẫn không đỡ, hoặc không có thuốc → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-day-sung-nang-long": {
+    "addSources": [
+      {
+        "title": "Keratosis pilaris",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/keratosis-pilaris/"
+      }
+    ],
+    "about": [
+      [
+        "Dày sừng nang lông là bệnh da rất hay gặp và vô hại, nổi những nốt nhỏ trên da, có thể kéo dài lâu; không lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mảng nốt nhỏ ở cánh tay, đùi, mông; màu da, đỏ hoặc sẫm; có thể ngứa; thường đỡ vào mùa hè, nặng hơn mùa đông.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nang lông bị bít do chất sừng (keratin) tích tụ; thường có tính gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dưỡng ẩm thường xuyên, dùng xà phòng dịu không mùi, tẩy da chết nhẹ bằng khăn; tắm nước mát hoặc ấm; tránh nước nóng, chà mạnh, sản phẩm có hương, gãi hoặc nặn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thường tự đỡ theo thời gian; dược sĩ có thể tư vấn kem bôi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tự chăm sóc không đỡ và thấy phiền, hoặc da ngứa, viêm → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-day-sung-anh-sang": {
+    "addSources": [
+      {
+        "title": "Actinic keratoses (solar keratoses)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/actinic-keratoses/"
+      }
+    ],
+    "about": [
+      [
+        "Dày sừng ánh sáng là mảng da khô, tróc vảy do da bị nắng làm tổn thương; thường không nặng nhưng có một ít khả năng thành ung thư da.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mảng sần ráp như giấy nhám, thường 1–2 cm, có thể ngứa; màu da, hồng, đỏ hoặc nâu; hay ở mặt, tay, cánh tay, tai, da đầu, chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Một mảng có thể chỉ theo dõi; nhiều mảng hoặc đau, ngứa thì dùng kem bôi theo đơn, đốt lạnh, cắt bỏ hoặc liệu pháp quang động.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: kem chống nắng SPF 30 trở lên, đội mũ, mặc áo che, tránh nắng 11–15 giờ, không tắm nắng nhân tạo; tự kiểm tra da thường xuyên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mảng mới, hoặc mảng chảy máu, to ra, đổi màu, đau, thành cục, hay xuất hiện trên môi → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dinh-thang-luoi": {
+    "addSources": [
+      {
+        "title": "Tongue-tie",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/tongue-tie/"
+      }
+    ],
+    "about": [
+      [
+        "Dính thắng lưỡi là khi dây thắng dưới lưỡi ngắn hoặc căng hơn bình thường; hay gặp ở trẻ nhỏ và thường không gây vấn đề.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ở trẻ có thể bú mẹ hoặc bú bình khó: ngậm khó, bú lâu và nhiều cữ, chảy nhiều nước dãi, ho hoặc kêu tách tách khi bú, tăng cân kém; mẹ có thể đau núm vú, căng sưng ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không gây vấn đề thì không cần điều trị; nếu có, được hướng dẫn cách cho bú hoặc làm thủ thuật cắt nhỏ dây thắng (trẻ nhỏ thường không cần gây mê); đa số bé bú tốt hơn ngay sau đó.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ con bị dính thắng lưỡi hoặc bé bú khó → hỏi nữ hộ sinh, bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-duong-vat-cong": {
+    "addSources": [
+      {
+        "title": "Peyronie's disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/peyronies-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Dương vật cong (bệnh Peyronie) làm dương vật cong khi cương, có thể đau; hay gặp ở nam trên 40 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Cục cứng hoặc sưng ở thân dương vật cản giãn khi cương; cong khi cương; cương đau hoặc khó cương, khó giữ cương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ, đôi khi do chấn thương dương vật; nguy cơ cao hơn khi tiểu đường, huyết áp cao, mỡ máu cao, bệnh tim, xơ cứng động mạch, một số thuốc; đôi khi có tính gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhẹ có thể không cần điều trị; có thuốc làm chậm mảng cứng hoặc trị rối loạn cương, sóng xung kích, phẫu thuật làm thẳng (thường không về hoàn toàn như cũ).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy cục cứng, sưng, cong nhiều, cương đau hoặc khó cương ảnh hưởng quan hệ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-con-dong-kinh-vang-y-thuc": {
+    "addSources": [
+      {
+        "title": "Epilepsy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/epilepsy/"
+      }
+    ],
+    "about": [
+      [
+        "Động kinh là bệnh của não gây các cơn co giật; có các loại cơn ảnh hưởng toàn thân hoặc làm mất ý thức ngắn: co cứng – co giật, co cứng, mất trương lực, cơn vắng ý thức, giật cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Trong cơn có thể: cứng hoặc mềm người, ngã, giật, tiểu không tự chủ, nhìn chằm chằm không đáp; thường kéo dài vài giây đến vài phút rồi tự hết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do thay đổi hoạt động điện bình thường của não; thường liên quan gen, đôi khi do tổn thương não sau chấn thương đầu, đột quỵ, nhiễm trùng; nhiều trường hợp không rõ nguyên nhân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Hiện chưa chữa khỏi nhưng thường kiểm soát được; điều trị chính là thuốc chống động kinh, phải uống đúng theo đơn.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Một số người cần phẫu thuật não, máy kích thích dây thần kinh phế vị hoặc chế độ ăn ketogenic.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Cơn co giật đầu tiên, cơn kéo dài trên 5 phút, không tỉnh lại như mọi khi, hoặc từ 3 cơn trở lên trong 24 giờ → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-con-dau-quan-than": {
+    "addSources": [
+      {
+        "title": "Kidney stones",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/kidney-stones/"
+      }
+    ],
+    "about": [
+      [
+        "Sỏi tiết niệu hình thành khi một số chất trong nước tiểu tích tụ và kết tinh trong thận; sỏi nhỏ thường không triệu chứng và có thể tự ra theo nước tiểu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sỏi to: đau dữ dội ở hông bụng hoặc thắt lưng, có thể lan xuống bẹn, tinh hoàn hoặc vùng kín, đau từng cơn; có thể sốt, ớn lạnh, buồn nôn, nôn, tiểu nhiều lần, nước tiểu đục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ tăng khi thiếu nước, có bệnh như hội chứng chuyển hoá, một số thuốc; dễ tái phát khi ăn nhiều đạm ít chất xơ, ít vận động, hay nhiễm trùng tiểu, có người nhà bị hoặc từng bị sỏi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đa số điều trị tại nhà: uống nhiều nước, thuốc giảm đau, chống nôn, thuốc giúp sỏi ra (có thể mất vài tuần); sỏi to cần tán sỏi hoặc thủ thuật ở bệnh viện.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng: người lớn uống khoảng 2,5–3 lít nước mỗi ngày; bớt nước có ga, cà phê, rượu; ăn đủ canxi, ăn nhạt; nước tiểu sẫm là dấu hiệu thiếu nước. Không tự thay đổi chế độ ăn nhiều mà chưa hỏi bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng sỏi → cần được khám gấp; đau dữ dội, sốt, ớn lạnh → khám gấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-di-tat-ong-than-kinh": {
+    "addSources": [
+      {
+        "title": "Spina bifida",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/spina-bifida/"
+      }
+    ],
+    "about": [
+      [
+        "Tật nứt đốt sống là khi cột sống và tuỷ sống của em bé không phát triển hoàn chỉnh trong thai kỳ; thường phát hiện khi mang thai hoặc ngay sau sinh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể hở (ít gặp hơn, thường nặng hơn): tuỷ hoặc mô quanh tuỷ lộ ra qua khe hở; thể kín: khe nhỏ có da che, đa số không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thể hở: yếu hoặc liệt chân, khó kiểm soát tiểu tiện đại tiện, não úng thuỷ, giảm cảm giác ở chân, mông, cong vẹo cột sống.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể kín: đau lưng hoặc chân, tê, yếu chân, da lưng có cục, lõm hoặc mảng lông; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; nguy cơ cao hơn khi mẹ thiếu axit folic hoặc vitamin B12 lúc mang thai, có người thân bị, hoặc dùng một số thuốc chống động kinh, thuốc tâm thần (như valproat) khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thể hở: mổ đóng khe hở sau sinh (thường trong 48 giờ) hoặc trước tuần 26 của thai kỳ — không phục hồi được tổn thương thần kinh đã có; đặt ống dẫn lưu dịch não; vật lý trị liệu, dụng cụ hỗ trợ, điều trị tiểu tiện đại tiện lâu dài.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể kín thường không cần điều trị, đôi khi cần mổ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Phụ nữ định có thai hoặc đang dùng thuốc chống động kinh → hỏi bác sĩ về bổ sung axit folic và thuốc trước khi mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-gai-khop-goi": {
+    "addSources": [
+      {
+        "title": "Osteoarthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/osteoarthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Thoái hoá khớp là bệnh kéo dài làm khớp đau và cứng (ở đây là khớp gối); là dạng viêm khớp hay gặp nhất, thường ở gối, háng và các khớp nhỏ bàn tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau khớp, cứng khớp, khó cử động; có thể sưng, ấn đau, hoặc nghe lạo xạo khi cử động; mức độ rất khác nhau giữa mỗi người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lớp sụn bảo vệ đầu xương bị mòn; nguy cơ tăng theo tuổi, hay gặp ở nữ hơn, có người thân bị, béo phì, từng chấn thương khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không chữa khỏi, nhưng không nhất thiết nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vận động vừa sức ít nhất 150 phút mỗi tuần kèm bài tập tăng cơ từ 2 ngày trở lên; giảm cân nếu thừa cân; mang giày phù hợp, giữ tư thế tốt, không ngồi lâu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng hơn có thể cần thuốc giảm đau, bài tập với chuyên viên vật lý trị liệu; một số ít cần phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng thoái hoá khớp kéo dài → đi khám để chẩn đoán và điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}
