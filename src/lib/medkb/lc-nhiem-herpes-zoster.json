@@ -7,54 +7,98 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Herpes zoster** — nhóm bệnh: truyền nhiễm.",
+   "text": "Zona (herpes zoster) là nhiễm trùng gây phát ban đau, do virus thuỷ đậu nằm lại trong cơ thể rồi tái hoạt động, thường khi miễn dịch yếu vì căng thẳng, bệnh tật hoặc điều trị như hoá trị.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sợ ánh sáng, nổi hạch, mụn nước, đau đầu, co rút, đau cổ, ngứa, vảy, nám, sốt.",
+   "text": "Sớm: tê rần hoặc đau ở một vùng da, kèm đau đầu, mệt.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Vài ngày sau mọc ban thành mảng ở một bên cơ thể (hay ở ngực, bụng; có thể ở mặt, mắt); mụn nước chảy dịch rồi khô, đóng vảy.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): ức chế miễn dịch, liệu pháp ức chế miễn dịch, hội chứng viêm phục hồi miễn dịch, hệ miễn dịch suy yếu, bệnh bạch cầu.",
+   "text": "Không lây zona cho người khác, nhưng người chưa bị thuỷ đậu hoặc chưa tiêm phòng có thể bị lây thuỷ đậu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tránh tiếp xúc người mang thai chưa bị thuỷ đậu, người suy giảm miễn dịch, trẻ dưới 1 tháng; nghỉ làm, nghỉ học khi ban còn chảy dịch và không che được.",
+   "src": [
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể mất đến 4 tuần để khỏi; đau da có thể kéo dài vài tuần sau khi hết ban.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ca nhẹ có thể không cần điều trị; thuốc kháng virus có thể được kê cho người miễn dịch yếu hoặc đau, ban vừa đến nặng — tốt nhất bắt đầu trong 3 ngày từ khi mọc ban.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Dùng thuốc giảm đau thông thường, giữ ban sạch và khô, mặc đồ rộng, chườm mát.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có vắc xin giúp giảm nguy cơ bị zona; có thể bị zona nhiều lần.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dấu hiệu zona → đi khám trong 3 ngày; mang thai, dưới 18 tuổi, miễn dịch suy giảm nặng → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Ban ở mắt hoặc mũi, hoặc thị lực thay đổi → đi khám gấp ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Nhiễm Herpes zoster – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-herpes-zoster-58.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Shingles",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/shingles/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

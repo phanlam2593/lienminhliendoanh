@@ -1,0 +1,799 @@
+{
+  "_note": "26/11 — Vòng LC 16 (đợt 81–82): NHS threadworms, shingles; CDC leptospirosis, shigella — Claude đã mở kiểm. Thêm: NHS cold-sores, chlamydia, gonorrhoea; CDC sth, botulism, cytomegalovirus.",
+  "lc-nhiem-giun-kim": {
+    "addSources": [
+      {
+        "title": "Threadworms",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/threadworms/"
+      }
+    ],
+    "about": [
+      [
+        "Giun kim là giun nhỏ sống trong ruột, thấy trong phân như sợi chỉ trắng; hay gặp ở trẻ em và rất dễ lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Dấu hiệu chính: ngứa hậu môn dữ dội, thường nặng hơn về đêm, làm trẻ khó ngủ, cáu gắt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ít gặp hơn: sụt cân, đái dầm, đau rát da quanh hậu môn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Trứng đẻ quanh hậu môn dính vào ngón tay khi gãi, rồi sang ga gối, đồ chơi, bề mặt, thức ăn và bị nuốt vào; trứng sống được đến 2 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc tẩy giun (mebendazole) diệt giun; cả nhà từ 2 tuổi trở lên nên tẩy cùng lúc dù không có triệu chứng. Trẻ dưới 2 tuổi, người mang thai hoặc cho con bú cần hỏi dược sĩ, bác sĩ trước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thuốc không diệt trứng nên cần giữ vệ sinh: rửa tay thường xuyên, nhất là trước khi ăn và sau đi vệ sinh; cắt ngắn móng tay; giặt ga gối, đồ ngủ, khăn ở nhiệt độ cao; lau bề mặt bằng nước nóng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không giũ chăn ga, không dùng chung khăn, tránh cắn móng tay, mút tay; duy trì 2 tuần nếu có uống thuốc, 6 tuần nếu không.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ bị giun kim không cần nghỉ học.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị giun kim → hỏi dược sĩ; trẻ dưới 2 tuổi, mang thai hoặc cho con bú → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-leptospira": {
+    "addSources": [
+      {
+        "title": "About Leptospirosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/leptospirosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh do xoắn khuẩn Leptospira, gặp ở cả người và động vật; vi khuẩn có trong nước hoặc đất bị nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt, đau cơ, đau đầu, nôn, tiêu chảy, ớn lạnh, vàng da vàng mắt; dễ nhầm với bệnh khác, có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Động vật nhiễm bệnh thải vi khuẩn qua nước tiểu; người thường nhiễm khi tiếp xúc nước hoặc đất bẩn, nhất là sau lũ lụt, mưa lớn, hoặc ăn uống thực phẩm, nước bị nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể vào giai đoạn nặng với suy thận, suy gan hoặc viêm màng não; không điều trị có thể tổn thương thận.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh theo bác sĩ, càng sớm càng tốt để tránh bệnh nặng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: tránh bơi, lội nước có thể bị nhiễm (nhất là sau bão lũ); băng kín vết trầy xước bằng băng chống nước; mang ủng khi lội nước lũ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt, đau cơ, vàng da sau khi lội nước lũ hoặc tiếp xúc nước, đất bẩn → đi khám sớm và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-shigella": {
+    "addSources": [
+      {
+        "title": "About Shigella Infection",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/shigella/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm Shigella (lỵ trực khuẩn) là nhiễm vi khuẩn rất dễ lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy ra máu hoặc kéo dài hơn 3 ngày, sốt, đau bụng, mót rặn liên tục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chỉ cần nuốt một lượng rất nhỏ vi khuẩn là bệnh; lây qua thức ăn, nước, bề mặt bị nhiễm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ dưới 5 tuổi dễ mắc nhất; người đi đến nơi vệ sinh kém cũng có nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong 5–7 ngày mà không cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nhẹ chỉ cần uống nhiều nước và nghỉ ngơi để tránh mất nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng thường xuyên; tránh quan hệ tình dục ít nhất 2 tuần sau khi hết tiêu chảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy ra máu, kéo dài, sốt cao hoặc có dấu hiệu mất nước, nhất là trẻ nhỏ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-herpes-zoster": {
+    "addSources": [
+      {
+        "title": "Shingles",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/shingles/"
+      }
+    ],
+    "about": [
+      [
+        "Zona (herpes zoster) là nhiễm trùng gây phát ban đau, do virus thuỷ đậu nằm lại trong cơ thể rồi tái hoạt động, thường khi miễn dịch yếu vì căng thẳng, bệnh tật hoặc điều trị như hoá trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sớm: tê rần hoặc đau ở một vùng da, kèm đau đầu, mệt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Vài ngày sau mọc ban thành mảng ở một bên cơ thể (hay ở ngực, bụng; có thể ở mặt, mắt); mụn nước chảy dịch rồi khô, đóng vảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Không lây zona cho người khác, nhưng người chưa bị thuỷ đậu hoặc chưa tiêm phòng có thể bị lây thuỷ đậu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh tiếp xúc người mang thai chưa bị thuỷ đậu, người suy giảm miễn dịch, trẻ dưới 1 tháng; nghỉ làm, nghỉ học khi ban còn chảy dịch và không che được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể mất đến 4 tuần để khỏi; đau da có thể kéo dài vài tuần sau khi hết ban.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nhẹ có thể không cần điều trị; thuốc kháng virus có thể được kê cho người miễn dịch yếu hoặc đau, ban vừa đến nặng — tốt nhất bắt đầu trong 3 ngày từ khi mọc ban.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Dùng thuốc giảm đau thông thường, giữ ban sạch và khô, mặc đồ rộng, chườm mát.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có vắc xin giúp giảm nguy cơ bị zona; có thể bị zona nhiều lần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dấu hiệu zona → đi khám trong 3 ngày; mang thai, dưới 18 tuổi, miễn dịch suy giảm nặng → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Ban ở mắt hoặc mũi, hoặc thị lực thay đổi → đi khám gấp ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-giun-dua": {
+    "addSources": [
+      {
+        "title": "About Soil-transmitted Helminths",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/sth/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Giun đũa là một trong ba loại giun truyền qua đất (cùng giun tóc, giun móc), sống trong ruột người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiễm nhẹ thường không triệu chứng; nhiễm nặng có thể đau bụng, tiêu chảy, mất máu và chất dinh dưỡng, sa trực tràng; ở trẻ có thể làm chậm phát triển thể chất và trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người nhiễm thải trứng theo phân ra đất, nước khi đi vệ sinh bừa bãi hoặc dùng phân người bón cây.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhiễm khi nuốt phải trứng giun từ đất dính rau quả chưa rửa, nước uống bẩn hoặc tay bẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Xét nghiệm phân để chẩn đoán; thuốc tẩy giun theo đơn rất hiệu quả, dùng trong 1–3 ngày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay trước khi chế biến thức ăn; rửa, gọt, nấu chín rau quả; tránh đất và nước uống bị nhiễm; đi giày dép khi ra vùng đất có thể nhiễm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng, tiêu chảy kéo dài, thiếu máu, hoặc trẻ chậm lớn → đi khám, xét nghiệm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-giun-toc": {
+    "addSources": [
+      {
+        "title": "About Soil-transmitted Helminths",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/sth/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Giun tóc là một trong ba loại giun truyền qua đất (cùng giun đũa, giun móc), sống trong ruột người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiễm nhẹ thường không triệu chứng; nhiễm nặng có thể đau bụng, tiêu chảy, mất máu và chất dinh dưỡng, sa trực tràng; ở trẻ có thể làm chậm phát triển thể chất và trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người nhiễm thải trứng theo phân ra đất, nước khi đi vệ sinh bừa bãi hoặc dùng phân người bón cây.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhiễm khi nuốt phải trứng giun từ đất dính rau quả chưa rửa, nước uống bẩn hoặc tay bẩn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Xét nghiệm phân để chẩn đoán; thuốc tẩy giun theo đơn rất hiệu quả, dùng trong 1–3 ngày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay trước khi chế biến thức ăn; rửa, gọt, nấu chín rau quả; tránh đất và nước uống bị nhiễm; đi giày dép khi ra vùng đất có thể nhiễm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng, tiêu chảy kéo dài, thiếu máu, hoặc trẻ chậm lớn → đi khám, xét nghiệm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-giun-moc": {
+    "addSources": [
+      {
+        "title": "About Soil-transmitted Helminths",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/sth/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Giun móc là một trong ba loại giun truyền qua đất (cùng giun đũa, giun tóc), sống trong ruột người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiễm nhẹ thường không triệu chứng; nhiễm nặng có thể đau bụng, tiêu chảy, mất máu và chất dinh dưỡng, sa trực tràng; ở trẻ có thể làm chậm phát triển thể chất và trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người nhiễm thải trứng theo phân ra đất, nước khi đi vệ sinh bừa bãi hoặc dùng phân người bón cây.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ấu trùng nở trong đất và chui qua da, chủ yếu khi đi chân đất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Xét nghiệm phân để chẩn đoán; thuốc tẩy giun theo đơn rất hiệu quả, dùng trong 1–3 ngày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay trước khi chế biến thức ăn; rửa, gọt, nấu chín rau quả; tránh đất và nước uống bị nhiễm; đi giày dép khi ra vùng đất có thể nhiễm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng, tiêu chảy kéo dài, thiếu máu, hoặc trẻ chậm lớn → đi khám, xét nghiệm phân.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-herpes-simplex": {
+    "addSources": [
+      {
+        "title": "Cold sores",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cold-sores/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm herpes simplex hay gây mụn rộp môi — rất hay gặp và thường tự khỏi trong 10 ngày.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đa số nhiễm từ nhỏ qua tiếp xúc da kề da như hôn; virus nằm lại suốt đời, thỉnh thoảng gây mụn rộp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đầu tiên tê rần, ngứa hoặc rát; trong 48 giờ mọc mụn nước đau trên mặt, sau đó vỡ ra và đóng vảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dễ bùng lên khi ốm, nắng, đến kỳ kinh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Lây từ lúc bắt đầu tê rần đến khi lành hẳn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Rửa tay sau khi chạm vào mụn; tránh hôn và quan hệ bằng miệng đến khi lành; không hôn trẻ sơ sinh vì có thể gây herpes sơ sinh nguy hiểm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Dùng son dưỡng có chống nắng khi ra ngoài, thuốc giảm đau thông thường (không cho trẻ dưới 16 tuổi uống aspirin), chấm kem chứ không chà, uống nhiều nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kem kháng virus giúp mau lành, hiệu quả nhất khi bôi từ lúc mới tê rần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mụn chưa bắt đầu lành sau 10 ngày, rất to hoặc rất đau, không chắc có phải mụn rộp, trẻ bị sưng đau nhiều trong miệng, hoặc người miễn dịch yếu → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-khuan-chlamydia": {
+    "addSources": [
+      {
+        "title": "Chlamydia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/chlamydia/"
+      }
+    ],
+    "about": [
+      [
+        "Chlamydia là bệnh lây qua đường tình dục hay gặp, thường lây khi quan hệ không an toàn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Phần lớn không có triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu có (vài tuần đến vài tháng sau khi nhiễm): dịch tiết bất thường, rát khi tiểu, đau bụng dưới hoặc đau tinh hoàn; có thể ở họng, hậu môn, mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị có thể gây viêm vùng chậu (dẫn đến vô sinh, chửa ngoài tử cung), viêm tinh hoàn, viêm khớp phản ứng; khi mang thai có thể lây cho bé lúc sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh theo bác sĩ; bạn tình cũng cần xét nghiệm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không quan hệ (kể cả bằng miệng, hậu môn) đến khi cả hai điều trị xong và xét nghiệm hết bệnh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: dùng bao cao su; xét nghiệm định kỳ hoặc khi có bạn tình mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dịch tiết lạ, rát khi tiểu, hoặc từng quan hệ không an toàn → đi xét nghiệm dù không có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-lau-cau": {
+    "addSources": [
+      {
+        "title": "Gonorrhoea",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/gonorrhoea/"
+      }
+    ],
+    "about": [
+      [
+        "Lậu là bệnh lây qua đường tình dục khi quan hệ không an toàn; chữa bằng kháng sinh, nhưng không điều trị có thể gây biến chứng nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu có (thường khoảng 2 tuần sau khi nhiễm): chảy dịch, đau khi tiểu, đau bụng dưới; đôi khi ở mắt, họng, hậu môn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua dịch âm đạo, tinh dịch khi quan hệ đường âm đạo, hậu môn, miệng; mẹ có thể lây cho bé khi sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị có thể gây viêm vùng chậu (dẫn đến vô sinh), viêm tiền liệt tuyến, viêm tinh hoàn; khi mang thai tăng nguy cơ sinh non, nhẹ cân, bé có thể bị nhiễm trùng mắt, mù.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị kháng sinh theo bác sĩ; bạn tình cũng phải xét nghiệm và điều trị; không quan hệ đến khi điều trị và xét nghiệm xong.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: dùng bao cao su; xét nghiệm định kỳ hoặc khi có bạn tình mới.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có dịch tiết, đau khi tiểu hoặc nghĩ mình có thể bị lây → đi xét nghiệm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-clostridium-botulinum": {
+    "addSources": [
+      {
+        "title": "About Botulism",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/botulism/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Ngộ độc botulinum là bệnh hiếm nhưng nặng, do độc tố tấn công thần kinh, có thể gây khó thở, liệt cơ và tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Qua thực phẩm: chủ yếu từ đồ tự làm đóng hộp, bảo quản hoặc lên men không đúng cách; đồ mua sẵn hiếm khi bị.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Qua vết thương: bào tử vào vết thương; ở trẻ nhũ nhi: bào tử phát triển trong ruột bé.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Phòng bệnh: cẩn thận với đồ tự đóng hộp, ngâm, lên men tại nhà vì dễ tạo điều kiện cho độc tố hình thành.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Mọi dạng ngộ độc botulinum đều có thể gây tử vong — nghi ngờ thì đừng chờ, đến cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-cytomegalovirus": {
+    "addSources": [
+      {
+        "title": "About Cytomegalovirus",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/cytomegalovirus/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Cytomegalovirus (CMV) là virus hay gặp ở mọi lứa tuổi; gần 1/3 trẻ đã nhiễm trước 5 tuổi; đã nhiễm thì virus ở lại suốt đời.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số không triệu chứng; nếu có thường nhẹ: sốt, đau họng, mệt, sưng hạch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua dịch cơ thể như nước bọt, nước tiểu, sữa mẹ; trẻ nhỏ là nguồn lây hay gặp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Người mang thai và người suy giảm miễn dịch có nguy cơ biến chứng cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Khoảng 1/200 trẻ sinh ra đã nhiễm CMV bẩm sinh; khoảng 1/5 số này có dị tật hoặc vấn đề sức khoẻ lâu dài, hay gặp nhất là nghe kém.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Hạn chế tiếp xúc nước bọt, nước tiểu của trẻ nhỏ; không dùng chung đồ ăn, muỗng, ly, núm vú giả; rửa tay bằng xà phòng sau khi thay tã.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đang mang thai và lo bị nhiễm CMV, hoặc người suy giảm miễn dịch có sốt kéo dài → hỏi bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

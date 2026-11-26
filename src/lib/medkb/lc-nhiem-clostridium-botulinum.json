@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Clostridium botulinum** — nhóm bệnh: truyền nhiễm.",
+   "text": "Ngộ độc botulinum là bệnh hiếm nhưng nặng, do độc tố tấn công thần kinh, có thể gây khó thở, liệt cơ và tử vong.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,24 +23,24 @@
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): nhiễm Clostridium botulinum.",
+   "text": "Qua thực phẩm: chủ yếu từ đồ tự làm đóng hộp, bảo quản hoặc lên men không đúng cách; đồ mua sẵn hiếm khi bị.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Qua vết thương: bào tử vào vết thương; ở trẻ nhũ nhi: bào tử phát triển trong ruột bé.",
+   "src": [
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan, không tiêm chích ma tuý, do độc tố C.",
+   "text": "Phòng bệnh: cẩn thận với đồ tự đóng hộp, ngâm, lên men tại nhà vì dễ tạo điều kiện cho độc tố hình thành.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -53,14 +53,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Mọi dạng ngộ độc botulinum đều có thể gây tử vong — nghi ngờ thì đừng chờ, đến cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Nhiễm Clostridium botulinum – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-clostridium-botulinum-198.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Botulism",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/botulism/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

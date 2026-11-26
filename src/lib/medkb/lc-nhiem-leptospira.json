@@ -7,55 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Leptospira** — nhóm bệnh: truyền nhiễm.",
+   "text": "Bệnh do xoắn khuẩn Leptospira, gặp ở cả người và động vật; vi khuẩn có trong nước hoặc đất bị nhiễm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, tiêu chảy, vàng mắt, nhức đầu, sốt cao, ớn lạnh, tiểu ít, vàng da, đau cổ, nôn.",
+   "text": "Sốt, đau cơ, đau đầu, nôn, tiêu chảy, ớn lạnh, vàng da vàng mắt; dễ nhầm với bệnh khác, có người không triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vi khuẩn, da bị tổn thương, gia súc, lợn, ngựa, chó, loài gặm nhấm, động vật hoang dã.",
+   "text": "Động vật nhiễm bệnh thải vi khuẩn qua nước tiểu; người thường nhiễm khi tiếp xúc nước hoặc đất bẩn, nhất là sau lũ lụt, mưa lớn, hoặc ăn uống thực phẩm, nước bị nhiễm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): nông dân, công nhân vùng mỏ, công nhân cống rãnh, công nhân lò mổ, công nhân ở xưởng cá, nông dân chăn nuôi bò sữa.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể vào giai đoạn nặng với suy thận, suy gan hoặc viêm màng não; không điều trị có thể tổn thương thận.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: sữa chua, bánh mì, bánh quy, củ cà rốt, bí ngô, cá, thịt bò, tiêm chủng cho đối tượng có nguy cơ cao.",
+   "text": "Điều trị bằng kháng sinh theo bác sĩ, càng sớm càng tốt để tránh bệnh nặng.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh: tránh bơi, lội nước có thể bị nhiễm (nhất là sau bão lũ); băng kín vết trầy xước bằng băng chống nước; mang ủng khi lội nước lũ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt, đau cơ, vàng da sau khi lội nước lũ hoặc tiếp xúc nước, đất bẩn → đi khám sớm và kể cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-leptospira-73.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Leptospirosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/leptospirosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

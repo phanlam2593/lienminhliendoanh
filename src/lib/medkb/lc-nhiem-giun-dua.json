@@ -7,55 +7,55 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm giun đũa** — nhóm bệnh: truyền nhiễm.",
+   "text": "Giun đũa là một trong ba loại giun truyền qua đất (cùng giun tóc, giun móc), sống trong ruột người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: ho có đờm, tiêu chảy, khó tiêu, vàng mắt, đầy bụng, co giật, táo bón, mất ngủ, ho khan, sốt cao.",
+   "text": "Nhiễm nhẹ thường không triệu chứng; nhiễm nặng có thể đau bụng, tiêu chảy, mất máu và chất dinh dưỡng, sa trực tràng; ở trẻ có thể làm chậm phát triển thể chất và trí tuệ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: ruột non, ấu trùng ra khỏi vỏ trứng.",
+   "text": "Người nhiễm thải trứng theo phân ra đất, nước khi đi vệ sinh bừa bãi hoặc dùng phân người bón cây.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người sống ở vùng nông thôn, miền núi, người làm nông nghiệp, chăn nuôi trồng trọt.",
+   "text": "Nhiễm khi nuốt phải trứng giun từ đất dính rau quả chưa rửa, nước uống bẩn hoặc tay bẩn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tẩy giun định kỳ.",
+   "text": "Xét nghiệm phân để chẩn đoán; thuốc tẩy giun theo đơn rất hiệu quả, dùng trong 1–3 ngày.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay trước khi chế biến thức ăn; rửa, gọt, nấu chín rau quả; tránh đất và nước uống bị nhiễm; đi giày dép khi ra vùng đất có thể nhiễm phân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau bụng, tiêu chảy kéo dài, thiếu máu, hoặc trẻ chậm lớn → đi khám, xét nghiệm phân.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-giun-dua-51.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Soil-transmitted Helminths",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/sth/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

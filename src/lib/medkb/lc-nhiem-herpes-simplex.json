@@ -7,49 +7,67 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Herpes simplex** — nhóm bệnh: truyền nhiễm.",
+   "text": "Nhiễm herpes simplex hay gây mụn rộp môi — rất hay gặp và thường tự khỏi trong 10 ngày.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đa số nhiễm từ nhỏ qua tiếp xúc da kề da như hôn; virus nằm lại suốt đời, thỉnh thoảng gây mụn rộp.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: sưng hạch, mụn nước, ngứa ran, cứng gáy, đau mắt, mệt mỏi, đau đầu, chán ăn, mờ mắt, ngứa.",
+   "text": "Đầu tiên tê rần, ngứa hoặc rát; trong 48 giờ mọc mụn nước đau trên mặt, sau đó vỡ ra và đóng vảy.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: HSV-1, HSV-2, hôn nhau, quan hệ tình dục bằng miệng, tiếp xúc da kề da.",
+   "text": "Dễ bùng lên khi ốm, nắng, đến kỳ kinh.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): có bạn tình nhiễm HSV, bị suy giảm miễn dịch, quan hệ tình dục không an toàn.",
+   "text": "Lây từ lúc bắt đầu tê rần đến khi lành hẳn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay sau khi chạm vào mụn; tránh hôn và quan hệ bằng miệng đến khi lành; không hôn trẻ sơ sinh vì có thể gây herpes sơ sinh nguy hiểm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Dùng son dưỡng có chống nắng khi ra ngoài, thuốc giảm đau thông thường (không cho trẻ dưới 16 tuổi uống aspirin), chấm kem chứ không chà, uống nhiều nước.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Kem kháng virus giúp mau lành, hiệu quả nhất khi bôi từ lúc mới tê rần.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Mụn chưa bắt đầu lành sau 10 ngày, rất to hoặc rất đau, không chắc có phải mụn rộp, trẻ bị sưng đau nhiều trong miệng, hoặc người miễn dịch yếu → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +78,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-herpes-simplex-57.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cold sores",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cold-sores/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

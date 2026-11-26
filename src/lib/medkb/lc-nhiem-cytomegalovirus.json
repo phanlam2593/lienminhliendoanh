@@ -7,49 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Cytomegalovirus** — nhóm bệnh: truyền nhiễm, bệnh trẻ em.",
+   "text": "Cytomegalovirus (CMV) là virus hay gặp ở mọi lứa tuổi; gần 1/3 trẻ đã nhiễm trước 5 tuổi; đã nhiễm thì virus ở lại suốt đời.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: loét miệng, sưng hạch, tiêu chảy, đau họng, vàng mắt, nuốt đau, nhức đầu, đau bụng, đau lưng, phát ban.",
+   "text": "Đa số không triệu chứng; nếu có thường nhẹ: sốt, đau họng, mệt, sưng hạch.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh thủy đậu.",
+   "text": "Lây qua dịch cơ thể như nước bọt, nước tiểu, sữa mẹ; trẻ nhỏ là nguồn lây hay gặp.",
    "src": [
-    0
-   ]
-  }
- ],
- "course": [],
- "care": [
-  {
-   "text": "Sinh hoạt / phòng ngừa: làm sạch đồ chơi và mặt bàn, quan hệ tình dục an toàn.",
-   "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Người mang thai và người suy giảm miễn dịch có nguy cơ biến chứng cao hơn.",
    "src": [
-    0
+    1
+   ]
+  }
+ ],
+ "course": [
+  {
+   "text": "Khoảng 1/200 trẻ sinh ra đã nhiễm CMV bẩm sinh; khoảng 1/5 số này có dị tật hoặc vấn đề sức khoẻ lâu dài, hay gặp nhất là nghe kém.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Hạn chế tiếp xúc nước bọt, nước tiểu của trẻ nhỏ; không dùng chung đồ ăn, muỗng, ly, núm vú giả; rửa tay bằng xà phòng sau khi thay tã.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đang mang thai và lo bị nhiễm CMV, hoặc người suy giảm miễn dịch có sốt kéo dài → hỏi bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-cytomegalovirus.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Cytomegalovirus",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/cytomegalovirus/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

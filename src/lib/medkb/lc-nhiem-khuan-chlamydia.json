@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm khuẩn Chlamydia** — nhóm bệnh: truyền nhiễm, sinh dục.",
+   "text": "Chlamydia là bệnh lây qua đường tình dục hay gặp, thường lây khi quan hệ không an toàn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau khi quan hệ, đau vùng chậu, đau thắt lưng, chảy nước mũi, tiểu buốt, nghẹt mũi, chảy máu, đau họng, sưng đau, cứng gáy.",
+   "text": "Phần lớn không có triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nếu có (vài tuần đến vài tháng sau khi nhiễm): dịch tiết bất thường, rát khi tiểu, đau bụng dưới hoặc đau tinh hoàn; có thể ở họng, hậu môn, mắt.",
+   "src": [
+    1
    ]
   }
  ],
@@ -29,21 +35,40 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị có thể gây viêm vùng chậu (dẫn đến vô sinh, chửa ngoài tử cung), viêm tinh hoàn, viêm khớp phản ứng; khi mang thai có thể lây cho bé lúc sinh.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị bằng kháng sinh theo bác sĩ; bạn tình cũng cần xét nghiệm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Không quan hệ (kể cả bằng miệng, hậu môn) đến khi cả hai điều trị xong và xét nghiệm hết bệnh.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Phòng bệnh: dùng bao cao su; xét nghiệm định kỳ hoặc khi có bạn tình mới.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có dịch tiết lạ, rát khi tiểu, hoặc từng quan hệ không an toàn → đi xét nghiệm dù không có triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +79,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-khuan-chlamydia-61.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Chlamydia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/chlamydia/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
