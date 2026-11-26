@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Viêm đa xoang** — nhóm bệnh: tai - mũi - họng, đầu, nhóm bệnh.",
+   "text": "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau răng, đau mắt, mệt mỏi, sốt, ho.",
+   "text": "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,27 +35,28 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường tự khỏi trong khoảng 4 tuần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tiêm phòng cúm hằng năm.",
+   "text": "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-xoang.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Sinusitis (sinus infection)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,66 +7,80 @@
  ],
  "about": [
   {
-   "text": "**Viêm đa rễ dây thần kinh** — nhóm bệnh: thần kinh - tinh thần.",
+   "text": "Viêm đa rễ dây thần kinh (hội chứng Guillain-Barré) là bệnh thần kinh hiếm, nặng, cần điều trị gấp trong bệnh viện.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: yếu cơ, rối loạn vận động, rối loạn nhịp tim, giảm cảm giác, rối loạn đại tiểu tiện, huyết áp không ổn định, rối loạn tiêu hóa.",
+   "text": "Tê rần, như kiến bò, thường bắt đầu ở bàn chân, bàn tay; yếu cơ lan dần từ chân tay; đau nhói ở chân hoặc lưng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Có thể khó thở, yếu mặt, khó nuốt, khó nói, nhìn đôi; thường nặng dần trong 2–4 tuần, nặng có thể liệt.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: suy thận, HIV, bệnh lý toàn thân, thuốc.",
+   "text": "Được cho là do hệ miễn dịch tấn công nhầm dây thần kinh, hay bắt đầu vài tuần sau một nhiễm trùng như cúm, viêm dạ dày ruột.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi, mắc bệnh tự miễn, nhiễm trùng, tăng huyết áp.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số đi lại được sau khoảng 6 tháng và hồi phục trong 1 năm; có người còn đau thần kinh, mệt, yếu kéo dài.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi và giữ thời gian nghỉ đủ, tập luyện và vận động nhẹ nhàng, theo dõi tình trạng sức khỏe, cung cấp đủ năng lượng, tăng cường protein, tăng cường hợp chất chống oxy hóa.",
+   "text": "Nhập viện ngay, thường vài tuần; điều trị chính bằng globulin miễn dịch truyền tĩnh mạch hoặc thay huyết tương; có thể cần thở máy.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghi bị bệnh này → khám gấp ngay trong ngày.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Khó thở, khó nuốt, yếu lan nhanh, méo miệng hoặc không nhấc được tay → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm đa rễ dây thần kinh – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-re-day-than-kinh.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Guillain-Barré syndrome",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/guillain-barre-syndrome/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

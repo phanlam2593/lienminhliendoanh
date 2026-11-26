@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Viêm đa khớp dạng thấp** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Viêm đa khớp dạng thấp là bệnh tự miễn kéo dài: hệ miễn dịch tấn công nhầm lớp lót khớp, gây sưng, cứng, đau và lâu dần làm hỏng khớp, sụn, xương; hay ở bàn tay, bàn chân, cổ tay, bệnh lúc nặng lúc nhẹ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: cứng khớp, sụt cân, mệt mỏi, ngứa, sưng, sốt.",
+   "text": "Đau, sưng, cứng khớp; có thể mệt, sụt cân hoặc ảnh hưởng nơi khác trong cơ thể.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá, tiền căn, tiếp xúc đầu đời, người lớn tuổi, tuổi, giới tính.",
+   "text": "Chưa rõ yếu tố khởi phát; nguy cơ cao hơn ở nữ, người có người thân bị, người hút thuốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Có thể kèm hội chứng ống cổ tay, viêm ở phổi, tim, mắt, tăng nguy cơ nhồi máu cơ tim và đột quỵ; kiểm soát bệnh tốt giúp giảm các nguy cơ này.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: vận động thể chất, ngừng hút thuốc lá, kiểm soát cân nặng, chất chống oxy hóa, chất xơ, flavonoid.",
+   "text": "Chưa chữa khỏi, nhưng thuốc dùng lâu dài giúp giảm triệu chứng và làm chậm bệnh; vật lý trị liệu, hoạt động trị liệu, đôi khi phẫu thuật.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ mình có dấu hiệu viêm khớp dạng thấp → đi khám sớm để tránh hỏng khớp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-khop-dang-thap.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Rheumatoid arthritis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/rheumatoid-arthritis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

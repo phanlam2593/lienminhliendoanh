@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Vẩn đục dịch kính** — nhóm bệnh: mắt.",
+   "text": "Vẩn đục dịch kính (ruồi bay) là những chấm đen, sợi ngoằn ngoèo, vòng hay mạng nhện trôi trong tầm nhìn; hay gặp, nhất là ở người lớn tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,19 +23,20 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: dịch kính lỏng, hiện tượng lấp lánh, viêm màng bồ đào, bệnh lý nhiễm tinh bột, cận thị, bong võng mạc, viêm mống mắt, xuất huyết võng mạc.",
+   "text": "Thường do bong dịch kính sau — thay đổi vô hại của chất gel trong mắt; ít hơn là dấu hiệu bong võng mạc, một bệnh nặng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): đục thủy tinh thể, viêm màng bồ đào.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường không nguy hiểm nếu đã có lâu, không nặng thêm, không ảnh hưởng thị lực; ruồi bay thường ít thấy dần theo thời gian.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
    "text": "Sinh hoạt / phòng ngừa: luôn luôn cho mắt có thời gian nghỉ ngơi, cân nhắc bổ sung axit hyaluronic, bài tập di chuyển mắt.",
@@ -59,14 +60,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Lần đầu thấy ruồi bay hoặc chớp sáng, ruồi bay xuất hiện đột ngột hay tăng nhiều, thấy bóng tối như tấm màn che, nhìn mờ, đau mắt → khám mắt gấp, vì có thể mất thị lực vĩnh viễn nếu chậm điều trị.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Vẩn đục dịch kính – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/van-duc-dich-kinh-553.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Floaters and flashes in the eyes",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/floaters-and-flashes-in-the-eyes/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

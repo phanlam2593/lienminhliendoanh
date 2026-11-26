@@ -7,55 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Viêm đa dây thần kinh** — nhóm bệnh: thần kinh - tinh thần, tứ chi.",
+   "text": "Viêm đa dây thần kinh (bệnh thần kinh ngoại biên) là khi dây thần kinh ở tay, chân bị tổn thương; gặp ở gần 1/10 người từ 55 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: ngứa ran, yếu cơ, ngứa.",
+   "text": "Tê, kiến bò ở bàn chân hoặc bàn tay; đau rát hoặc như dao đâm; mất thăng bằng, kém phối hợp; yếu cơ, nhất là ở bàn chân.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: bệnh HIV, bệnh bạch hầu, bệnh Lyme, nghiện rượu.",
+   "text": "Hay gặp nhất là tiểu đường (đường huyết cao làm hỏng dần dây thần kinh); ngoài ra chấn thương thần kinh, nhiễm virus như zona, tác dụng phụ thuốc, uống nhiều rượu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): những người nghiện bia rượu, bệnh đái tháo đường, nghiện rượu, phơi nhiễm độc tố, tiền sử gia đình mắc bệnh thần kinh.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Loét bàn chân không điều trị có thể nhiễm trùng, hoại tử, đôi khi phải cắt cụt; người tiểu đường cần khám bàn chân định kỳ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: hỗ trợ vận động, chăm sóc tốt cho chân tay, nghỉ ngơi và giảm căng thẳng, theo dõi sức khỏe, thực phẩm giàu chất xơ, protein.",
+   "text": "Tuỳ nguyên nhân: kiểm soát đường huyết, bỏ thuốc lá, bớt rượu; đau thần kinh thường cần thuốc chuyên biệt theo đơn vì thuốc giảm đau thường ít tác dụng; vật lý trị liệu khi yếu cơ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau, tê, mất cảm giác ở bàn chân, mất thăng bằng, yếu cơ, hoặc vết đứt, vết loét ở chân lâu lành → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-da-day-than-kinh-715.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Peripheral neuropathy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

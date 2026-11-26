@@ -1,0 +1,577 @@
+{
+  "_note": "26/11 — Vòng LC 23 (đợt 64–67): NHS primary-biliary-cholangitis, cellulitis, peripheral-neuropathy — Claude đã mở kiểm. Thêm (đợt 60–63): NHS ear-infections, glue-ear, appendicitis, laryngitis, pneumonia.",
+  "lc-viem-duong-mat-nguyen-phat-pbc": {
+    "addSources": [
+      {
+        "title": "Primary biliary cholangitis (PBC)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/primary-biliary-cholangitis-pbc/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đường mật nguyên phát (PBC) là bệnh gan trong đó hệ miễn dịch tấn công nhầm các ống mật; bệnh có thể nặng dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng, thường phát hiện qua xét nghiệm máu định kỳ; có người mệt, ngứa da, đau nhức xương khớp, khô mắt khô miệng, khó chịu vùng bụng trên bên phải.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân, được cho là liên quan khác biệt nhỏ trong hoạt động của hệ miễn dịch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tiến triển rất khác nhau, có thể hàng chục năm; không điều trị có thể suy gan; giai đoạn muộn có thể loãng xương, cổ trướng, thiếu vitamin; nguy cơ ung thư gan tăng nhẹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc theo đơn giúp làm chậm tổn thương gan, thuốc khác giảm ngứa; đôi khi cần ghép gan.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Mệt kéo dài, ngứa da không rõ lý do, hoặc xét nghiệm men gan bất thường → đi khám chuyên khoa gan.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-to-chuc-hoc-mat": {
+    "addSources": [
+      {
+        "title": "Cellulitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cellulitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm mô tế bào là nhiễm khuẩn lớp sâu của da; khi xảy ra quanh mắt (viêm tổ chức hốc mắt) thì rất nguy hiểm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Da đau, nóng, sưng, thường đỏ; có thể phồng rộp; mệt như cúm, sưng hạch; lòng trắng mắt có thể đỏ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn vào lớp da sâu qua vết trầy, vết côn trùng cắn, da khô nứt (có khi rất nhỏ); không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh theo bác sĩ, uống hết liệu trình; ca nặng phải nằm viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sưng đỏ đau quanh mắt → khám gấp ngay; kèm sốt rất cao, tim đập nhanh, thở nhanh, chóng mặt, lú lẫn, da lạnh tái → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-day-than-kinh": {
+    "addSources": [
+      {
+        "title": "Peripheral neuropathy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đa dây thần kinh (bệnh thần kinh ngoại biên) là khi dây thần kinh ở tay, chân bị tổn thương; gặp ở gần 1/10 người từ 55 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tê, kiến bò ở bàn chân hoặc bàn tay; đau rát hoặc như dao đâm; mất thăng bằng, kém phối hợp; yếu cơ, nhất là ở bàn chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là tiểu đường (đường huyết cao làm hỏng dần dây thần kinh); ngoài ra chấn thương thần kinh, nhiễm virus như zona, tác dụng phụ thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Loét bàn chân không điều trị có thể nhiễm trùng, hoại tử, đôi khi phải cắt cụt; người tiểu đường cần khám bàn chân định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: kiểm soát đường huyết, bỏ thuốc lá, bớt rượu; đau thần kinh thường cần thuốc chuyên biệt theo đơn vì thuốc giảm đau thường ít tác dụng; vật lý trị liệu khi yếu cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, tê, mất cảm giác ở bàn chân, mất thăng bằng, yếu cơ, hoặc vết đứt, vết loét ở chân lâu lành → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-tai-giua-cap": {
+    "addSources": [
+      {
+        "title": "Ear infections",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/ear-infections/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm tai giữa cấp chủ yếu ở trẻ em, thường do virus như cảm lạnh, cúm, liên quan vòi nhĩ nối tai giữa với họng mũi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau tai, sốt, nghe kém, chảy dịch tai, cảm giác đầy tai; trẻ nhỏ hay kéo tai, không đáp lại âm thanh, quấy, ăn ít, mất thăng bằng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số tự khỏi trong khoảng 3 ngày, đôi khi đến 1 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Dùng paracetamol hoặc ibuprofen giảm đau (không cho trẻ dưới 16 tuổi uống aspirin); lau dịch chảy ra bằng bông; không cho gì vào tai, giữ khô tai, không đi bơi. Thuốc thông mũi, kháng histamin không có tác dụng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ dưới 12 tháng nghi viêm tai, đau tai không đỡ sau 3 ngày, hay bị lại → đi khám.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Mệt nhiều, sốt rất cao, sưng quanh tai, chảy dịch tai, mới nghe kém, chóng mặt, nôn, đau họng nặng → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-tai-giua-u-dich": {
+    "addSources": [
+      {
+        "title": "Glue ear",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/glue-ear/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm tai giữa ứ dịch là khi tai giữa đầy dịch, gây nghe kém tạm thời, thường cả hai tai; hay gặp ở trẻ em hơn người lớn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nghe kém tạm thời (hay gặp nhất), đau tai, ù tai, mất thăng bằng; kéo dài có thể ảnh hưởng phát triển lời nói và việc học của trẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự hết trong 3 tháng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bác sĩ thường theo dõi chờ tự hết; nếu ảnh hưởng việc học hoặc nghe kém nhiều có thể dùng máy trợ thính tạm thời hoặc đặt ống thông khí nhỏ vào màng nhĩ (thường tự rơi sau 6–12 tháng).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trẻ nói to, khó nghe hiểu, hay hỏi lại, bật TV lớn, dễ xao nhãng khi người khác nói → đưa đi khám tai.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-ruot-thua-cap": {
+    "addSources": [
+      {
+        "title": "Appendicitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/appendicitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm ruột thừa là ruột thừa (túi nhỏ ở bụng dưới bên phải) bị sưng và nhiễm trùng, cần điều trị gấp ở bệnh viện; hay gặp nhất ở trẻ trên 10 tuổi và người trẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau thường bắt đầu quanh rốn rồi trong vài giờ dời xuống bụng dưới bên phải và nặng dần; đau hơn khi cử động, ho, ấn; đỡ chút khi co gối.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Buồn nôn, nôn, chán ăn, sốt, táo bón hoặc tiêu chảy, tiểu nhiều; ở người mang thai, trẻ nhỏ, người già dấu hiệu có thể không điển hình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường mổ cắt ruột thừa (không có ruột thừa vẫn sống bình thường); đôi khi dùng kháng sinh nếu nhiễm trùng chưa lan và mổ có nhiều rủi ro.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau bụng nặng dần, không hết hoặc dời xuống bụng dưới bên phải → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội; hoặc đau bỗng dịu rồi lan khắp bụng rất đau (có thể vỡ ruột thừa); lú lẫn, da tái loang lổ, khó thở → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-thanh-quan-cap": {
+    "addSources": [
+      {
+        "title": "Laryngitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/laryngitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm thanh quản là khi thanh quản hoặc dây thanh bị kích ứng, sưng; thường tự khỏi trong 1–2 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bắt đầu đột ngột, nặng hơn trong 3 ngày đầu: khàn tiếng, có khi mất tiếng, ho khan dai dẳng, đau họng, hay phải hắng giọng; trẻ có thể sốt, ăn uống kém, hiếm khi khó thở.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do virus như cảm lạnh, cúm; ngoài ra dị ứng (bụi, khói), trào ngược axit, ho kéo dài, hắng giọng nhiều.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nói càng ít càng tốt, tránh thì thầm hay nói to; uống nhiều nước, giữ không khí ẩm; súc họng nước muối ấm (không dùng cho trẻ); tránh khói thuốc, bụi, bớt cà phê, rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 2 tuần hoặc hay bị lại → đi khám; đau nhiều, khó nuốt → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Bạn hoặc con bị khó thở → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-phoi-cong-dong": {
+    "addSources": [
+      {
+        "title": "Pneumonia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pneumonia/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm phổi là tình trạng viêm ở phổi, thường do nhiễm trùng — đa số do vi khuẩn hoặc virus, đôi khi sau cúm, RSV, COVID-19.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ho, khó thở, sốt, đau ngực, đau nhức, mệt, chán ăn, thở khò khè; người lớn tuổi hay bị lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dễ bị nặng: người trên 65 tuổi, có bệnh tim phổi, trẻ nhỏ, người đang ốm nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số khá lên trong 2–4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Viêm phổi do vi khuẩn thường dùng kháng sinh và phải uống hết; ở nhà nghỉ ngơi, uống nhiều nước, không dùng thuốc ức chế ho vì ho giúp tống đờm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho kéo dài, đờm vàng xanh, đau ngực, hụt hơi → khám gấp; dùng kháng sinh 2–3 ngày không đỡ → báo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nhiều, môi hoặc da tái xanh, ho ra máu, bỗng lú lẫn, trẻ nhỏ li bì khó đánh thức hoặc mềm nhũn → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-phoi-do-virus": {
+    "addSources": [
+      {
+        "title": "Pneumonia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pneumonia/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm phổi là tình trạng viêm ở phổi, thường do nhiễm trùng — đa số do vi khuẩn hoặc virus, đôi khi sau cúm, RSV, COVID-19.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ho, khó thở, sốt, đau ngực, đau nhức, mệt, chán ăn, thở khò khè; người lớn tuổi hay bị lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dễ bị nặng: người trên 65 tuổi, có bệnh tim phổi, trẻ nhỏ, người đang ốm nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số khá lên trong 2–4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Viêm phổi do vi khuẩn thường dùng kháng sinh và phải uống hết; ở nhà nghỉ ngơi, uống nhiều nước, không dùng thuốc ức chế ho vì ho giúp tống đờm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho kéo dài, đờm vàng xanh, đau ngực, hụt hơi → khám gấp; dùng kháng sinh 2–3 ngày không đỡ → báo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nhiều, môi hoặc da tái xanh, ho ra máu, bỗng lú lẫn, trẻ nhỏ li bì khó đánh thức hoặc mềm nhũn → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-phoi-o-tre-em": {
+    "addSources": [
+      {
+        "title": "Pneumonia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pneumonia/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm phổi là tình trạng viêm ở phổi, thường do nhiễm trùng — đa số do vi khuẩn hoặc virus, đôi khi sau cúm, RSV, COVID-19.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ho, khó thở, sốt, đau ngực, đau nhức, mệt, chán ăn, thở khò khè; người lớn tuổi hay bị lú lẫn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Dễ bị nặng: người trên 65 tuổi, có bệnh tim phổi, trẻ nhỏ, người đang ốm nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số khá lên trong 2–4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Viêm phổi do vi khuẩn thường dùng kháng sinh và phải uống hết; ở nhà nghỉ ngơi, uống nhiều nước, không dùng thuốc ức chế ho vì ho giúp tống đờm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho kéo dài, đờm vàng xanh, đau ngực, hụt hơi → khám gấp; dùng kháng sinh 2–3 ngày không đỡ → báo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở nhiều, môi hoặc da tái xanh, ho ra máu, bỗng lú lẫn, trẻ nhỏ li bì khó đánh thức hoặc mềm nhũn → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

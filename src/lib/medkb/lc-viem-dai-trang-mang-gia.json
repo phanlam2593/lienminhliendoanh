@@ -7,55 +7,62 @@
  ],
  "about": [
   {
-   "text": "**Viêm đại tràng màng giả** — nhóm bệnh: tiêu hóa.",
+   "text": "Viêm đại tràng màng giả thường do vi khuẩn C. difficile (C. diff) gây tiêu chảy và viêm đại tràng, có thể đe doạ tính mạng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, chuột rút, tiêu chảy, mất nước, buồn nôn, mệt mỏi, nôn.",
+   "text": "Tiêu chảy, sốt, đau hoặc ấn đau bụng, chán ăn, buồn nôn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: C, penicillin, clindamycin.",
+   "text": "Đa số xảy ra trong hoặc ngay sau khi dùng kháng sinh; nguy cơ cao hơn ở người nằm viện, viện dưỡng lão, từ 65 tuổi, suy giảm miễn dịch, từng bị C. diff.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hệ thống miễn dịch suy yếu, ung thư đại trực tràng.",
+   "text": "Bào tử sống trên bề mặt nhiều tháng; lây qua bề mặt bẩn và tiếp xúc phân người bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Hay gây mất nước; hiếm hơn có thể phình đại tràng nhiễm độc, nhiễm trùng huyết, tử vong.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: bệnh nhân cần lạc quan.",
+   "text": "Điều trị bằng kháng sinh đặc hiệu theo bác sĩ; ca nặng cần nằm viện truyền dịch.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay bằng xà phòng sau đi vệ sinh và trước khi ăn; lau khử khuẩn bề mặt, đồ giặt; hỏi bác sĩ về nguy cơ khi bắt đầu dùng kháng sinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiêu chảy, sốt, đau bụng trong hoặc sau đợt dùng kháng sinh → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-dai-trang-mang-gia-141.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About C. diff",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/c-diff/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

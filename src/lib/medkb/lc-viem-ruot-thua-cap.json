@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Viêm ruột thừa cấp** — nhóm bệnh: tiêu hóa.",
+   "text": "Viêm ruột thừa là ruột thừa (túi nhỏ ở bụng dưới bên phải) bị sưng và nhiễm trùng, cần điều trị gấp ở bệnh viện; hay gặp nhất ở trẻ trên 10 tuổi và người trẻ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chướng bụng, tiểu nhiều, tiểu buốt, tiêu chảy, đau bụng, buồn nôn, táo bón, sốt nhẹ, đau cổ, sưng.",
+   "text": "Đau thường bắt đầu quanh rốn rồi trong vài giờ dời xuống bụng dưới bên phải và nặng dần; đau hơn khi cử động, ho, ấn; đỡ chút khi co gối.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Buồn nôn, nôn, chán ăn, sốt, táo bón hoặc tiêu chảy, tiểu nhiều; ở người mang thai, trẻ nhỏ, người già dấu hiệu có thể không điển hình.",
+   "src": [
+    1
    ]
   }
  ],
@@ -38,29 +44,42 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường mổ cắt ruột thừa (không có ruột thừa vẫn sống bình thường); đôi khi dùng kháng sinh nếu nhiễm trùng chưa lan và mổ có nhiều rủi ro.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau bụng nặng dần, không hết hoặc dời xuống bụng dưới bên phải → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau bụng dữ dội; hoặc đau bỗng dịu rồi lan khắp bụng rất đau (có thể vỡ ruột thừa); lú lẫn, da tái loang lổ, khó thở → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm ruột thừa cấp – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-ruot-thua-cap-406.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Appendicitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/appendicitis/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

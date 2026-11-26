@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Viêm tai giữa cấp** — nhóm bệnh: tai - mũi - họng, bệnh trẻ em.",
+   "text": "Viêm tai giữa cấp chủ yếu ở trẻ em, thường do virus như cảm lạnh, cúm, liên quan vòi nhĩ nối tai giữa với họng mũi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: giảm thính lực, chảy dịch, tiêu chảy, sưng đau, nghe kém, mất ngủ, sốt cao, đau tai, mệt mỏi, đau đầu.",
+   "text": "Đau tai, sốt, nghe kém, chảy dịch tai, cảm giác đầy tai; trẻ nhỏ hay kéo tai, không đáp lại âm thanh, quấy, ăn ít, mất thăng bằng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,27 +35,34 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Đa số tự khỏi trong khoảng 3 ngày, đôi khi đến 1 tuần.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ vệ sinh tai sạch, khô.",
+   "text": "Dùng paracetamol hoặc ibuprofen giảm đau (không cho trẻ dưới 16 tuổi uống aspirin); lau dịch chảy ra bằng bông; không cho gì vào tai, giữ khô tai, không đi bơi. Thuốc thông mũi, kháng histamin không có tác dụng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trẻ dưới 12 tháng nghi viêm tai, đau tai không đỡ sau 3 ngày, hay bị lại → đi khám.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Mệt nhiều, sốt rất cao, sưng quanh tai, chảy dịch tai, mới nghe kém, chóng mặt, nôn, đau họng nặng → khám gấp.",
+   "src": [
+    1
    ]
   }
  ],
@@ -66,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-tai-giua-cap.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Ear infections",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/ear-infections/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -1,0 +1,661 @@
+{
+  "_note": "26/11 — Vòng LC 22 (đợt 66–68): NHS gynaecomastia, floaters-and-flashes; CDC c-diff — Claude đã mở kiểm. Thêm (đợt 64–67): NHS diverticular-disease, sinusitis, rheumatoid-arthritis, guillain-barre, bronchiolitis.",
+  "lc-vu-to-o-nam-gioi": {
+    "addSources": [
+      {
+        "title": "Gynaecomastia",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/gynaecomastia/"
+      }
+    ],
+    "about": [
+      [
+        "Vú to ở nam giới là khi ngực nam to hơn bình thường; hay gặp và thường vô hại, nhưng đôi khi liên quan bệnh khác. Gặp ở trẻ sơ sinh, tuổi dậy thì và nam trên 50 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ngực to, có thể sưng hoặc đau; một hoặc cả hai bên.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thay đổi nội tiết, thừa cân, một số thuốc, bệnh như cường giáp, bệnh thận, xơ gan, dùng chất (kể cả steroid đồng hoá); ở trẻ sơ sinh do hormone của mẹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Ở trẻ sơ sinh và tuổi dậy thì thường tự hết.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường không cần điều trị; nếu khó chịu, bác sĩ có thể cho thuốc điều chỉnh nội tiết hoặc khuyên giảm cân; điều trị bệnh nền; mổ khi các cách khác không hiệu quả.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Lo về kích thước ngực, đau ngực hoặc núm vú kéo dài, có cục, da thay đổi (phát ban, lõm, đỏ), tiết dịch hoặc chảy máu núm vú → đi khám, đừng ngại.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-van-duc-dich-kinh": {
+    "addSources": [
+      {
+        "title": "Floaters and flashes in the eyes",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/floaters-and-flashes-in-the-eyes/"
+      }
+    ],
+    "about": [
+      [
+        "Vẩn đục dịch kính (ruồi bay) là những chấm đen, sợi ngoằn ngoèo, vòng hay mạng nhện trôi trong tầm nhìn; hay gặp, nhất là ở người lớn tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường do bong dịch kính sau — thay đổi vô hại của chất gel trong mắt; ít hơn là dấu hiệu bong võng mạc, một bệnh nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường không nguy hiểm nếu đã có lâu, không nặng thêm, không ảnh hưởng thị lực; ruồi bay thường ít thấy dần theo thời gian.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Lần đầu thấy ruồi bay hoặc chớp sáng, ruồi bay xuất hiện đột ngột hay tăng nhiều, thấy bóng tối như tấm màn che, nhìn mờ, đau mắt → khám mắt gấp, vì có thể mất thị lực vĩnh viễn nếu chậm điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-dai-trang-mang-gia": {
+    "addSources": [
+      {
+        "title": "About C. diff",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/c-diff/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đại tràng màng giả thường do vi khuẩn C. difficile (C. diff) gây tiêu chảy và viêm đại tràng, có thể đe doạ tính mạng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy, sốt, đau hoặc ấn đau bụng, chán ăn, buồn nôn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Đa số xảy ra trong hoặc ngay sau khi dùng kháng sinh; nguy cơ cao hơn ở người nằm viện, viện dưỡng lão, từ 65 tuổi, suy giảm miễn dịch, từng bị C. diff.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bào tử sống trên bề mặt nhiều tháng; lây qua bề mặt bẩn và tiếp xúc phân người bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Hay gây mất nước; hiếm hơn có thể phình đại tràng nhiễm độc, nhiễm trùng huyết, tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng kháng sinh đặc hiệu theo bác sĩ; ca nặng cần nằm viện truyền dịch.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng sau đi vệ sinh và trước khi ăn; lau khử khuẩn bề mặt, đồ giặt; hỏi bác sĩ về nguy cơ khi bắt đầu dùng kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy, sốt, đau bụng trong hoặc sau đợt dùng kháng sinh → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-tui-thua-dai-trang": {
+    "addSources": [
+      {
+        "title": "Diverticular disease and diverticulitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/"
+      }
+    ],
+    "about": [
+      [
+        "Túi thừa đại tràng là các túi nhỏ phồng ra ở thành ruột già; đa số người lớn tuổi có nhưng không triệu chứng. Viêm túi thừa là khi túi bị viêm hoặc nhiễm trùng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau bụng dưới bên trái (đôi khi bên phải), hay nặng hơn sau ăn, đỡ khi xì hơi hoặc đi ngoài; táo bón, tiêu chảy, chướng bụng, có máu trong phân.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Viêm túi thừa: đau dữ dội liên tục, sốt, chảy máu hoặc nhầy từ hậu môn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Giảm đau bằng paracetamol, thuốc nhuận tràng tạo khối, thuốc chống co thắt; viêm túi thừa có nhiễm trùng thì dùng kháng sinh theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ăn cân bằng với ngũ cốc nguyên hạt, rau quả (không có món nào bắt buộc kiêng); tăng chất xơ từ từ kèm uống đủ nước; bỏ thuốc lá, giữ cân nặng; tránh ibuprofen và codein.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có máu hoặc nhầy trong phân, đau kéo dài hoặc nặng hơn, sốt, nôn nhiều lần, tiêu chảy quá 7 ngày → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau dữ dội kèm nôn, bụng chướng, không đi ngoài hay xì hơi được; chảy máu hậu môn nhiều; lú lẫn, da tái loang lổ, sốt rất cao, thở nhanh → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-xoang-ham": {
+    "addSources": [
+      {
+        "title": "Sinusitis (sinus infection)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng 4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-xoang-sang": {
+    "addSources": [
+      {
+        "title": "Sinusitis (sinus infection)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng 4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-xoang-sang-sau": {
+    "addSources": [
+      {
+        "title": "Sinusitis (sinus infection)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng 4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-xoang-tran": {
+    "addSources": [
+      {
+        "title": "Sinusitis (sinus infection)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng 4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-xoang": {
+    "addSources": [
+      {
+        "title": "Sinusitis (sinus infection)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/sinusitis-sinus-infection/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm xoang là tình trạng các xoang bị sưng viêm, thường do nhiễm trùng, hay xảy ra sau cảm lạnh hoặc cúm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng hoặc ấn đau quanh má, mắt, trán; nghẹt hoặc chảy mũi; giảm khứu giác; nước mũi xanh vàng; sốt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong khoảng 4 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nhiều nước, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin), tránh tác nhân dị ứng, không hút thuốc, rửa mũi nước muối.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ sau 3 tuần tự chăm sóc hoặc 7 ngày dùng thuốc, hay tái phát, hoặc trẻ từ 11 tuổi trở xuống → đi khám; rất mệt, thuốc giảm đau không đỡ, triệu chứng nặng hơn, miễn dịch yếu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-khop-dang-thap": {
+    "addSources": [
+      {
+        "title": "Rheumatoid arthritis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/rheumatoid-arthritis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đa khớp dạng thấp là bệnh tự miễn kéo dài: hệ miễn dịch tấn công nhầm lớp lót khớp, gây sưng, cứng, đau và lâu dần làm hỏng khớp, sụn, xương; hay ở bàn tay, bàn chân, cổ tay, bệnh lúc nặng lúc nhẹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau, sưng, cứng khớp; có thể mệt, sụt cân hoặc ảnh hưởng nơi khác trong cơ thể.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ yếu tố khởi phát; nguy cơ cao hơn ở nữ, người có người thân bị, người hút thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Có thể kèm hội chứng ống cổ tay, viêm ở phổi, tim, mắt, tăng nguy cơ nhồi máu cơ tim và đột quỵ; kiểm soát bệnh tốt giúp giảm các nguy cơ này.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chưa chữa khỏi, nhưng thuốc dùng lâu dài giúp giảm triệu chứng và làm chậm bệnh; vật lý trị liệu, hoạt động trị liệu, đôi khi phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình có dấu hiệu viêm khớp dạng thấp → đi khám sớm để tránh hỏng khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-da-re-day-than-kinh": {
+    "addSources": [
+      {
+        "title": "Guillain-Barré syndrome",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/guillain-barre-syndrome/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đa rễ dây thần kinh (hội chứng Guillain-Barré) là bệnh thần kinh hiếm, nặng, cần điều trị gấp trong bệnh viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tê rần, như kiến bò, thường bắt đầu ở bàn chân, bàn tay; yếu cơ lan dần từ chân tay; đau nhói ở chân hoặc lưng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Có thể khó thở, yếu mặt, khó nuốt, khó nói, nhìn đôi; thường nặng dần trong 2–4 tuần, nặng có thể liệt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Được cho là do hệ miễn dịch tấn công nhầm dây thần kinh, hay bắt đầu vài tuần sau một nhiễm trùng như cúm, viêm dạ dày ruột.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Đa số đi lại được sau khoảng 6 tháng và hồi phục trong 1 năm; có người còn đau thần kinh, mệt, yếu kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhập viện ngay, thường vài tuần; điều trị chính bằng globulin miễn dịch truyền tĩnh mạch hoặc thay huyết tương; có thể cần thở máy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị bệnh này → khám gấp ngay trong ngày.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Khó thở, khó nuốt, yếu lan nhanh, méo miệng hoặc không nhấc được tay → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-tieu-phe-quan-rsv": {
+    "addSources": [
+      {
+        "title": "Bronchiolitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/bronchiolitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm tiểu phế quản là nhiễm trùng ngực hay gặp ở trẻ dưới 2 tuổi, thường do virus RSV; đa số nhẹ nhưng đôi khi nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Bắt đầu như cảm lạnh: hắt hơi, sổ hoặc nghẹt mũi, sốt nhẹ; sau đó ho, thở nhanh, bú kém, khò khè, quấy; nặng nhất khoảng ngày 3–5, ho thường hết trong 3 tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Virus lây qua ho, hắt hơi; trẻ dưới 6 tháng, sinh non, miễn dịch yếu hoặc có bệnh tim phổi dễ bị nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không có thuốc đặc trị, đa số khỏi tại nhà; có thể dùng paracetamol hoặc ibuprofen dành cho trẻ (không dùng cùng lúc), cho bé ngồi thẳng khi thức, cho uống, bú từng ít một nhiều lần, theo dõi cả ban đêm; tránh khói thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Cảm lạnh nặng dần, bé bú giảm rõ, không có tã ướt trên 12 giờ, sốt cao, bé mệt lả bất thường → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Bé khó thở, có lúc ngưng thở, da, môi hoặc lưỡi tái xanh hay xám, mềm nhũn hoặc li bì → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

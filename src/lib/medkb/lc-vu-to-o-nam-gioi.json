@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Vú to ở nam giới** — nhóm bệnh: sức khỏe giới tính, bệnh nam giới.",
+   "text": "Vú to ở nam giới là khi ngực nam to hơn bình thường; hay gặp và thường vô hại, nhưng đôi khi liên quan bệnh khác. Gặp ở trẻ sơ sinh, tuổi dậy thì và nam trên 50 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: u cục, sưng, nám, ho.",
+   "text": "Ngực to, có thể sưng hoặc đau; một hoặc cả hai bên.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: rối loạn nội tiết tố, tuổi dậy thì, sự lão hóa, khối u, bệnh cường giáp, suy thận, suy dinh dưỡng và đói, béo phì.",
+   "text": "Thay đổi nội tiết, thừa cân, một số thuốc, bệnh như cường giáp, bệnh thận, xơ gan, dùng chất (kể cả steroid đồng hoá); ở trẻ sơ sinh do hormone của mẹ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý tuyến giáp.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Ở trẻ sơ sinh và tuổi dậy thì thường tự hết.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường không cần điều trị; nếu khó chịu, bác sĩ có thể cho thuốc điều chỉnh nội tiết hoặc khuyên giảm cân; điều trị bệnh nền; mổ khi các cách khác không hiệu quả.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Lo về kích thước ngực, đau ngực hoặc núm vú kéo dài, có cục, da thay đổi (phát ban, lõm, đỏ), tiết dịch hoặc chảy máu núm vú → đi khám, đừng ngại.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/vu-to-o-nam-gioi.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Gynaecomastia",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/gynaecomastia/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
