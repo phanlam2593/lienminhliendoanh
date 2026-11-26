@@ -7,17 +7,23 @@
  ],
  "about": [
   {
-   "text": "**Chửa trứng** — nhóm bệnh: bệnh nữ giới, sức khỏe sinh sản.",
+   "text": "Chửa trứng là khi trứng thụ tinh có vấn đề nên em bé và nhau thai không phát triển bình thường, không thể sống; xảy ra ngẫu nhiên và hiếm gặp.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Chửa trứng toàn phần: tế bào bất thường mọc trong tử cung, không có dấu hiệu em bé; bán phần: có thể có dấu hiệu sớm của em bé nhưng không phát triển được.",
+   "src": [
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: thiếu máu, chảy máu, cứng gáy, nôn, phù.",
+   "text": "Có người không triệu chứng, có người như mang thai bình thường; thường phát hiện khi siêu âm lần đầu (khoảng tuần 8–14) hoặc sau sảy thai.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -25,18 +31,24 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Có thể tự sảy; nếu không thường được làm thủ thuật lấy ra dưới gây mê, đôi khi dùng thuốc.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Sau đó xét nghiệm máu, nước tiểu đều để chắc hormone hCG về bình thường; rất hiếm khi tế bào thành ung thư, nhưng thường điều trị thành công bằng hoá trị.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đang mang thai mà ra máu hoặc dịch âm đạo sẫm màu, nôn nhiều, bụng to hơn so với tuổi thai → liên hệ bác sĩ, nữ hộ sinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -47,7 +59,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/chua-trung-282.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Molar pregnancy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/molar-pregnancy/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,43 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Suy buồng trứng sớm** — nhóm bệnh: sức khỏe sinh sản.",
+   "text": "Mãn kinh sớm là khi hết kinh trước 45 tuổi; trước 40 tuổi gọi là mãn kinh rất sớm. Có thể tự nhiên hoặc do điều trị bệnh khác.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đổ mồ hôi đêm, đổ mồ hôi, trầm cảm, phù, ho.",
+   "text": "Kinh không đều hoặc mất kinh trước 45 tuổi; bốc hoả, đổ mồ hôi đêm, khô âm đạo, khó ngủ, buồn hoặc lo âu, giảm ham muốn, giảm trí nhớ và tập trung.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người bị rối loạn tự miễn, người bị nhiễm virus, rối loạn tự miễn, giải phẫu buồng trứng.",
+   "text": "Nguy cơ cao hơn nếu gia đình có người bị, có kinh sớm, hút thuốc, thiếu cân; hoặc sau xạ trị, hoá trị, một số thuốc nội tiết, mổ cắt buồng trứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Mãn kinh sớm làm tăng nguy cơ loãng xương và bệnh tim mạch.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chủ yếu bù hormone bằng thuốc tránh thai kết hợp hoặc liệu pháp hormone thay thế (HRT) theo bác sĩ; vận động đều, ăn thực phẩm giàu canxi như sữa chua.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Dưới 45 tuổi mà kinh thất thường, mất kinh hoặc có dấu hiệu mãn kinh → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/suy-buong-trung-som-498.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Early menopause",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/early-menopause/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

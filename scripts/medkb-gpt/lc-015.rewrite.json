@@ -1,0 +1,200 @@
+{
+  "_note": "26/11 — Vòng LC 13 (đợt 88–90): NHS molar-pregnancy, bacterial-vaginosis, genital-warts — Claude đã mở kiểm.",
+  "lc-chua-trung": {
+    "addSources": [
+      {
+        "title": "Molar pregnancy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/molar-pregnancy/"
+      }
+    ],
+    "about": [
+      [
+        "Chửa trứng là khi trứng thụ tinh có vấn đề nên em bé và nhau thai không phát triển bình thường, không thể sống; xảy ra ngẫu nhiên và hiếm gặp.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chửa trứng toàn phần: tế bào bất thường mọc trong tử cung, không có dấu hiệu em bé; bán phần: có thể có dấu hiệu sớm của em bé nhưng không phát triển được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có người không triệu chứng, có người như mang thai bình thường; thường phát hiện khi siêu âm lần đầu (khoảng tuần 8–14) hoặc sau sảy thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có thể tự sảy; nếu không thường được làm thủ thuật lấy ra dưới gây mê, đôi khi dùng thuốc.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Sau đó xét nghiệm máu, nước tiểu đều để chắc hormone hCG về bình thường; rất hiếm khi tế bào thành ung thư, nhưng thường điều trị thành công bằng hoá trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đang mang thai mà ra máu hoặc dịch âm đạo sẫm màu, nôn nhiều, bụng to hơn so với tuổi thai → liên hệ bác sĩ, nữ hộ sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-huyet-trang-do-vi-khuan": {
+    "addSources": [
+      {
+        "title": "Bacterial vaginosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/bacterial-vaginosis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm âm đạo do vi khuẩn (BV) là nguyên nhân hay gặp của huyết trắng bất thường, xảy ra khi vi khuẩn trong âm đạo mất cân bằng; không xếp vào bệnh lây qua đường tình dục nhưng quan hệ có thể khởi phát hoặc truyền bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Huyết trắng mùi tanh như cá, nhất là sau quan hệ; dịch chuyển trắng xám, loãng như nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nhiều người không triệu chứng; BV thường không gây đau rát hay ngứa.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi có quan hệ tình dục, bạn tình mới, đặt vòng tránh thai, dùng sản phẩm có hương thơm ở vùng kín.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Hay tái phát trong vài tháng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Khi mang thai có một ít nguy cơ biến chứng như sinh non, sảy thai, nhưng phần lớn thai kỳ không sao.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Bác sĩ kê kháng sinh dạng viên, gel hoặc kem.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa vùng kín bằng nước và xà phòng thường, tắm vòi sen; tránh xà phòng thơm, sữa tắm tạo bọt, xịt khử mùi, dung dịch thụt rửa âm đạo; không giặt đồ lót bằng chất tẩy mạnh; không hút thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghi bị BV → đi khám phụ khoa; đang mang thai mà huyết trắng thay đổi → báo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-mun-com-sinh-duc": {
+    "addSources": [
+      {
+        "title": "Genital warts",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/genital-warts/"
+      }
+    ],
+    "about": [
+      [
+        "Mụn cơm sinh dục là những cục nhỏ, sần quanh bộ phận sinh dục hoặc hậu môn, do virus HPV; là bệnh lây qua đường tình dục hay gặp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có thể xuất hiện vài tuần đến vài tháng sau khi nhiễm; thường không triệu chứng, đôi khi đau, ngứa hoặc chảy máu; mọc đơn lẻ hoặc thành cụm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây qua tiếp xúc da kề da, kể cả quan hệ, dùng chung đồ chơi tình dục; vẫn lây được dù không thấy mụn. Hôn, dùng chung khăn hay đũa muỗng không lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Một số mụn tự hết trong 6 tháng nên không phải lúc nào cũng cần điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Khi cần, bác sĩ kê thuốc bôi, đốt lạnh hoặc cắt bỏ; không dùng thuốc trị mụn cóc bán ở nhà thuốc vì không dành cho vùng sinh dục.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh quan hệ đến khi mụn hết; không hút thuốc vì làm giảm hiệu quả điều trị.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bao cao su giảm nguy cơ nhưng không bảo vệ hoàn toàn; vắc xin HPV phòng mụn cơm sinh dục và một số ung thư.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy cục, nốt quanh bộ phận sinh dục hay hậu môn, ngứa hoặc chảy máu ở đó, hoặc bạn tình bị mụn cơm sinh dục → đi khám da liễu hoặc phòng khám sức khoẻ tình dục.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

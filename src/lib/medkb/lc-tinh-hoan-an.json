@@ -7,43 +7,56 @@
  ],
  "about": [
   {
-   "text": "**Tinh hoàn ẩn** — nhóm bệnh: sức khỏe sinh sản, sức khỏe giới tính, sinh dục.",
+   "text": "Tinh hoàn ẩn là khi tinh hoàn không nằm đúng chỗ trong bìu; hay gặp ở bé trai nhỏ, hiếm ở người lớn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co rút, nám, tinh hoàn co rút, thoát vị bẹn, ung thư tinh hoàn, xoắn tinh hoàn, tinh thần kém, thoát vị, chấn thương, vô sinh.",
+   "text": "Không sờ thấy đủ hai tinh hoàn trong bìu (chỉ thấy một hoặc không thấy cái nào); thường được phát hiện khi khám sơ sinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): sinh non hoặc nhẹ cân, tiền sử gia đình có tinh hoàn ẩn, sử dụng rượu trong khi mang thai, sinh non, bại não, tiểu đường.",
+   "text": "Thường không rõ nguyên nhân; nguy cơ cao hơn ở trẻ sinh non, nhẹ cân, có người thân từng bị.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tinh hoàn thường tự xuống trong 12 tuần đầu sau sinh; nếu một bên chưa xuống sau 4–5 tháng (hai bên thì sớm hơn) thường được chuyển chuyên khoa.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Không điều trị có thể gây vấn đề sức khoẻ cho trẻ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Điều trị thường là mổ đưa tinh hoàn về đúng vị trí, hay làm khi trẻ khoảng 1 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Nghĩ con bị tinh hoàn ẩn, hoặc thấy tinh hoàn thay đổi bất thường → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -54,7 +67,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/tinh-hoan-an.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Undescended testicles",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/undescended-testicles/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
