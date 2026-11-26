@@ -7,60 +7,79 @@
  ],
  "about": [
   {
-   "text": "**Tắc động mạch phổi** — nhóm bệnh: tim mạch.",
+   "text": "Tắc động mạch phổi là khi mạch máu trong phổi bị tắc, thường do cục máu đông; có thể đe doạ tính mạng nếu không điều trị kịp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: ho ra máu, chóng mặt, đau ngực, cứng gáy, hắt hơi, khó thở, tím tái, đau cổ, sưng, sốt.",
+   "text": "Đột ngột khó thở, đau ngực tăng khi hít vào, ho ra máu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Đau, sưng hoặc đổi màu da ở chân (thường bắp chân) hoặc tay có thể là huyết khối tĩnh mạch sâu.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: cục máu đông, thuyên tắc khí.",
+   "text": "Đi xa từ 4 giờ trở lên làm tăng nguy cơ huyết khối tĩnh mạch sâu.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý tim mạch, rối loạn đông máu.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Đi xa: vận động thường xuyên, uống nước, mặc đồ rộng, tránh uống nhiều rượu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nếu xác định bệnh, thường dùng thuốc chống đông ít nhất 3 tháng; phát hiện và điều trị sớm thường hồi phục hoàn toàn.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ho ra máu → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đột ngột khó thở, đau ngực hoặc lưng trên, tim đập rất nhanh, ngất → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Tắc động mạch phổi – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/tac-dong-mach-phoi-171.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Pulmonary embolism",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/pulmonary-embolism/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

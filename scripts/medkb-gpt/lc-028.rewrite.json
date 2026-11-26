@@ -1,0 +1,554 @@
+{
+  "_note": "27/11 — Vòng LC 26 (đợt 49–52): NHS tonsillitis, cystitis, molluscum-contagiosum, skin-tags, blepharitis, pulmonary-embolism — Claude đã mở kiểm.",
+  "lc-viem-amidan-hoc-mu": {
+    "addSources": [
+      {
+        "title": "Tonsillitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/tonsillitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm amidan thường do virus như cảm lạnh, đôi khi do vi khuẩn như liên cầu; bản thân viêm amidan không lây nhưng mầm bệnh gây ra nó có thể lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau họng, khó nuốt, sốt, ho, đau đầu, buồn nôn, đau tai, mệt; nặng có thể sưng đau hạch cổ, mủ hoặc đốm trắng trên amidan, hơi thở hôi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường đỡ sau 3–4 ngày, đôi khi lâu hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nước mát, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin); người lớn và trẻ lớn có thể súc họng nước muối.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kháng sinh chỉ dùng khi do vi khuẩn; cắt amidan hiếm khi cần, chỉ khi viêm nặng tái đi tái lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng quá một tuần hoặc hay bị lại → đi khám; có mủ trên amidan hoặc đau họng đến mức khó ăn uống → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau họng nặng lên nhanh, sưng trong miệng họng, khó nói, khó nuốt, khó thở hoặc khó há miệng (có thể áp xe quanh amidan) → đi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-amidan-man-tinh": {
+    "addSources": [
+      {
+        "title": "Tonsillitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/tonsillitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm amidan thường do virus như cảm lạnh, đôi khi do vi khuẩn như liên cầu; bản thân viêm amidan không lây nhưng mầm bệnh gây ra nó có thể lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau họng, khó nuốt, sốt, ho, đau đầu, buồn nôn, đau tai, mệt; nặng có thể sưng đau hạch cổ, mủ hoặc đốm trắng trên amidan, hơi thở hôi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường đỡ sau 3–4 ngày, đôi khi lâu hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nước mát, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin); người lớn và trẻ lớn có thể súc họng nước muối.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kháng sinh chỉ dùng khi do vi khuẩn; cắt amidan hiếm khi cần, chỉ khi viêm nặng tái đi tái lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng quá một tuần hoặc hay bị lại → đi khám; có mủ trên amidan hoặc đau họng đến mức khó ăn uống → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau họng nặng lên nhanh, sưng trong miệng họng, khó nói, khó nuốt, khó thở hoặc khó há miệng (có thể áp xe quanh amidan) → đi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-amidan-xo-teo": {
+    "addSources": [
+      {
+        "title": "Tonsillitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/tonsillitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm amidan thường do virus như cảm lạnh, đôi khi do vi khuẩn như liên cầu; bản thân viêm amidan không lây nhưng mầm bệnh gây ra nó có thể lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau họng, khó nuốt, sốt, ho, đau đầu, buồn nôn, đau tai, mệt; nặng có thể sưng đau hạch cổ, mủ hoặc đốm trắng trên amidan, hơi thở hôi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường đỡ sau 3–4 ngày, đôi khi lâu hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống nước mát, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin); người lớn và trẻ lớn có thể súc họng nước muối.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kháng sinh chỉ dùng khi do vi khuẩn; cắt amidan hiếm khi cần, chỉ khi viêm nặng tái đi tái lại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Triệu chứng quá một tuần hoặc hay bị lại → đi khám; có mủ trên amidan hoặc đau họng đến mức khó ăn uống → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau họng nặng lên nhanh, sưng trong miệng họng, khó nói, khó nuốt, khó thở hoặc khó há miệng (có thể áp xe quanh amidan) → đi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-bang-quang-cap": {
+    "addSources": [
+      {
+        "title": "Cystitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cystitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm bàng quang là nhiễm trùng bàng quang, một dạng nhiễm trùng đường tiểu; nữ dễ bị hơn vì niệu đạo ngắn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau rát khi tiểu; tiểu nhiều lần, cả ban đêm, hoặc mắc tiểu gấp; nước tiểu đục hoặc có máu; đau bụng dưới; có thể sốt, ớn lạnh, mệt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn từ phân vào đường tiểu qua niệu đạo; nguy cơ cao hơn khi mang thai, lau từ sau ra trước, đặt ống thông tiểu, mãn kinh, miễn dịch yếu, uống ít nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống đủ nước để nước tiểu nhạt màu; dùng paracetamol giảm đau; tránh rượu, cà phê, nước ép trái cây. Nước ép nam việt quất không giúp chữa nhiễm trùng đang có.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ có thể cho kháng sinh ngắn ngày — phải uống hết liệu trình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 65 tuổi, là nam giới, trẻ em, đang mang thai, tiểu đường, đặt ống thông, miễn dịch yếu; triệu chứng nặng nhanh hoặc không đỡ sau 48 giờ; tiểu ra máu; hay bị lại; đau lưng ngay dưới sườn (có thể viêm thận) → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Lú lẫn, lơ mơ, khó nói → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-bang-quang-man-tinh": {
+    "addSources": [
+      {
+        "title": "Cystitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/cystitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm bàng quang là nhiễm trùng bàng quang, một dạng nhiễm trùng đường tiểu; nữ dễ bị hơn vì niệu đạo ngắn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đau rát khi tiểu; tiểu nhiều lần, cả ban đêm, hoặc mắc tiểu gấp; nước tiểu đục hoặc có máu; đau bụng dưới; có thể sốt, ớn lạnh, mệt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Vi khuẩn từ phân vào đường tiểu qua niệu đạo; nguy cơ cao hơn khi mang thai, lau từ sau ra trước, đặt ống thông tiểu, mãn kinh, miễn dịch yếu, uống ít nước.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nghỉ ngơi, uống đủ nước để nước tiểu nhạt màu; dùng paracetamol giảm đau; tránh rượu, cà phê, nước ép trái cây. Nước ép nam việt quất không giúp chữa nhiễm trùng đang có.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ có thể cho kháng sinh ngắn ngày — phải uống hết liệu trình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 65 tuổi, là nam giới, trẻ em, đang mang thai, tiểu đường, đặt ống thông, miễn dịch yếu; triệu chứng nặng nhanh hoặc không đỡ sau 48 giờ; tiểu ra máu; hay bị lại; đau lưng ngay dưới sườn (có thể viêm thận) → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Lú lẫn, lơ mơ, khó nói → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-mem-lay": {
+    "addSources": [
+      {
+        "title": "Molluscum contagiosum",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/molluscum-contagiosum/"
+      }
+    ],
+    "about": [
+      [
+        "U mềm lây là nhiễm virus ở da gây nốt, thường vô hại; hay gặp ở trẻ em nhưng ai cũng có thể bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nốt nhô cao hình vòm, khoảng 2–5 mm, giữa thường có lõm nhỏ trắng bóng; trẻ hay mọc ở thân mình, nếp gấp da; người lớn lây qua quan hệ thì hay ở bụng dưới, bộ phận sinh dục, đùi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây chủ yếu qua tiếp xúc da trực tiếp; nguy cơ khi sinh hoạt bình thường thấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự hết trong vòng 18 tháng, hiếm khi cần điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Che nốt lại, dùng kem dưỡng không mùi và tắm mát khi ngứa; không nặn, không gãi; không dùng chung khăn, chăn, quần áo; dùng bao cao su khi quan hệ nếu bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không chắc chẩn đoán, nốt rất ngứa, đau, sưng hoặc đóng vảy, nốt gần mắt hoặc bộ phận sinh dục, người miễn dịch yếu → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-u-mem-treo": {
+    "addSources": [
+      {
+        "title": "Skin tags",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/skin-tags/"
+      }
+    ],
+    "about": [
+      [
+        "U mềm treo (mụn thịt dư) là những nốt thịt mềm, màu da hoặc sẫm hơn một chút, rất hay gặp, thường không đau và vô hại.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hay mọc ở chỗ da cọ xát hoặc nếp gấp: cổ, nách, mí mắt, dưới ngực, quanh mông.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ai cũng có thể bị và không phòng được; dễ gặp hơn ở người béo phì, tiểu đường type 2, mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Không cần điều trị; nếu vướng víu có thể cắt, đốt hoặc đốt lạnh (thường là làm đẹp, có thể để sẹo hoặc thâm tạm thời).",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không tự cắt bỏ vì dễ nhiễm trùng, chảy máu, để sẹo.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nốt to ra, đau, chảy máu, hoặc mọc rất nhiều → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-viem-bo-mi-tren-mat": {
+    "addSources": [
+      {
+        "title": "Blepharitis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/blepharitis/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm bờ mi là bệnh hay gặp làm mí mắt sưng, ngứa; thường không nặng và kiểm soát được bằng vệ sinh mí mắt hằng ngày. Không lây.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Mí mắt đau, ngứa mắt, cộm như có cát, vảy hoặc gỉ ở chân lông mi, mí dính lại khi ngủ dậy; triệu chứng hay lúc có lúc không.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do vi khuẩn sống trên da, bệnh da như viêm da tiết bã, hoặc tuyến ở mí mắt tiết dầu kém.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Vệ sinh mí mắt mỗi ngày: chườm khăn ấm ẩm lên mí đang nhắm 5–10 phút, xoa nhẹ mí rồi lau dọc bờ mi để sạch vảy; tiếp tục làm cả khi đã đỡ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tạm ngưng kính áp tròng và trang điểm mắt (nhất là kẻ mắt, mascara) khi đang có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Không đỡ hoặc nặng hơn → đi khám; đau mắt, nhìn mờ hoặc mất thị lực, mắt rất đỏ → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-tac-dong-mach-phoi": {
+    "addSources": [
+      {
+        "title": "Pulmonary embolism",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/pulmonary-embolism/"
+      }
+    ],
+    "about": [
+      [
+        "Tắc động mạch phổi là khi mạch máu trong phổi bị tắc, thường do cục máu đông; có thể đe doạ tính mạng nếu không điều trị kịp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đột ngột khó thở, đau ngực tăng khi hít vào, ho ra máu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đau, sưng hoặc đổi màu da ở chân (thường bắp chân) hoặc tay có thể là huyết khối tĩnh mạch sâu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Đi xa từ 4 giờ trở lên làm tăng nguy cơ huyết khối tĩnh mạch sâu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Đi xa: vận động thường xuyên, uống nước, mặc đồ rộng, tránh uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nếu xác định bệnh, thường dùng thuốc chống đông ít nhất 3 tháng; phát hiện và điều trị sớm thường hồi phục hoàn toàn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho ra máu → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đột ngột khó thở, đau ngực hoặc lưng trên, tim đập rất nhanh, ngất → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,66 +7,73 @@
  ],
  "about": [
   {
-   "text": "**Viêm bàng quang cấp** — nhóm bệnh: thận - tiết niệu, nhóm bệnh, xem theo bộ phận cơ thể.",
+   "text": "Viêm bàng quang là nhiễm trùng bàng quang, một dạng nhiễm trùng đường tiểu; nữ dễ bị hơn vì niệu đạo ngắn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu không tự chủ, đau khi quan hệ, tiểu buốt, chuột rút, nóng rát, buồn nôn, tiểu đục, sốt nhẹ, sốt cao, mệt mỏi.",
+   "text": "Đau rát khi tiểu; tiểu nhiều lần, cả ban đêm, hoặc mắc tiểu gấp; nước tiểu đục hoặc có máu; đau bụng dưới; có thể sốt, ớn lạnh, mệt.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vi khuẩn Escherichia coli, escherichia coli, đái tháo đường, phụ nữ mang thai, xạ trị, sỏi hoặc u ở bàng quang.",
+   "text": "Vi khuẩn từ phân vào đường tiểu qua niệu đạo; nguy cơ cao hơn khi mang thai, lau từ sau ra trước, đặt ống thông tiểu, mãn kinh, miễn dịch yếu, uống ít nước.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi già, phụ nữ có thai, đặt ống thông tiểu, đái tháo đường, mất kiểm soát ruột, bí tiểu.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: mặc đồ lót và quần rộng rãi, không nhịn tiểu, sử dụng biện pháp tránh thai phù hợp.",
+   "text": "Nghỉ ngơi, uống đủ nước để nước tiểu nhạt màu; dùng paracetamol giảm đau; tránh rượu, cà phê, nước ép trái cây. Nước ép nam việt quất không giúp chữa nhiễm trùng đang có.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Bác sĩ có thể cho kháng sinh ngắn ngày — phải uống hết liệu trình.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Từ 65 tuổi, là nam giới, trẻ em, đang mang thai, tiểu đường, đặt ống thông, miễn dịch yếu; triệu chứng nặng nhanh hoặc không đỡ sau 48 giờ; tiểu ra máu; hay bị lại; đau lưng ngay dưới sườn (có thể viêm thận) → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Lú lẫn, lơ mơ, khó nói → gọi cấp cứu.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm bàng quang cấp – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-bang-quang-cap.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Cystitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/cystitis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

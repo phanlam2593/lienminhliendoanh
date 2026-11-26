@@ -7,17 +7,17 @@
  ],
  "about": [
   {
-   "text": "**Viêm amidan hốc mủ** — nhóm bệnh: tai - mũi - họng, xem theo bộ phận cơ thể, nhóm bệnh.",
+   "text": "Viêm amidan thường do virus như cảm lạnh, đôi khi do vi khuẩn như liên cầu; bản thân viêm amidan không lây nhưng mầm bệnh gây ra nó có thể lây.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mảng trắng, khàn tiếng, hôi miệng, ho có đờm, khô miệng, đau họng, nuốt khó, nuốt đau, nổi hạch, đau bụng.",
+   "text": "Đau họng, khó nuốt, sốt, ho, đau đầu, buồn nôn, đau tai, mệt; nặng có thể sưng đau hạch cổ, mủ hoặc đốm trắng trên amidan, hơi thở hôi.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -35,38 +35,58 @@
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường đỡ sau 3–4 ngày, đôi khi lâu hơn.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tránh khói thuốc lá.",
+   "text": "Nghỉ ngơi, uống nước mát, dùng paracetamol hoặc ibuprofen (không cho trẻ dưới 16 tuổi uống aspirin); người lớn và trẻ lớn có thể súc họng nước muối.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Kháng sinh chỉ dùng khi do vi khuẩn; cắt amidan hiếm khi cần, chỉ khi viêm nặng tái đi tái lại.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Triệu chứng quá một tuần hoặc hay bị lại → đi khám; có mủ trên amidan hoặc đau họng đến mức khó ăn uống → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Đau họng nặng lên nhanh, sưng trong miệng họng, khó nói, khó nuốt, khó thở hoặc khó há miệng (có thể áp xe quanh amidan) → đi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Viêm amidan hốc mủ – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/viem-amidan-hoc-mu.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Tonsillitis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/tonsillitis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
