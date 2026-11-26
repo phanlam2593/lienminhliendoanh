@@ -7,49 +7,62 @@
  ],
  "about": [
   {
-   "text": "**Lỵ trực trùng do Shigella dysenteriae** — nhóm bệnh: truyền nhiễm, bụng.",
+   "text": "Nhiễm Shigella (lỵ trực khuẩn) là nhiễm vi khuẩn rất dễ lây từ người sang người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đi ngoài nhiều lần, chướng bụng, tiểu nhiều, tiêu chảy, mất nước, đau bụng, buồn nôn, co giật, sốt cao, mệt mỏi.",
+   "text": "Tiêu chảy ra máu hoặc kéo dài hơn 3 ngày, sốt, đau bụng, mót rặn liên tục.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: shigella dysenteriae, enterobateriaceae, ăn thực phẩm bị ô nhiễm.",
+   "text": "Chỉ cần nuốt một lượng rất nhỏ vi khuẩn là bệnh; lây qua thức ăn, nước, bề mặt bị nhiễm.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): trẻ 1 - 5 tuổi dễ mắc bệnh, quan hệ đồng giới, tiếp xúc trực tiếp với phân người bệnh.",
+   "text": "Trẻ dưới 5 tuổi dễ mắc nhất; người đi đến nơi vệ sinh kém cũng có nguy cơ cao hơn.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Thường tự khỏi trong 5–7 ngày mà không cần kháng sinh.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Ca nhẹ chỉ cần uống nhiều nước và nghỉ ngơi để tránh mất nước.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Rửa tay bằng xà phòng thường xuyên; tránh quan hệ tình dục ít nhất 2 tuần sau khi hết tiêu chảy.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiêu chảy ra máu, kéo dài, sốt cao hoặc có dấu hiệu mất nước, nhất là trẻ nhỏ → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ly-truc-trung-do-shigella-dysenteriae-195.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Shigella Infection",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/shigella/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

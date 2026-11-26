@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm nấm Coccidioidomycosis** — nhóm bệnh: truyền nhiễm, hô hấp.",
+   "text": "Nhiễm nấm Coccidioidomycosis (sốt thung lũng) là nhiễm trùng phổi do nấm Coccidioides trong đất, có ở tây nam Hoa Kỳ, Mexico, Trung và Nam Mỹ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: giảm thính lực, sợ ánh sáng, đổ mồ hôi, cứng khớp, đau ngực, phát ban, đau khớp, sụt cân, nhìn mờ, sốt nhẹ.",
+   "text": "Có người không triệu chứng; có người mệt, ho, sốt, đau đầu, khó thở, đổ mồ hôi đêm, đau cơ khớp, phát ban.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): những người mắc bệnh đái tháo đường, người da đen, HIV/AIDS.",
+   "text": "Nhiễm khi hít bào tử nấm; không lây từ người sang người.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Nhiều người tự khỏi sau vài tuần đến vài tháng; khoảng 5–10% bị vấn đề phổi nặng hoặc kéo dài, khoảng 1% lan sang da, xương, khớp, não.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi đầy đủ, tránh vận động quá sức, không hút thuốc lá, không sử dụng chất kích thích, không ăn thực phẩm đóng hộp, sử dụng máy lọc không khí trong nhà.",
+   "text": "Ca nặng hoặc lan rộng cần thuốc kháng nấm, đôi khi phải nằm viện.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ho, sốt kéo dài sau khi ở vùng có nấm này → đi khám và kể cho bác sĩ, vì bệnh dễ bị nhầm với viêm phổi thường.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-nam-coccidioidomycosis.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Valley Fever",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/valley-fever/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

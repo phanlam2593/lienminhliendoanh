@@ -7,49 +7,55 @@
  ],
  "about": [
   {
-   "text": "**Lỵ amip** — nhóm bệnh: truyền nhiễm, tiêu hóa, bụng.",
+   "text": "Lỵ amip là nhiễm ký sinh trùng Entamoeba histolytica, chữa được; hay gặp ở vùng nhiệt đới vệ sinh kém.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiểu ra máu, xuất huyết, tiêu chảy, đau bụng, buồn nôn, sụt cân, chán ăn, đau cổ, ngứa, sốt.",
+   "text": "Đa số không triệu chứng hoặc nhẹ: tiêu chảy, đau bụng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Thể nặng (lỵ amip): đi ngoài ra máu, sốt; hiếm khi amip lên gan gây áp xe.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): sử dụng giảm đau corticosteroid, tình trạng dinh dưỡng kém, tuổi trẻ, phụ nữ có thai và sau sinh, đang mắc bệnh ác tính, trẻ sơ sinh.",
+   "text": "Lây khi nuốt phải nước, thức ăn bị nhiễm, hoặc đưa vào miệng thứ dính phân người bệnh; lây qua bề mặt, ngón tay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: quan hệ tình dục an toàn, uống nước đun sôi hoặc nước đóng chai, tránh dùng chung khăn tắm, rửa sạch và gọt vỏ trái cây trước ăn, uống nước đóng chai hoặc đun sôi, tránh uống những đồ uống sử dụng đá viên.",
+   "text": "Điều trị bằng thuốc theo bác sĩ, hiệu quả; chẩn đoán có thể cần xét nghiệm phân nhiều lần.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Rửa tay bằng xà phòng sau đi vệ sinh, thay tã, trước khi nấu ăn; ở nơi vệ sinh kém tránh nước máy chưa xử lý, đá, rau quả không gọt, sữa chưa tiệt trùng, đồ ăn vỉa hè; uống nước đun sôi hoặc đóng chai.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Tiêu chảy kéo dài, đi ngoài ra máu, sốt → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ly-amip.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Amebiasis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/amebiasis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

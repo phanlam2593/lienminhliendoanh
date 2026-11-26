@@ -7,34 +7,47 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Cryptococcus** — nhóm bệnh: truyền nhiễm.",
+   "text": "Nhiễm Cryptococcus là nhiễm nấm nặng do hít bào tử nấm từ môi trường; đa số người phơi nhiễm không bị bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: cứng khớp, đau ngực, phát ban, buồn nôn, đau đầu, khó thở, đau cổ, loét, nôn, nám.",
+   "text": "Ở phổi: ho, khó thở, đau ngực, sốt.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Viêm màng não do nấm: đau đầu, đau cổ, sợ ánh sáng, lú lẫn hoặc thay đổi hành vi.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): cấy ghép tế bào gốc, tủy xương, C, bệnh HIV/AIDS, u lympho.",
+   "text": "Phần lớn gặp ở người suy giảm miễn dịch, nhất là người nhiễm HIV; người khoẻ ít khi bị.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Không điều trị có thể tử vong.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Cần thuốc kháng nấm theo đơn ít nhất 6 tháng, thường lâu hơn; sàng lọc giúp phát hiện trước khi bệnh nặng.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -47,14 +60,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Người suy giảm miễn dịch bị đau đầu, đau cổ, sợ ánh sáng, lú lẫn → đi cấp cứu ngay.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Nhiễm Cryptococcus – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-cryptococcus.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Cryptococcosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/cryptococcosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

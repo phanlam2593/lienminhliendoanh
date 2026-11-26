@@ -7,49 +7,74 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm Candida** — nhóm bệnh: truyền nhiễm.",
+   "text": "Nhiễm nấm Candida (nấm men) hay gặp ở cả nam và nữ, thường vô hại nhưng gây khó chịu và hay tái phát; không xếp vào bệnh lây qua đường tình dục.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: mảng trắng, phát ban, nổi mẩn, ớn lạnh, ngứa, sưng, nám, sốt, phù, ho.",
+   "text": "Nữ: khí hư trắng như bã đậu, thường không mùi; ngứa, rát vùng âm hộ, âm đạo; đau rát khi quan hệ hoặc khi tiểu.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nam: rát, đỏ ở đầu dương vật và dưới bao quy đầu, có dịch trắng, mùi khó chịu, khó kéo bao quy đầu.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Ở da (nách, bẹn, kẽ ngón): mảng đỏ ngứa hoặc đau, có thể bong vảy.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: nấm miệng, nhiễm trùng nấm men sinh dục, candida xâm lấn, tưa miệng, phát ban.",
+   "text": "Nấm Candida vốn vô hại, phát triển khi ẩm nóng và cân bằng vi khuẩn thay đổi; yếu tố khởi phát: kích ứng da, dùng kháng sinh, tiểu đường kiểm soát kém, miễn dịch yếu, liệu pháp hormone, mang thai.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh tiểu đường, thuốc tránh thai, hăm tã, suy giảm miễn dịch.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Triệu chứng thường hết trong 7–14 ngày khi điều trị.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thường dùng thuốc kháng nấm dạng uống, đặt âm đạo hoặc bôi; bạn tình chỉ cần điều trị khi có triệu chứng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Rửa vùng bị bằng nước và chất làm mềm da thay xà phòng, lau khô kỹ; mặc đồ lót cotton, tránh đồ bó; không dùng xà phòng, sữa tắm, dung dịch thụt rửa, khử mùi ở vùng kín.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Kem kháng nấm có thể làm hỏng bao cao su.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Bị lần đầu, dưới 16 hoặc trên 60 tuổi, tái phát hơn 4 lần trong 12 tháng, điều trị không đỡ, đang mang thai hoặc cho con bú, miễn dịch yếu → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +85,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-candida-197.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Thrush in men and women",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/thrush-in-men-and-women/",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

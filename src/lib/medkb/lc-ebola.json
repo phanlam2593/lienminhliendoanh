@@ -7,46 +7,41 @@
  ],
  "about": [
   {
-   "text": "**Ebola** — nhóm bệnh: truyền nhiễm, bệnh theo mùa.",
+   "text": "Ebola do một nhóm virus gây ra; không điều trị có thể bệnh nặng và tử vong. Dịch chủ yếu ở châu Phi cận Sahara.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu chân răng, chảy máu âm đạo, xuất huyết, ho ra máu, tiêu chảy, chảy máu, phân đen, đau bụng, phát ban, rụng tóc.",
+   "text": "Xuất hiện 2–21 ngày sau phơi nhiễm: sốt, đau nhức, mệt; có thể tiến tới tiêu chảy, nôn, chảy máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: máu, sữa mẹ, nước bọt, phân, tinh dịch, mồ hôi, dịch nôn mửa, nước tiểu.",
+   "text": "Lây khi tiếp xúc trực tiếp dịch cơ thể của người bệnh hoặc người đã chết vì bệnh; không lây khi chỉ ở gần, và chỉ lây sau khi có triệu chứng.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): người có sức đề kháng yếu.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Tỷ lệ tử vong có thể lên tới 80–90%.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tiêm ngừa vaccine phòng chống virus Ebola.",
+   "text": "Có thuốc điều trị và vắc xin cho chủng Zaire; chăm sóc hỗ trợ như bù dịch, kiểm soát triệu chứng giúp tăng khả năng sống.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
@@ -59,14 +54,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt trong vòng 21 ngày sau khi ở vùng có dịch hoặc tiếp xúc người bệnh → đi khám ngay và kể rõ cho nhân viên y tế.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Ebola – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/ebola-438.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Ebola Disease",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/ebola/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

@@ -7,49 +7,50 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm trùng nấm Aspergillus** — nhóm bệnh: truyền nhiễm, bệnh thường gặp.",
+   "text": "Nhiễm nấm Aspergillus là nhiễm trùng phổi do hít bào tử một loại nấm mốc phổ biến; người khoẻ hiếm khi bị bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, ho ra máu, nghẹt mũi, đau ngực, nhức đầu, đau khớp, đau mắt, mệt mỏi, khó thở, ớn lạnh.",
+   "text": "Hay gặp nhất là ho, khó thở; ngoài ra nghẹt mũi, đau đầu, mệt, ho ra máu; thể xâm lấn có thể sốt, đau ngực.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hen suyễn hoặc xơ nang, ung thư máu, hóa trị.",
+   "text": "Người suy giảm miễn dịch hoặc có bệnh phổi mạn dễ bị; thể nặng nhất hay gặp ở người vừa ghép tạng, ghép tế bào gốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Từ nhẹ đến đe doạ tính mạng; thể xâm lấn (nấm lan từ phổi sang cơ quan khác) là nặng nhất.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: giữ tinh thần thư giãn, tâm lý thoải mái, bổ sung đầy đủ dinh dưỡng.",
+   "text": "Thường điều trị bằng thuốc kháng nấm tuỳ loại nhiễm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Người suy giảm miễn dịch hoặc bệnh phổi mạn bị ho, khó thở, ho ra máu → đi khám sớm.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-trung-nam-aspergillus.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Aspergillosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/aspergillosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

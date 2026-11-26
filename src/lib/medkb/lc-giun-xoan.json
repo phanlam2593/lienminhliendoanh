@@ -7,49 +7,55 @@
  ],
  "about": [
   {
-   "text": "**Giun xoắn** — nhóm bệnh: truyền nhiễm.",
+   "text": "Bệnh giun xoắn là nhiễm ấu trùng của một loại giun ký sinh; không lây từ người sang người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: xuất huyết, tiêu chảy, phát ban, buồn nôn, sụt cân, táo bón, sốt cao, đau đầu, khó thở, chán ăn.",
+   "text": "Sớm: buồn nôn, tiêu chảy, mệt, sốt, khó chịu ở bụng.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Sau đó: đau đầu, đau cơ, đau khớp, sưng mặt và mắt, ngứa da; nhiễm nặng có thể ảnh hưởng vận động, tim, hô hấp và có thể tử vong.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): khu vực nông thôn, ăn thịt hoang dã, tuổi.",
+   "text": "Do ăn thịt sống hoặc tái có ấu trùng, như thịt lợn, lợn rừng, thú rừng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không nên ăn tiết canh, thịt sống.",
+   "text": "Có thuốc điều trị theo đơn, nên bắt đầu càng sớm càng tốt.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phòng bệnh: nấu chín thịt (đo bằng nhiệt kế thực phẩm), không nếm thịt khi chưa chín; đông lạnh kỹ diệt được giun trong thịt lợn nhưng có thể không diệt được trong thịt thú rừng; muối, phơi khô, xông khói hay quay lò vi sóng không diệt chắc chắn.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Đau cơ, sưng mặt mắt, sốt sau khi ăn thịt tái, sống (nhất là thịt rừng) → đi khám và kể cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +66,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/giun-xoan.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Trichinellosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/trichinellosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

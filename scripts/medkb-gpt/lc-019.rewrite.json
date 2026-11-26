@@ -1,0 +1,816 @@
+{
+  "_note": "26/11 — Vòng LC 17 (đợt 77–80): CDC plague, ebola, bird-flu, trichinellosis, shigella; NHS thrush — Claude đã mở kiểm. Thêm: CDC amebiasis, histoplasmosis, valley-fever, aspergillosis, schistosomiasis, cryptococcosis.",
+  "lc-ly-truc-khuan": {
+    "addSources": [
+      {
+        "title": "About Shigella Infection",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/shigella/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm Shigella (lỵ trực khuẩn) là nhiễm vi khuẩn rất dễ lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy ra máu hoặc kéo dài hơn 3 ngày, sốt, đau bụng, mót rặn liên tục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chỉ cần nuốt một lượng rất nhỏ vi khuẩn là bệnh; lây qua thức ăn, nước, bề mặt bị nhiễm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ dưới 5 tuổi dễ mắc nhất; người đi đến nơi vệ sinh kém cũng có nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong 5–7 ngày mà không cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nhẹ chỉ cần uống nhiều nước và nghỉ ngơi để tránh mất nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng thường xuyên; tránh quan hệ tình dục ít nhất 2 tuần sau khi hết tiêu chảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy ra máu, kéo dài, sốt cao hoặc có dấu hiệu mất nước, nhất là trẻ nhỏ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ly-truc-trung-do-shigella-dysenteriae": {
+    "addSources": [
+      {
+        "title": "About Shigella Infection",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/shigella/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm Shigella (lỵ trực khuẩn) là nhiễm vi khuẩn rất dễ lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy ra máu hoặc kéo dài hơn 3 ngày, sốt, đau bụng, mót rặn liên tục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chỉ cần nuốt một lượng rất nhỏ vi khuẩn là bệnh; lây qua thức ăn, nước, bề mặt bị nhiễm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ dưới 5 tuổi dễ mắc nhất; người đi đến nơi vệ sinh kém cũng có nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Thường tự khỏi trong 5–7 ngày mà không cần kháng sinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nhẹ chỉ cần uống nhiều nước và nghỉ ngơi để tránh mất nước.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng thường xuyên; tránh quan hệ tình dục ít nhất 2 tuần sau khi hết tiêu chảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy ra máu, kéo dài, sốt cao hoặc có dấu hiệu mất nước, nhất là trẻ nhỏ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-dich-hach": {
+    "addSources": [
+      {
+        "title": "About Plague",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/plague/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Dịch hạch là bệnh có thể đe doạ tính mạng, do vi khuẩn Yersinia pestis.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây sang người chủ yếu qua vết đốt của bọ chét trên loài gặm nhấm bị nhiễm; ít hơn là do tiếp xúc trực tiếp với động vật bệnh.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Chuột hoặc sóc hoang ốm, chết hàng loạt bất thường có thể là dấu hiệu có dịch hạch.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chữa khỏi được bằng kháng sinh, nhưng phải dùng kịp thời.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt đột ngột sau khi bị bọ chét đốt hoặc tiếp xúc động vật gặm nhấm ốm, chết → đi cấp cứu ngay và kể rõ cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ebola": {
+    "addSources": [
+      {
+        "title": "About Ebola Disease",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/ebola/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Ebola do một nhóm virus gây ra; không điều trị có thể bệnh nặng và tử vong. Dịch chủ yếu ở châu Phi cận Sahara.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Xuất hiện 2–21 ngày sau phơi nhiễm: sốt, đau nhức, mệt; có thể tiến tới tiêu chảy, nôn, chảy máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây khi tiếp xúc trực tiếp dịch cơ thể của người bệnh hoặc người đã chết vì bệnh; không lây khi chỉ ở gần, và chỉ lây sau khi có triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Tỷ lệ tử vong có thể lên tới 80–90%.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có thuốc điều trị và vắc xin cho chủng Zaire; chăm sóc hỗ trợ như bù dịch, kiểm soát triệu chứng giúp tăng khả năng sống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Sốt trong vòng 21 ngày sau khi ở vùng có dịch hoặc tiếp xúc người bệnh → đi khám ngay và kể rõ cho nhân viên y tế.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-cum-ga-h5n1": {
+    "addSources": [
+      {
+        "title": "About Bird Flu",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/bird-flu/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Cúm gia cầm (H5N1) do virus cúm A ở chim gây ra, thường lây giữa các loài chim chứ không phải người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhẹ: đỏ mắt, sốt, ho, đau họng, đau nhức, mệt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nặng: sốt cao, khó thở, lơ mơ, co giật; có trường hợp tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người hiếm khi mắc, thường do tiếp xúc trực tiếp không bảo hộ với chim, gia cầm hoặc động vật bệnh; ăn gia cầm, trứng chưa chín hoặc uống sữa chưa tiệt trùng cũng có nguy cơ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Lây từ người sang người rất hiếm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thuốc kháng virus cúm (như oseltamivir) hiệu quả nhất khi bắt đầu trong 48 giờ từ khi có triệu chứng; không cần chờ kết quả xét nghiệm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: tránh tiếp xúc gia cầm, động vật ốm hoặc chết; mang đồ bảo hộ khi bắt buộc phải tiếp xúc; dùng sữa tiệt trùng; nấu chín kỹ gia cầm, trứng, thịt bò.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt, ho, đỏ mắt sau khi tiếp xúc gia cầm ốm hoặc chết → đi khám ngay và kể rõ cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-giun-xoan": {
+    "addSources": [
+      {
+        "title": "About Trichinellosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/trichinellosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh giun xoắn là nhiễm ấu trùng của một loại giun ký sinh; không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sớm: buồn nôn, tiêu chảy, mệt, sốt, khó chịu ở bụng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Sau đó: đau đầu, đau cơ, đau khớp, sưng mặt và mắt, ngứa da; nhiễm nặng có thể ảnh hưởng vận động, tim, hô hấp và có thể tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Do ăn thịt sống hoặc tái có ấu trùng, như thịt lợn, lợn rừng, thú rừng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có thuốc điều trị theo đơn, nên bắt đầu càng sớm càng tốt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Phòng bệnh: nấu chín thịt (đo bằng nhiệt kế thực phẩm), không nếm thịt khi chưa chín; đông lạnh kỹ diệt được giun trong thịt lợn nhưng có thể không diệt được trong thịt thú rừng; muối, phơi khô, xông khói hay quay lò vi sóng không diệt chắc chắn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau cơ, sưng mặt mắt, sốt sau khi ăn thịt tái, sống (nhất là thịt rừng) → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-candida": {
+    "addSources": [
+      {
+        "title": "Thrush in men and women",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/thrush-in-men-and-women/"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm nấm Candida (nấm men) hay gặp ở cả nam và nữ, thường vô hại nhưng gây khó chịu và hay tái phát; không xếp vào bệnh lây qua đường tình dục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nữ: khí hư trắng như bã đậu, thường không mùi; ngứa, rát vùng âm hộ, âm đạo; đau rát khi quan hệ hoặc khi tiểu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Nam: rát, đỏ ở đầu dương vật và dưới bao quy đầu, có dịch trắng, mùi khó chịu, khó kéo bao quy đầu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Ở da (nách, bẹn, kẽ ngón): mảng đỏ ngứa hoặc đau, có thể bong vảy.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nấm Candida vốn vô hại, phát triển khi ẩm nóng và cân bằng vi khuẩn thay đổi; yếu tố khởi phát: kích ứng da, dùng kháng sinh, tiểu đường kiểm soát kém, miễn dịch yếu, liệu pháp hormone, mang thai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Triệu chứng thường hết trong 7–14 ngày khi điều trị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường dùng thuốc kháng nấm dạng uống, đặt âm đạo hoặc bôi; bạn tình chỉ cần điều trị khi có triệu chứng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa vùng bị bằng nước và chất làm mềm da thay xà phòng, lau khô kỹ; mặc đồ lót cotton, tránh đồ bó; không dùng xà phòng, sữa tắm, dung dịch thụt rửa, khử mùi ở vùng kín.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kem kháng nấm có thể làm hỏng bao cao su.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Bị lần đầu, dưới 16 hoặc trên 60 tuổi, tái phát hơn 4 lần trong 12 tháng, điều trị không đỡ, đang mang thai hoặc cho con bú, miễn dịch yếu → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-ly-amip": {
+    "addSources": [
+      {
+        "title": "About Amebiasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/amebiasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Lỵ amip là nhiễm ký sinh trùng Entamoeba histolytica, chữa được; hay gặp ở vùng nhiệt đới vệ sinh kém.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Đa số không triệu chứng hoặc nhẹ: tiêu chảy, đau bụng.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Thể nặng (lỵ amip): đi ngoài ra máu, sốt; hiếm khi amip lên gan gây áp xe.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Lây khi nuốt phải nước, thức ăn bị nhiễm, hoặc đưa vào miệng thứ dính phân người bệnh; lây qua bề mặt, ngón tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Điều trị bằng thuốc theo bác sĩ, hiệu quả; chẩn đoán có thể cần xét nghiệm phân nhiều lần.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Rửa tay bằng xà phòng sau đi vệ sinh, thay tã, trước khi nấu ăn; ở nơi vệ sinh kém tránh nước máy chưa xử lý, đá, rau quả không gọt, sữa chưa tiệt trùng, đồ ăn vỉa hè; uống nước đun sôi hoặc đóng chai.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Tiêu chảy kéo dài, đi ngoài ra máu, sốt → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-nam-histoplasma": {
+    "addSources": [
+      {
+        "title": "About Histoplasmosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/histoplasmosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm nấm Histoplasma là viêm phổi do hít bào tử nấm; đa số người hít phải không bị bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sốt, ho, mệt, ớn lạnh, đau đầu, đau ngực, đau nhức, thường 3–17 ngày sau khi phơi nhiễm; hay bị nhầm với viêm phổi do vi khuẩn, virus.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nấm sống trong đất, nhất là đất lẫn phân chim, phân dơi; không lây giữa người với người hay với vật nuôi.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Người suy giảm miễn dịch dễ bị nhiễm kéo dài; hiếm khi lan đến não, tuỷ sống.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nhẹ có thể tự khỏi; ca nặng, kéo dài hoặc lan rộng cần thuốc kháng nấm theo đơn, kéo dài 3 tháng đến 1 năm. Kháng sinh không diệt được nấm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sốt, ho kéo dài sau khi dọn chỗ có nhiều phân chim, phân dơi → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-nam-coccidioidomycosis": {
+    "addSources": [
+      {
+        "title": "About Valley Fever",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/valley-fever/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm nấm Coccidioidomycosis (sốt thung lũng) là nhiễm trùng phổi do nấm Coccidioides trong đất, có ở tây nam Hoa Kỳ, Mexico, Trung và Nam Mỹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Có người không triệu chứng; có người mệt, ho, sốt, đau đầu, khó thở, đổ mồ hôi đêm, đau cơ khớp, phát ban.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nhiễm khi hít bào tử nấm; không lây từ người sang người.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Nhiều người tự khỏi sau vài tuần đến vài tháng; khoảng 5–10% bị vấn đề phổi nặng hoặc kéo dài, khoảng 1% lan sang da, xương, khớp, não.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ca nặng hoặc lan rộng cần thuốc kháng nấm, đôi khi phải nằm viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ho, sốt kéo dài sau khi ở vùng có nấm này → đi khám và kể cho bác sĩ, vì bệnh dễ bị nhầm với viêm phổi thường.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-trung-nam-aspergillus": {
+    "addSources": [
+      {
+        "title": "About Aspergillosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/aspergillosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm nấm Aspergillus là nhiễm trùng phổi do hít bào tử một loại nấm mốc phổ biến; người khoẻ hiếm khi bị bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Hay gặp nhất là ho, khó thở; ngoài ra nghẹt mũi, đau đầu, mệt, ho ra máu; thể xâm lấn có thể sốt, đau ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Người suy giảm miễn dịch hoặc có bệnh phổi mạn dễ bị; thể nặng nhất hay gặp ở người vừa ghép tạng, ghép tế bào gốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Từ nhẹ đến đe doạ tính mạng; thể xâm lấn (nấm lan từ phổi sang cơ quan khác) là nặng nhất.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Thường điều trị bằng thuốc kháng nấm tuỳ loại nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Người suy giảm miễn dịch hoặc bệnh phổi mạn bị ho, khó thở, ho ra máu → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-san-mang": {
+    "addSources": [
+      {
+        "title": "About Schistosomiasis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/schistosomiasis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh sán máng do giun sán ký sinh; hơn 200 triệu người trên thế giới bị nhiễm, gặp ở châu Phi, châu Á, Trung Đông, Nam Mỹ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Sớm nhiều người không triệu chứng; có người nổi ban, ngứa da vài ngày đầu; 1–2 tháng sau có thể sốt, ớn lạnh, ho, đau cơ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Trẻ nhiễm nhiều lần có thể thiếu máu, suy dinh dưỡng, khó khăn học tập.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ấu trùng sống trong ốc nước ngọt; nhiễm khi da tiếp xúc nước ngọt bị nhiễm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị có thể gây viêm, xơ hoá ở ruột, gan hoặc bàng quang.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Có thuốc điều trị an toàn và hiệu quả (praziquantel) theo đơn bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh xuống hoặc chạm vào nước ngọt không an toàn; uống nước sạch; nước tắm nên đun sôi, khử clo hoặc để lắng 24 giờ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từng tắm, lội sông hồ ở vùng có sán máng rồi sốt, ngứa, ho → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-nhiem-cryptococcus": {
+    "addSources": [
+      {
+        "title": "About Cryptococcosis",
+        "publisher": "CDC (Hoa Kỳ)",
+        "url": "https://www.cdc.gov/cryptococcosis/about/index.html"
+      }
+    ],
+    "about": [
+      [
+        "Nhiễm Cryptococcus là nhiễm nấm nặng do hít bào tử nấm từ môi trường; đa số người phơi nhiễm không bị bệnh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ở phổi: ho, khó thở, đau ngực, sốt.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Viêm màng não do nấm: đau đầu, đau cổ, sợ ánh sáng, lú lẫn hoặc thay đổi hành vi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Phần lớn gặp ở người suy giảm miễn dịch, nhất là người nhiễm HIV; người khoẻ ít khi bị.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị có thể tử vong.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Cần thuốc kháng nấm theo đơn ít nhất 6 tháng, thường lâu hơn; sàng lọc giúp phát hiện trước khi bệnh nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Người suy giảm miễn dịch bị đau đầu, đau cổ, sợ ánh sáng, lú lẫn → đi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Dịch hạch** — nhóm bệnh: truyền nhiễm.",
+   "text": "Dịch hạch là bệnh có thể đe doạ tính mạng, do vi khuẩn Yersinia pestis.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,24 +23,24 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: vi khuẩn Yersinia pestis.",
+   "text": "Lây sang người chủ yếu qua vết đốt của bọ chét trên loài gặm nhấm bị nhiễm; ít hơn là do tiếp xúc trực tiếp với động vật bệnh.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): sống trong môi trường ô nhiễm, tiếp xúc với động vật gặm nhấm, người có sức đề kháng yếu.",
+   "text": "Chuột hoặc sóc hoang ốm, chết hàng loạt bất thường có thể là dấu hiệu có dịch hạch.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chữa khỏi được bằng kháng sinh, nhưng phải dùng kịp thời.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -53,14 +53,27 @@
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Sốt đột ngột sau khi bị bọ chét đốt hoặc tiếp xúc động vật gặm nhấm ốm, chết → đi cấp cứu ngay và kể rõ cho bác sĩ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Dịch hạch – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/dich-hach-437.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Plague",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/plague/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

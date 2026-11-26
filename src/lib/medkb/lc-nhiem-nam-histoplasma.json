@@ -7,55 +7,49 @@
  ],
  "about": [
   {
-   "text": "**Nhiễm nấm Histoplasma** — nhóm bệnh: truyền nhiễm, ngực.",
+   "text": "Nhiễm nấm Histoplasma là viêm phổi do hít bào tử nấm; đa số người hít phải không bị bệnh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau ngực, buồn nôn, sụt cân, sốt nhẹ, ho khan, sốt cao, mệt mỏi, đau đầu, khó thở, nổi mẩn.",
+   "text": "Sốt, ho, mệt, ớn lạnh, đau đầu, đau ngực, đau nhức, thường 3–17 ngày sau khi phơi nhiễm; hay bị nhầm với viêm phổi do vi khuẩn, virus.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: hệ miễn dịch suy yếu.",
+   "text": "Nấm sống trong đất, nhất là đất lẫn phân chim, phân dơi; không lây giữa người với người hay với vật nuôi.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Người dễ mắc hơn (theo nguồn): công nhân xây dựng, nông dân, người chăn nuôi gia cầm, nhân viên kiểm soát dịch hại, công nhân phá dỡ, thợ sửa mái nhà.",
+   "text": "Người suy giảm miễn dịch dễ bị nhiễm kéo dài; hiếm khi lan đến não, tuỷ sống.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: tránh và hạn chế sử dụng rượu bia, uống nước 2 lít mỗi ngày, kiểm tra sức khỏe định kỳ.",
+   "text": "Ca nhẹ có thể tự khỏi; ca nặng, kéo dài hoặc lan rộng cần thuốc kháng nấm theo đơn, kéo dài 3 tháng đến 1 năm. Kháng sinh không diệt được nấm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt, ho kéo dài sau khi dọn chỗ có nhiều phân chim, phân dơi → đi khám và kể cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +60,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/nhiem-nam-histoplasma.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Histoplasmosis",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/histoplasmosis/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }

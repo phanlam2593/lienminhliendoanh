@@ -8,43 +8,61 @@
  ],
  "about": [
   {
-   "text": "**Cúm gà (H5N1)** — nhóm bệnh: truyền nhiễm.",
+   "text": "Cúm gia cầm (H5N1) do virus cúm A ở chim gây ra, thường lây giữa các loài chim chứ không phải người.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tiêu chảy, buồn nôn, co giật, đau mắt, đau đầu, khó thở, chán ăn, sổ mũi, đau cổ, sưng.",
+   "text": "Nhẹ: đỏ mắt, sốt, ho, đau họng, đau nhức, mệt.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Nặng: sốt cao, khó thở, lơ mơ, co giật; có trường hợp tử vong.",
+   "src": [
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): chăn nuôi gia cầm, tiếp xúc với gia cầm bị nhiễm bệnh.",
+   "text": "Người hiếm khi mắc, thường do tiếp xúc trực tiếp không bảo hộ với chim, gia cầm hoặc động vật bệnh; ăn gia cầm, trứng chưa chín hoặc uống sữa chưa tiệt trùng cũng có nguy cơ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Lây từ người sang người rất hiếm.",
+   "src": [
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Thuốc kháng virus cúm (như oseltamivir) hiệu quả nhất khi bắt đầu trong 48 giờ từ khi có triệu chứng; không cần chờ kết quả xét nghiệm.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Phòng bệnh: tránh tiếp xúc gia cầm, động vật ốm hoặc chết; mang đồ bảo hộ khi bắt buộc phải tiếp xúc; dùng sữa tiệt trùng; nấu chín kỹ gia cầm, trứng, thịt bò.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sốt, ho, đỏ mắt sau khi tiếp xúc gia cầm ốm hoặc chết → đi khám ngay và kể rõ cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -55,7 +73,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/cum-ga-h5n1-435.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "About Bird Flu",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/bird-flu/about/index.html",
+   "reviewed": "2026-11-26"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-26"
 }
