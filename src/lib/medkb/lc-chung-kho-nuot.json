@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Chứng khó nuốt** — nhóm bệnh: tiêu hóa, cổ.",
+   "text": "Chứng khó nuốt là gặp vấn đề khi nuốt, thường do bệnh khác hoặc một số thuốc.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: khàn tiếng, mất nước, nuốt đau, sụt cân, ợ chua, ngất, nôn, ho.",
+   "text": "Ho hoặc sặc khi ăn uống, thức ăn trào lên (có khi ra mũi), cảm giác thức ăn kẹt ở họng hay ngực, giọng ướt ồ ồ sau ăn, chảy dãi, khó nhai; lâu dần sụt cân, mất nước, hay viêm phổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: chứng khó nuốt ở thực quản, chứng khó nuốt ở hầu họng, hẹp thực quản, xạ trị, ung thư, giảm co thắt, co thắt lan tỏa, vật thể lạ.",
+   "text": "Một số thuốc, trào ngược axit, viêm thực quản, bệnh phổi tắc nghẽn mạn tính, bệnh não – thần kinh (đột quỵ, sa sút trí tuệ, bại não, đa xơ cứng), ung thư miệng hoặc thực quản, co thắt tâm vị, sứt môi hở hàm ếch ở trẻ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tuổi tác, bệnh lý thần kinh, đột quỵ.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Tuỳ nguyên nhân: thuốc trị trào ngược hoặc viêm, tập nuốt với chuyên viên ngôn ngữ trị liệu, ăn đồ mềm hoặc uống nước làm đặc, dụng cụ ăn đặc biệt, ống ăn, thủ thuật nong thực quản.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Khó nuốt, ho sặc khi ăn uống, thấy thức ăn kẹt, hay trào ngược, giọng ướt sau ăn, khó thở sau ăn, hay viêm phổi; trẻ khóc nhiều hoặc ưỡn lưng khi bú → khám gấp.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/chung-kho-nuot-50.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Swallowing problems (dysphagia)",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/swallowing-problems-dysphagia/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

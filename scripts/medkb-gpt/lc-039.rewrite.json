@@ -1,0 +1,604 @@
+{
+  "_note": "27/11 — Vòng LC 37 (đợt 1–11 còn sót): NHS diabetic-retinopathy, von-willebrand, high-cholesterol, dupuytrens, dysphagia; dùng lại thẻ Peyronie, bệnh thần kinh ngoại biên, tăng huyết áp — Claude đã mở kiểm. Thêm: NHS asbestosis, inflammatory-bowel-disease, head-injury-and-concussion.",
+  "lc-benh-vong-mac-tieu-duong": {
+    "addSources": [
+      {
+        "title": "Diabetic retinopathy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/diabetic-retinopathy/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh võng mạc tiểu đường là bệnh mắt do tiểu đường, có thể gây mất thị lực, nhưng phát hiện và điều trị sớm giúp giảm nguy cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ban đầu thường không triệu chứng, hay phát hiện khi tầm soát mắt; về sau nhìn kém dần, mờ, ruồi bay, khó nhìn chỗ tối; một hoặc hai mắt.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Nguy cơ cao hơn khi bị tiểu đường lâu năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Người tiểu đường từ 12 tuổi nên tầm soát mắt (chụp đáy mắt) mỗi 1–2 năm.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Kiểm soát đường huyết tốt nhất có thể là quan trọng nhất; hạ huyết áp, mỡ máu, không hút thuốc.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Không chữa được thị lực đã mất; điều trị nhằm chặn nặng thêm: laser, tiêm thuốc vào mắt, cấy steroid, phẫu thuật.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Người tiểu đường bỗng nhìn kém hẳn hoặc mờ mắt → khám mắt gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-von-willebrand": {
+    "addSources": [
+      {
+        "title": "Von Willebrand disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/von-willebrand-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh von Willebrand là bệnh di truyền làm máu khó đông, dễ chảy máu; chưa chữa khỏi nhưng đa số nhẹ và kiểm soát được.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Nhiều người không triệu chứng cho đến khi chấn thương, phẫu thuật, sinh con; hay gặp: dễ bầm tím, chảy máu cam thường xuyên, chảy máu lợi, kinh nhiều; nặng hơn: chảy máu khó cầm, phân hoặc nước tiểu có máu, đau sưng khớp.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hầu như luôn di truyền; thể 1 và 2 thì mỗi con có 1 phần 2 khả năng thừa hưởng; người nhà nên được xét nghiệm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chảy máu nhẹ thường chỉ cần sơ cứu; nặng hơn hoặc để phòng có thuốc cầm máu, thuốc tăng yếu tố đông máu, truyền yếu tố đông máu theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Tránh thuốc giảm đau kháng viêm như ibuprofen, aspirin; hỏi bác sĩ, dược sĩ trước khi dùng thuốc nam, thực phẩm chức năng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Hay chảy máu cam, bầm tím dễ, kinh rất nhiều hoặc chảy máu lâu cầm → đi khám, xét nghiệm đông máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-cholesterol-mau-cao": {
+    "addSources": [
+      {
+        "title": "High cholesterol",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/high-cholesterol/"
+      }
+    ],
+    "about": [
+      [
+        "Cholesterol máu cao là khi có quá nhiều cholesterol trong máu; thường không triệu chứng nên chỉ biết qua xét nghiệm máu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Ăn nhiều chất béo, ít vận động, thừa cân, hút thuốc, uống rượu; nguy cơ cao hơn ở người trên 50 tuổi, nam giới, phụ nữ sau mãn kinh; có thể di truyền trong gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Cholesterol dư có thể làm tắc mạch máu, tăng nguy cơ bệnh tim và đột quỵ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn uống lành mạnh, vận động nhiều hơn giúp giảm cholesterol; một số người cần thêm thuốc theo bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Trên 40 tuổi, thừa cân hoặc gia đình có người mỡ máu cao, bệnh tim sớm → đi xét nghiệm mỡ máu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-co-rut-dupuytren": {
+    "addSources": [
+      {
+        "title": "Dupuytren's contracture",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/dupuytrens-contracture/"
+      }
+    ],
+    "about": [
+      [
+        "Co rút Dupuytren là khi một hay nhiều ngón tay bị co gập vào lòng bàn tay; chưa chữa khỏi nhưng phẫu thuật có thể làm thẳng ngón bị nặng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường bắt đầu bằng cục, lõm hoặc gờ ở lòng bàn tay, tiến triển chậm trong nhiều tháng, năm; thường không đau nhưng hạn chế dùng tay; hay ở ngón áp út và ngón út, thường cả hai tay.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân; liên quan tiền sử gia đình, hút thuốc, uống nhiều rượu, tiểu đường, động kinh.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Giai đoạn sớm thường không cần điều trị; nặng có thể mổ cắt mô xơ hoặc dùng kim làm lỏng; ngón có thể không thẳng hẳn và có thể tái phát sau vài năm.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Ngón tay co gập, không đặt bàn tay phẳng xuống bàn được hoặc khó sinh hoạt → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chung-kho-nuot": {
+    "addSources": [
+      {
+        "title": "Swallowing problems (dysphagia)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/swallowing-problems-dysphagia/"
+      }
+    ],
+    "about": [
+      [
+        "Chứng khó nuốt là gặp vấn đề khi nuốt, thường do bệnh khác hoặc một số thuốc.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Ho hoặc sặc khi ăn uống, thức ăn trào lên (có khi ra mũi), cảm giác thức ăn kẹt ở họng hay ngực, giọng ướt ồ ồ sau ăn, chảy dãi, khó nhai; lâu dần sụt cân, mất nước, hay viêm phổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Một số thuốc, trào ngược axit, viêm thực quản, bệnh phổi tắc nghẽn mạn tính, bệnh não – thần kinh (đột quỵ, sa sút trí tuệ, bại não, đa xơ cứng), ung thư miệng hoặc thực quản, co thắt tâm vị, sứt môi hở hàm ếch ở trẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: thuốc trị trào ngược hoặc viêm, tập nuốt với chuyên viên ngôn ngữ trị liệu, ăn đồ mềm hoặc uống nước làm đặc, dụng cụ ăn đặc biệt, ống ăn, thủ thuật nong thực quản.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Khó nuốt, ho sặc khi ăn uống, thấy thức ăn kẹt, hay trào ngược, giọng ướt sau ăn, khó thở sau ăn, hay viêm phổi; trẻ khóc nhiều hoặc ưỡn lưng khi bú → khám gấp.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-peyronie": {
+    "addSources": [
+      {
+        "title": "Peyronie's disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/peyronies-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Dương vật cong (bệnh Peyronie) làm dương vật cong khi cương, có thể đau; hay gặp ở nam trên 40 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Cục cứng hoặc sưng ở thân dương vật cản giãn khi cương; cong khi cương; cương đau hoặc khó cương, khó giữ cương.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Thường không rõ, đôi khi do chấn thương dương vật; nguy cơ cao hơn khi tiểu đường, huyết áp cao, mỡ máu cao, bệnh tim, xơ cứng động mạch, một số thuốc; đôi khi có tính gia đình.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Nhẹ có thể không cần điều trị; có thuốc làm chậm mảng cứng hoặc trị rối loạn cương, sóng xung kích, phẫu thuật làm thẳng (thường không về hoàn toàn như cũ).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Thấy cục cứng, sưng, cong nhiều, cương đau hoặc khó cương ảnh hưởng quan hệ → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-than-kinh-dai-thao-duong": {
+    "addSources": [
+      {
+        "title": "Peripheral neuropathy",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/"
+      }
+    ],
+    "about": [
+      [
+        "Viêm đa dây thần kinh (bệnh thần kinh ngoại biên) là khi dây thần kinh ở tay, chân bị tổn thương; gặp ở gần 1/10 người từ 55 tuổi.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tê, kiến bò ở bàn chân hoặc bàn tay; đau rát hoặc như dao đâm; mất thăng bằng, kém phối hợp; yếu cơ, nhất là ở bàn chân.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Hay gặp nhất là tiểu đường (đường huyết cao làm hỏng dần dây thần kinh); ngoài ra chấn thương thần kinh, nhiễm virus như zona, tác dụng phụ thuốc, uống nhiều rượu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Loét bàn chân không điều trị có thể nhiễm trùng, hoại tử, đôi khi phải cắt cụt; người tiểu đường cần khám bàn chân định kỳ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ nguyên nhân: kiểm soát đường huyết, bỏ thuốc lá, bớt rượu; đau thần kinh thường cần thuốc chuyên biệt theo đơn vì thuốc giảm đau thường ít tác dụng; vật lý trị liệu khi yếu cơ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Đau, tê, mất cảm giác ở bàn chân, mất thăng bằng, yếu cơ, hoặc vết đứt, vết loét ở chân lâu lành → đi khám sớm.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-cao-huyet-ap-vo-can": {
+    "addSources": [
+      {
+        "title": "High blood pressure (hypertension)",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/high-blood-pressure-hypertension/"
+      }
+    ],
+    "about": [
+      [
+        "Huyết áp gồm hai chỉ số; cao thường là từ 140/90 khi đo ở cơ sở y tế, hoặc từ 135/85 khi tự đo ở nhà.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Thường không triệu chứng nên nhiều người không biết; hiếm khi đau đầu, nhìn mờ, đau ngực.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tuổi cao, gia đình có người cao huyết áp, ăn mặn, thừa cân, hút thuốc, uống nhiều rượu, căng thẳng kéo dài.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Không điều trị làm tăng nguy cơ bệnh tim, nhồi máu cơ tim, đột quỵ, suy tim, bệnh thận, sa sút trí tuệ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Ăn uống cân bằng, giảm muối, vận động đều, giảm cân nếu cần, bớt rượu và cà phê, bỏ thuốc lá.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Bác sĩ cho thuốc khi huyết áp rất cao, nguy cơ tim mạch cao hoặc thay đổi lối sống chưa đủ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Từ 40 tuổi mà quá 5 năm chưa đo huyết áp, hoặc nghĩ mình có nguy cơ → đi đo.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau ngực kèm vã mồ hôi, buồn nôn, choáng hoặc khó thở → gọi cấp cứu ngay.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-bui-phoi-atbet-amiang": {
+    "addSources": [
+      {
+        "title": "Asbestosis",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/asbestosis/"
+      }
+    ],
+    "about": [
+      [
+        "Bụi phổi amiăng là bệnh phổi hiếm nhưng nặng do tiếp xúc amiăng (vật liệu xây dựng dùng nhiều trước đây).",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Khó thở, ho dai dẳng, khò khè, rất mệt, đau ngực hoặc vai; nặng có thể ngón tay dùi trống; có người không triệu chứng.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Tiếp xúc amiăng, hay gặp ở thợ xây dựng, sửa ống nước, điện, phá dỡ; vẫn có thể phơi nhiễm khi làm việc trong toà nhà cũ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "course": [
+      [
+        "Triệu chứng có thể 20–30 năm sau khi phơi nhiễm mới xuất hiện; khi đã bị thì không chữa khỏi vì phổi tổn thương không hồi phục.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Phục hồi chức năng hô hấp, thở oxy, thuốc hít giúp kiểm soát triệu chứng; bỏ thuốc lá, tiêm phòng cúm và phế cầu.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Có triệu chứng và nghĩ mình từng tiếp xúc amiăng → đi khám và kể cho bác sĩ.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-benh-viem-ruot-ibd": {
+    "addSources": [
+      {
+        "title": "Inflammatory bowel disease",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/inflammatory-bowel-disease/"
+      }
+    ],
+    "about": [
+      [
+        "Bệnh viêm ruột (IBD) là nhóm bệnh kéo dài gây đau bụng nhiều và tiêu chảy, gồm bệnh Crohn, viêm loét đại tràng, viêm đại tràng vi thể; khác với hội chứng ruột kích thích.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "signs": [
+      [
+        "Tiêu chảy kéo dài trên 4 tuần, đau bụng, phân có máu hoặc nhầy, chảy máu hậu môn, mệt mỏi liên tục, sụt cân không rõ lý do.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "causes": [
+      [
+        "Chưa rõ nguyên nhân, được cho là hệ miễn dịch tấn công ruột; có người thân bị thì nguy cơ cao hơn.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Tuỳ triệu chứng: thuốc như steroid theo bác sĩ; nặng có thể mổ cắt một phần ruột hoặc nằm viện.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Nghĩ mình bị viêm ruột → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Đau bụng dữ dội, chảy máu hậu môn không ngừng, nôn ra máu → gọi cấp cứu.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  },
+  "lc-chan-thuong-so-nao": {
+    "addSources": [
+      {
+        "title": "Head injury and concussion",
+        "publisher": "NHS (Anh)",
+        "url": "https://www.nhs.uk/conditions/head-injury-and-concussion/"
+      }
+    ],
+    "about": [
+      [
+        "Chấn thương đầu có thể nhẹ hoặc nặng; chấn động não là tổn thương não tạm thời có thể kéo dài vài tuần.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "care": [
+      [
+        "Chấn thương nhẹ: chườm đá bọc khăn từng đợt ngắn trong vài ngày đầu, nghỉ ngơi, dùng paracetamol khi đau đầu; có người lớn ở cạnh ít nhất 24 giờ đầu.",
+        [
+          "+0"
+        ]
+      ],
+      [
+        "Đi học, đi làm khi thấy khoẻ; lái xe khi đã hồi phục hẳn; tránh thể thao va chạm ít nhất 3 tuần; tránh rượu đến khi khoẻ.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "doctor": [
+      [
+        "Sau va đầu mà nôn, chóng mặt, đang dùng thuốc chống đông hoặc có uống rượu lúc bị → khám gấp; triệu chứng quá 2 tuần → đi khám.",
+        [
+          "+0"
+        ]
+      ]
+    ],
+    "emergency": [
+      [
+        "Bất tỉnh không tỉnh lại, co giật, ngã cao trên 1 mét hoặc 5 bậc cầu thang, mới tê hoặc yếu bất kỳ phần nào, thay đổi hành vi → gọi cấp cứu, đừng tự lái xe.",
+        [
+          "+0"
+        ]
+      ]
+    ]
+  }
+}

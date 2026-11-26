@@ -8,49 +8,49 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Von Willebrand** — nhóm bệnh: máu, nhóm bệnh.",
+   "text": "Bệnh von Willebrand là bệnh di truyền làm máu khó đông, dễ chảy máu; chưa chữa khỏi nhưng đa số nhẹ và kiểm soát được.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: chảy máu chân răng, chảy máu mũi, phân có máu, xuất huyết, thiếu máu, chảy máu, bầm tím, ngứa, nám, phù.",
+   "text": "Nhiều người không triệu chứng cho đến khi chấn thương, phẫu thuật, sinh con; hay gặp: dễ bầm tím, chảy máu cam thường xuyên, chảy máu lợi, kinh nhiều; nặng hơn: chảy máu khó cầm, phân hoặc nước tiểu có máu, đau sưng khớp.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: loại 1, loại 2, loại 3, đột biến gen, lupus ban đỏ, suy giáp, rối loạn tăng sinh bạch huyết, khối u tăng sinh tủy.",
+   "text": "Hầu như luôn di truyền; thể 1 và 2 thì mỗi con có 1 phần 2 khả năng thừa hưởng; người nhà nên được xét nghiệm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): bệnh tim mạch, di truyền.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Chảy máu nhẹ thường chỉ cần sơ cứu; nặng hơn hoặc để phòng có thuốc cầm máu, thuốc tăng yếu tố đông máu, truyền yếu tố đông máu theo bác sĩ.",
    "src": [
-    0
+    1
+   ]
+  },
+  {
+   "text": "Tránh thuốc giảm đau kháng viêm như ibuprofen, aspirin; hỏi bác sĩ, dược sĩ trước khi dùng thuốc nam, thực phẩm chức năng.",
+   "src": [
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Hay chảy máu cam, bầm tím dễ, kinh rất nhiều hoặc chảy máu lâu cầm → đi khám, xét nghiệm đông máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-von-willebrand.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Von Willebrand disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/von-willebrand-disease/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

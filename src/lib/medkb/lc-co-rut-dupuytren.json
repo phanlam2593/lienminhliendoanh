@@ -7,49 +7,43 @@
  ],
  "about": [
   {
-   "text": "**Co rút Dupuytren** — nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "text": "Co rút Dupuytren là khi một hay nhiều ngón tay bị co gập vào lòng bàn tay; chưa chữa khỏi nhưng phẫu thuật có thể làm thẳng ngón bị nặng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: co rút, ngón tay.",
+   "text": "Thường bắt đầu bằng cục, lõm hoặc gờ ở lòng bàn tay, tiến triển chậm trong nhiều tháng, năm; thường không đau nhưng hạn chế dùng tay; hay ở ngón áp út và ngón út, thường cả hai tay.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): người có tiền căn động kinh, người bệnh đái tháo đường, người nhiễm HIV, chủng tộc, tuổi tác, giới tính.",
+   "text": "Chưa rõ nguyên nhân; liên quan tiền sử gia đình, hút thuốc, uống nhiều rượu, tiểu đường, động kinh.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không hút thuốc lá.",
+   "text": "Giai đoạn sớm thường không cần điều trị; nặng có thể mổ cắt mô xơ hoặc dùng kim làm lỏng; ngón có thể không thẳng hẳn và có thể tái phát sau vài năm.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Ngón tay co gập, không đặt bàn tay phẳng xuống bàn được hoặc khó sinh hoạt → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -60,7 +54,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/co-rut-dupuytren.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Dupuytren's contracture",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/dupuytrens-contracture/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Cholesterol máu cao** — nhóm bệnh: nội tiết - chuyển hóa.",
+   "text": "Cholesterol máu cao là khi có quá nhiều cholesterol trong máu; thường không triệu chứng nên chỉ biết qua xét nghiệm máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -23,39 +23,34 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: béo phì, bệnh tiểu đường, ít vận động, hút thuốc, di truyền.",
+   "text": "Ăn nhiều chất béo, ít vận động, thừa cân, hút thuốc, uống rượu; nguy cơ cao hơn ở người trên 50 tuổi, nam giới, phụ nữ sau mãn kinh; có thể di truyền trong gia đình.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): béo phì, ít vận động, hút thuốc, lớn tuổi, di truyền.",
-   "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Cholesterol dư có thể làm tắc mạch máu, tăng nguy cơ bệnh tim và đột quỵ.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không hút thuốc lá, từ bỏ hút thuốc, uống rượu có chừng mực.",
+   "text": "Ăn uống lành mạnh, vận động nhiều hơn giúp giảm cholesterol; một số người cần thêm thuốc theo bác sĩ.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Trên 40 tuổi, thừa cân hoặc gia đình có người mỡ máu cao, bệnh tim sớm → đi xét nghiệm mỡ máu.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -66,7 +61,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/cholesterol-mau-cao-290.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "High cholesterol",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/high-cholesterol/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

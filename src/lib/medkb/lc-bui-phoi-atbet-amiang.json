@@ -8,43 +8,50 @@
  ],
  "about": [
   {
-   "text": "**Bụi phổi atbet (amiăng)** — nhóm bệnh: hô hấp, ngực.",
+   "text": "Bụi phổi amiăng là bệnh phổi hiếm nhưng nặng do tiếp xúc amiăng (vật liệu xây dựng dùng nhiều trước đây).",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: tức ngực, ho khan, khó thở, nám.",
+   "text": "Khó thở, ho dai dẳng, khò khè, rất mệt, đau ngực hoặc vai; nặng có thể ngón tay dùi trống; có người không triệu chứng.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc lá.",
+   "text": "Tiếp xúc amiăng, hay gặp ở thợ xây dựng, sửa ống nước, điện, phá dỡ; vẫn có thể phơi nhiễm khi làm việc trong toà nhà cũ.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "course": [],
+ "course": [
+  {
+   "text": "Triệu chứng có thể 20–30 năm sau khi phơi nhiễm mới xuất hiện; khi đã bị thì không chữa khỏi vì phổi tổn thương không hồi phục.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Phục hồi chức năng hô hấp, thở oxy, thuốc hít giúp kiểm soát triệu chứng; bỏ thuốc lá, tiêm phòng cúm và phế cầu.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Có triệu chứng và nghĩ mình từng tiếp xúc amiăng → đi khám và kể cho bác sĩ.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -55,7 +62,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/bui-phoi-atbet-amiang-83.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Asbestosis",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/asbestosis/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

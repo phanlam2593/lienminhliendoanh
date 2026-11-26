@@ -7,9 +7,9 @@
  ],
  "about": [
   {
-   "text": "**Chấn thương sọ não** — nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "text": "Chấn thương đầu có thể nhẹ hoặc nặng; chấn động não là tổn thương não tạm thời có thể kéo dài vài tuần.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -38,35 +38,48 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa: không dùng thảm trong nhà, lắp đặt cổng an toàn ở đầu cầu thang, giữ cho cầu thang không bị lộn xộn, đảm bảo khu vực thảm được an toàn.",
+   "text": "Chấn thương nhẹ: chườm đá bọc khăn từng đợt ngắn trong vài ngày đầu, nghỉ ngơi, dùng paracetamol khi đau đầu; có người lớn ở cạnh ít nhất 24 giờ đầu.",
    "src": [
-    0
+    1
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Đi học, đi làm khi thấy khoẻ; lái xe khi đã hồi phục hẳn; tránh thể thao va chạm ít nhất 3 tuần; tránh rượu đến khi khoẻ.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Sau va đầu mà nôn, chóng mặt, đang dùng thuốc chống đông hoặc có uống rượu lúc bị → khám gấp; triệu chứng quá 2 tuần → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
- "emergency": [],
+ "emergency": [
+  {
+   "text": "Bất tỉnh không tỉnh lại, co giật, ngã cao trên 1 mét hoặc 5 bậc cầu thang, mới tê hoặc yếu bất kỳ phần nào, thay đổi hành vi → gọi cấp cứu, đừng tự lái xe.",
+   "src": [
+    1
+   ]
+  }
+ ],
  "sources": [
   {
    "title": "Chấn thương sọ não – Tìm hiểu về bệnh",
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/chan-thuong-so-nao-9.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Head injury and concussion",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/head-injury-and-concussion/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }

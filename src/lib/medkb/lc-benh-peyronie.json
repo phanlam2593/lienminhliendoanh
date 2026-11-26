@@ -8,49 +8,43 @@
  ],
  "about": [
   {
-   "text": "**Bệnh Peyronie** — nhóm bệnh: sức khỏe giới tính, bệnh nam giới.",
+   "text": "Dương vật cong (bệnh Peyronie) làm dương vật cong khi cương, có thể đau; hay gặp ở nam trên 40 tuổi.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "signs": [
   {
-   "text": "Triệu chứng hay gặp: đau khi quan hệ, rối loạn cương, trầm cảm, nám, ho.",
+   "text": "Cục cứng hoặc sưng ở thân dương vật cản giãn khi cương; cong khi cương; cương đau hoặc khó cương, khó giữ cương.",
    "src": [
-    0
+    1
    ]
   }
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan: chấn thương dương vật, bệnh tự miễn, chứng co cứng Dupuytren, chấn thương.",
+   "text": "Thường không rõ, đôi khi do chấn thương dương vật; nguy cơ cao hơn khi tiểu đường, huyết áp cao, mỡ máu cao, bệnh tim, xơ cứng động mạch, một số thuốc; đôi khi có tính gia đình.",
    "src": [
-    0
-   ]
-  },
-  {
-   "text": "Người dễ mắc hơn (theo nguồn): tổn thương dương vật, tiền sử gia đình mắc bệnh Peyronie, tuổi tác, bệnh tiểu đường kèm rối loạn cương dương, lupus ban đỏ, bệnh tiểu đường.",
-   "src": [
-    0
+    1
    ]
   }
  ],
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Nhẹ có thể không cần điều trị; có thuốc làm chậm mảng cứng hoặc trị rối loạn cương, sóng xung kích, phẫu thuật làm thẳng (thường không về hoàn toàn như cũ).",
    "src": [
-    0
+    1
    ]
   }
  ],
  "diet": null,
  "doctor": [
   {
-   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "text": "Thấy cục cứng, sưng, cong nhiều, cương đau hoặc khó cương ảnh hưởng quan hệ → đi khám.",
    "src": [
-    0
+    1
    ]
   }
  ],
@@ -61,7 +55,13 @@
    "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
    "url": "https://nhathuoclongchau.com.vn/benh/benh-peyronie.html",
    "reviewed": "2026-11-05"
+  },
+  {
+   "title": "Peyronie's disease",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/peyronies-disease/",
+   "reviewed": "2026-11-27"
   }
  ],
- "verifiedAt": "2026-11-05"
+ "verifiedAt": "2026-11-27"
 }
