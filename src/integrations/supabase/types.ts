@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      _lomi_eval_prompts: {
+        Row: {
+          body: string
+          name: string
+        }
+        Insert: {
+          body: string
+          name: string
+        }
+        Update: {
+          body?: string
+          name?: string
+        }
+        Relationships: []
+      }
       ai_chat_daily_usage: {
         Row: {
           day: string
@@ -2684,6 +2699,15 @@ export type Database = {
     }
     Functions: {
       _demo_move_driver: { Args: never; Returns: undefined }
+      _lomi_eval_fire: {
+        Args: {
+          _lanes: number
+          _model?: string
+          _prefix: string
+          _system: string
+        }
+        Returns: number
+      }
       accept_ride: { Args: { _rid: string }; Returns: undefined }
       add_group_members: {
         Args: { _gid: string; _member_ids: string[] }
