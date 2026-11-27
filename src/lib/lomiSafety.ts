@@ -48,8 +48,8 @@ const KIN_B = "(?:cha|duong|anh trai|me chong|ba chong|bo chong|me vo|ba toi|ba 
 const HIT = "(?:đánh đập|bạo hành|bạo lực|xô đẩy|đẩy ngã|xô mạnh|cào cấu|bạt tai|nắm tóc|đánh|tát|đấm|đạp|bóp cổ|túm tóc|xô ngã|hành hạ|ném đồ vào|cầm dao|đập đầu)";
 const HIT_B = "(?:danh dap|bao hanh|bao luc|xo day|day nga|xo manh|cao cau|bat tai|nam toc|danh|tat|dam|dap|bop co|tum toc|xo nga|hanh ha|nem do vao|cam dao|dap dau)";
 // "đánh" + một thứ không phải người ("đánh cầu lông", "đánh răng", "đánh giá"…) không phải đánh người.
-const NOT_HIT = "(?! (?:cầu|bóng|banh|bài|răng|giá|máy|đàn|trống|golf|tennis|game|thức|dấu|vần|rơi|mất|liều|lừa|số|bida|bi-a|cờ|bạc|nhau|son|phấn|móng))";
-const NOT_HIT_B = "(?! (?:cau|bong|banh|bai|rang|gia|may|dan|trong|golf|tennis|game|thuc|dau|van|roi|mat|lieu|lua|so|bida|co|bac|nhau|son|phan|mong))";
+const NOT_HIT = "(?! (?:cầu|bóng|banh|bài|răng|giá|máy|đàn|trống|golf|tennis|game|thức|dấu|vần|rơi|mất|liều|lừa|số|bida|bi-a|cờ|bạc|nhau|son|phấn|móng|hụi|hội|họ|đề|lô|cá độ|chứng khoán|coin))";
+const NOT_HIT_B = "(?! (?:cau|bong|banh|bai|rang|gia|may|dan|trong|golf|tennis|game|thuc|dau|van|roi|mat|lieu|lua|so|bida|co|bac|nhau|son|phan|mong|hui|hoi|ho|de|lo|ca do|chung khoan|coin))";
 
 // Bị đánh: "X đánh e", "e bị (chồng) đánh", "chồng e hay đánh đập", "bị bạo hành".
 const V_OBJ = P(`${HIT}${NOT_HIT} ${SELF}`, `${HIT_B}${NOT_HIT_B} ${SELF_B}`);

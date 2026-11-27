@@ -2165,6 +2165,17 @@ export function AiChat({
         }
       }
     }
+    // 27/11 (Kir: "A chưa bh trúng số :((" → Lomi chúc mừng) — chuyện may / không may (trúng số, đậu / rớt, tăng lương…) có PHỦ ĐỊNH,
+    //   hỏi vặn, hụt, so bì, ước mong hay vui-mà-buồn: đọc ở lớp riêng (lib/lomiSense.senseLuck) TRƯỚC các lớp đoán chung,
+    //   sau lớp an toàn. Đang xem Tarot (tab hoặc lá bài vừa rút) thì câu ước / hỏi "khi nào" để Tarot đọc.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && !crisisReply(q, lang) && !crisisCheckIn(q) && raw.split(/\s+/).length <= 30) {
+      const lastL = msgs[msgs.length - 1];
+      // Lomi vừa hỏi "nếu trúng thì tính làm gì đầu tiên?" → câu này là điều người dùng mơ, đáp theo đó (chuyện lo thật thì để lớp sau nghe).
+      const dr = lastL?.role === "assistant" && lastL.routed === "luck-dream" ? senseDream(raw) : null;
+      if (dr) return localReply(q, { role: "assistant", content: dr.text, local: true, sense: true });
+      const lk = senseLuck(raw, { tarot: lomiTab.cur === "tarot" || !!(lastL?.role === "assistant" && (lastL.tarot || lastL.tarotRef)), thread: !!(lastL?.role === "assistant" && (lastL.heart || lastL.biz || lastL.bizPick || lastL.bizTopicPick || lastL.health) && !lastL.routed?.startsWith("luck")), bizTopic: detectBizTopic(q) });
+      if (lk) return localReply(q, { role: "assistant", content: lk.text, local: true, sense: true, routed: "dream" in lk && lk.dream ? "luck-dream" : "luck", ...(lk.intent === "luck:good" ? { heart: "ev:goodnews", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {}) });
+    }
     // 20/11 (bộ 100 câu, #98–100): hỏi cách nấu món có chữ "sốt" / "kho" là tên món ("trứng sốt cà chua", "cá sốt cà", "bò sốt vang")
     //   → trả công thức NGAY, trước lớp sức khoẻ (trước đây "sốt" bị đọc là bị sốt, ra thẻ "kiêng trứng khi sốt").
     //   (bộ 60 đoạn, #39: lượt trước vừa hỏi làm NƯỚC SỐT — "sốt bơ tỏi" — thì "sốt để ngoài tủ lạnh bao lâu" vẫn là nước sốt, không phải bị sốt)
@@ -2434,17 +2445,6 @@ export function AiChat({
       //   #36 "Bạn ấy còn tập gym muốn tăng cơ nữa" (đang nói dị ứng sữa) — hỏi ăn uống, không phải tìm phòng gym
       if (VN(/\b(tập gym|tập tạ|tập thể hình)\b/).test(nX) && VN(/\b(tăng cơ|lên cơ|giữ cơ|ăn gì|bổ sung|đạm|protein)\b/).test(nX) && !VN(/\b(tìm|ở đâu|phòng gym|chỗ tập|gần đây|giá)\b/).test(nX))
         return localReply(q, { role: "assistant", content: "Muốn tăng cơ thì quan trọng nhất là **tập đều + ăn đủ đạm** chia ra các bữa trong ngày 💪 Chuyện chọn nguồn đạm hợp với người bị dị ứng thì Lomi chưa có kiến thức đã kiểm chứng đủ chi tiết, nên chưa dám chỉ món cụ thể — nếu bạn ấy dị ứng thức ăn thì hỏi bác sĩ hoặc chuyên gia dinh dưỡng để chọn nguồn đạm an toàn nha.", local: true, health: {}, stuck: "unknown_care" });
-    }
-    // 27/11 (Kir: "A chưa bh trúng số :((" → Lomi chúc mừng) — chuyện may / không may (trúng số, đậu / rớt, tăng lương…) có PHỦ ĐỊNH,
-    //   hỏi vặn, hụt, so bì, ước mong hay vui-mà-buồn: đọc ở lớp riêng (lib/lomiSense.senseLuck) TRƯỚC các lớp đoán chung,
-    //   sau lớp an toàn. Đang xem Tarot (tab hoặc lá bài vừa rút) thì câu ước / hỏi "khi nào" để Tarot đọc.
-    if (!forceAi && !en && !danger0 && !riskRef.current?.any && !crisisReply(q, lang) && !crisisCheckIn(q) && raw.split(/\s+/).length <= 30) {
-      const lastL = msgs[msgs.length - 1];
-      // Lomi vừa hỏi "nếu trúng thì tính làm gì đầu tiên?" → câu này là điều người dùng mơ, đáp theo đó (chuyện lo thật thì để lớp sau nghe).
-      const dr = lastL?.role === "assistant" && lastL.routed === "luck-dream" ? senseDream(raw) : null;
-      if (dr) return localReply(q, { role: "assistant", content: dr.text, local: true, sense: true });
-      const lk = senseLuck(raw, { tarot: lomiTab.cur === "tarot" || !!(lastL?.role === "assistant" && (lastL.tarot || lastL.tarotRef)), thread: !!(lastL?.role === "assistant" && (lastL.heart || lastL.biz || lastL.bizPick || lastL.bizTopicPick || lastL.health) && !lastL.routed?.startsWith("luck")), biz: !!detectBizTopic(q) });
-      if (lk) return localReply(q, { role: "assistant", content: lk.text, local: true, sense: true, routed: "dream" in lk && lk.dream ? "luck-dream" : "luck", ...(lk.intent === "luck:good" ? { heart: "ev:goodnews", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {}) });
     }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.

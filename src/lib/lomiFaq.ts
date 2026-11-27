@@ -530,6 +530,10 @@ const CREATIVE =
 const FAQ_NEED: Record<string, RegExp> = {
   // 27/11 (bộ test chuyện may rủi): "trúng số có phải đóng thuế không" từng ra câu dòng trạng thái — phải nhắc đúng dòng trạng thái / hồ sơ.
   status: /\b(trang thai|status|ghi chu|ho so|profile|anh dai dien)\b/,
+  // 27/11 (bộ ChatGPT): "đi phỏng vấn mà hỏi mức lương mong muốn thì trả lời sao" từng ra cách dùng Quẹt; "thi rớt đại học có được đăng ký xét
+  //   tuyển cao đẳng không" từng ra cách đăng ký tài khoản — hai câu này phải nhắc tới app / tài khoản.
+  quetjob: /\b(quet|app|ilomi|dang tin|dang bai|muc|tim viec|viec lam them|lam them|tuyen nguoi|tuyen nhan vien|xin viec|kiem viec)\b/,
+  register: /\b(tai khoan|app|ilomi|dang nhap|nick|acc|account|thanh vien|ung dung)\b/,
   ridprice: /\b(xe|cuoc|chuyen|giao|ship|tai xe|km|dua don|dat xe|grab|taxi|cho nguoi|cho hang|van chuyen)\b/,
   claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
   // 31/10 (danh sách ChatGPT lần 6): "mỗi tuần ăn cá mấy lần", "nhập sai mật khẩu mấy lần" từng ra số lượt quẹt

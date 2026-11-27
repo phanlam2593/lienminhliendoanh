@@ -847,7 +847,10 @@ export function crisisReply(text: string, lang: L): ChatReply | null {
   // 21/10 (đợt 4): ý nghĩ không muốn sống nói gián tiếp (PASSIVE); câu chỉ NÓI QUÁ ("đói muốn chết") thì không phải khủng hoảng.
   //   Cảm xúc + "muốn chết" ("chán muốn chết", "buồn muốn chết") mà ngoài cụm đó không còn tín hiệu nào → hỏi han (crisisCheckIn), chưa
   //   bật lời hỗ trợ khủng hoảng ngay. "a muốn chết" trơn (không kèm trạng thái) vẫn là khủng hoảng.
-  const strong = PASSIVE.test(n) || poisonIntent(text);
+  // 27/11 (bộ ChatGPT: "thua sạch tiền vì cá độ, giờ nợ ngập đầu, em muốn kết thúc tất cả"): câu mơ hồ kiểu "muốn kết thúc tất cả"
+  //   mà kèm GÁNH NẶNG nợ / mất trắng thì không chỉ hỏi han — đưa lời hỗ trợ khủng hoảng (có số đường dây) ngay.
+  const heavy = CHECKIN.test(n) && VN(/\b(nợ ngập đầu|ngập nợ|nợ nần|vỡ nợ|phá sản|thua sạch|mất sạch|mất hết|cá độ|tín dụng đen|siết nợ|xã hội đen)\b/).test(n);
+  const strong = PASSIVE.test(n) || poisonIntent(text) || heavy;
   const stateOnly = hyperboleOnly(text) !== null || (EMO_DEATH.test(n) && !RULES[0].re.test(` ${normalizeVi(text.replace(VR(/muốn\s+chết(\s+(luôn|đi được|mất|à|á|quá|nè|ghê|thôi))*/giu), " quá "))} `));
   const hit = strong || (RULES[0].re.test(n) && !stateOnly);
   if (!hit) return null;
