@@ -10,13 +10,20 @@
 const EN_WORDS = new Set(
   "i you he she it we they me my your our their is am are was were be been do does did have has had can could will would should what why how when where who which the a an and or but not no yes so to of in on at for with from about this that these those just very really feel feeling want need help please thanks thank hello hi hey sorry today tonight yesterday since my after before again anymore know think much many too there here some any".split(" "),
 );
+const EN_AMBIG = new Set("a so an to me do no on can ma la hi be bo".split(" "));
+const VI_PLAIN = new Set("chua khong ko dc duoc roi nha nhe anh em minh toi tui gi sao bi la cua voi cho trung tung lam qua lam vay the nay kia ay oi uong nguoi ban biet hoi muon nhung nen phai khi nao bao gio".split(" "));
+const EN_STRONG = new Set("i i'm im you the is are was were my what why how this that with have it's dont don't".split(" "));
 /** Câu gõ bằng tiếng Anh (không dấu, đa số là từ tiếng Anh thông dụng). */
 export function looksEnglish(q: string): boolean {
   const t = q.trim().toLowerCase();
   if (!t || /[\u00C0-\u024F\u1E00-\u1EFF]/u.test(t.normalize("NFC"))) return false; // có dấu tiếng Việt → không phải câu tiếng Anh
   const w = t.replace(/[^a-z' ]/g, " ").split(/\s+/).filter(Boolean);
   if (w.length < 2) return /^(hi|hello|hey|thanks|thank you|bye|goodnight|good night)$/.test(t.replace(/[^a-z ]/g, "").trim());
-  const hits = w.filter((x) => EN_WORDS.has(x) || EN_WORDS.has(x.replace(/'.*$/, ""))).length;
+  // 27/11 (Kir: "a chua tung trung so" bị đáp tiếng Anh): chữ vừa là tiếng Anh vừa là tiếng Việt gõ không dấu ("a" = anh, "so" = số,
+  //   "me" = mẹ, "an" = ăn, "to", "do", "no", "on" = ổn, "can" = cần) chỉ tính nửa; câu có chữ chắc chắn tiếng Việt không dấu thì không phải tiếng Anh.
+  if (w.some((x) => VI_PLAIN.has(x)) && !w.some((x) => EN_STRONG.has(x))) return false;
+  const strong = w.some((x) => EN_STRONG.has(x));
+  const hits = w.reduce((k, x) => k + (EN_WORDS.has(x) || EN_WORDS.has(x.replace(/'.*$/, "")) ? (EN_AMBIG.has(x) && !strong ? 0.5 : 1) : 0), 0);
   return hits / w.length >= 0.34 && hits >= 2;
 }
 

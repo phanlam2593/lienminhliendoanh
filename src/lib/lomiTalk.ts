@@ -219,7 +219,7 @@ export const EVENTS: Ev[] = [
     id: "bored",
     selfOnly: true,
     label: "đang chán, không có gì làm",
-    re: VN(/\b(chán quá|chán ghê|chán thật|chán vậy|chán nè|chán á|chán à|chán thật sự|buồn chán|chán chết|rảnh quá|rảnh rồi|ran quá|ran rồi|ran rảnh|không có gì làm|ko có gì làm|rảnh rang|boring|chán đời quá)\b/),
+    re: VN(/\b(chán quá|chán ghê|chán thật|chán vậy|chán nè|chán á|chán à|chán thật sự|buồn chán|chán chết|rảnh quá|rảnh rồi|ran quá|ran rồi|ran rảnh|không có gì làm|ko có gì làm|không có việc gì làm|chẳng có việc gì làm|rảnh rang|boring|chán đời quá)\b/),
     react: [
       "Chán hả 😆 Vậy để Lomi bày trò nè: bói một lá Tarot xem hôm nay thế nào, lướt Quẹt (/quet) tìm bạn chơi game hay đi cà phê, hoặc Lomi tìm quán ngon gần đây cho bạn đi ăn — bạn thích cái nào?",
       "Rảnh quá thì làm gì vui vui nha 😄 Bạn thích ở nhà hay ra ngoài?",
@@ -243,6 +243,7 @@ export const EVENTS: Ev[] = [
 const SELF_LEAD = new Set("oix a anh e em c chi minh toi tui to t tao dang thay cam hom nay bua gio toi sang trua chieu dem qua lai cu hoi o nha mot ma sao troi oi ui haiz haizz u thi that su day dao luc nay may bay hay van con cung luon".split(" "));
 // (so trên câu KHÔNG DẤU n — VN tự đối chiếu dạng có dấu)
 const NEG_GOOD = VN(/(^|\s)(không|ko|k|kh|chẳng|chả|hông|hong|chưa|kbh)( (bao giờ|bao h|bh|từng|hề|có|được|đc|còn|thể))*\s*$/);
+const GOOD_ASK = VN(/\b(làm sao|làm thế nào|làm cách nào|cách nào|bí quyết|có cần|có phải|cần gì|cần những gì|để được|muốn được|có nên|bao lâu|bao nhiêu|khi nào|bao giờ|mấy năm|ở đâu)\b|\b(không|ko|k|hông|chưa|hả|nhỉ|sao|chứ|ạ)\s*$/);
 export function eventOf(n: string): Ev | undefined {
   const s = ` ${n} `;
   return EVENTS.find((e) => {
@@ -250,6 +251,8 @@ export function eventOf(n: string): Ev | undefined {
     if (!m) return false;
     // 27/11 (Kir: "A chưa bh trúng số :(("): chuyện vui bị phủ định ngay trước ("chưa bao giờ trúng số", "chưa được tăng lương") không phải tin vui.
     if (e.good && NEG_GOOD.test(s.slice(0, m.index))) return false;
+    // 27/11: câu HỎI ("làm sao để được tăng lương", "thăng chức có cần học thêm không") không phải báo tin vui.
+    if (e.good && GOOD_ASK.test(s)) return false;
     // Chuyện của chính người nói: trước cụm đó không có một danh từ khác làm chủ ngữ ("công việc", "phim này", "quán đó"…).
     return !e.selfOnly || s.slice(0, m.index).trim().split(" ").every((w) => !w || SELF_LEAD.has(w));
   });

@@ -787,12 +787,16 @@ const CHECKIN = { test: (x: string) => CHECKIN0.test(x) || CHECKIN_X.test(x) };
 // (3) NÓI QUÁ về trạng thái cơ thể / chuyện thường ("đói muốn chết", "nóng muốn chết luôn", "mệt muốn chết", "chết cười")
 //     — tiếng Việt dùng "muốn chết" như "rất". Trước đây những câu này nhận lời hỗ trợ khủng hoảng kèm đường dây nóng.
 const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|chờ|đợi"; // (22/10: bỏ "ế" — gõ không dấu "e ơi a muốn chết" bị đọc thành "ế … muốn chết" = nói quá)
+const HYPER_LOSS = VN(/\b(rớt|trượt|tạch|thi hỏng|thất bại|mất việc|bị đuổi|thất nghiệp|phá sản|vỡ nợ|nợ|chia tay|bỏ rơi|ly hôn|mất hết|mất người|qua đời|mất rồi|bị lừa|không ai thương|không ai cần)\b/);
 const HYPER = VN(new RegExp(`\\b(${HYPER_STATE})( \\S+){0,2}? muốn chết( luôn| đi được| mất| à| á| quá| nè| ghê| thôi)*\\b|\\bchết (cười|mất|thôi|ngất|đói)\\b|\\bcười (muốn )?(chết|xỉu)\\b|\\bmuốn chết (vì|tại) (thèm|đói|nóng|lạnh|cười|buồn cười|tức cười|ngại|quê|xấu hổ|mắc cỡ|ghen tị|kẹt xe|ồn)\\b`));
 /** Câu chỉ là NÓI QUÁ ("đói muốn chết") — trả câu đã bỏ phần nói quá ("đói quá") để các lớp khác đáp như thường; null nếu không phải. */
 export function hyperboleOnly(text: string): string | null {
   const n = ` ${normalizeVi(text)} `;
   // (22/10: "mệt mỏi quá muốn chết luôn" — kiệt sức về tinh thần, không chỉ nói quá → để lớp hỏi han nhẹ nhàng)
   if (!HYPER.test(n) || PASSIVE.test(n) || CHECKIN.test(n) || EMO_DEATH.test(n) || poisonIntent(text)) return null;
+  // 27/11 (bộ test chuyện may rủi): "a rớt đại học rồi, a muốn chết" — chữ "học" trong "đại học" không phải việc học làm mệt, và câu có
+  //   chuyện mất mát / thất bại thật (rớt, mất việc, chia tay, nợ…) thì "muốn chết" KHÔNG được coi là nói quá → để lớp an toàn hỏi han.
+  if (VN(/\b(đại|cao|tiểu|trung|du|bỏ|nghỉ) học( \S+){0,3}? muốn chết\b/).test(n) || HYPER_LOSS.test(n)) return null;
   // Bỏ phần nói quá đi rồi mà vẫn còn tín hiệu khủng hoảng thật ("đói muốn chết, mà a cũng chẳng thiết sống") → không phải nói quá.
   const rest = text
     .replace(VR(/(chết\s+cười|cười\s+(muốn\s+)?(chết|xỉu))/giu), " cười quá trời ")
@@ -1244,8 +1248,10 @@ export function expandTeen(text: string): string {
   s = s.replace(VR(/(^|[^\p{L}])bn(?![\p{L}])/giu), "$1bạn");
   // 27/11 (Kir: "A chưa bh trúng số :((" bị đáp chúc mừng): "bh" sau chữ phủ định là "bao giờ" ("chưa bh", "k bh"),
   //   còn lại là "bây giờ" ("bh a đang ở nhà", "ngay bh").
-  s = s.replace(VR(/(^|[^\p{L}])(chưa|không|ko|k|kh|chẳng|chả|hông|hong|chua|khong) (bh|bgio|bjo|bao h)(?![\p{L}])/giu), "$1$2 bao giờ");
-  s = s.replace(VR(/(^|[^\p{L}])bh(?![\p{L}])/giu), "$1bây giờ");
+  //   (câu gõ KHÔNG DẤU giữ không dấu "bao gio" / "bay gio" — chèn chữ có dấu làm bộ đoán dấu bỏ qua cả câu, xem "lam gi" bên dưới)
+  const plainBh = !/[\u0080-\uFFFF]/.test(s);
+  s = s.replace(VR(/(^|[^\p{L}])(chưa|không|ko|k|kh|chẳng|chả|hông|hong|khum|chx|chua|khong) (bh|bgio|bjo|bao h)(?![\p{L}])/giu), plainBh ? "$1$2 bao gio" : "$1$2 bao giờ");
+  s = s.replace(VR(/(^|[^\p{L}])bh(?![\p{L}])/giu), plainBh ? "$1bay gio" : "$1bây giờ");
   // "lm j", "làm j" → làm gì; "m/t + động từ" là mày/tao (khác "5 m" = mét); "nv quán" = nhân viên.
   // (05/11: câu gõ KHÔNG DẤU — "la voi dung lm j" — giữ không dấu "lam gi" để bộ đoán dấu vẫn đọc cả câu; chèn "làm gì" có dấu
   //   làm câu thành nửa có dấu, bộ đoán dấu bỏ qua → "la voi" không ra "lá vối")
