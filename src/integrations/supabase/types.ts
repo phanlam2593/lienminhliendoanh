@@ -883,6 +883,54 @@ export type Database = {
           },
         ]
       }
+      lomi_ai_eval: {
+        Row: {
+          batch: string
+          created_at: string
+          done_at: string | null
+          error: string | null
+          id: number
+          in_tok: number | null
+          label: string | null
+          ms: number | null
+          note: string | null
+          out_tok: number | null
+          replies: Json | null
+          status: string
+          turns: Json
+        }
+        Insert: {
+          batch: string
+          created_at?: string
+          done_at?: string | null
+          error?: string | null
+          id?: number
+          in_tok?: number | null
+          label?: string | null
+          ms?: number | null
+          note?: string | null
+          out_tok?: number | null
+          replies?: Json | null
+          status?: string
+          turns: Json
+        }
+        Update: {
+          batch?: string
+          created_at?: string
+          done_at?: string | null
+          error?: string | null
+          id?: number
+          in_tok?: number | null
+          label?: string | null
+          ms?: number | null
+          note?: string | null
+          out_tok?: number | null
+          replies?: Json | null
+          status?: string
+          turns?: Json
+        }
+        Relationships: []
+      }
       lomi_claude_answers: {
         Row: {
           answer: string | null
@@ -910,6 +958,21 @@ export type Database = {
           last_hit_at?: string | null
           question?: string
           scope?: string
+        }
+        Relationships: []
+      }
+      lomi_eval_keys: {
+        Row: {
+          created_at: string
+          key: string
+        }
+        Insert: {
+          created_at?: string
+          key: string
+        }
+        Update: {
+          created_at?: string
+          key?: string
         }
         Relationships: []
       }
