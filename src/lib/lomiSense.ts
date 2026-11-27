@@ -804,12 +804,15 @@ export function bareDishReply(raw: string): SenseReply | null {
 //   rớt / trượt, so với người khác ("ai cũng đậu chỉ có a rớt"), vui mà kèm chuyện buồn ("được tăng lương mà bị chuyển đi xa"),
 //   ước / mong ("ước gì trúng số", "khi nào a mới được thăng chức") và tin vui thật ("cuối cùng a cũng trúng số").
 // So trên câu KHÔNG DẤU (VN tự đối chiếu dạng có dấu) nên câu gõ không dấu / teen code cũng hiểu.
-const LK_NEG = "(chưa|không|ko|k|kh|chẳng|chả|hông|hong|khum|chx|kbh|hổng)";
-const LK_FILL = "( (bao giờ|bao gio|từng|hề|có|được|đc|dc|còn|thể|mua|ai|lần nào|nổi|kịp))*";
-const LK_EXAM = "(đậu|đỗ)(?= (đại học|cao đẳng|phỏng vấn|tốt nghiệp|nguyện vọng|rồi|nổi|luôn|nữa|môn|kỳ thi|kì thi|bằng|vào|trường|lớp|công chức|thạc sĩ|cấp 3|lần nào|bao giờ)\\b| *$)";
-const LK_GOOD = `(trúng (xổ số|vé số|số|thưởng|giải|vietlott|độc đắc|tờ nào|lần nào)|trúng|tăng lương|thăng chức|lên chức|nhận việc|nhận vào làm|được khen|khen|thưởng tết|thưởng|${LK_EXAM}|có việc làm|có việc(?! gì)|qua môn|qua phỏng vấn|may mắn|hên|gặp may)`;
+const LK_NEG = "(chưa|không|ko|k|kh|hk|hok|chẳng|chả|hông|hong|khum|chx|kbh|hổng|hem)";
+const LK_FILL = "( (bao giờ|bao gio|từng|hề|có|được|đc|dc|còn|thể|mua|ai|lần nào|lần mô|nổi|kịp|xin))*";
+const LK_EXAM = "(đậu|đỗ)(?= (đại học|cao đẳng|phỏng vấn|tốt nghiệp|nguyện vọng|rồi|nổi|luôn|nữa|môn|kỳ thi|kì thi|bằng|vào|trường|lớp|công chức|thạc sĩ|cấp 3|lần nào|bao giờ|thủ khoa|á khoa)\\b| *$)";
+const LK_PRIZE = "(giải (nhất|nhì|ba|tư|khuyến khích|đặc biệt|độc đắc|gì)|đạt giải|được giải|vô địch|huy chương)";
+const LK_GOOD = `(trúng (xổ số|vé số|số|thưởng|giải|vietlott|độc đắc|tờ nào|lần nào|lần mô)|trúng|tăng lương|thăng chức|lên chức|nhận việc|nhận vào làm|xin (được )?việc|được khen|khen|thưởng tết|thưởng|${LK_EXAM}|có việc làm|có việc(?! gì)|qua môn|qua phỏng vấn|may mắn|hên|gặp may|${LK_PRIZE})`;
 // (chỉ khi câu nói RÕ vé số: "trật" một mình là trật khớp, "xịt" là thuốc xịt)
-const LOTTO = VN(/\b(trúng (có )?(1|một|2|hai) (số|con số)|trật (có )?(1|một|2|hai) (số|con số)|trúng (xổ số|vé số|số|vietlott|độc đắc|tờ nào|\d+ ?(triệu|tr|trăm|nghìn|ngàn|k|tỷ|tỉ|củ))|vé số|xổ số|vietlott|dò số|độc đắc|(chục|mấy|\d+) tờ|tờ nào)\b/);
+const LOTTO = VN(/\b(trúng (có )?(1|một|2|hai) (số|con số)|trật (có )?(1|một|2|hai) (số|con số)|trúng (xổ số|vé số|số|vietlott|độc đắc|tờ nào|\d+ ?(triệu|tr|trăm|nghìn|ngàn|k|tỷ|tỉ|củ))|vé số|xổ số|vietlott|dò số|độc đắc|(chục|mấy|\d+) tờ|tờ nào|(mua|dò)( \S+){0,5} (trật|xịt)|số (nhọ|đen|xui))\b/);
+// Chữ tận cùng vô lý của câu mỉa ("a mà trúng số chắc trời sập", "… thì heo biết bay")
+const LK_ABSURD = "(heo biết bay|lợn biết bay|trời sập|mặt trời mọc (đằng|hướng|ở) tây|tận thế|có mà mơ|nằm mơ|chuyện lạ|gà mọc răng|chó biết nói)";
 const LK = {
   neg: VN(new RegExp(`\\b${LK_NEG}${LK_FILL} ${LK_GOOD}\\b`)),
   rhet: [
@@ -817,75 +820,167 @@ const LK = {
     VN(/\b(trúng|đậu|đỗ) đâu mà\b/),
     VN(new RegExp(`\\blàm gì có (chuyện )?(\\S+ ){0,2}${LK_GOOD}\\b`)),
     VN(new RegExp(`\\bđâu có ${LK_GOOD}\\b`)),
+    // mỉa: "trúng cái nịt", "trúng số gì tầm này", "a mà trúng số chắc trời sập", "kiếp sau mới trúng", "mua bao nhiêu cũng trật"
+    VN(/\btrúng (cái )?(nịt|con khỉ|cái đầu|cục cứt|cái gì|búa)\b/),
+    VN(new RegExp(`\\b${LK_GOOD} gì (tầm này|nổi|mà|trời|đâu)\\b`)),
+    VN(new RegExp(`\\b${LK_GOOD}( \\S+){0,3} (thì|chắc|là)( \\S+){0,2} ${LK_ABSURD}\\b`)),
+    VN(new RegExp(`\\bkiếp sau( \\S+){0,3} ${LK_GOOD}\\b`)),
+    VN(/\b(mua|dò|chơi|đánh|thi|nộp)( \S+){0,3} (bao nhiêu|mấy|hoài|cả đời|mỗi ngày|bao lần)( \S+){0,2} (cũng|vẫn) (trật|xịt|không trúng|chẳng trúng|chả trúng|rớt|trượt|tạch)\b/),
+    VN(/\b(hoài|mãi|toàn) (không|chẳng|chả|hông|ko|k) trúng\b/),
   ],
   miss: [
     VN(/\b(suýt|xém|xíu nữa|tí nữa|hụt)( \S+)? trúng\b/),
-    VN(/\b(trật|xịt|tạch)\b/), // (chỉ tính khi LOTTO — xem missed)
+    VN(/\b(trật|xịt|tạch|nhọ|đen|duyên âm|số đen|số nhọ)\b/), // (chỉ tính khi LOTTO — xem missed)
     VN(/\btrúng gió thì có\b/),
     VN(/\btrúng (có )?(1|một|2|hai) (số|con số)\b/),
   ],
-  fail: VN(/\b(toàn|lại|cứ|hoài|liên tục|mấy lần) (thi )?(rớt|trượt|tạch)\b|\b(rớt|trượt|tạch) (hoài|mãi|suốt|hết|liên tục|mấy lần)\b|\b(thi )?(rớt|trượt|tạch|bị loại|bị đánh rớt|bị đánh trượt)( \S+)?( (đại học|cao đẳng|phỏng vấn|tốt nghiệp|môn|nguyện vọng|kỳ thi|kì thi|bằng lái|công chức|vòng|cấp 3))|^((a|anh|em|e|mình|tui|tôi|t|tao|tớ|con|nó) )?(thi )?(rớt|trượt|tạch)( rồi| luôn| mất rồi)*( :\(+)?$/),
+  fail: VN(/\b(toàn|lại|cứ|hoài|liên tục|mấy lần) (thi )?(rớt|trượt|tạch)\b|\b(rớt|trượt|tạch) (hoài|mãi|suốt|hết|liên tục|mấy lần)\b|\b(nào|đâu|mô) cũng (rớt|trượt|tạch|bị loại|không đậu|không đỗ|bị từ chối)\b|\b(thi )?(rớt|trượt|tạch|bị loại|bị đánh rớt|bị đánh trượt)( \S+)?( (đại học|cao đẳng|phỏng vấn|tốt nghiệp|môn|nguyện vọng|kỳ thi|kì thi|bằng lái|công chức|vòng|cấp 3))|(^|\s)(thi )?(rớt|trượt|tạch|bị loại)( rồi| luôn| mất rồi| nữa| hoài| thật| thiệt)*$/),
+  // "rớt / trượt" của đồ vật, giá cả, chân tay — không phải thi rớt
+  failObj: VN(/\b(điện thoại|đt|đồ|ví|chìa khoá|chìa khóa|răng|tóc|lá|giá|vàng|xe|mạng|wifi|sóng|cân|ký|kg|hạng|rank|chân|tay|nước|hàng|cổ phiếu|coin|tiền ảo|chứng khoán|mưa)\b/),
   compare: VN(/\b(còn|chỉ có|chỉ mình|riêng|mỗi) (a|anh|em|e|mình|tui|tôi|t|tao|tớ)( thì| là)? (không|chưa|chẳng|chả|ko|k|bị|rớt|trượt|tạch|vẫn|lại|toàn)\b/),
   wish: [
     VN(new RegExp(`\\b(ước gì|ước|giá mà|giá như|mong|mong sao|cầu|cầu cho|cầu mong|mơ|mơ được|muốn|thèm|nếu)( \\S+){0,4} ${LK_GOOD}\\b`)),
     VN(new RegExp(`\\b(bao giờ|khi nào|chừng nào|tới bao giờ|đến bao giờ|bao h)( \\S+){0,3} (mới|được)( \\S+){0,2} ${LK_GOOD}\\b`)),
+    VN(new RegExp(`\\bmà ${LK_GOOD}( \\S+){0,3} thì\\b`)),
   ],
   mixed: VN(/\b(mà|nhưng|nhưng mà|có điều|tiếc là|khổ nỗi)( \S+){0,2} (bị|không|chẳng|chả|mất|buồn|lo|xa|ít|chán|mệt|áp lực|sợ|tiếc|khó)\b/),
-  pos: VN(new RegExp(`\\b(trúng (xổ số|vé số|số|thưởng|giải|vietlott|độc đắc|\\d+ ?(triệu|tr|trăm|nghìn|ngàn|k|tỷ|tỉ|củ))|được (tăng lương|thăng chức|nhận việc|nhận vào làm|thưởng|khen)|được( \\S+){1,2} (khen|thưởng|tăng lương)|tăng lương|thăng chức|lên chức|${LK_EXAM}|có việc làm|nhận việc|qua phỏng vấn|qua môn)\\b`)),
+  lostAfter: VN(/\b(mà|nhưng|nhưng mà)( giờ| rồi| sau đó)? (mất hết|tiêu hết|hết sạch|mất sạch|thua hết|nướng hết|đốt hết|bay hết)\b/),
+  pos: VN(new RegExp(`\\b(trúng (xổ số|vé số|số|thưởng|giải|vietlott|độc đắc|\\d+ ?(triệu|tr|trăm|nghìn|ngàn|k|tỷ|tỉ|củ))|được (tăng lương|thăng chức|nhận việc|nhận vào làm|thưởng|khen)|được( \\S+){1,2} (khen|thưởng|tăng lương)|tăng lương|thăng chức|lên chức|${LK_EXAM}|có việc làm|nhận việc|xin được việc|qua phỏng vấn|qua môn|${LK_PRIZE})\\b`)),
+  past: VN(new RegExp(`\\b(hồi xưa|hồi trước|ngày xưa|năm (ngoái|xưa|trước|đó)|có lần|từng)( \\S+){0,3} ${LK_GOOD}\\b`)),
+  // câu cụt: "trúng rồi", "đậu rồi em ơi" / "trật", "lại xịt"
+  bareGood: VN(/^((a|anh|em|e|mình|tui|tôi|t|tao|tớ) )?(trúng|đậu|đỗ|qua)( rồi| luôn| nè| thật| thiệt| rồi nè| rồi nha| á| nha)+$/),
+  bareMiss: VN(/^((a|anh|em|e|mình|tui|tôi|t|tao|tớ) )?(lại )?(trật|xịt|tạch|toang)( rồi| nữa| hoài| luôn| mất rồi| thật| tiếp)*$/),
+  unlucky: VN(/\b(toàn xui|xui (quá|tận mạng|thật|ghê|dữ|hoài|lắm|kinh|xẻo|vãi|vl|như)|xui xẻo|đen (như chó mực|như mực|đủi|thui|quá|vãi)|đen đủi|nhọ (quá|lắm|vãi|ghê)|số (nhọ|đen|xui)|hên xui mà)\b/),
+  bizSlow: VN(/\b(không|chưa|chẳng|chả|hông|hổng|ko|k)( có)?( bán| ra| chốt)( được)? (gì|đơn|hàng|đồng|ly|món|cái|ai)\b|\b(không|chưa|chẳng|chả|hông|hổng|ko|k) (có|được) (đơn|khách|đồng)( nào)?\b|\b(lỗ nặng|lỗ vốn|lỗ quá|lỗ to|lỗ sấp mặt|ế (quá|ẩm|chỏng chơ|hàng|khách)|đìu hiu|vắng (hoe|tanh|khách))\b|\bbán( \S+){0,3} (chưa|không|chẳng) (được|có) (đồng|đơn|khách)\b/),
+  bizWord: VN(/\b(quán|shop|tiệm|bán|đơn|khách|hàng|lỗ|doanh thu|buôn|kinh doanh|cửa hàng|sạp|chợ)\b/),
+  bizGood: VN(/\bchốt( được)? \d+ đơn\b|\bchốt đơn (ầm ầm|liên tục|mỏi tay|quá trời)\b|\bbán (đắt|chạy|hết sạch|được nhiều|đắt như tôm tươi)\b|\bcháy hàng\b|\b(hết|sạch) hàng (rồi|luôn|sớm)\b/),
+  sportLose: VN(/\b(đội|team|clb|câu lạc bộ|tuyển|a|anh|em|mình|tui|tôi)( \S+){0,2} (thua(?! (kém|thiệt|bạn|người|ai|đứa|chị|anh|em|nó|lỗ))|bị loại)( rồi| trận| đậm| tan nát| sát nút| luôn| mất rồi)*\b|^thua( rồi| luôn| trận| đậm)*$/),
+  gamble: VN(/\b(cá độ|cá cược|cờ bạc|đánh bạc|đánh đề|số đề|lô đề|ghi đề|tài xỉu|casino|bài bạc|xì dách|đánh bài|thua lỗ)\b/),
+  worry: VN(/\b(lỡ|nhỡ|ngộ nhỡ|sợ|lo|e là)( \S+){0,3} ((không|chẳng|chả|ko|k|hông) (đậu|đỗ|qua|được nhận|trúng tuyển|được tăng lương|được thăng chức)|rớt|trượt|tạch|bị loại)\b/),
+  ifPlan: VN(new RegExp(`\\bnếu( \\S+){0,3} ${LK_NEG}${LK_FILL} ${LK_GOOD}( \\S+){0,3} thì\\b`)),
+  lottoAsk: VN(/\b(vé số|xổ số|trúng số|vietlott|độc đắc)\b/),
+  askWord: VN(/\b(làm sao|làm thế nào|cách nào|có nên|có phải|nên làm gì|làm gì (đầu tiên|trước|tiếp)|thì sao|bao nhiêu|thế nào|ra sao|ở đâu|khi nào|có cần|cần gì)\b/),
   scam: VN(/\b(lừa|lừa đảo|scam|bị gạt|chiếm đoạt)\b/),
-  health: VN(/\b(sốt|ốm|bệnh|đau|nhức|ho|nôn|ói|tiêu chảy|thuốc|tháng tuổi|độ|bệnh viện|khám|mổ|cấp cứu|trúng gió|trúng độc|trúng thực|trật khớp|bong gân|xịt|bôi|nhỏ mắt|cảm cúm|cảm lạnh|chóng mặt|khó thở|co giật|ngộ độc|dị ứng|bầu|mang thai)\b/),
-  danger: VN(/\b(chết|tự tử|tự sát|tự tử|tự hại|tự làm đau|rạch|nhảy (cầu|lầu|sông)|uống thuốc ngủ|không muốn sống|chẳng muốn sống|sống (chẳng|không|chả)|sống (để )?làm gì|biến mất|kết thúc (tất cả|cuộc đời|mọi thứ)|buông xuôi|tuyệt vọng|đánh|bạo lực|nợ nần|siết nợ|xã hội đen|tín dụng đen)\b/),
+  health: VN(/\b(sốt|ốm|bệnh|đau|nhức|ho|nôn|ói|tiêu chảy|thuốc|tháng tuổi|độ|bệnh viện|khám|mổ|cấp cứu|trúng gió|trúng độc|trúng thực|trật khớp|bong gân|thuốc xịt|xịt (mũi|họng|thuốc)|bôi|nhỏ mắt|cảm cúm|cảm lạnh|chóng mặt|khó thở|co giật|ngộ độc|dị ứng|bầu|mang thai)\b/),
+  danger: VN(/\b(chết|tự tử|tự sát|tự hại|tự làm đau|rạch|nhảy (cầu|lầu|sông)|uống thuốc ngủ|không muốn sống|chẳng muốn sống|sống (chẳng|không|chả)|sống (để )?làm gì|biến mất|kết thúc (tất cả|cuộc đời|mọi thứ)|buông xuôi|tuyệt vọng|đánh|bạo lực|nợ nần|siết nợ|xã hội đen|tín dụng đen)\b/),
 };
-const SAD_FACE = /(😭|🥲|😢|😞|😔|☹|:\(+|huhu|hic)/iu;
+const SAD_FACE = /(😭|🥲|😢|😞|😔|☹|💔|🙃|:\(+|huhu|hic)/iu;
+// Gõ tắt / sai chính tả hay gặp ở mấy câu này (so trên câu không dấu)
+const LK_TYPO: Record<string, string> = { trug: "trung", trun: "trung", truong: "truong", luog: "luong", pv: "phong van", dh: "dai hoc", r: "roi", dc: "duoc", đc: "duoc", hk: "khong", hok: "khong", hem: "khong", ko: "khong" };
+// Người được kể tới (không phải chính người nói): "con a", "vợ a", "ba a", "em gái a", "bạn a", "đồng nghiệp a"
+const LK_WHO = VR(/^(?:\S+\s+){0,2}?(con trai|con gái|con|vợ|chồng|ba|bố|mẹ|má|em gái|em trai|anh trai|chị gái|em|bạn thân|bạn|đồng nghiệp|cháu|ông|bà|người yêu|bồ|sếp|đứa bạn)(?:\s+(?:của\s+)?(?:a|anh|em|e|mình|tui|tôi|t|tao|tớ|chị|c))(?![\p{L}])/u);
+const LK_WHO0 = VR(/^(con trai|con gái|con|vợ|chồng|đứa bạn|bạn thân|đồng nghiệp|sếp)\s/u);
+function luckWho(raw: string): string {
+  const s = low(raw);
+  const m = s.match(LK_WHO) ?? s.match(LK_WHO0);
+  if (!m) return "";
+  const w = m[1];
+  // ("ba bạn" bị đọc là "ba người bạn" nên không đổi được thành "ba anh" — viết "ba của bạn")
+  return /^(bạn|bạn thân|đứa bạn)$/u.test(w) ? "bạn ấy" : w === "ba" ? "ba của bạn" : `${w} bạn`;
+}
 
-export function senseLuck(raw: string, opt: { tarot?: boolean } = {}): SenseReply | null {
+export function senseLuck(raw: string, opt: { tarot?: boolean; thread?: boolean; biz?: boolean } = {}): SenseReply | null {
   const r = low(expandTeen(raw));
   if (!r || r.length > 160) return null;
-  const n = ` ${normalizeVi(r).replace(/[?!.,…]+/g, " ").replace(/\s+/g, " ").trim()} `;
-  const t = n.trim();
+  let t = normalizeVi(r).replace(/[?!.,…]+/g, " ").replace(/\s+/g, " ").trim();
+  t = t.split(" ").map((w) => LK_TYPO[w] ?? w).join(" ");
+  for (let i = 0; i < 3; i++) t = t.replace(/\s+(em oi|e oi|lomi oi|mi oi|ban oi|oi|ne|nha|nhe|a|ah|em|e|mi|lomi|ban)$/u, "");
+  const n = ` ${t} `;
   // Có chữ về sống chết / tự hại → không bao giờ đáp nhẹ kiểu chuyện may rủi: để lớp an toàn / tâm sự xử lý.
   if (LK.danger.test(n)) return null;
   // Chuyện sức khoẻ ("con 2 tháng tuổi sốt 38 độ" — đoán dấu có thể ra "38 đỗ"; "trúng gió", "trúng thực") → để lớp sức khoẻ / cấp cứu đáp.
-  if (LK.health.test(n) || VN(/\b\d+ ?(đậu|đỗ)\b/).test(n)) return null;
+  //   ("a dau dh roi" — bộ đoán dấu có thể ra "đau đh": "đau" + đại học / phỏng vấn là ĐẬU)
+  const nH = n.replace(/ dau (dai hoc|phong van|tot nghiep|nguyen vong|thu khoa|cao dang|cap 3|roi)(?= )/g, " _exam_ ");
+  if (LK.health.test(nH) || VN(/\b\d+ ?(đậu|đỗ)\b/).test(n)) return null;
   if (LK.scam.test(n)) return null; // "trúng số mà bị lừa" — để lớp "bị lừa" chỉ việc cần làm ngay
   const lotto = LOTTO.test(n);
+  // Đang ở giữa một mạch có sẵn (tâm sự, tư vấn kinh doanh, sức khoẻ) → để mạch đó hiểu câu theo ngữ cảnh ("mai a phỏng vấn" → "sợ rớt");
+  //   chỉ giữ chuyện vé số (mạch kia không hiểu chuyện trúng / trật).
+  if (opt.thread && !lotto) return null;
   const hasGood = LK.pos.test(n) || LK.neg.test(n) || lotto;
   const sad = SAD_FACE.test(raw);
+  // (câu PHỦ ĐỊNH kết bằng "nào / gì" là câu kể: "chưa bán được đơn nào", "hổng có trúng gì hết"; "mua bao nhiêu cũng trật" cũng vậy)
+  const ask = (isAskLike(raw) || LK.askWord.test(n)) && !VN(/\b(không|chưa|chẳng|chả|hông|hổng|ko|k)( \S+){0,6} (nào|gì|đâu)( hết| cả| luôn| trơn| hết trơn)*$/).test(t) && !VN(/\b(bao nhiêu|mấy)( \S+){0,2} (cũng|vẫn)\b/).test(n);
+  const who = luckWho(raw);
+  const Who = who ? who.charAt(0).toUpperCase() + who.slice(1) : "";
   const out = (kind: string, text: string): SenseReply & { dream?: boolean } => ({ intent: `luck:${kind}`, text, talk: true, dream: /làm gì đầu tiên|muốn làm là gì|trúng thì làm gì/u.test(text) });
+
+  // Hỏi về vé số — trả lời thật, không chúc mừng ("trúng số có phải đóng thuế không", "mua vé số có phải cờ bạc không", "trúng số thì nên làm gì")
+  // (câu hỏi vặn / so bì / phủ định có dáng câu hỏi — "a có bao giờ trúng số đâu", "làm gì có chuyện a trúng", "… còn a thì không" — là câu KỂ)
+  const negForm = LK.neg.test(n) || LK.rhet.some((re) => re.test(n)) || LK.compare.test(n);
+  if (ask && LK.lottoAsk.test(n) && !negForm) {
+    if (VN(/\b(thuế|đóng thuế|nộp thuế|khấu trừ)\b/).test(n))
+      return out("lottoTax", "Có nha 🙂 Từ 1/7/2026, trúng xổ số chỉ phải nộp **thuế thu nhập cá nhân 10%** trên phần vượt **20 triệu đồng** của **mỗi vé** trong một đợt quay (trước đó là phần vượt 10 triệu). Ví dụ một vé trúng 50 triệu thì thuế là 10% × 30 triệu = 3 triệu. Công ty xổ số **khấu trừ luôn khi trả thưởng**, bạn không cần tự đi khai.\n\nĐể chắc từng trường hợp, bạn hỏi lại công ty xổ số / đại lý lúc lĩnh thưởng nha.");
+    if (VN(/\b(cờ bạc|nghiện|có hại|xấu|tốt không)\b/).test(n))
+      return out("lottoGamble", "Vé số do công ty xổ số của Nhà nước phát hành là trò chơi may rủi **hợp pháp** (còn số đề, lô đề là cờ bạc trái phép). Nhưng bản chất vẫn là may rủi: tính chung thì người mua luôn bỏ ra nhiều hơn nhận về.\n\nMua cho vui thì nên đặt một mức nhỏ cố định, mất cũng không ảnh hưởng ăn ở. Nếu thấy mình mua để **gỡ**, mua nhiều hơn dự tính, hay giấu người nhà — đó là dấu hiệu đang sa vào rồi, kể Lomi nghe nha 🤝");
+    if (VN(/\b(trúng|trúng số|trúng thưởng)( \S+){0,3} (nên|phải|cần) (làm gì|làm sao)|\btrúng( \S+){0,3} (làm gì|thì sao)\b/).test(n))
+      return out("lottoWon", "Lỡ trúng thật thì mấy việc nên làm nè 🍀\n• **Giữ kín**, đừng khoe rộng — kể cả trên mạng\n• **Cất vé thật kỹ**, đừng để ướt, rách, nhàu; chụp lại hai mặt vé\n• Đến công ty xổ số (hoặc đại lý lớn) **lĩnh thưởng sớm**, vé có hạn lĩnh thưởng — mang theo căn cước\n• Giải lớn thì nhận qua tài khoản ngân hàng cho an toàn; thuế thu nhập cá nhân công ty sẽ khấu trừ luôn\n• **Đừng quyết chi lớn ngay** — cho mình vài tuần bình tĩnh, trả nợ trước, rồi mới tính mua sắm, đầu tư\n\nCó dự định gì chưa nè? 😄");
+    return null;
+  }
+
+  if (LK.gamble.test(n)) return null; // cá độ, lô đề, thua bài — để lớp tâm sự (nghiện / nợ) nghe
   // "a chưa có người yêu", "vẫn ế" — chuyện một mình, hỏi nhẹ (không chúc mừng, không coi là chuyện không may)
-  if (VN(/\b(chưa|không|ko|k|chẳng|chả|hông|chx) (có )?(người yêu|ny|bồ|bạn gái|bạn trai|gấu)\b|\b(vẫn|còn|đang) ế\b|\bế (quá|lâu rồi|mấy năm|hoài)\b/).test(n) && !VN(/\b(bán|hàng|quán|khách|tiệm|đơn)\b/).test(n))
+  if (VN(/\b(chưa|không|ko|k|chẳng|chả|hông|chx) (có )?(người yêu|ny|bồ|bạn gái|bạn trai|gấu)\b|\b(vẫn|còn|đang) ế\b|\bế (quá|lâu rồi|mấy năm|hoài)\b/).test(n) && !LK.bizWord.test(n))
     return out("single", pick([
       "Chưa có người yêu hả 😄 Bạn đang thấy thoải mái với chuyện một mình, hay dạo này cũng muốn có ai đó bên cạnh rồi?",
       "Một mình cũng có cái tự do của nó mà 😄 Mà bạn đang muốn tìm ai đó, hay chỉ kể cho vui thôi nè?",
     ]));
-  // Niềm vui bị phủ định hẳn — "a chưa bao giờ thấy hạnh phúc", "a hết vui rồi", "chẳng còn thấy vui nữa" (không phải "chưa bao giờ vui NHƯ hôm nay")
+  // Niềm vui bị phủ định hẳn — "a chưa bao giờ thấy hạnh phúc", "a hết vui rồi" (không phải "chưa bao giờ vui NHƯ hôm nay")
   //   (chỉ câu ngắn chỉ nói mỗi chuyện đó — câu dài có chuyện khác như "làm 12 tiếng … không còn thấy vui" để thư viện tâm sự nhận đúng chủ đề)
   if (t.split(" ").length <= 8 && VN(/\b((chưa|không|chẳng|chả|ko|k) (bao giờ|từng|hề)( thấy| cảm thấy| được)?|hết|mất) (vui|hạnh phúc|yêu đời|vui vẻ|sướng)\b(?! (như|bằng|hơn|đến vậy))/).test(n))
     return out("nohappy", pick([
       "Nghe vậy Lomi thương ghê 🥺 Cảm giác lâu rồi không thấy vui thật nặng lòng lắm. Dạo này có chuyện gì làm bạn mệt hả, kể Lomi nghe nha?",
       "Ôm bạn một cái nè 🫂 Không thấy vui lâu vậy chắc bạn gồng nhiều lắm. Chuyện gì đang đè lên bạn vậy?",
     ]));
+  // Buôn bán ế / đắt — "quán a không bán được gì", "shop chưa có đơn nào", "chốt được 20 đơn"
+  if (!opt.biz && LK.bizWord.test(n) && LK.bizSlow.test(n) && !ask)
+    return out("bizSlow", pick([
+      "Ngày ế khách thì nản thật 😣 Bán cả ngày mà không ra đơn ai cũng sốt ruột hết. Bạn bán gì vậy — có quán hay bán online? Kể Lomi nghe chút, mình cùng tìm cách kéo khách nha.",
+      "Ui, ế vậy là mệt lòng lắm 😔 Có hôm vắng vậy thôi bạn. Bạn đang bán món gì, ở đâu, để Lomi cùng nghĩ cách nha?",
+    ]));
+  if (!opt.biz && LK.bizGood.test(n) && !ask && !sad)
+    return out("bizGood", pick(["Buôn may bán đắt vậy là quá đỉnh luôn 🎉 Chúc mừng bạn nha! Hôm nay có bí quyết gì vậy, kể Lomi nghe với?", "Chốt đơn ầm ầm vậy là vui lây luôn 🥳 Chúc mừng bạn nha! Nhớ nghỉ tay uống miếng nước nữa đó."]));
   // So với người khác — "ai cũng đậu chỉ có a rớt", "bạn a trúng số còn a thì không"
   if ((hasGood || VN(/\b(rớt|trượt|tạch)\b/).test(n)) && LK.compare.test(n))
     return out("compare", pick([
       "Thấy người khác được còn mình thì chưa, chạnh lòng lắm ha 😔 Cảm giác đó bình thường mà, không có nghĩa là bạn kém hơn ai đâu. Chuyện sao vậy, kể Lomi nghe với?",
       "Đứng cạnh người khác mà mình chưa được như vậy thì tủi thật 🥺 Mỗi người một nhịp mà bạn. Bạn đang thấy buồn hay thấy áp lực nhiều hơn?",
     ]));
-  // Rớt / trượt — "a rớt đại học rồi", "a trượt phỏng vấn rồi"
-  if (LK.fail.test(t) && !lotto)
-    return out("fail", pick([
-      "Ui, rớt thì buồn và hụt hẫng lắm 😔 Bạn đã cố gắng mà kết quả không như mong muốn, thấy nặng lòng là đúng rồi. Bạn muốn kể Lomi nghe chút không — hay mình cùng tính bước tiếp theo?",
-      "Thương bạn ghê 🫂 Một lần không qua không nói lên giá trị của bạn đâu. Giờ bạn đang thấy sao — buồn, tiếc hay lo cho chuyện sắp tới?",
+  // Lo trước kết quả — "lỡ a rớt thì sao", "a sợ năm nay không đậu" (đang tâm sự dở thì để mạch tâm sự hiểu cả câu)
+  if (!opt.thread && LK.worry.test(n))
+    return out("worry", pick([
+      "Lo trước kết quả là chuyện ai cũng bị nè 🫂 Mà dù ra sao thì bạn vẫn còn đường khác, không phải hết đâu. Bạn đang chờ kết quả gì vậy, kể Lomi nghe nha?",
+      "Chờ kết quả mà cứ nghĩ tới chuyện xấu nhất thì mệt lắm ha 🥺 Bạn đã làm hết sức rồi mà. Chuyện gì vậy, kể Lomi nghe với?",
     ]));
+  // Giả định có kế hoạch — "nếu a không được tăng lương thì a nghỉ"
+  if (!opt.thread && LK.ifPlan.test(n))
+    return out("ifPlan", "Nghe như bạn đã tính trước đường lui rồi ha 🤔 Ngoài chuyện đó ra, còn điều gì ở chỗ hiện tại làm bạn lấn cấn không? Kể Lomi nghe, mình cùng cân nhắc nha.");
+  // Rớt rồi hỏi bước tiếp — "rớt đại học thì làm gì tiếp", "trượt phỏng vấn rồi giờ sao"
+  if (LK.fail.test(t.replace(/ (thi|thì|giờ|rồi|nên|phải)( \S+){0,4}$/u, "")) || VN(/\b(rớt|trượt|tạch)( \S+){0,3} (thì|rồi|giờ)( \S+){0,2} (làm gì|tính sao|sao|đi đâu|học gì|làm sao)\b/).test(n))
+    if (ask && VN(/\b(làm gì|tính sao|thì sao|giờ sao|đi đâu|học gì|làm sao|nên)\b/).test(n) && !LK.failObj.test(n))
+      return out("failAsk", VN(/\b(đại học|cao đẳng|nguyện vọng|thi)\b/).test(n)
+        ? "Rớt thì buồn thật, nhưng còn nhiều đường lắm nè 🫂\n• **Nguyện vọng bổ sung** — nhiều trường còn xét đợt sau, canh thông báo của trường và Bộ\n• **Cao đẳng / trung cấp nghề** — học ngắn hơn, ra làm sớm, sau này vẫn liên thông lên đại học được\n• **Ôn thi lại năm sau** — nếu bạn thật sự muốn ngành đó, một năm chuẩn bị kỹ không phí đâu\n• **Vừa đi làm vừa học** (văn bằng 2, hệ từ xa) cũng là một lựa chọn\n\nBạn đang nghiêng về hướng nào, hay muốn kể Lomi nghe mình thích ngành gì trước?"
+        : "Trượt một lần chưa phải hết đâu 🫂 Mình làm vầy nha:\n• Nếu được, **xin nhận xét** từ bên tuyển dụng — biết hụt ở đâu để sửa\n• Ghi lại mấy câu bị hỏi khó, **tập trả lời lại** cho lần sau\n• Rải hồ sơ thêm vài chỗ, đừng dồn hết hy vọng vào một nơi\n\nBạn trượt vòng nào vậy, kể Lomi nghe để mình chuẩn bị kỹ hơn cho lần tới nha?");
+  // Rớt / trượt — "a rớt đại học rồi", "con a thi rớt rồi", "năm ngoái đậu mà năm nay rớt", "chỗ nào cũng trượt"
+  if (LK.fail.test(t) && !lotto && !LK.failObj.test(n))
+    return out("fail", who
+      ? pick([`${Who} rớt hả 😔 Chắc ${who} buồn lắm, mà bạn cũng lo cho ${who} nữa ha. ${Who} giờ sao rồi bạn?`, `Thương ${who} ghê 🫂 Một lần không qua không nói lên gì hết. Giờ ${who} thấy sao rồi bạn, có cần Lomi gợi ý cách nói chuyện với ${who} cho nhẹ lòng không?`])
+      : pick([
+        "Ui, rớt thì buồn và hụt hẫng lắm 😔 Bạn đã cố gắng mà kết quả không như mong muốn, thấy nặng lòng là đúng rồi. Bạn muốn kể Lomi nghe chút không — hay mình cùng tính bước tiếp theo?",
+        "Thương bạn ghê 🫂 Một lần không qua không nói lên giá trị của bạn đâu. Giờ bạn đang thấy sao — buồn, tiếc hay lo cho chuyện sắp tới?",
+      ]));
+  // Thua (thi đấu) — "đội a thua rồi"
+  if (LK.sportLose.test(n) && !ask)
+    return out("lose", pick(["Thua hả 😩 Tiếc ghê! Trận gì vậy bạn, thua sát nút hay cách biệt?", "Ui, thua rồi hả 😣 Tiếc thiệt chứ. Thôi trận sau gỡ lại nha! Trận đó sao vậy bạn?"]));
   // Ước / mong (không phải tin vui đã xảy ra). Đang ở tab Tarot thì để Tarot hiểu là câu hỏi bói.
   if (!opt.tarot && LK.wish.some((re) => re.test(n)) && !LK.neg.test(n))
     return out("wish", lotto
       ? pick(["Ai mà không mơ trúng số ha 😆 Nếu trúng thật thì bạn tính làm gì đầu tiên nè?", "Mong lắm luôn ha 😆 Mà nếu trúng thật, món đầu tiên bạn muốn làm là gì nè?"])
       : pick(["Lomi mong chuyện đó sớm tới với bạn nha 🍀 Bạn mong chuyện này lâu chưa, có gì đang làm bạn lo không?", "Mong là sắp tới thôi 🍀 Kể Lomi nghe thêm đi — bạn đang chờ chuyện này ra sao rồi?"]));
-  // Phủ định / hỏi vặn / hụt — "chưa bao giờ trúng số", "có trúng đâu", "trật có 1 số"
+  // Phủ định / hỏi vặn / mỉa / hụt — "chưa bao giờ trúng số", "có trúng đâu", "trúng cái nịt", "trật có 1 số"
   // "về quê sợ không có việc", "lỡ không đậu thì sao" — lo trước / giả sử, chưa xảy ra → để lớp tâm sự hiểu cả câu.
   if (VN(new RegExp(`\\b(sợ|lo|lỡ|nếu|giả sử|nhỡ|ngộ nhỡ|e là|chắc là)( \\S+){0,2} ${LK_NEG}${LK_FILL} ${LK_GOOD}\\b`)).test(n)) return null;
-  const negd = LK.neg.test(n) || LK.rhet.some((re) => re.test(n));
+  const negd = (LK.neg.test(n) || LK.rhet.some((re) => re.test(n))) && !(ask && !lotto && !LK.rhet.some((re) => re.test(n)) && !VN(/\b(bao giờ|lần nào)\b/).test(n));
   // "đoán không trúng", "bắn không trúng" — chữ "trúng" ở đây không phải trúng thưởng.
   if (negd && !lotto && VN(/\b(đoán|bắn|ném|đá|sút|chọn|nói|đánh|chích|tiêm|bấm|gõ)( \S+){0,2} (không|chưa|chẳng|chả|ko|k|hông) trúng\b/).test(n)) return null;
   const missed = lotto && LK.miss.some((re) => re.test(n));
@@ -895,17 +990,36 @@ export function senseLuck(raw: string, opt: { tarot?: boolean } = {}): SenseRepl
         "Ui, suýt nữa là trúng rồi, tiếc dữ lắm luôn 😩 Hụt sát nút vậy ai cũng ấm ức hết. Thôi coi như hôm nay hên ở chỗ khác nha — mà bạn đã tính trúng thì làm gì chưa? 😆",
         "Trời, sát nút luôn hả 😫 Tiếc thiệt chứ! Vé số mình coi như mua niềm vui thôi nha, đừng mua dồn để gỡ đó.",
       ]));
-    if (lotto || (VN(/\btrúng\b/).test(n) && t.split(" ").length <= 9 && !VN(/\b(đậu|đỗ|lương|chức|việc|khen|thưởng|bắn|đoán|ném|đá|sút)\b/).test(n)))
-      return out("nolotto", pick([
-        "Huhu chưa tới lượt bạn thôi mà 😆 Vé số thì mình coi như mua niềm vui, đừng dồn nhiều tiền vào nha. Mà nếu trúng thật thì bạn tính làm gì đầu tiên nè?",
-        "Ui, khoản này Lomi cũng chưa trúng lần nào nè 🥲 Vé số coi như mua chút hy vọng thôi, đừng mua nhiều quá nha. Dạo này bạn đang cần tiền cho việc gì hả?",
+    if (lotto || (VN(/\btrúng\b/).test(n) && t.split(" ").length <= 12 && !VN(/\b(đậu|đỗ|lương|chức|việc|khen|thưởng|bắn|đoán|ném|đá|sút|giải)\b/).test(n)))
+      return out("nolotto", who
+        ? pick([`Mua hoài mà chưa trúng thì ${who} kiên trì ghê luôn 😆 Vé số coi như niềm vui nho nhỏ của ${who} thôi ha, miễn đừng mua nhiều quá là được.`])
+        : pick([
+          "Huhu chưa tới lượt bạn thôi mà 😆 Vé số thì mình coi như mua niềm vui, đừng dồn nhiều tiền vào nha. Mà nếu trúng thật thì bạn tính làm gì đầu tiên nè?",
+          "Ui, khoản này Lomi cũng chưa trúng lần nào nè 🥲 Vé số coi như mua chút hy vọng thôi, đừng mua nhiều quá nha. Dạo này bạn đang cần tiền cho việc gì hả?",
+        ]));
+    return out("nogood", who
+      ? pick([`Vậy là ${who} chưa được như mong muốn rồi 🥺 ${Who} có buồn nhiều không bạn?`, `Ui, ${who} chưa được như ý rồi 😔 Bạn có lo cho ${who} không, kể Lomi nghe với?`])
+      : pick([
+        "Chưa được như mong muốn chắc cũng hơi nản ha 😔 Chuyện sao vậy, kể Lomi nghe với?",
+        "Ui, vậy là chưa được như ý rồi 🥺 Bạn đang thấy buồn hay chỉ hơi tiếc thôi? Kể Lomi nghe nè.",
       ]));
-    return out("nogood", pick([
-      "Chưa được như mong muốn chắc cũng hơi nản ha 😔 Chuyện sao vậy, kể Lomi nghe với?",
-      "Ui, vậy là chưa được như ý rồi 🥺 Bạn đang thấy buồn hay chỉ hơi tiếc thôi? Kể Lomi nghe nè.",
-    ]));
   }
-  if (!LK.pos.test(n) || isAskLike(raw)) return null;
+  // Xui liên tục — "a xui tận mạng", "đen như chó mực", "hên xui mà toàn xui"
+  if (LK.unlucky.test(n) && !ask)
+    return out("unlucky", pick(["Nghe là thấy dạo này xui dồn dập ha 😣 Có chuyện gì vừa xảy ra vậy bạn, kể Lomi nghe với?", "Xui liên tục thì ai cũng nản 🥲 Mà xui tới rồi thì hên cũng sắp tới thôi. Vụ gì vậy bạn?"]));
+  // Câu cụt — "trật", "lại xịt" / "trúng rồi", "đậu rồi em ơi"
+  if (LK.bareMiss.test(t)) return out("miss", pick(["Lại xịt hả 😩 Tiếc ghê. Vụ gì vậy bạn, kể Lomi nghe với?", "Ui, trật rồi hả 🥲 Tiếc thiệt. Chuyện gì vậy bạn?"]));
+  // Có rồi mà mất — "a từng trúng mà giờ mất hết rồi"
+  if ((hasGood || VN(/\b(trúng|đậu|đỗ|thắng)\b/).test(n)) && LK.lostAfter.test(n)) return out("lostAfter", "Có rồi mà mất hết thì còn tiếc hơn chưa từng có nữa 😔 Chuyện sao vậy bạn, kể Lomi nghe với?");
+  if (ask) return null;
+  if (LK.bareGood.test(t))
+    return out("good", pick(["Thật hả 🎉🥳 Chúc mừng bạn nha! Vụ gì vậy, kể Lomi nghe với!", "Wow chúc mừng bạn 🎊 Nghe mà Lomi vui lây! Kể Lomi nghe chi tiết đi nào!"]));
+  if (!LK.pos.test(n)) return null;
+  // Chuyện đã qua — "hồi xưa a từng trúng số 1 lần"
+  if (LK.past.test(n))
+    return out("past", lotto
+      ? "Ồ từng trúng luôn hả 😄 Hồi đó chắc vui lắm ha! Trúng dịp nào vậy, kể Lomi nghe chút đi."
+      : "Nghe kể lại thôi mà Lomi cũng thấy vui lây 😄 Hồi đó chắc bạn mừng lắm ha! Kể Lomi nghe thêm đi.");
   // Vui mà kèm chuyện không vui — "được tăng lương mà bị chuyển đi xa :((", "đậu rồi mà không vui nổi"
   if (LK.mixed.test(n) || sad)
     return out("mixed", pick([
@@ -913,9 +1027,13 @@ export function senseLuck(raw: string, opt: { tarot?: boolean } = {}): SenseRepl
       "Tin vui mà lòng chưa vui trọn được ha 🫂 Chuyện gì đang làm bạn lăn tăn vậy?",
     ]));
   // Tin vui thật — "cuối cùng a cũng trúng số", "không tin nổi a đậu đại học rồi", "a trúng 2 triệu nè"
-  if (t.split(" ").length > 16) return null;
+  if (t.split(" ").length > 18) return null;
+  if (who)
+    return out("good", lotto
+      ? `Trời, ${who} trúng số hả 🎉🥳 Chúc mừng cả nhà nha! Nhớ dặn ${who} cất vé thật kỹ, đừng kể rộng quá đó.`
+      : pick([`Ui chúc mừng ${who} nha 🎉🥳 ${Who} chắc vui lắm, mà bạn chắc cũng tự hào ghê! Kể Lomi nghe thêm với.`, `Tin vui quá trời 🎊 Chúc mừng ${who} nha! Cả nhà tính ăn mừng sao nè?`]));
   // Được khen — vui nhẹ, không làm quá như đậu đại học / trúng số
-  if (!lotto && VN(/\bkhen\b/).test(n) && !VN(/\b(tăng lương|thăng chức|lên chức|đậu|đỗ|nhận việc|thưởng|trúng)\b/).test(n))
+  if (!lotto && VN(/\bkhen\b/).test(n) && !VN(/\b(tăng lương|thăng chức|lên chức|đậu|đỗ|nhận việc|thưởng|trúng|giải|vô địch)\b/).test(n))
     return out("good", pick(["Ui được khen hả 😄 Nghe mà Lomi vui lây! Ai khen bạn vậy, khen chuyện gì nè?", "Ui được khen hả 😆 Lomi vui lây luôn, công sức của bạn có người thấy rồi đó! Kể Lomi nghe với."]));
   return out("good", lotto
     ? pick(["Trời ơi trúng thật hả 🎉🥳 Chúc mừng bạn nha! Nhớ cất vé thật kỹ và đừng kể rộng quá nha. Tính ăn mừng sao nè?", "Wow chúc mừng bạn 🎊 Hên ghê luôn! Bạn định dùng tiền trúng làm gì nè?"])

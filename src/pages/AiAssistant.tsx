@@ -2443,8 +2443,8 @@ export function AiChat({
       // Lomi vừa hỏi "nếu trúng thì tính làm gì đầu tiên?" → câu này là điều người dùng mơ, đáp theo đó (chuyện lo thật thì để lớp sau nghe).
       const dr = lastL?.role === "assistant" && lastL.routed === "luck-dream" ? senseDream(raw) : null;
       if (dr) return localReply(q, { role: "assistant", content: dr.text, local: true, sense: true });
-      const lk = senseLuck(raw, { tarot: lomiTab.cur === "tarot" || !!(lastL?.role === "assistant" && (lastL.tarot || lastL.tarotRef)) });
-      if (lk) return localReply(q, { role: "assistant", content: lk.text, local: true, sense: true, ...("dream" in lk && lk.dream ? { routed: "luck-dream" } : {}), ...(lk.intent === "luck:good" ? { heart: "ev:goodnews", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {}) });
+      const lk = senseLuck(raw, { tarot: lomiTab.cur === "tarot" || !!(lastL?.role === "assistant" && (lastL.tarot || lastL.tarotRef)), thread: !!(lastL?.role === "assistant" && (lastL.heart || lastL.biz || lastL.bizPick || lastL.bizTopicPick || lastL.health) && !lastL.routed?.startsWith("luck")), biz: !!detectBizTopic(q) });
+      if (lk) return localReply(q, { role: "assistant", content: lk.text, local: true, sense: true, routed: "dream" in lk && lk.dream ? "luck-dream" : "luck", ...(lk.intent === "luck:good" ? { heart: "ev:goodnews", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {}) });
     }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.
