@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
   const batch = String(body?.batch ?? "");
   const system = String(body?.system ?? "");
   const model = String(body?.model ?? Deno.env.get("ANTHROPIC_MODEL") ?? "claude-haiku-5-5");
-  const limit = Math.min(Math.max(Number(body?.limit ?? 6), 1), 12);
+  const limit = Math.min(Math.max(Number(body?.limit ?? 6), 1), 20);
   const maxTokens = Math.min(Math.max(Number(body?.max_tokens ?? 500), 50), 1200);
   if (!batch || !system) return json({ error: "batch/system" }, 400);
   const key = Deno.env.get("ANTHROPIC_API_KEY");
@@ -29,19 +29,26 @@ Deno.serve(async (req) => {
   if (!rows?.length) return json({ done: 0, left: 0 });
   await admin.from("lomi_ai_eval").update({ status: "running" }).in("id", rows.map((r) => r.id));
 
+  // (27/11: tài khoản Anthropic giới hạn số yêu cầu chạy cùng lúc — chạy TUẦN TỰ từng ca, gặp 429 / 529 thì chờ rồi thử lại,
+  //   để bài chạy thử không làm nghẽn lomi-claude của người dùng thật)
   const call = async (messages: { role: string; content: string }[]) => {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model, max_tokens: maxTokens, system, messages }),
-    });
-    if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 200)}`);
-    const d = await res.json();
+    let res: Response | null = null;
+    for (let k = 0; k < 5; k++) {
+      res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+        body: JSON.stringify({ model, max_tokens: maxTokens, system, messages }),
+      });
+      if (res.status !== 429 && res.status !== 529) break;
+      await new Promise((r) => setTimeout(r, 1500 * 2 ** k));
+    }
+    if (!res!.ok) throw new Error(`${res!.status} ${(await res!.text()).slice(0, 200)}`);
+    const d = await res!.json();
     const text = (d?.content ?? []).filter((b: any) => b?.type === "text").map((b: any) => b.text).join("\n").trim();
     return { text, inTok: d?.usage?.input_tokens ?? 0, outTok: d?.usage?.output_tokens ?? 0 };
   };
 
-  await Promise.all(rows.map(async (r) => {
+  for (const r of rows) {
     const t0 = Date.now();
     const msgs: { role: string; content: string }[] = [];
     const replies: string[] = [];
@@ -58,7 +65,7 @@ Deno.serve(async (req) => {
     } catch (e) {
       await admin.from("lomi_ai_eval").update({ status: "error", replies, error: String(e).slice(0, 300) }).eq("id", r.id);
     }
-  }));
+  }
   const { count } = await admin.from("lomi_ai_eval").select("id", { count: "exact", head: true }).eq("batch", batch).eq("status", "pending");
   return json({ done: rows.length, left: count ?? 0 });
 });
