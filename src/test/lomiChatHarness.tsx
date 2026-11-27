@@ -98,6 +98,9 @@ export type ChatOpts = {
   seed?: number;
   /** Ngôn ngữ giao diện app (22/10) — "en" để chạy Lomi ở chế độ tiếng Anh như người dùng đã đổi ngôn ngữ trong app. */
   lang?: "vi" | "en";
+  /** 27/11: tab Tâm sự trò chuyện bằng AI — người dùng đã đồng ý ("yes"), từ chối ("no", mặc định: test phần chạy trên máy),
+   *  hay chưa chọn (null → app hỏi đồng ý). */
+  talkConsent?: "yes" | "no" | null;
 };
 function seeded(seed: number) {
   let a = seed >>> 0;
@@ -125,6 +128,8 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
   localStorage.clear();
   if (opts.lang) localStorage.setItem("lang", opts.lang);
   if (opts.tab) localStorage.setItem("lomi:tab", opts.tab);
+  const tc = opts.talkConsent === undefined ? "no" : opts.talkConsent;
+  if (tc) localStorage.setItem(`lomi_talk_ai_${UID}`, tc);
   const pre = opts.history ?? [];
   if (pre.length) localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
   Element.prototype.scrollIntoView = () => {};

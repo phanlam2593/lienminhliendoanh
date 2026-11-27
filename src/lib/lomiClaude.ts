@@ -64,3 +64,54 @@ export function withTabHint(q: string, tab: LomiTab): string {
   const t = LOMI_TABS.find((x) => x.id === tab);
   return t ? `${q}\n\n(Ghi chú của app: người dùng đang bấm chọn chủ đề "${t.label}" — hiểu câu trên theo chủ đề này nếu hợp lý, trả lời đúng vào đó.)` : q;
 }
+
+// ── 27/11 (Kir: "tâm sự / chuyện đời thường để AI lo, máy giữ sức khoẻ – Tarot – app"; chọn Sonnet; chưa tính Membership) ──────────
+// Tab "Tâm sự": câu đáp KIỂU TRÒ CHUYỆN do AI viết (edge function lomi-claude, mode "talk"). Máy vẫn chạy trước và GIỮ:
+//   • mọi câu đáp an toàn / khủng hoảng / cấp cứu / bị hại (và cả lượt ngay sau một câu hỏi han an toàn — vd Lomi hỏi
+//     "bạn có đang nghĩ tới chuyện không muốn sống không?" → câu "có" do máy xử lý, không đưa AI đoán);
+//   • câu đáp có cấu trúc: thẻ sức khoẻ / thuốc / thảo dược / kiêng ăn, Tarot, tìm quán, tư vấn kinh doanh, câu hỏi về app,
+//     bài tập tâm lý đang làm dở, chẩn đoán lỗi app.
+//   AI lỗi / hết lượt / người dùng không đồng ý gửi → giữ câu đáp trên máy như cũ.
+const SAFETY_TEXT = /^(🚨|⚠️|🔥)|không phải một mình|không một mình|\b115\b|096 306 1414|\b113\b|\b111\b/u;
+type TalkMsg = {
+  role: "user" | "assistant";
+  content: string;
+  tarot?: unknown; tarotAwait?: unknown; tarotSpread?: unknown; tarotCard?: unknown; tarotRef?: unknown; tarotGate?: unknown; tarotBack?: unknown;
+  biz?: unknown; bizPick?: unknown; bizTopicPick?: unknown;
+  places?: unknown; search?: unknown; searchAsk?: unknown; dishPick?: unknown; dishAsk?: unknown; dish?: unknown;
+  faqId?: unknown; med?: unknown; drug?: unknown; herb?: unknown; diet?: unknown; src?: unknown; foodRev?: unknown;
+  harm?: unknown; risk?: unknown; therapy?: unknown; issue?: unknown; taught?: unknown;
+};
+const structured = (m?: TalkMsg) =>
+  !!m && !!(m.tarot || m.tarotAwait || m.tarotSpread || m.tarotCard || m.tarotRef || m.tarotGate || m.tarotBack || m.biz || m.bizPick || m.bizTopicPick ||
+    m.places || m.search || m.searchAsk || m.dishPick || m.dishAsk || m.dish || m.faqId || m.med || m.drug || m.herb || m.diet || m.src || m.foodRev ||
+    m.harm || m.risk || m.therapy || m.issue || m.taught);
+export function talkEligible(i: { tab: LomiTab | null; reply: TalkMsg; prev?: TalkMsg; question: string; risk: RiskScan | null }): boolean {
+  if (offUntilReload || i.tab !== "heart") return false;
+  if (i.risk?.any) return false;
+  if (SAFETY_TEXT.test(i.reply.content) || (i.prev && SAFETY_TEXT.test(i.prev.content))) return false;
+  if (structured(i.reply)) return false;
+  // Đang làm dở một luồng có cấu trúc (bài tập tâm lý, tư vấn kinh doanh, chọn món…) → để máy đi tiếp luồng đó.
+  if (i.prev && (i.prev.therapy || i.prev.bizPick || i.prev.bizTopicPick || i.prev.dishPick || i.prev.dishAsk || i.prev.searchAsk || i.prev.tarotAwait || i.prev.tarotSpread || i.prev.issue)) return false;
+  const q = i.question.trim();
+  if (!q || q.length > 1500) return false;
+  return !offTopic(q);
+}
+/** Người dùng đã đồng ý / từ chối gửi tin tâm sự cho dịch vụ AI (lưu trên máy). */
+const TALK_OK_KEY = (uid: string) => `lomi_talk_ai_${uid}`;
+export function talkConsent(uid: string): "yes" | "no" | null {
+  try {
+    const v = localStorage.getItem(TALK_OK_KEY(uid));
+    return v === "yes" || v === "no" ? v : null;
+  } catch {
+    return null;
+  }
+}
+export function setTalkConsent(uid: string, v: "yes" | "no" | null) {
+  try {
+    if (v) localStorage.setItem(TALK_OK_KEY(uid), v);
+    else localStorage.removeItem(TALK_OK_KEY(uid));
+  } catch {
+    /* bỏ qua */
+  }
+}

@@ -7,7 +7,11 @@
 //     → app giữ câu đáp trên máy; (2) câu trả lời dùng chung được ([CHUNG]) lưu vào bảng lomi_claude_answers — lần sau ai hỏi
 //     đúng câu đó thì lấy từ đây, KHÔNG gọi Claude, không trừ lượt (cả câu ngoài phạm vi cũng nhớ để khỏi hỏi lại).
 //   • Model mặc định claude-haiku-5-5 (rẻ nhất); đổi bằng secret ANTHROPIC_MODEL nếu cần. max_tokens 600.
+//   • 27/11 (Kir: "tâm sự để AI lo — dùng Sonnet; trước mắt chưa tính Membership"): body.mode = "talk" → Lomi TRÒ CHUYỆN ở tab Tâm sự.
+//     Lời dặn riêng (_shared/lomiTalkPrompt — đã chạy thử trên ~300 câu bằng lomi-eval), model ANTHROPIC_TALK_MODEL hoặc Sonnet,
+//     12 lượt gần nhất, không lưu thư viện, lượt riêng consume_ai_talk_quota (ai đăng nhập cũng được, 60 tin / người / ngày).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { LOMI_TALK_PROMPT } from "../_shared/lomiTalkPrompt.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -131,11 +135,13 @@ Deno.serve(async (req) => {
   let messages: Msg[] = [];
   let card = "";
   let kind = "";
+  let talk = false;
   try {
     const body = await req.json();
+    talk = body?.mode === "talk";
     messages = (Array.isArray(body?.messages) ? body.messages : [])
       .filter((m: any) => (m?.role === "user" || m?.role === "assistant") && typeof m?.content === "string")
-      .slice(-8)
+      .slice(talk ? -12 : -8)
       .map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 1500) }));
     if (typeof body?.card === "string") card = body.card.slice(0, 3000);
     if (typeof body?.kind === "string") kind = body.kind.slice(0, 40);
@@ -145,8 +151,10 @@ Deno.serve(async (req) => {
   messages = normalize(messages);
   if (!messages.length || messages[messages.length - 1].role !== "user") return json({ fallback: true, error: "BAD_REQUEST" }, 400);
 
-  // Thư viện câu đã trả lời — ai đăng nhập cũng dùng được, không trừ lượt, không gọi Claude.
   const admin = createClient(supabaseUrl, serviceKey);
+  if (talk) return await talkReply(messages, uid, userClient, admin);
+
+  // Thư viện câu đã trả lời — ai đăng nhập cũng dùng được, không trừ lượt, không gọi Claude.
   const qKey = cacheKey(messages[messages.length - 1].content);
   const canCache = cacheable(qKey);
   if (canCache) {
@@ -232,3 +240,64 @@ Deno.serve(async (req) => {
     return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
   }
 });
+
+// ── 27/11: chế độ TRÒ CHUYỆN (tab Tâm sự) ─────────────────────────────────────────────────────────────────────────────────
+async function talkReply(messages: Msg[], uid: string, userClient: any, admin: any): Promise<Response> {
+  const key = Deno.env.get("ANTHROPIC_API_KEY");
+  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
+  const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_talk_quota");
+  if (qErr) {
+    const m = qErr.message ?? "";
+    return json({ fallback: true, error: /AI_LIMIT/.test(m) ? "AI_LIMIT" : /AI_BUSY_GLOBAL/.test(m) ? "AI_BUSY" : "QUOTA_ERROR" });
+  }
+  const refund = async () => {
+    try {
+      await admin.rpc("refund_ai_talk_quota", { _uid: uid });
+    } catch (e) {
+      console.error("lomi-claude talk refund", e);
+    }
+  };
+  const model = Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
+  // Tắt "nghĩ ngầm" (đo bằng lomi-eval: để bật thì có câu rỗng / cụt). Sonnet đòi "between_tools", Haiku nhận "disabled".
+  const thinking = { type: /haiku/i.test(model) ? "disabled" : "between_tools" };
+  const system = LOMI_TALK_PROMPT + `
+
+Phạm vi: Lomi chỉ trò chuyện, tâm sự, chuyện đời thường. Yêu cầu kiểu viết code, giải bài tập, dịch văn bản, viết bài văn → nói nhẹ nhàng đó không phải việc Lomi giúp được, rồi hỏi họ có chuyện gì muốn kể không.` + nowLine();
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25000);
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+      body: JSON.stringify({ model, max_tokens: 500, system, messages, thinking }),
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      console.error("lomi-claude talk anthropic", res.status, t.slice(0, 300));
+      await refund();
+      const code = /credit balance/i.test(t) ? "AI_CREDITS" : res.status === 429 || res.status === 529 ? "AI_BUSY" : "AI_ERROR";
+      return json({ fallback: true, error: code, detail: `${res.status} ${t.slice(0, 200)}` });
+    }
+    const data = await res.json();
+    let reply = (Array.isArray(data?.content) ? data.content : [])
+      .filter((b: any) => b?.type === "text")
+      .map((b: any) => String(b.text))
+      .join("\n")
+      .trim();
+    if (data?.stop_reason === "max_tokens" && reply) {
+      const cut = Math.max(reply.lastIndexOf(". "), reply.lastIndexOf("! "), reply.lastIndexOf("? "), reply.lastIndexOf("\n"));
+      reply = cut > 40 ? reply.slice(0, cut + 1).trim() : "";
+    }
+    if (!reply) {
+      await refund();
+      return json({ fallback: true, error: "AI_ERROR", detail: `talk empty stop=${String(data?.stop_reason)}` });
+    }
+    return json({ reply, remaining });
+  } catch (e) {
+    console.error("lomi-claude talk", e);
+    await refund();
+    return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
+  }
+}
