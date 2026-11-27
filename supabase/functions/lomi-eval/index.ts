@@ -4,6 +4,7 @@
 //     (mảng câu người dùng) — chạy lần lượt từng câu, câu sau kèm lịch sử, ghi lại câu trả lời, thời gian và số token.
 //   • Dùng cùng ANTHROPIC_API_KEY của lomi-claude. Prompt (system) gửi kèm trong body để thử nhiều bản mà không cần deploy lại.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { routeSystem } from "../_shared/lomiRoutePrompt.ts";
 
 const json = (b: unknown, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "Content-Type": "application/json" } });
 
@@ -17,7 +18,8 @@ Deno.serve(async (req) => {
 
   const body = await req.json().catch(() => ({}));
   const batch = String(body?.batch ?? "");
-  const system = String(body?.system ?? "");
+  // 28/11: shared = "route" | "route_app" → dùng ĐÚNG lời dặn "hiểu câu" đang chạy ở lomi-claude (_shared/lomiRoutePrompt)
+  const system = body?.shared === "route" ? routeSystem(false) : body?.shared === "route_app" ? routeSystem(true) : String(body?.system ?? "");
   const model = String(body?.model ?? Deno.env.get("ANTHROPIC_MODEL") ?? "claude-haiku-5-5");
   const limit = Math.min(Math.max(Number(body?.limit ?? 6), 1), 20);
   const maxTokens = Math.min(Math.max(Number(body?.max_tokens ?? 500), 50), 1200);

@@ -10,8 +10,10 @@
 //   • 27/11 (Kir: "tâm sự để AI lo — dùng Sonnet; trước mắt chưa tính Membership"): body.mode = "talk" → Lomi TRÒ CHUYỆN ở tab Tâm sự.
 //     Lời dặn riêng (_shared/lomiTalkPrompt — đã chạy thử trên ~300 câu bằng lomi-eval), model ANTHROPIC_TALK_MODEL hoặc Sonnet,
 //     12 lượt gần nhất, không lưu thư viện, lượt riêng consume_ai_talk_quota (ai đăng nhập cũng được, 60 tin / người / ngày).
+//   • 28/11: body.mode = "route" → AI HIỂU CÂU TRƯỚC ở các mục khác Tâm sự (routeReply bên dưới).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { LOMI_TALK_PROMPT } from "../_shared/lomiTalkPrompt.ts";
+import { routeSystem } from "../_shared/lomiRoutePrompt.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -136,12 +138,16 @@ Deno.serve(async (req) => {
   let card = "";
   let kind = "";
   let talk = false;
+  let route = false;
+  let appTab = false;
   try {
     const body = await req.json();
     talk = body?.mode === "talk";
+    route = body?.mode === "route";
+    appTab = body?.tab === "app";
     messages = (Array.isArray(body?.messages) ? body.messages : [])
       .filter((m: any) => (m?.role === "user" || m?.role === "assistant") && typeof m?.content === "string")
-      .slice(talk ? -12 : -8)
+      .slice(talk ? -12 : route ? -9 : -8)
       .map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 1500) }));
     if (typeof body?.card === "string") card = body.card.slice(0, 3000);
     if (typeof body?.kind === "string") kind = body.kind.slice(0, 40);
@@ -153,6 +159,7 @@ Deno.serve(async (req) => {
 
   const admin = createClient(supabaseUrl, serviceKey);
   if (talk) return await talkReply(messages, uid, userClient, admin);
+  if (route) return await routeReply(messages, appTab, uid, userClient, admin);
 
   // Thư viện câu đã trả lời — ai đăng nhập cũng dùng được, không trừ lượt, không gọi Claude.
   const qKey = cacheKey(messages[messages.length - 1].content);
@@ -245,6 +252,80 @@ Deno.serve(async (req) => {
 });
 
 // ── 27/11: chế độ TRÒ CHUYỆN (tab Tâm sự) ─────────────────────────────────────────────────────────────────────────────────
+// 28/11 (Kir duyệt: "AI hiểu câu trước ở mọi tab"): mode "route" — AI đọc câu (kèm 8 tin trước + tên mục đang chọn) và trả về
+//   { route: { do: "local", q } } (app cho phần trên máy chạy câu viết lại) hoặc { route: { do: "reply", text } } (gửi luôn).
+//   Lời dặn _shared/lomiRoutePrompt (đo bằng lomi-eval trên 120 câu bẫy; Sonnet hiểu phủ định, mỉa mai tốt hơn Haiku rõ rệt).
+//   Chung lượt với Tâm sự AI (consume_ai_talk_quota). Lời dặn dài và giống nhau mọi lượt → bật prompt caching cho rẻ.
+async function routeReply(messages: Msg[], appTab: boolean, uid: string, userClient: any, admin: any): Promise<Response> {
+  const key = Deno.env.get("ANTHROPIC_API_KEY");
+  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
+  const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_talk_quota");
+  if (qErr) {
+    const m = qErr.message ?? "";
+    return json({ fallback: true, error: /AI_LIMIT/.test(m) ? "AI_LIMIT" : /AI_BUSY_GLOBAL/.test(m) ? "AI_BUSY" : "QUOTA_ERROR" });
+  }
+  const refund = async () => {
+    try {
+      await admin.rpc("refund_ai_talk_quota", { _uid: uid });
+    } catch (e) {
+      console.error("lomi-claude route refund", e);
+    }
+  };
+  const model = Deno.env.get("ANTHROPIC_ROUTE_MODEL") || Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
+  const thinking = { type: /haiku/i.test(model) ? "disabled" : "between_tools" };
+  const system = [
+    { type: "text", text: routeSystem(appTab), cache_control: { type: "ephemeral" } },
+    { type: "text", text: nowLine().trim() },
+  ];
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25000);
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal: ctrl.signal,
+      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+      body: JSON.stringify({ model, max_tokens: 600, system, messages, thinking }),
+    });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const t = await res.text().catch(() => "");
+      console.error("lomi-claude route anthropic", res.status, t.slice(0, 300));
+      await refund();
+      const code = /credit balance/i.test(t) ? "AI_CREDITS" : res.status === 429 || res.status === 529 ? "AI_BUSY" : "AI_ERROR";
+      return json({ fallback: true, error: code, detail: `${res.status} ${t.slice(0, 200)}` });
+    }
+    const data = await res.json();
+    const raw = (Array.isArray(data?.content) ? data.content : [])
+      .filter((b: any) => b?.type === "text")
+      .map((b: any) => String(b.text))
+      .join("\n")
+      .trim();
+    let r: any = null;
+    try {
+      const j = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
+      r = j ? JSON.parse(j) : null;
+    } catch {
+      r = null;
+    }
+    const ok =
+      (r?.do === "reply" && typeof r.text === "string" && r.text.trim()) ||
+      (r?.do === "local" && typeof r.q === "string" && r.q.trim() && r.q.length <= 400);
+    if (!ok || data?.stop_reason === "max_tokens") {
+      await refund();
+      return json({ fallback: true, error: "AI_ERROR", detail: `route bad stop=${String(data?.stop_reason)} raw=${raw.slice(0, 120)}` });
+    }
+    const route =
+      r.do === "reply"
+        ? { do: "reply", text: String(r.text).trim().slice(0, 2000) }
+        : { do: "local", q: String(r.q).trim(), kind: typeof r.kind === "string" ? r.kind : undefined, text: typeof r.text === "string" ? r.text.trim().slice(0, 1200) : undefined };
+    return json({ route, remaining });
+  } catch (e) {
+    console.error("lomi-claude route", e);
+    await refund();
+    return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
+  }
+}
+
 async function talkReply(messages: Msg[], uid: string, userClient: any, admin: any): Promise<Response> {
   const key = Deno.env.get("ANTHROPIC_API_KEY");
   if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });

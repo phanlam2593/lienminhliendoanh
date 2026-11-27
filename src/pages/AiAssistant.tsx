@@ -9,7 +9,7 @@ import { ArrowLeft, BriefcaseBusiness, ChefHat, CircleHelp, Copy, MapPinned, Mes
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
-import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic, tabClaudeEligible, talkConsent, talkEligible, withTabHint } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic, parseRoute, routeEligible, routeKindOk, type RouteKind, tabClaudeEligible, talkConsent, talkEligible, withTabHint } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -651,6 +651,9 @@ export function AiChat({
   // Tin người dùng gõ teen code ("nyc có quay lại khum") → Lomi hiểu bằng bản chữ chuẩn, nhưng khung chat
   // vẫn hiện đúng chữ họ gõ: push() đổi lại nội dung tin của người dùng từ bản chuẩn về bản gốc.
   const shownRef = useRef<{ from: string; to: string } | null>(null);
+  const routeShowRef = useRef<string | null>(null);
+  // 28/11: lượt chạy lại câu AI viết lại — loại việc AI nhận ra + câu dự phòng (dùng khi máy trả lời lệch loại); done = đã thay / đã xét
+  const routeAltRef = useRef<{ kind?: RouteKind; alt?: string; done?: boolean } | null>(null);
   // 31/10: tin hỏi HAI chuyện khác nhau ("đau đầu uống gì, mà quán phở nào ngon") — trả lời ý đầu, ý sau thành nút bấm gửi tiếp.
   const splitRef = useRef<string | null>(null);
   // 31/10 (list 7): câu thấu cảm cho vế cảm xúc đứng trước một câu hỏi việc ("buồn quá, mà tìm quán…") — gắn đầu câu đáp kế tiếp
@@ -715,6 +718,16 @@ export function AiChat({
     carryRef.current = null; // mạch chuyện chỉ được giữ qua localReply của đúng lượt đang xử lý
     const sh = shownRef.current;
     if (sh) add = add.map((m) => (m.role === "user" && m.content === sh.from ? { ...m, content: sh.to } : m));
+    // 28/11: câu đã được AI viết lại cho phần trên máy → bong bóng vẫn hiện đúng câu người dùng gõ.
+    const rs = routeShowRef.current;
+    if (rs) add = add.map((m) => (m.role === "user" ? { ...m, content: rs, raw: rs } : m));
+    // 28/11: máy trả lời câu viết lại mà LỆCH loại việc AI đã nhận ra (vd hỏi tìm chỗ mà ra thẻ bệnh) → dùng câu dự phòng của AI.
+    const ra = routeAltRef.current;
+    if (ra && !ra.done && add.some((m) => m.role === "assistant")) {
+      ra.done = true;
+      const fi = add.findIndex((m) => m.role === "assistant");
+      if (ra.alt && !routeKindOk(ra.kind, add[fi])) add = add.map((m, i) => (i === fi ? { role: "assistant", content: ra.alt!, local: true, claude: true, routed: "route-alt" } : m));
+    }
     // 15/10 (Kir): câu đáp sức khoẻ không đọc tên cơ quan ("NHS: …") và không kèm dòng nguồn — nguồn cất vào src, hỏi mới nói (lib/lomiCite).
     add = add.map((m) => {
       if (m.role !== "assistant") return m;
@@ -1697,17 +1710,41 @@ export function AiChat({
     }
     // 25/11 (Kir: "đề xuất tags để đỡ hiểu sai mà vẫn hiểu sai"): đang chọn một chủ đề (trừ Tâm sự) mà Lomi chỉ đáp được câu trò chuyện
     //   chung ("cố lên nha, nhớ uống nước") → nhờ Claude đọc lại câu đó THEO CHỦ ĐỀ đang chọn; ghi nhật ký "tab_offtopic" để admin xem.
-    if (!en && !reply.stuck && tabClaudeEligible({ tab: lomiTab.cur, sense: !!reply.sense, question: qClaude, risk: riskRef.current })) {
+    // (28/11: câu đã qua AI hiểu câu và có câu dự phòng → không gọi AI lần hai; push() tự thay bằng câu dự phòng nếu máy đáp lệch)
+    const routedAlt = !!routeAltRef.current?.alt;
+    if (!en && !routedAlt && !reply.stuck && tabClaudeEligible({ tab: lomiTab.cur, sense: !!reply.sense, question: qClaude, risk: riskRef.current })) {
       recordStuck({ kind: "tab_offtopic", question: qClaude, reply: reply.content, context: msgs.slice(-8).map((m) => ({ r: m.role === "user" ? ("u" as const) : ("a" as const), t: m.role === "user" ? (m.raw ?? m.content) : m.content })) }, isAdmin);
       void askClaude(userMsg, reply, qClaude, lomiTab.cur, "tab_offtopic");
       return;
     }
-    if (claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, tarot: !!reply.tarot })) {
+    if (!routedAlt && claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, tarot: !!reply.tarot })) {
       void askClaude(userMsg, reply, qClaude);
       return;
     }
     push([userMsg, reply]);
     lomiSound("msg");
+  };
+  // 28/11: AI đọc câu trước (lomi-claude mode "route") — gửi 8 tin gần nhất + câu này kèm tên mục đang chọn.
+  const routeAsk = async (typed: string) => {
+    setBusy(true);
+    try {
+      const tabL = LOMI_TABS.find((t) => t.id === lomiTab.cur)?.label ?? "chưa chọn";
+      const ctx = msgs
+        .filter((m) => !m.note && !m.sticker && m.content?.trim())
+        .slice(-8)
+        .map((m) => ({ role: m.role, content: (m.role === "user" ? (m.raw ?? m.content) : (m.aiContent ?? m.content)).slice(0, 700) }));
+      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { mode: "route", tab: lomiTab.cur, messages: [...ctx, { role: "user", content: `[Mục đang chọn: ${tabL}] ${typed}` }] } });
+      const r = !error ? parseRoute(data?.route) : null;
+      if (r) return r;
+      if (String(data?.error) !== "AI_LIMIT")
+        recordStuck({ kind: "claude_fail", question: typed, reply: `Hiểu câu AI lỗi: ${String(data?.error ?? error?.message ?? "không rõ")} ${String(data?.detail ?? "")}`.trim().slice(0, 400), context: [] }, isAdmin);
+      if (isHardOff(data?.error)) markClaudeOff();
+    } catch {
+      /* AI lỗi → chạy như cũ */
+    } finally {
+      setBusy(false);
+    }
+    return null;
   };
   // 27/11: Lomi TRÒ CHUYỆN bằng AI ở tab Tâm sự (edge function lomi-claude, mode "talk"). Gửi 11 tin gần nhất + câu này.
   //   Lỗi / hết lượt → câu đáp trên máy (local) như cũ; ghi mã lỗi vào nhật ký claude_fail cho admin xem.
@@ -1897,9 +1934,12 @@ export function AiChat({
     return localReply(asked, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, avoidIds, ...(place ? { dishPlace: place } : {}) });
   };
 
-  const send = async (text: string, forceAi = false) => {
+  const send = async (text: string, forceAi = false, ro?: { show: string; kind?: RouteKind; alt?: string }) => {
     const typed = text.trim(); // câu NGUYÊN VĂN người dùng gõ — hiện trong bong bóng, gửi khi báo cáo / Dạy Lomi
-    if (!typed || busy) return;
+    if (!typed || (busy && !ro)) return;
+    // 28/11: lượt chạy lại sau khi AI viết lại câu (ro.show = câu người dùng thật sự gõ — bong bóng hiện câu đó, không hiện câu viết lại)
+    routeShowRef.current = ro?.show ?? null;
+    routeAltRef.current = ro ? { kind: ro.kind, alt: ro.alt } : null;
     rawRef.current = typed;
     coreRef.current = null;
     rewroteRef.current = false;
@@ -2110,7 +2150,8 @@ export function AiChat({
       fr0 && !sw0 && addr0 !== "anh" && addr0 !== "chị" && fr0.em === "self" && fr0.act === "statement" && fr0.conf >= 0.75 && (possSelf || (fr0.subject === "self" && (fr0.toks.some((t) => t.r === "KIN" && t.cls === "partner") || (!!fr0.pred && fr0.pred.val < 0 && (fr0.pred.cls === "bad" || fr0.pred.cls === "ill")))))
         ? ("em" as const)
         : undefined;
-    const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw, { force: callsLomiEm ? "bạn-em" : fr0?.addressee && fr0.em === "you" && selfAC && !hasNameLetter(raw) ? selfAC : undefined, fallback: hasNameLetter(raw) ? undefined : selfAC ?? shortAC ?? selfEm, hold: (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })() });
+    // (28/11: lượt chạy lại câu AI viết lại — "con tôi bị sốt" — không học lại cách xưng hô từ câu viết lại)
+    const addrNow = en || ro ? { explicit: undefined } : learnAddr(user.id, raw, { force: callsLomiEm ? "bạn-em" : fr0?.addressee && fr0.em === "you" && selfAC && !hasNameLetter(raw) ? selfAC : undefined, fallback: hasNameLetter(raw) ? undefined : selfAC ?? shortAC ?? selfEm, hold: (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })() });
     // Câu này vừa cho biết cách xưng hô mới ("a đang…") → đọc lại khung với cách xưng hô đó ("e" trong câu là Lomi).
     const fr1 = fr0 && loadMem(user.id).addr !== addr0 ? parseVi(raw, { addr: loadMem(user.id).addr, partnerCtx }) : fr0;
     // Tin trước đang nói về một người / con vật → câu lược chủ ngữ này vẫn nói về người đó ("mẹ a đang ốm" → "bị cảm thôi").
@@ -2131,6 +2172,23 @@ export function AiChat({
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
     riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
+    // 28/11 (Kir duyệt: "AI hiểu câu trước ở mọi tab"): trừ Tâm sự (đã có AI trò chuyện), câu không nguy hiểm → AI đọc câu trước
+    //   (lib/lomiClaude.routeEligible). AI trả lời luôn, hoặc viết lại câu rõ ý rồi cho phần trên máy chạy câu đó (thẻ sức khoẻ có nguồn,
+    //   tìm chỗ, Tarot khi tự xin bói, câu hỏi app). AI lỗi / hết lượt → chạy tiếp như cũ trên câu gốc.
+    if (!ro && !forceAi && !en && talkConsent(user.id) !== "no" && routeEligible({ tab: lomiTab.cur, prev: lastMsg0?.role === "assistant" ? lastMsg0 : undefined, typed, risk: riskRef.current, danger: danger0 })) {
+      setInput("");
+      const r = await routeAsk(typed);
+      if (r?.do === "reply") {
+        push([{ role: "user", content: typed, local: true, raw: typed }, { role: "assistant", content: r.text, local: true, claude: true, routed: "route-ai" }]);
+        lomiSound("msg");
+        noteAi();
+        return;
+      }
+      if (r?.do === "local") {
+        noteAi();
+        return send(r.q, false, { show: typed, kind: r.kind, alt: r.text });
+      }
+    }
     // 21/11 (bộ 60 đoạn, #52 — "Ý là ăn cay cấp độ 7 cho đã chứ ko phải tự làm đau mình nha =)))"): lượt trước Lomi vừa đưa lời hỗ trợ
     //   khủng hoảng, giờ người dùng nói rõ là đùa / nói quá → nhẹ nhõm, vẫn để ngỏ (trước: lặp lại lời khủng hoảng, lượt sau vẫn giọng buồn).
     {

@@ -81,6 +81,7 @@ type TalkMsg = {
   places?: unknown; search?: unknown; searchAsk?: unknown; dishPick?: unknown; dishAsk?: unknown; dish?: unknown;
   faqId?: unknown; med?: unknown; drug?: unknown; herb?: unknown; diet?: unknown; src?: unknown; foodRev?: unknown;
   harm?: unknown; risk?: unknown; therapy?: unknown; issue?: unknown; taught?: unknown;
+  quick?: string[];
 };
 const structured = (m?: TalkMsg) =>
   !!m && !!(m.tarot || m.tarotAwait || m.tarotSpread || m.tarotCard || m.tarotRef || m.tarotGate || m.tarotBack || m.biz || m.bizPick || m.bizTopicPick ||
@@ -96,6 +97,47 @@ export function talkEligible(i: { tab: LomiTab | null; reply: TalkMsg; prev?: Ta
   const q = i.question.trim();
   if (!q || q.length > 1500) return false;
   return !offTopic(q);
+}
+// ── 28/11 (Kir duyệt: "AI hiểu câu trước ở mọi tab" — 120 câu bẫy của ChatGPT: máy hiểu sai rõ 31 câu, lệch ý 17) ─────────────────
+// Các tab trừ Tâm sự: AI (lomi-claude mode "route") đọc câu + ngữ cảnh trước, rồi HOẶC viết lại câu cho phần trên máy (thẻ sức khoẻ có
+//   nguồn, tìm chỗ, trải bài Tarot khi người dùng tự xin, câu hỏi về app), HOẶC tự trả lời (nấu ăn, kinh doanh, trò chuyện…).
+//   Máy vẫn chạy TRƯỚC phần an toàn: câu nguy hiểm / khủng hoảng / cấp cứu / bị hại không gửi đi. Đang làm dở một luồng có cấu trúc
+//   (chọn loại hình, chọn món, rút bài, bài tập tâm lý…) hoặc bấm chip gợi ý → để máy đi tiếp như cũ.
+export function routeEligible(i: { tab: LomiTab | null; prev?: TalkMsg; typed: string; risk: RiskScan | null; danger: boolean }): boolean {
+  if (offUntilReload || i.tab === "heart") return false;
+  if (i.danger || i.risk?.any) return false;
+  if (i.prev && SAFETY_TEXT.test(i.prev.content)) return false;
+  const p = i.prev;
+  if (p && (p.therapy || p.bizPick || p.bizTopicPick || p.dishPick || p.dishAsk || p.searchAsk || p.tarotAwait || p.tarotSpread || p.issue)) return false;
+  const q = i.typed.trim();
+  if (!q || q.length > 1500) return false;
+  if (p?.quick?.some((c) => c.trim().toLowerCase() === q.toLowerCase())) return false;
+  return !offTopic(q);
+}
+export type RouteKind = "health" | "place" | "tarot" | "app";
+export type RouteResult = { do: "reply"; text: string } | { do: "local"; q: string; kind?: RouteKind; text?: string };
+export function parseRoute(r: unknown): RouteResult | null {
+  const o = r as { do?: unknown; text?: unknown; q?: unknown; kind?: unknown } | null;
+  if (o?.do === "reply" && typeof o.text === "string" && o.text.trim()) return { do: "reply", text: o.text.trim() };
+  if (o?.do === "local" && typeof o.q === "string" && o.q.trim() && o.q.length <= 400) {
+    const kind = (["health", "place", "tarot", "app"] as const).find((k) => k === o.kind);
+    const text = typeof o.text === "string" && o.text.trim() ? o.text.trim() : undefined;
+    return { do: "local", q: o.q.trim(), ...(kind ? { kind } : {}), ...(text ? { text } : {}) };
+  }
+  return null;
+}
+type KindMsg = TalkMsg & { sx?: string[]; tarotGate?: unknown };
+/**
+ * Câu máy trả lời cho câu AI viết lại có ĐÚNG loại việc AI đã nhận ra không (đo 28/11: câu viết lại sạch vẫn có lúc bị máy đọc lệch —
+ * "tìm chỗ chill thư giãn" → thẻ Kỹ thuật thở, "tôi ăn vào thấy khó chịu bụng" → câu dỗ nóng giận). Lệch → dùng câu dự phòng của AI.
+ * Câu đáp an toàn / cấp cứu luôn được giữ.
+ */
+export function routeKindOk(kind: RouteKind | undefined, m: KindMsg): boolean {
+  if (!kind || SAFETY_TEXT.test(m.content)) return true;
+  if (kind === "health") return !!(m.med || m.drug || m.herb || m.diet || m.foodRev || m.src || (m.sx && m.sx.length));
+  if (kind === "place") return !!(m.places || m.search || m.searchAsk || m.dishAsk || m.dishPick || m.dish);
+  if (kind === "tarot") return !!(m.tarot || m.tarotAwait || m.tarotSpread || m.tarotGate);
+  return !!m.faqId;
 }
 /** 27/11 tối (Kir: "auto"): không còn hộp hỏi đồng ý — AI tự bật. Giữ khoá tắt "no" trên máy (bộ test dùng để chạy phần trên máy). */
 const TALK_OK_KEY = (uid: string) => `lomi_talk_ai_${uid}`;
