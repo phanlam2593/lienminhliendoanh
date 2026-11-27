@@ -47,6 +47,24 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_talk_daily_usage: {
+        Row: {
+          day: string
+          n: number
+          user_id: string
+        }
+        Insert: {
+          day: string
+          n?: number
+          user_id: string
+        }
+        Update: {
+          day?: string
+          n?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       app_tips: {
         Row: {
           amount: number
@@ -2774,6 +2792,7 @@ export type Database = {
       claim_offer: { Args: { _offer_id: string; _pin: string }; Returns: Json }
       compute_business_area: { Args: { addr: string }; Returns: string }
       consume_ai_chat_quota: { Args: never; Returns: number }
+      consume_ai_talk_quota: { Args: never; Returns: number }
       create_group_chat: {
         Args: { _member_ids: string[]; _name: string }
         Returns: string
@@ -2990,6 +3009,7 @@ export type Database = {
       }
       refresh_admin_pending_notification: { Args: never; Returns: undefined }
       refund_ai_chat_quota: { Args: { _uid: string }; Returns: undefined }
+      refund_ai_talk_quota: { Args: { _uid: string }; Returns: undefined }
       remove_group_member: {
         Args: { _gid: string; _user: string }
         Returns: undefined
