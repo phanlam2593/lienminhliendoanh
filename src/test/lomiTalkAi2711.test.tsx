@@ -74,6 +74,15 @@ describe("tab Tâm sự — trò chuyện bằng AI", () => {
     expect(r[0].content).toBe("AI_TRẢ_LỜI");
     expect(screen.queryByText("Đồng ý")).toBeNull();
   }, T);
+
+  it("27/11 tối — lần đầu AI trả lời: báo một lần (chỉ nút OK), lần sau không báo nữa", async () => {
+    fakeAi();
+    const p = chat(["A chưa bh trúng số :((", "mà thôi kệ"], { tab: "heart", talkConsent: null, aiNotice: true });
+    expect(await screen.findByText("💬 Lomi có nhờ AI trả lời", {}, { timeout: 20000 })).toBeTruthy();
+    const r = await p;
+    expect(r[1].content).toBe("AI_TRẢ_LỜI");
+    expect(localStorage.getItem("lomi_ai_notice_test-user")).toBe("1");
+  }, T);
 });
 
 describe("talkEligible", () => {

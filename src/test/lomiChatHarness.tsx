@@ -101,6 +101,8 @@ export type ChatOpts = {
   /** 27/11: tab Tâm sự trò chuyện bằng AI — người dùng đã đồng ý ("yes"), từ chối ("no", mặc định: test phần chạy trên máy),
    *  hay chưa chọn (null → app hỏi đồng ý). */
   talkConsent?: "yes" | "no" | null;
+  /** 27/11 tối: để hiện thông báo "Lomi có nhờ AI" lần đầu (mặc định coi như đã xem). */
+  aiNotice?: boolean;
 };
 function seeded(seed: number) {
   let a = seed >>> 0;
@@ -130,6 +132,7 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
   if (opts.tab) localStorage.setItem("lomi:tab", opts.tab);
   const tc = opts.talkConsent === undefined ? "no" : opts.talkConsent;
   if (tc) localStorage.setItem(`lomi_talk_ai_${UID}`, tc);
+  if (!opts.aiNotice) localStorage.setItem(`lomi_ai_notice_${UID}`, "1"); // 27/11 tối: thông báo AI một lần — tắt sẵn trừ test cần xem
   const pre = opts.history ?? [];
   if (pre.length) localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
   Element.prototype.scrollIntoView = () => {};

@@ -613,6 +613,19 @@ export function AiChat({
   const [msgs, setMsgs] = useState<Msg[]>([]);
   // Nút ⁉️ (01/10): tin Lomi đang được báo cáo (vị trí trong msgs).
   const [fbIdx, setFbIdx] = useState<number | null>(null);
+  // 27/11 tối (Kir duyệt): AI tự bật, không hỏi đồng ý — lần đầu Lomi nhờ AI trả lời thì báo một lần (chỉ nút OK).
+  const [aiNotice, setAiNotice] = useState(false);
+  const noteAi = () => {
+    try {
+      const k = `lomi_ai_notice_${user.id}`;
+      if (!localStorage.getItem(k)) {
+        localStorage.setItem(k, "1");
+        setAiNotice(true);
+      }
+    } catch {
+      /* bỏ qua */
+    }
+  };
   // 15/10 (theo ý Kir): chạm vào một tin nhắn → hiện nút Sao chép ngay dưới tin đó.
   const [copyIdx, setCopyIdx] = useState<number | null>(null);
   const [fbReason, setFbReason] = useState<FeedbackReason>("unknown");
@@ -1718,6 +1731,7 @@ export function AiChat({
     }
     setBusy(false);
     push([userMsg, text ? { role: "assistant", content: text, local: true, claude: true, routed: "talk-ai" } : local]);
+    if (text) noteAi();
     lomiSound("msg");
   };
   const askClaude = async (userMsg: Msg, local: Msg, q: string, tab?: LomiTab | null, kind?: StuckKind) => {
@@ -1742,6 +1756,7 @@ export function AiChat({
     }
     setBusy(false);
     push([userMsg, text ? { role: "assistant", content: text, local: true, claude: true } : local]);
+    if (text) noteAi();
     lomiSound("msg");
   };
 
@@ -5197,6 +5212,22 @@ export function AiChat({
         {err && <div className="text-center text-xs text-destructive px-4">{err}</div>}
         <div ref={endRef} />
       </div>
+
+      {/* 27/11 tối: báo một lần khi Lomi bắt đầu nhờ AI (Điều khoản mục Lomi ghi chi tiết). Không nêu tên nhà cung cấp (Kir 22/11). */}
+      <Dialog open={aiNotice} onOpenChange={(o) => !o && setAiNotice(false)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>💬 Lomi có nhờ AI trả lời</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground -mt-1">
+            Ở mục <b>Tâm sự</b> và khi Lomi chưa có sẵn câu trả lời, Lomi gửi câu của bạn kèm vài tin nhắn gần đây tới một <b>dịch vụ AI ở nước ngoài</b> để hiểu bạn đúng hơn. Lomi không gửi kèm tên tài khoản hay số điện thoại; câu có dấu hiệu nguy hiểm, cấp cứu luôn được Lomi trả lời trên máy.
+          </p>
+          <p className="text-xs text-muted-foreground">Đừng nhập số CCCD, tài khoản ngân hàng, mật khẩu vào Lomi nha.</p>
+          <button onClick={() => setAiNotice(false)} className="rounded-xl bg-gradient-brand text-white text-sm font-semibold py-2.5 mt-1">
+            OK
+          </button>
+        </DialogContent>
+      </Dialog>
 
       {/* ⁉️ Báo câu trả lời cho ban quản trị (01/10) — admin xem ở Quản trị → Lomi học hỏi và dạy lại Lomi. */}
       <Dialog open={fbIdx !== null} onOpenChange={(o) => !o && !fbBusy && setFbIdx(null)}>
