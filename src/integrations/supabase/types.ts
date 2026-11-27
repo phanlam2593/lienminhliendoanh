@@ -2708,6 +2708,11 @@ export type Database = {
         }
         Returns: number
       }
+      _lomi_eval_fire2: {
+        Args: { _lanes: number; _prefix: string; _prompt: string }
+        Returns: number
+      }
+      _lomi_eval_fire3: { Args: never; Returns: number }
       accept_ride: { Args: { _rid: string }; Returns: undefined }
       add_group_members: {
         Args: { _gid: string; _member_ids: string[] }
