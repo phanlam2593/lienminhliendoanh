@@ -23,3 +23,6 @@ verify_jwt = true
 
 [functions.lomi-claude]
 verify_jwt = true
+
+[functions.lomi-eval]
+verify_jwt = false
