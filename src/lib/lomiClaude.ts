@@ -97,7 +97,7 @@ export function talkEligible(i: { tab: LomiTab | null; reply: TalkMsg; prev?: Ta
   if (!q || q.length > 1500) return false;
   return !offTopic(q);
 }
-/** Người dùng đã đồng ý / từ chối gửi tin tâm sự cho dịch vụ AI (lưu trên máy). */
+/** 27/11 tối (Kir: "auto"): không còn hộp hỏi đồng ý — AI tự bật. Giữ khoá tắt "no" trên máy (bộ test dùng để chạy phần trên máy). */
 const TALK_OK_KEY = (uid: string) => `lomi_talk_ai_${uid}`;
 export function talkConsent(uid: string): "yes" | "no" | null {
   try {
@@ -105,13 +105,5 @@ export function talkConsent(uid: string): "yes" | "no" | null {
     return v === "yes" || v === "no" ? v : null;
   } catch {
     return null;
-  }
-}
-export function setTalkConsent(uid: string, v: "yes" | "no" | null) {
-  try {
-    if (v) localStorage.setItem(TALK_OK_KEY(uid), v);
-    else localStorage.removeItem(TALK_OK_KEY(uid));
-  } catch {
-    /* bỏ qua */
   }
 }

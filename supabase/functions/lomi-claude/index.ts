@@ -1,8 +1,8 @@
 // 20/11 (Kir duyệt — "hướng lai"): Lomi trả lời bằng thư viện trên máy trước; CHỈ câu Lomi bí mới gửi sang Claude (Anthropic API).
 //   • Key: secret ANTHROPIC_API_KEY (tài khoản trả trước của Kir ở platform.claude.com). Chưa có key / hết tiền / lỗi
 //     → trả { fallback: true } (HTTP 200) để app giữ nguyên câu trả lời trên máy — không bao giờ làm khung chat lỗi.
-//   • Chốt chi phí ở server (RPC consume_ai_chat_quota): 20 câu / người / ngày, 300 câu / ngày cho cả app; chỉ thành viên Membership còn hạn.
-//     Gọi lỗi thì hoàn lượt (refund_ai_chat_quota).
+//   • Chốt chi phí ở server: (27/11 tối) RPC consume_ai_talk_quota — chung lượt với Tâm sự AI, ai đăng nhập cũng được
+//     (trước đây consume_ai_chat_quota, chỉ Membership). Gọi lỗi thì hoàn lượt (refund_ai_talk_quota).
 //   • 20/11 (Kir): (1) chỉ trả lời trong 4 mục chính của Lomi — Claude gắn nhãn [NGOAI] cho câu ngoài phạm vi (viết code, làm bài tập…)
 //     → app giữ câu đáp trên máy; (2) câu trả lời dùng chung được ([CHUNG]) lưu vào bảng lomi_claude_answers — lần sau ai hỏi
 //     đúng câu đó thì lấy từ đây, KHÔNG gọi Claude, không trừ lượt (cả câu ngoài phạm vi cũng nhớ để khỏi hỏi lại).
@@ -169,15 +169,18 @@ Deno.serve(async (req) => {
   const key = Deno.env.get("ANTHROPIC_API_KEY");
   if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
 
-  const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_chat_quota");
+  // 27/11 tối (Kir: "bất kể tab nào Lomi trả lời không được thì AI trả lời"; chưa tính Membership): bỏ chốt Membership —
+  //   dùng chung lượt với Tâm sự AI (consume_ai_talk_quota: ai đăng nhập cũng được, 60 tin / người / ngày, 1.500 / ngày cả app).
+  //   consume_ai_chat_quota (chỉ Membership) giữ nguyên cho chế độ AI riêng (ai-assistant).
+  const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_talk_quota");
   if (qErr) {
     const m = qErr.message ?? "";
-    const code = /MEMBER_ONLY/.test(m) ? "MEMBER_ONLY" : /AI_LIMIT/.test(m) ? "AI_LIMIT" : /AI_BUSY_GLOBAL/.test(m) ? "AI_BUSY" : "QUOTA_ERROR";
+    const code = /AI_LIMIT/.test(m) ? "AI_LIMIT" : /AI_BUSY_GLOBAL/.test(m) ? "AI_BUSY" : "QUOTA_ERROR";
     return json({ fallback: true, error: code });
   }
   const refund = async () => {
     try {
-      await admin.rpc("refund_ai_chat_quota", { _uid: uid });
+      await admin.rpc("refund_ai_talk_quota", { _uid: uid });
     } catch (e) {
       console.error("lomi-claude refund", e);
     }

@@ -1,7 +1,7 @@
 // 27/11 (Kir: "tâm sự để AI lo — dùng Sonnet; chưa tính Membership"): tab Tâm sự → câu đáp KIỂU TRÒ CHUYỆN do AI viết
 //   (lomi-claude mode "talk"); máy vẫn giữ câu an toàn, sức khoẻ, Tarot, tìm quán, app; lần đầu hỏi đồng ý gửi tin.
 import { afterEach, describe, expect, it } from "vitest";
-import { fireEvent, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { chat } from "./lomiChatHarness";
 import { talkEligible } from "@/lib/lomiClaude";
 
@@ -68,14 +68,11 @@ describe("tab Tâm sự — trò chuyện bằng AI", () => {
     expect(r[0].content).not.toMatch(/chúc mừng|ăn mừng/i);
   }, T);
 
-  it("lần đầu: hỏi đồng ý — bấm Đồng ý thì câu đó đi qua AI", async () => {
+  it("27/11 tối — auto: chưa chọn gì thì tự dùng AI, không hiện hộp hỏi đồng ý", async () => {
     fakeAi();
-    const p = chat(["A chưa bh trúng số :(("], { tab: "heart", talkConsent: null });
-    const btn = await screen.findByText("Đồng ý", {}, { timeout: 20000 });
-    fireEvent.click(btn);
-    const r = await p;
+    const r = await chat(["A chưa bh trúng số :(("], { tab: "heart", talkConsent: null });
     expect(r[0].content).toBe("AI_TRẢ_LỜI");
-    expect(localStorage.getItem("lomi_talk_ai_test-user")).toBe("yes");
+    expect(screen.queryByText("Đồng ý")).toBeNull();
   }, T);
 });
 

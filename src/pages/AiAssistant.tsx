@@ -9,7 +9,7 @@ import { ArrowLeft, BriefcaseBusiness, ChefHat, CircleHelp, Copy, MapPinned, Mes
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
-import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic, setTalkConsent, tabClaudeEligible, talkConsent, talkEligible, withTabHint } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic, tabClaudeEligible, talkConsent, talkEligible, withTabHint } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -629,7 +629,6 @@ export function AiChat({
   };
   const [busy, setBusy] = useState(false);
   // 27/11: tin tâm sự đang chờ người dùng đồng ý gửi cho dịch vụ AI (lần đầu ở tab Tâm sự)
-  const [talkAsk, setTalkAsk] = useState<{ userMsg: Msg; local: Msg; q: string } | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [soundOn, setSoundOn] = useState(lomiSoundOn);
   useEffect(() => onLomiSoundChange(setSoundOn), []);
@@ -1677,17 +1676,11 @@ export function AiChat({
     //   Claude lỗi / chưa cài key / hết lượt → vẫn gửi câu đáp trên máy như cũ. Câu "bí" vẫn được ghi vào nhật ký ở trên cho admin xem.
     const qClaude = rawRef.current ?? asked;
     // 27/11 (Kir: "tâm sự để AI lo — dùng Sonnet; chưa tính Membership"): tab Tâm sự → câu đáp kiểu trò chuyện do AI viết
-    //   (lib/lomiClaude.talkEligible — máy vẫn giữ câu an toàn, sức khoẻ, Tarot, tìm quán, app…). Lần đầu hỏi đồng ý gửi tin.
-    if (!en && talkEligible({ tab: lomiTab.cur, reply, prev: prevA, question: qClaude, risk: riskRef.current })) {
-      const c = talkConsent(user.id);
-      if (c === "yes") {
-        void askTalk(userMsg, reply, qClaude);
-        return;
-      }
-      if (c === null) {
-        setTalkAsk({ userMsg, local: reply, q: qClaude });
-        return;
-      }
+    //   (lib/lomiClaude.talkEligible — máy vẫn giữ câu an toàn, sức khoẻ, Tarot, tìm quán, app…).
+    //   27/11 tối (Kir: "auto, không cần chọn"): bỏ hộp hỏi đồng ý — tự dùng AI; Điều khoản mục Lomi đã ghi rõ việc gửi tin cho AI.
+    if (!en && talkEligible({ tab: lomiTab.cur, reply, prev: prevA, question: qClaude, risk: riskRef.current }) && talkConsent(user.id) !== "no") {
+      void askTalk(userMsg, reply, qClaude);
+      return;
     }
     // 25/11 (Kir: "đề xuất tags để đỡ hiểu sai mà vẫn hiểu sai"): đang chọn một chủ đề (trừ Tâm sự) mà Lomi chỉ đáp được câu trò chuyện
     //   chung ("cố lên nha, nhớ uống nước") → nhờ Claude đọc lại câu đó THEO CHỦ ĐỀ đang chọn; ghi nhật ký "tab_offtopic" để admin xem.
@@ -1727,17 +1720,6 @@ export function AiChat({
     push([userMsg, text ? { role: "assistant", content: text, local: true, claude: true, routed: "talk-ai" } : local]);
     lomiSound("msg");
   };
-  const answerTalkAsk = (ok: boolean) => {
-    const p = talkAsk;
-    setTalkAsk(null);
-    setTalkConsent(user.id, ok ? "yes" : "no");
-    if (!p) return;
-    if (ok) void askTalk(p.userMsg, p.local, p.q);
-    else {
-      push([p.userMsg, p.local]);
-      lomiSound("msg");
-    }
-  };
   const askClaude = async (userMsg: Msg, local: Msg, q: string, tab?: LomiTab | null, kind?: StuckKind) => {
     setBusy(true);
     let text: string | null = null;
@@ -1752,8 +1734,9 @@ export function AiChat({
       //   nên không biết vì sao Lomi vẫn đáp câu trên máy.
       else if (!["MEMBER_ONLY", "OUT_OF_SCOPE"].includes(String(data?.error)))
         recordStuck({ kind: "claude_fail", question: q, reply: `Lỗi: ${String(data?.error ?? error?.message ?? "không rõ")} ${String(data?.detail ?? "")}`.trim().slice(0, 400), context: [] }, isAdmin);
-      if (quota && typeof data?.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
-      else if (isHardOff(data?.error)) markClaudeOff();
+      // 27/11 tối: lượt "Lomi bí → AI" giờ chung với lượt Tâm sự AI (consume_ai_talk_quota), khác bộ đếm của chế độ AI riêng
+      //   → không cập nhật `quota` (bộ đếm của chế độ AI) từ đây nữa.
+      if (isHardOff(data?.error)) markClaudeOff();
     } catch {
       text = null;
     }
@@ -5214,27 +5197,6 @@ export function AiChat({
         {err && <div className="text-center text-xs text-destructive px-4">{err}</div>}
         <div ref={endRef} />
       </div>
-
-      {/* 27/11: lần đầu tâm sự — hỏi đồng ý gửi tin cho dịch vụ AI (Luật Bảo vệ dữ liệu cá nhân). Không nêu tên nhà cung cấp (Kir 22/11). */}
-      <Dialog open={!!talkAsk} onOpenChange={(o) => !o && talkAsk && answerTalkAsk(false)}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>💬 Lomi trò chuyện bằng AI</DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground -mt-1">
-            Ở mục <b>Tâm sự</b>, để hiểu bạn đúng hơn, Lomi gửi các tin nhắn gần đây trong cuộc trò chuyện này tới một <b>nhà cung cấp dịch vụ AI ở nước ngoài</b> để soạn câu trả lời. Lomi không gửi kèm tên tài khoản hay số điện thoại của bạn.
-          </p>
-          <p className="text-sm text-muted-foreground">Bạn không đồng ý thì Lomi vẫn trò chuyện được, chỉ dùng phần có sẵn trên máy (có thể kém hiểu ý hơn).</p>
-          <div className="flex flex-col gap-2 pt-1">
-            <button onClick={() => answerTalkAsk(true)} className="rounded-xl bg-gradient-brand text-white text-sm font-semibold py-2.5">
-              Đồng ý
-            </button>
-            <button onClick={() => answerTalkAsk(false)} className="rounded-xl border text-sm py-2.5 hover:bg-accent">
-              Không, chỉ dùng Lomi trên máy
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* ⁉️ Báo câu trả lời cho ban quản trị (01/10) — admin xem ở Quản trị → Lomi học hỏi và dạy lại Lomi. */}
       <Dialog open={fbIdx !== null} onOpenChange={(o) => !o && !fbBusy && setFbIdx(null)}>
