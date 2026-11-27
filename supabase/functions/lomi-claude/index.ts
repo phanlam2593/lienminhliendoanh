@@ -184,7 +184,9 @@ Deno.serve(async (req) => {
       signal: ctrl.signal,
       headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
       // 24/11 (Kir): câu ngoài phạm vi → dừng NGAY khi AI viết nhãn [NGOAI] (stop_sequences), không trả tiền cho phần chữ viết thêm.
-      body: JSON.stringify({ model: Deno.env.get("ANTHROPIC_MODEL") || "claude-haiku-5-5", max_tokens: 600, system, messages, stop_sequences: ["[NGOAI]", "[NGOÀI]"] }),
+      // 27/11 (chạy thử lomi-eval): model mặc định tự "nghĩ ngầm" và có lúc tiêu hết max_tokens trước khi viết → câu trả lời RỖNG
+      //   hoặc bị cắt giữa câu. Lomi chỉ cần câu ngắn → tắt nghĩ ngầm.
+      body: JSON.stringify({ model: Deno.env.get("ANTHROPIC_MODEL") || "claude-haiku-5-5", max_tokens: 600, system, messages, stop_sequences: ["[NGOAI]", "[NGOÀI]"], thinking: { type: "disabled" } }),
     });
     clearTimeout(timer);
     if (!res.ok) {
@@ -204,7 +206,12 @@ Deno.serve(async (req) => {
     const tag = raw.match(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/iu);
     const stoppedOut = data?.stop_reason === "stop_sequence" && /NGO/i.test(String(data?.stop_sequence ?? ""));
     const label = stoppedOut ? "NGOAI" : tag ? tag[1].toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "RIENG";
-    const reply = (tag ? raw.slice(tag[0].length) : raw).replace(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/giu, "").trim();
+    let reply = (tag ? raw.slice(tag[0].length) : raw).replace(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/giu, "").trim();
+    // Hết max_tokens giữa chừng → chỉ giữ tới câu trọn vẹn cuối cùng (không gửi người dùng câu cụt "Anh ơi, nghe câu").
+    if (data?.stop_reason === "max_tokens" && reply) {
+      const cut = Math.max(reply.lastIndexOf(". "), reply.lastIndexOf("! "), reply.lastIndexOf("? "), reply.lastIndexOf("\n"));
+      reply = cut > 40 ? reply.slice(0, cut + 1).trim() : "";
+    }
     // Ngoài 4 mục: không trả lời, nhớ lại để lần sau khỏi hỏi Claude. Không hoàn lượt (đỡ bị hỏi dồn câu ngoài phạm vi).
     if (label === "NGOAI") {
       if (canCache) await admin.from("lomi_claude_answers").upsert({ key: qKey, question: messages[messages.length - 1].content.slice(0, 500), scope: "out", answer: null });
