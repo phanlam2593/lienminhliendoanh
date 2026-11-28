@@ -2732,6 +2732,7 @@ export type Database = {
       }
       _lomi_eval_fire3: { Args: never; Returns: number }
       _lomi_eval_fire4: { Args: { _p: string }; Returns: number }
+      _lomi_eval_fire5: { Args: never; Returns: number }
       accept_ride: { Args: { _rid: string }; Returns: undefined }
       add_group_members: {
         Args: { _gid: string; _member_ids: string[] }
