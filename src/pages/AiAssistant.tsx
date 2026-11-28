@@ -5282,7 +5282,7 @@ export function AiChat({
           <p className="text-sm text-muted-foreground -mt-1">
             Để hiểu đúng ý bạn, Lomi gửi tin nhắn của bạn (trừ câu chào hỏi ngắn) kèm vài tin gần đây tới <b>dịch vụ AI ở nước ngoài</b>. Lomi không gửi kèm tên tài khoản hay số điện thoại; câu có dấu hiệu nguy hiểm, cấp cứu luôn được Lomi trả lời trên máy.
           </p>
-          <p className="text-xs text-muted-foreground">Đừng nhập số CCCD, tài khoản ngân hàng, mật khẩu vào Lomi nha.</p>
+          <p className="text-xs text-muted-foreground">Lúc dịch vụ chính quá tải, Lomi có thể nhờ gói miễn phí của dịch vụ AI khác — gói miễn phí có thể dùng nội dung để cải thiện dịch vụ của họ. Đừng nhập số CCCD, tài khoản ngân hàng, mật khẩu vào Lomi nha.</p>
           <button onClick={() => setAiNotice(false)} className="rounded-xl bg-gradient-brand text-white text-sm font-semibold py-2.5 mt-1">
             OK
           </button>

@@ -14,7 +14,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { LOMI_TALK_PROMPT } from "../_shared/lomiTalkPrompt.ts";
 import { APP_PROMPT, ROUTE_PROMPT } from "../_shared/lomiRoutePrompt.ts";
-import { callLLM } from "../_shared/lomiLLM.ts";
+import { FALLBACKS_BIG, FALLBACKS_SMALL, callLLM } from "../_shared/lomiLLM.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -270,8 +270,8 @@ async function routeReply(messages: Msg[], appTab: boolean, uid: string, userCli
       console.error("lomi-claude route refund", e);
     }
   };
-  // 28/11 chiều: mục Hỏi về app — trả lời thẳng bằng chữ từ KIẾN THỨC VỀ APP (~18.000 token) → dùng Haiku cho rẻ, không đi Groq
-  //   (vượt 8.000 token/phút của gói miễn phí). Các mục khác — lời dặn gọn, Sonnet, hỏng thì Groq.
+  // 28/11 chiều: mục Hỏi về app — trả lời thẳng bằng chữ từ KIẾN THỨC VỀ APP (~18.000 token) → dùng Haiku cho rẻ; hỏng thì Gemini /
+  //   OpenRouter (không đi Groq: vượt 8.000 token/phút của gói miễn phí). Các mục khác — lời dặn gọn, Sonnet, hỏng thì Groq → Gemini → OpenRouter.
   const model = appTab
     ? Deno.env.get("ANTHROPIC_ROUTE_APP_MODEL") || "claude-haiku-5-5"
     : Deno.env.get("ANTHROPIC_ROUTE_MODEL") || Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
@@ -281,6 +281,7 @@ async function routeReply(messages: Msg[], appTab: boolean, uid: string, userCli
     cacheSystem: true,
     messages,
     maxTokens: 600,
+    fallback: appTab ? FALLBACKS_BIG : FALLBACKS_SMALL,
     groq: appTab ? undefined : { json: true },
   });
   if (!out.ok) {
@@ -338,8 +339,8 @@ async function talkReply(messages: Msg[], uid: string, userClient: any, admin: a
   const system = LOMI_TALK_PROMPT + `
 
 Phạm vi: Lomi chỉ trò chuyện, tâm sự, chuyện đời thường. Yêu cầu kiểu viết code, giải bài tập, dịch văn bản, viết bài văn → nói nhẹ nhàng đó không phải việc Lomi giúp được, rồi hỏi họ có chuyện gì muốn kể không.` + nowLine();
-  // 28/11 chiều: Anthropic hỏng (hết tiền / quá tải) → Groq (lomiLLM).
-  const out = await callLLM({ model: Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5", system, messages, maxTokens: 500, groq: {} });
+  // 28/11 chiều: Anthropic hỏng (hết tiền / quá tải) → Groq → Gemini → OpenRouter (lomiLLM).
+  const out = await callLLM({ model: Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5", system, messages, maxTokens: 500, fallback: FALLBACKS_SMALL });
   if (!out.ok) {
     console.error("lomi-claude talk", out.detail);
     await refund();
