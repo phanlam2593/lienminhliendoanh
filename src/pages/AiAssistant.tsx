@@ -25,6 +25,7 @@ import {
   relatedFaqs,
   suggestFaqs,
   type Faq,
+  smallTalk as smallTalkVi,
 } from "@/lib/lomiFaq";
 import { LomiPlaceCards } from "@/components/LomiPlaceCards";
 import { LomiStickerGrid } from "@/components/LomiStickerGrid";
@@ -2175,7 +2176,8 @@ export function AiChat({
     // 28/11 (Kir duyệt: "AI hiểu câu trước ở mọi tab"): trừ Tâm sự (đã có AI trò chuyện), câu không nguy hiểm → AI đọc câu trước
     //   (lib/lomiClaude.routeEligible). AI trả lời luôn, hoặc viết lại câu rõ ý rồi cho phần trên máy chạy câu đó (thẻ sức khoẻ có nguồn,
     //   tìm chỗ, Tarot khi tự xin bói, câu hỏi app). AI lỗi / hết lượt → chạy tiếp như cũ trên câu gốc.
-    if (!ro && !forceAi && !en && talkConsent(user.id) !== "no" && routeEligible({ tab: lomiTab.cur, prev: lastMsg0?.role === "assistant" ? lastMsg0 : undefined, typed, risk: riskRef.current, danger: danger0 })) {
+    // (28/11 chiều: câu chào / cảm ơn / "ok" — máy tự đáp, không tốn lượt AI)
+    if (!ro && !forceAi && !en && talkConsent(user.id) !== "no" && !smallTalkVi(typed, "vi") && routeEligible({ tab: lomiTab.cur, prev: lastMsg0?.role === "assistant" ? lastMsg0 : undefined, typed, risk: riskRef.current, danger: danger0 })) {
       setInput("");
       const r = await routeAsk(typed);
       if (r?.do === "reply") {
@@ -5278,7 +5280,7 @@ export function AiChat({
             <DialogTitle>💬 Lomi có nhờ AI trả lời</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground -mt-1">
-            Ở mục <b>Tâm sự</b> và khi Lomi chưa có sẵn câu trả lời, Lomi gửi câu của bạn kèm vài tin nhắn gần đây tới một <b>dịch vụ AI ở nước ngoài</b> để hiểu bạn đúng hơn. Lomi không gửi kèm tên tài khoản hay số điện thoại; câu có dấu hiệu nguy hiểm, cấp cứu luôn được Lomi trả lời trên máy.
+            Để hiểu đúng ý bạn, Lomi gửi tin nhắn của bạn (trừ câu chào hỏi ngắn) kèm vài tin gần đây tới <b>dịch vụ AI ở nước ngoài</b>. Lomi không gửi kèm tên tài khoản hay số điện thoại; câu có dấu hiệu nguy hiểm, cấp cứu luôn được Lomi trả lời trên máy.
           </p>
           <p className="text-xs text-muted-foreground">Đừng nhập số CCCD, tài khoản ngân hàng, mật khẩu vào Lomi nha.</p>
           <button onClick={() => setAiNotice(false)} className="rounded-xl bg-gradient-brand text-white text-sm font-semibold py-2.5 mt-1">

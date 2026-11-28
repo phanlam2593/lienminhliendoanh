@@ -78,6 +78,13 @@ describe("AI hiểu câu trước (mode route)", () => {
     expect(r[0].content).toMatch(/Cà phê|cà phê/);
   }, T);
 
+  it("câu chào / cảm ơn: máy tự đáp, không tốn lượt AI", async () => {
+    fake({ do: "reply", text: "AI_ĐÁP" });
+    const r = await chat(["cảm ơn em nha"], { tab: "food", talkConsent: null });
+    expect(routes().length).toBe(0);
+    expect(r[0].content).not.toBe("AI_ĐÁP");
+  }, T);
+
   it("mục Tâm sự: không dùng đường route (đã có AI trò chuyện)", async () => {
     fake({ do: "reply", text: "AI_ĐÁP" });
     await chat(["hôm nay a buồn quá"], { tab: "heart", talkConsent: null });

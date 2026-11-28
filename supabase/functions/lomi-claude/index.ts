@@ -13,7 +13,8 @@
 //   • 28/11: body.mode = "route" → AI HIỂU CÂU TRƯỚC ở các mục khác Tâm sự (routeReply bên dưới).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { LOMI_TALK_PROMPT } from "../_shared/lomiTalkPrompt.ts";
-import { routeSystem } from "../_shared/lomiRoutePrompt.ts";
+import { APP_PROMPT, ROUTE_PROMPT } from "../_shared/lomiRoutePrompt.ts";
+import { callLLM } from "../_shared/lomiLLM.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -257,8 +258,6 @@ Deno.serve(async (req) => {
 //   Lời dặn _shared/lomiRoutePrompt (đo bằng lomi-eval trên 120 câu bẫy; Sonnet hiểu phủ định, mỉa mai tốt hơn Haiku rõ rệt).
 //   Chung lượt với Tâm sự AI (consume_ai_talk_quota). Lời dặn dài và giống nhau mọi lượt → bật prompt caching cho rẻ.
 async function routeReply(messages: Msg[], appTab: boolean, uid: string, userClient: any, admin: any): Promise<Response> {
-  const key = Deno.env.get("ANTHROPIC_API_KEY");
-  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
   const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_talk_quota");
   if (qErr) {
     const m = qErr.message ?? "";
@@ -271,64 +270,59 @@ async function routeReply(messages: Msg[], appTab: boolean, uid: string, userCli
       console.error("lomi-claude route refund", e);
     }
   };
-  const model = Deno.env.get("ANTHROPIC_ROUTE_MODEL") || Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
-  const thinking = { type: /haiku/i.test(model) ? "disabled" : "between_tools" };
-  const system = [
-    { type: "text", text: routeSystem(appTab), cache_control: { type: "ephemeral" } },
-    { type: "text", text: nowLine().trim() },
-  ];
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25000);
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      signal: ctrl.signal,
-      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model, max_tokens: 600, system, messages, thinking }),
-    });
-    clearTimeout(timer);
-    if (!res.ok) {
-      const t = await res.text().catch(() => "");
-      console.error("lomi-claude route anthropic", res.status, t.slice(0, 300));
-      await refund();
-      const code = /credit balance/i.test(t) ? "AI_CREDITS" : res.status === 429 || res.status === 529 ? "AI_BUSY" : "AI_ERROR";
-      return json({ fallback: true, error: code, detail: `${res.status} ${t.slice(0, 200)}` });
-    }
-    const data = await res.json();
-    const raw = (Array.isArray(data?.content) ? data.content : [])
-      .filter((b: any) => b?.type === "text")
-      .map((b: any) => String(b.text))
-      .join("\n")
-      .trim();
-    let r: any = null;
-    try {
-      const j = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
-      r = j ? JSON.parse(j) : null;
-    } catch {
-      r = null;
-    }
-    const ok =
-      (r?.do === "reply" && typeof r.text === "string" && r.text.trim()) ||
-      (r?.do === "local" && typeof r.q === "string" && r.q.trim() && r.q.length <= 400);
-    if (!ok || data?.stop_reason === "max_tokens") {
-      await refund();
-      return json({ fallback: true, error: "AI_ERROR", detail: `route bad stop=${String(data?.stop_reason)} raw=${raw.slice(0, 120)}` });
-    }
-    const route =
-      r.do === "reply"
-        ? { do: "reply", text: String(r.text).trim().slice(0, 2000) }
-        : { do: "local", q: String(r.q).trim(), kind: typeof r.kind === "string" ? r.kind : undefined, text: typeof r.text === "string" ? r.text.trim().slice(0, 1200) : undefined };
-    return json({ route, remaining });
-  } catch (e) {
-    console.error("lomi-claude route", e);
+  // 28/11 chiều: mục Hỏi về app — trả lời thẳng bằng chữ từ KIẾN THỨC VỀ APP (~18.000 token) → dùng Haiku cho rẻ, không đi Groq
+  //   (vượt 8.000 token/phút của gói miễn phí). Các mục khác — lời dặn gọn, Sonnet, hỏng thì Groq.
+  const model = appTab
+    ? Deno.env.get("ANTHROPIC_ROUTE_APP_MODEL") || "claude-haiku-5-5"
+    : Deno.env.get("ANTHROPIC_ROUTE_MODEL") || Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
+  const out = await callLLM({
+    model,
+    system: (appTab ? APP_PROMPT : ROUTE_PROMPT) + nowLine(),
+    cacheSystem: true,
+    messages,
+    maxTokens: 600,
+    groq: appTab ? undefined : { json: true },
+  });
+  if (!out.ok) {
+    console.error("lomi-claude route", out.detail);
     await refund();
-    return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
+    return json({ fallback: true, error: out.code, detail: out.detail });
   }
+  const raw = out.text;
+  if (appTab) {
+    let reply = raw;
+    if (out.stop === "max_tokens" && reply) {
+      const cut = Math.max(reply.lastIndexOf(". "), reply.lastIndexOf("! "), reply.lastIndexOf("? "), reply.lastIndexOf("\n"));
+      reply = cut > 40 ? reply.slice(0, cut + 1).trim() : "";
+    }
+    if (!reply) {
+      await refund();
+      return json({ fallback: true, error: "AI_ERROR", detail: `route app empty stop=${out.stop}` });
+    }
+    return json({ route: { do: "reply", text: reply.slice(0, 2000) }, remaining, via: out.provider });
+  }
+  let r: any = null;
+  try {
+    const j = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
+    r = j ? JSON.parse(j) : null;
+  } catch {
+    r = null;
+  }
+  const ok =
+    (r?.do === "reply" && typeof r.text === "string" && r.text.trim()) ||
+    (r?.do === "local" && typeof r.q === "string" && r.q.trim() && r.q.length <= 400);
+  if (!ok || out.stop === "max_tokens") {
+    await refund();
+    return json({ fallback: true, error: "AI_ERROR", detail: `route bad ${out.provider} stop=${out.stop} raw=${raw.slice(0, 120)}` });
+  }
+  const route =
+    r.do === "reply"
+      ? { do: "reply", text: String(r.text).trim().slice(0, 2000) }
+      : { do: "local", q: String(r.q).trim(), kind: typeof r.kind === "string" ? r.kind : undefined, text: typeof r.text === "string" ? r.text.trim().slice(0, 1200) : undefined };
+  return json({ route, remaining, via: out.provider });
 }
 
 async function talkReply(messages: Msg[], uid: string, userClient: any, admin: any): Promise<Response> {
-  const key = Deno.env.get("ANTHROPIC_API_KEY");
-  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
   const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_talk_quota");
   if (qErr) {
     const m = qErr.message ?? "";
@@ -341,47 +335,24 @@ async function talkReply(messages: Msg[], uid: string, userClient: any, admin: a
       console.error("lomi-claude talk refund", e);
     }
   };
-  const model = Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5";
-  // Tắt "nghĩ ngầm" (đo bằng lomi-eval: để bật thì có câu rỗng / cụt). Sonnet đòi "between_tools", Haiku nhận "disabled".
-  const thinking = { type: /haiku/i.test(model) ? "disabled" : "between_tools" };
   const system = LOMI_TALK_PROMPT + `
 
 Phạm vi: Lomi chỉ trò chuyện, tâm sự, chuyện đời thường. Yêu cầu kiểu viết code, giải bài tập, dịch văn bản, viết bài văn → nói nhẹ nhàng đó không phải việc Lomi giúp được, rồi hỏi họ có chuyện gì muốn kể không.` + nowLine();
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25000);
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      signal: ctrl.signal,
-      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
-      body: JSON.stringify({ model, max_tokens: 500, system, messages, thinking }),
-    });
-    clearTimeout(timer);
-    if (!res.ok) {
-      const t = await res.text().catch(() => "");
-      console.error("lomi-claude talk anthropic", res.status, t.slice(0, 300));
-      await refund();
-      const code = /credit balance/i.test(t) ? "AI_CREDITS" : res.status === 429 || res.status === 529 ? "AI_BUSY" : "AI_ERROR";
-      return json({ fallback: true, error: code, detail: `${res.status} ${t.slice(0, 200)}` });
-    }
-    const data = await res.json();
-    let reply = (Array.isArray(data?.content) ? data.content : [])
-      .filter((b: any) => b?.type === "text")
-      .map((b: any) => String(b.text))
-      .join("\n")
-      .trim();
-    if (data?.stop_reason === "max_tokens" && reply) {
-      const cut = Math.max(reply.lastIndexOf(". "), reply.lastIndexOf("! "), reply.lastIndexOf("? "), reply.lastIndexOf("\n"));
-      reply = cut > 40 ? reply.slice(0, cut + 1).trim() : "";
-    }
-    if (!reply) {
-      await refund();
-      return json({ fallback: true, error: "AI_ERROR", detail: `talk empty stop=${String(data?.stop_reason)}` });
-    }
-    return json({ reply, remaining });
-  } catch (e) {
-    console.error("lomi-claude talk", e);
+  // 28/11 chiều: Anthropic hỏng (hết tiền / quá tải) → Groq (lomiLLM).
+  const out = await callLLM({ model: Deno.env.get("ANTHROPIC_TALK_MODEL") || "claude-sonnet-5-5", system, messages, maxTokens: 500, groq: {} });
+  if (!out.ok) {
+    console.error("lomi-claude talk", out.detail);
     await refund();
-    return json({ fallback: true, error: "AI_ERROR", detail: String(e).slice(0, 200) });
+    return json({ fallback: true, error: out.code, detail: out.detail });
   }
+  let reply = out.text;
+  if (out.stop === "max_tokens" && reply) {
+    const cut = Math.max(reply.lastIndexOf(". "), reply.lastIndexOf("! "), reply.lastIndexOf("? "), reply.lastIndexOf("\n"));
+    reply = cut > 40 ? reply.slice(0, cut + 1).trim() : "";
+  }
+  if (!reply) {
+    await refund();
+    return json({ fallback: true, error: "AI_ERROR", detail: `talk empty ${out.provider} stop=${out.stop}` });
+  }
+  return json({ reply, remaining, via: out.provider });
 }
